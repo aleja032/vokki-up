@@ -5,13 +5,13 @@ import { visibleExtractionStatus } from './extractionStatus'
 describe('Gemini edge-function client', () => {
   it('sends a typed action to the configured Supabase function without a Gemini key', async () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ cards: [{ front: 'bright', back: 'brillante', example: 'A bright room.' }] }), { status: 200 }))
-    const client = createGeminiClient({ url: 'https://study.example', publishableKey: 'public-key', fetcher })
+    const client = createGeminiClient({ getAccessToken: async () => 'session-access-token', url: 'https://study.example', publishableKey: 'public-key', fetcher })
 
     const result = await client.request('flashcards', { text: 'bright' })
 
     expect(fetcher).toHaveBeenCalledWith('https://study.example/functions/v1/vokki-ai', expect.objectContaining({
       method: 'POST',
-      headers: expect.objectContaining({ apikey: 'public-key', Authorization: 'Bearer public-key' }),
+      headers: expect.objectContaining({ apikey: 'public-key', Authorization: 'Bearer session-access-token' }),
     }))
     const request = fetcher.mock.calls[0][1]
     expect(JSON.parse(String(request?.body))).toEqual({ action: 'flashcards', text: 'bright' })
@@ -21,7 +21,7 @@ describe('Gemini edge-function client', () => {
 
   it('encodes an image as a bounded MIME-tagged inline payload', async () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ words: [{ originalInput: 'bridge', canonicalWord: 'bridge', meaning: 'puente', phonetic: '/brɪdʒ/' }] }), { status: 200 }))
-    const client = createGeminiClient({ url: 'https://study.example/', publishableKey: 'public-key', fetcher })
+    const client = createGeminiClient({ getAccessToken: async () => 'session-access-token', url: 'https://study.example/', publishableKey: 'public-key', fetcher })
     const file = new File([new Uint8Array([1, 2, 3])], 'photo.png', { type: 'image/png' })
 
     await client.extractImageVocabulary(file)
@@ -34,7 +34,7 @@ describe('Gemini edge-function client', () => {
   it('sends the original note and validates explicit correction, meaning, and phonetics', async () => {
     const words = [{ originalInput: 'bridg', canonicalWord: 'bridge', meaning: 'puente', phonetic: '/brɪdʒ/' }]
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ words }), { status: 200 }))
-    const client = createGeminiClient({ url: 'https://study.example', publishableKey: 'public-key', fetcher })
+    const client = createGeminiClient({ getAccessToken: async () => 'session-access-token', url: 'https://study.example', publishableKey: 'public-key', fetcher })
 
     const result = await client.request('image-vocabulary', {
       image: { mimeType: 'image/png', data: 'AQID' }, context: 'a bridg',
@@ -46,14 +46,14 @@ describe('Gemini edge-function client', () => {
 
   it('rejects image candidates missing the explicit source or phonetic fields', async () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ words: [{ canonicalWord: 'bridge', meaning: 'puente' }] }), { status: 200 }))
-    const client = createGeminiClient({ url: 'https://study.example', publishableKey: 'public-key', fetcher })
+    const client = createGeminiClient({ getAccessToken: async () => 'session-access-token', url: 'https://study.example', publishableKey: 'public-key', fetcher })
     await expect(client.request('image-vocabulary', { image: { mimeType: 'image/png', data: 'AQID' }, context: 'bridg' }))
       .rejects.toThrow('respuesta no válida')
   })
 
   it('surfaces safe server error messages and rejects unsupported image payloads before fetch', async () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ error: { code: 'invalid_image', message: 'Choose a PNG, JPEG, or WebP image.' } }), { status: 400 }))
-    const client = createGeminiClient({ url: 'https://study.example', publishableKey: 'public-key', fetcher })
+    const client = createGeminiClient({ getAccessToken: async () => 'session-access-token', url: 'https://study.example', publishableKey: 'public-key', fetcher })
     await expect(client.request('quiz', { text: 'hello' })).rejects.toThrow('PNG, JPEG o WebP')
     await expect(client.extractImageVocabulary(new File(['x'], 'text.txt', { type: 'text/plain' }))).rejects.toThrow('PNG, JPEG o WebP')
     expect(fetcher).toHaveBeenCalledTimes(1)
@@ -61,7 +61,7 @@ describe('Gemini edge-function client', () => {
 
   it('accepts only supported action names at the typed boundary', async () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ correctedText: 'I went to the shop.', feedback: 'Bien.', suggestions: [] }), { status: 200 }))
-    const client = createGeminiClient({ url: 'https://study.example', publishableKey: 'public-key', fetcher })
+    const client = createGeminiClient({ getAccessToken: async () => 'session-access-token', url: 'https://study.example', publishableKey: 'public-key', fetcher })
     const action: AiAction = 'writing-feedback'
     await client.request(action, { text: 'I went to the shop.' })
     expect(JSON.parse(String(fetcher.mock.calls[0][1]?.body)).action).toBe('writing-feedback')
@@ -69,21 +69,32 @@ describe('Gemini edge-function client', () => {
 
   it('rejects malformed AI output instead of exposing it to the candidate workflow', async () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ words: [{ originalInput: 'bridge', canonicalWord: 42, meaning: 'puente', phonetic: '/brɪdʒ/' }] }), { status: 200 }))
-    const client = createGeminiClient({ url: 'https://study.example', publishableKey: 'public-key', fetcher })
+    const client = createGeminiClient({ getAccessToken: async () => 'session-access-token', url: 'https://study.example', publishableKey: 'public-key', fetcher })
     await expect(client.extractImageVocabulary(new File(['x'], 'photo.png', { type: 'image/png' }))).rejects.toThrow('respuesta no válida')
   })
 
   it('does not expose untrusted service errors or network details', async () => {
     const fetcher = vi.fn<typeof fetch>().mockResolvedValueOnce(new Response(JSON.stringify({ error: { message: 'secret upstream detail' } }), { status: 502 }))
       .mockRejectedValueOnce(new Error('private hostname'))
-    const client = createGeminiClient({ url: 'https://study.example', publishableKey: 'public-key', fetcher })
+    const client = createGeminiClient({ getAccessToken: async () => 'session-access-token', url: 'https://study.example', publishableKey: 'public-key', fetcher })
     await expect(client.request('quiz', { text: 'hello' })).rejects.not.toThrow('secret upstream detail')
     await expect(client.request('quiz', { text: 'hello' })).rejects.not.toThrow('private hostname')
   })
 
+  it('does not contact the function when authenticated session acquisition fails', async () => {
+    const fetcher = vi.fn<typeof fetch>()
+    const client = createGeminiClient({
+      url: 'https://study.example', publishableKey: 'public-key', fetcher,
+      getAccessToken: async () => { throw new Error('No pudimos validar tu sesión para usar la IA. Probá de nuevo o seguí sin conexión.') },
+    })
+
+    await expect(client.request('quiz', { text: 'hello' })).rejects.toThrow('No pudimos validar tu sesión')
+    expect(fetcher).not.toHaveBeenCalled()
+  })
+
   it('rejects oversized images before contacting the function', async () => {
     const fetcher = vi.fn<typeof fetch>()
-    const client = createGeminiClient({ url: 'https://study.example', publishableKey: 'public-key', fetcher })
+    const client = createGeminiClient({ getAccessToken: async () => 'session-access-token', url: 'https://study.example', publishableKey: 'public-key', fetcher })
     await expect(client.extractImageVocabulary(new File([new Uint8Array(8 * 1024 * 1024 + 1)], 'photo.png', { type: 'image/png' }))).rejects.toThrow('8 MB')
     expect(fetcher).not.toHaveBeenCalled()
   })

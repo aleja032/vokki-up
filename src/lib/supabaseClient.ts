@@ -27,3 +27,20 @@ export function getConfiguredSupabaseClient(): SupabaseClient | null {
   })
   return configuredClient
 }
+
+export async function getSupabaseAccessToken(client: SupabaseClient | null = getConfiguredSupabaseClient()): Promise<string> {
+  const unavailableMessage = 'No pudimos validar tu sesión para usar la IA. Probá de nuevo o seguí sin conexión.'
+  if (!client) throw new Error('La IA todavía no está configurada. Podés seguir agregando palabras manualmente.')
+
+  try {
+    const { data, error } = await client.auth.getSession()
+    if (error) throw error
+    if (data.session?.access_token) return data.session.access_token
+
+    const { data: signInData, error: signInError } = await client.auth.signInAnonymously()
+    if (signInError || !signInData.session?.access_token) throw signInError ?? new Error('Missing anonymous session')
+    return signInData.session.access_token
+  } catch {
+    throw new Error(unavailableMessage)
+  }
+}

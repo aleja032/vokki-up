@@ -82,6 +82,13 @@ Deliver an intuitive, mobile-first PWA for personal English study from B1 to B2 
   - Checks: `npm test -- --run` passed (45 tests); `npm run build` and `npm run lint` passed. Local browser QA confirmed the progress timeline/segments and compact optional-sync panel at desktop width. Phone-width visual QA remains pending because the available browser surface did not provide a viewport override; sync and AI controls were not activated. Production build retains the pre-existing >500 kB chunk advisory.
   - Implementation: added Dexie v6 optional `activityHistory` store with atomic local events for card creation, reviews, candidate-batch confirmation, quiz completion, and writing completion; progress derives an eight-entry recent timeline and activity-type/7-day/30-day counts. Activity history intentionally remains local-only, so no Supabase migration or sync payload changes were needed. Refined light-theme muted/line tokens and supporting text sizing; moved optional sync below the active module and reduced it to a calm compact strip.
 
+- [x] **VU-09C — Authenticate Gemini Edge Function requests**
+  - Route: delegated; fixes the client authentication contract and adds deterministic coverage.
+  - Scope: reuse the configured Supabase session or obtain an anonymous session before calling `vokki-ai`; keep the publishable key in `apikey`, use only the session access token as bearer, and preserve Spanish safe errors plus manual/offline fallback.
+  - Acceptance: a missing or unavailable authenticated session prevents the function request; neither secrets nor raw auth/network errors are exposed.
+  - Checks: `npm test -- --run` passed (49 tests); `npm run build` passed (existing chunk-size advisory only); `npm run lint` passed. No deployment or remote service calls.
+  - Implementation: added shared session token acquisition to `supabaseClient.ts`, injected it into the Gemini client, and covered session reuse, anonymous sign-in, auth failure, and request headers.
+
 ## Progress
 - Created: 2026-10-17
 - Completed: VU-01 — mobile-first Spanish application shell, responsive navigation, and persistent theme preference. Verification: build and lint passed.

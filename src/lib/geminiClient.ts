@@ -1,3 +1,5 @@
+import { getConfiguredSupabaseClient, getSupabaseAccessToken, getSupabasePublicConfig } from './supabaseClient'
+
 export type AiAction = 'flashcards' | 'quiz' | 'writing-feedback' | 'image-vocabulary'
 
 export type AiRequests = {
@@ -17,6 +19,7 @@ export type AiResults = {
 export type AiClientConfig = {
   url: string
   publishableKey: string
+  getAccessToken: () => Promise<string>
   fetcher?: typeof fetch
 }
 
@@ -66,12 +69,10 @@ function isValidResult(action: AiAction, value: unknown): boolean {
 }
 
 export function getGeminiClientConfig(): Pick<AiClientConfig, 'url' | 'publishableKey'> | null {
-  const url = import.meta.env.VITE_SUPABASE_URL?.trim()
-  const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim()
-  return url && publishableKey ? { url, publishableKey } : null
+  return getSupabasePublicConfig()
 }
 
-export function createGeminiClient({ url, publishableKey, fetcher = fetch }: AiClientConfig) {
+export function createGeminiClient({ url, publishableKey, getAccessToken, fetcher = fetch }: AiClientConfig) {
   const endpoint = `${url.replace(/\/+$/, '')}/functions/v1/vokki-ai`
 
   async function request<A extends AiAction>(action: A, payload: AiRequests[A]): Promise<AiResults[A]> {
@@ -86,6 +87,16 @@ export function createGeminiClient({ url, publishableKey, fetcher = fetch }: AiC
       if (!isNonEmptyString(text) || text.length > 5000) throw new Error(errorMessages.invalid_text)
     }
 
+    let accessToken: string
+    try {
+      accessToken = await getAccessToken()
+    } catch (error) {
+      const message = error instanceof Error ? error.message : ''
+      throw new Error(message === 'La IA todavía no está configurada. Podés seguir agregando palabras manualmente.'
+        || message === 'No pudimos validar tu sesión para usar la IA. Probá de nuevo o seguí sin conexión.'
+        ? message : genericError, { cause: error })
+    }
+
     let response: Response
     try {
       response = await fetcher(endpoint, {
@@ -93,7 +104,7 @@ export function createGeminiClient({ url, publishableKey, fetcher = fetch }: AiC
         headers: {
           'Content-Type': 'application/json',
           apikey: publishableKey,
-          Authorization: `Bearer ${publishableKey}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ action, ...payload }),
       })
@@ -125,5 +136,7 @@ export function createGeminiClient({ url, publishableKey, fetcher = fetch }: AiC
 
 export function getConfiguredGeminiClient() {
   const config = getGeminiClientConfig()
-  return config ? createGeminiClient(config) : null
+  if (!config) return null
+  const supabaseClient = getConfiguredSupabaseClient()
+  return createGeminiClient({ ...config, getAccessToken: () => getSupabaseAccessToken(supabaseClient) })
 }
