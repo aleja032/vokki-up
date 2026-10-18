@@ -64,7 +64,9 @@ export function calculateProgress(
     writingSessions: writing.filter((session) => session.completedAt).length,
     streakDays,
     goalPercent: Math.min(100, Math.round(masteredCount / MASTERED_CARD_GOAL * 100)),
-    recentActivity: [...activity].sort((a, b) => b.occurredAt.getTime() - a.occurredAt.getTime()).slice(0, 8),
+    recentActivity: [...activity].sort((a, b) =>
+      b.occurredAt.getTime() - a.occurredAt.getTime() || a.id.localeCompare(b.id),
+    ).slice(0, 8),
     activityByType,
     activityByPeriod: {
       last7Days: activity.filter((item) => item.occurredAt.getTime() >= since(7) && item.occurredAt <= now).length,

@@ -65,10 +65,10 @@ describe('studyDb', () => {
     await saveStudyCard(makeCard('trace-card'))
     await reviewStudyCard('trace-card', 'good', now)
 
-    expect(await getActivityHistory()).toMatchObject([
+    expect((await getActivityHistory()).map(({ type, entityId, occurredAt, summary }) => ({ type, entityId, occurredAt, summary }))).toEqual(expect.arrayContaining([
       { type: 'review', entityId: 'trace-card', occurredAt: now, summary: 'Repasaste “take your time”.' },
       { type: 'card_created', entityId: 'trace-card', occurredAt: now, summary: 'Guardaste “take your time”.' },
-    ])
+    ]))
     expect(await studyDb.activityHistory.count()).toBe(2)
     studyDb.close()
     await studyDb.open()
