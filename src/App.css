@@ -357,6 +357,12 @@ h1, h2, p { margin-top: 0; }
 .candidate-fields input { padding: 7px 8px; font-size: 10px; }
 .candidate-fields input:disabled { color: var(--muted-strong); opacity: .75; }
 .candidate-actions { display: flex; align-items: center; gap: 8px; margin: 8px 0 0 91px; }
+.candidate-select { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 8px 91px; color: var(--muted-strong); font-size: 9px; }
+.candidate-select input { accent-color: var(--violet); }
+.candidate-batch-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--line); color: var(--muted-strong); font-size: 9px; }
+.candidate-batch-actions button:disabled { cursor: not-allowed; opacity: .55; }
+.candidate-original-label { color: var(--muted); font-size: 9px; }
+.candidate-original { min-width: 0; color: var(--muted-strong); font-size: 10px; overflow-wrap: anywhere; }
 .confirm-candidate, .reject-candidate { padding: 6px 8px; color: #426a4d; background: #eaf3e8; border: 0; border-radius: 6px; cursor: pointer; font: inherit; font-size: 8px; font-weight: 700; }
 .reject-candidate { color: var(--muted-strong); background: var(--hover); }
 .candidate-status { display: inline-block; margin: 8px 0 0 91px; color: var(--muted); font-size: 8px; }

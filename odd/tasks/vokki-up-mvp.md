@@ -69,12 +69,25 @@ Deliver an intuitive, mobile-first PWA for personal English study from B1 to B2 
   - Acceptance: each feature/component owns its styles; shared primitives expose deliberate reusable styling; no screen-specific styling remains in the application-shell stylesheet; build, lint, and visual QA continue to pass.
   - Checks: tests, build, lint, and targeted phone/desktop browser QA.
 
+- [x] **VU-09A — AI-enriched image vocabulary batches**
+  - Route: delegated; extends local vocabulary, Gemini contract, and candidate review flow.
+  - Scope: preserve the raw note as user context; enrich image candidates with canonical corrected English, Spanish meaning, and English phonetic transcription; allow selecting and confirming multiple candidates atomically into cards.
+  - Acceptance: a user can upload/take a photo, review and edit AI candidates, see corrections without losing the original input, select multiple entries, and create non-duplicate local cards in one action. Offline/manual fallback remains usable.
+  - Checks: 42 deterministic tests passed; production build and lint passed. Browser QA not run. No Edge Function deployment or remote service calls.
+
+- [ ] **VU-09B — Traceable study activity and readable UI refinement**
+  - Route: delegated; local activity history plus targeted UX refinement.
+  - Scope: record meaningful local study actions for progress traceability; make light-theme contrast and type scale legible; reduce visual noise around optional synchronization and active module content.
+  - Acceptance: progress explains recent meaningful activity; light-mode text meets readable contrast/size expectations; optional sync is visually calm and does not compete with the active module.
+  - Checks: deterministic history/progress tests, build, lint, and phone/desktop browser QA.
+
 ## Progress
 - Created: 2026-10-17
 - Completed: VU-01 — mobile-first Spanish application shell, responsive navigation, and persistent theme preference. Verification: build and lint passed.
 - Completed: VU-02 — Dexie-backed offline cards, review log, deterministic SRS scheduler, editable/suspendable local cards, and persistence tests. Verification: 7 tests, build, and lint passed.
 - Completed: VU-03 — offline notes, camera/file capture, persisted image previews, truthful candidate confirmation, and atomic local flashcard creation. Verification: 12 tests, build, and lint passed.
 - Completed: VU-04 — secure local Gemini/Supabase Edge Function boundary, validated image requests/responses, and note-scoped extraction UX. Verification: 20 tests, build, lint, and non-network Edge smoke checks passed.
+- Completed: VU-09A — explicit original/corrected vocabulary fields, Spanish meaning and IPA phonetics, editable/selectable candidates, and atomic duplicate-safe batch confirmation. Verification: 42 tests, production build, and lint passed; browser QA and deployment were intentionally not performed.
 - Completed: VU-05 — persistent local quiz and writing workflows, derived progress/streak dashboard, and safe Gemini-assisted feedback boundary. Verification: 29 tests, build, and lint passed.
 - Completed: VU-07 — neutral profile copy, legible mobile typography/spacing, modular card views, and separate review/create/library flows. Verification: 37 tests, build, lint, and independent desktop/phone browser QA passed.
 - Next: configure the Gemini secrets outside chat, confirm anonymous sign-ins are enabled, then validate live auth/RLS/sync and device/offline behavior.

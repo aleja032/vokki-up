@@ -4,14 +4,14 @@ export type AiRequests = {
   flashcards: { text: string }
   quiz: { text: string }
   'writing-feedback': { text: string }
-  'image-vocabulary': { image: { mimeType: string; data: string } }
+  'image-vocabulary': { image: { mimeType: string; data: string }; context?: string }
 }
 
 export type AiResults = {
   flashcards: { cards: Array<{ front: string; back: string; example: string }> }
   quiz: { questions: Array<{ question: string; options: string[]; answer: string; explanation: string }> }
   'writing-feedback': { correctedText: string; feedback: string; suggestions: string[] }
-  'image-vocabulary': { words: Array<{ word: string; meaning: string }> }
+  'image-vocabulary': { words: Array<{ originalInput: string; canonicalWord: string; meaning: string; phonetic: string }> }
 }
 
 export type AiClientConfig = {
@@ -60,7 +60,8 @@ function isValidResult(action: AiAction, value: unknown): boolean {
       return isNonEmptyString(value.correctedText) && isNonEmptyString(value.feedback) && isStringArray(value.suggestions)
     case 'image-vocabulary':
       return Array.isArray(value.words) && value.words.length <= 12 && value.words.every((word: unknown) =>
-        isRecord(word) && isNonEmptyString(word.word) && isNonEmptyString(word.meaning))
+        isRecord(word) && isNonEmptyString(word.originalInput) && isNonEmptyString(word.canonicalWord)
+        && isNonEmptyString(word.meaning) && isNonEmptyString(word.phonetic))
   }
 }
 
@@ -111,13 +112,13 @@ export function createGeminiClient({ url, publishableKey, fetcher = fetch }: AiC
 
   return {
     request,
-    async extractImageVocabulary(file: Blob): Promise<AiResults['image-vocabulary']> {
+    async extractImageVocabulary(file: Blob, context = ''): Promise<AiResults['image-vocabulary']> {
       if (!SUPPORTED_IMAGE_TYPES.has(file.type)) throw new Error(errorMessages.invalid_image)
       if (file.size === 0 || file.size > IMAGE_LIMIT_BYTES) throw new Error(errorMessages.invalid_image)
       const bytes = new Uint8Array(await file.arrayBuffer())
       let binary = ''
       for (const byte of bytes) binary += String.fromCharCode(byte)
-      return request('image-vocabulary', { image: { mimeType: file.type, data: btoa(binary) } })
+      return request('image-vocabulary', { image: { mimeType: file.type, data: btoa(binary) }, ...(context.trim() ? { context } : {}) })
     },
   }
 }

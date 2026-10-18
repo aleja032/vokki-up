@@ -27,6 +27,12 @@ export interface ReviewLog {
 
 export interface VocabularyCandidate {
   id: string
+  /** Original transcription/learner wording; kept distinct from the corrected card front. */
+  originalInput?: string
+  /** Canonical English word proposed for the card; optional for legacy records. */
+  canonicalWord?: string
+  /** English IPA-style transcription returned by image extraction. */
+  phonetic?: string
   word: string
   meaning: string
   status: 'pending' | 'rejected' | 'confirmed'

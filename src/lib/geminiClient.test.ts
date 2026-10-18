@@ -20,7 +20,7 @@ describe('Gemini edge-function client', () => {
   })
 
   it('encodes an image as a bounded MIME-tagged inline payload', async () => {
-    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ words: [{ word: 'bridge', meaning: 'puente' }] }), { status: 200 }))
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ words: [{ originalInput: 'bridge', canonicalWord: 'bridge', meaning: 'puente', phonetic: '/brɪdʒ/' }] }), { status: 200 }))
     const client = createGeminiClient({ url: 'https://study.example/', publishableKey: 'public-key', fetcher })
     const file = new File([new Uint8Array([1, 2, 3])], 'photo.png', { type: 'image/png' })
 
@@ -29,6 +29,26 @@ describe('Gemini edge-function client', () => {
     expect(JSON.parse(String(fetcher.mock.calls[0][1]?.body))).toEqual({
       action: 'image-vocabulary', image: { mimeType: 'image/png', data: 'AQID' },
     })
+  })
+
+  it('sends the original note and validates explicit correction, meaning, and phonetics', async () => {
+    const words = [{ originalInput: 'bridg', canonicalWord: 'bridge', meaning: 'puente', phonetic: '/brɪdʒ/' }]
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ words }), { status: 200 }))
+    const client = createGeminiClient({ url: 'https://study.example', publishableKey: 'public-key', fetcher })
+
+    const result = await client.request('image-vocabulary', {
+      image: { mimeType: 'image/png', data: 'AQID' }, context: 'a bridg',
+    })
+
+    expect(JSON.parse(String(fetcher.mock.calls[0][1]?.body))).toMatchObject({ context: 'a bridg' })
+    expect(result.words[0]).toEqual(words[0])
+  })
+
+  it('rejects image candidates missing the explicit source or phonetic fields', async () => {
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ words: [{ canonicalWord: 'bridge', meaning: 'puente' }] }), { status: 200 }))
+    const client = createGeminiClient({ url: 'https://study.example', publishableKey: 'public-key', fetcher })
+    await expect(client.request('image-vocabulary', { image: { mimeType: 'image/png', data: 'AQID' }, context: 'bridg' }))
+      .rejects.toThrow('respuesta no válida')
   })
 
   it('surfaces safe server error messages and rejects unsupported image payloads before fetch', async () => {
@@ -48,7 +68,7 @@ describe('Gemini edge-function client', () => {
   })
 
   it('rejects malformed AI output instead of exposing it to the candidate workflow', async () => {
-    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ words: [{ word: 42, meaning: 'puente' }] }), { status: 200 }))
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify({ words: [{ originalInput: 'bridge', canonicalWord: 42, meaning: 'puente', phonetic: '/brɪdʒ/' }] }), { status: 200 }))
     const client = createGeminiClient({ url: 'https://study.example', publishableKey: 'public-key', fetcher })
     await expect(client.extractImageVocabulary(new File(['x'], 'photo.png', { type: 'image/png' }))).rejects.toThrow('respuesta no válida')
   })

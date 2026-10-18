@@ -106,38 +106,55 @@ export async function updateStudyNote(id: string, update: (current: StudyNote) =
 }
 
 export async function confirmStudyNoteCandidate(noteId: string, candidateId: string): Promise<StudyCard | null> {
+  const created = await confirmStudyNoteCandidates(noteId, [candidateId])
+  return created[0] ?? null
+}
+
+export async function confirmStudyNoteCandidates(noteId: string, candidateIds: string[]): Promise<StudyCard[]> {
+  const selectedIds = [...new Set(candidateIds)]
+  if (selectedIds.length === 0) return []
   return studyDb.transaction('rw', studyDb.notes, studyDb.cards, async () => {
     const note = await studyDb.notes.get(noteId)
     if (!note) throw new Error('Study note not found')
-    const candidate = note.candidates.find((item) => item.id === candidateId)
-    if (!candidate) throw new Error('Vocabulary candidate not found')
-    if (candidate.status !== 'pending') return null
-    const front = candidate.word.trim()
-    const back = candidate.meaning.trim()
-    if (!front || !back) throw new Error('Vocabulary candidate is incomplete')
-
+    const selected = selectedIds.map((id) => note.candidates.find((item) => item.id === id))
+    if (selected.some((candidate) => !candidate)) throw new Error('Vocabulary candidate not found')
+    const pending = selected.filter((candidate) => candidate?.status === 'pending')
+    if (pending.length === 0) return []
+    const cards = await studyDb.cards.toArray()
+    const existingWords = new Set(cards.map((card) => card.front.trim().replace(/\s+/g, ' ').toLocaleLowerCase()))
     const now = new Date()
-    const card: StudyCard = {
-      id: `candidate-${candidate.id}`,
-      front,
-      back,
-      note: note.body,
-      createdAt: now,
-      updatedAt: now,
-      state: 'new',
-      nextReviewAt: new Date(0),
-      intervalMinutes: 0,
-      easeFactor: 2.5,
-      repetitions: 0,
-      suspended: false,
+    const created: StudyCard[] = []
+    for (const candidate of pending) {
+      if (!candidate) continue
+      const front = (candidate.canonicalWord ?? candidate.word).trim().replace(/\s+/g, ' ')
+      const back = [candidate.meaning.trim(), candidate.phonetic?.trim()].filter(Boolean).join(' · ')
+      if (!front || !back) throw new Error('Vocabulary candidate is incomplete')
+      const normalizedFront = front.toLocaleLowerCase()
+      if (existingWords.has(normalizedFront)) continue
+      existingWords.add(normalizedFront)
+      created.push({
+        id: `candidate-${candidate.id}`,
+        front,
+        back,
+        note: note.body,
+        createdAt: now,
+        updatedAt: now,
+        state: 'new',
+        nextReviewAt: new Date(0),
+        intervalMinutes: 0,
+        easeFactor: 2.5,
+        repetitions: 0,
+        suspended: false,
+      })
     }
-    await studyDb.cards.add(card)
+    if (created.length) await studyDb.cards.bulkAdd(created)
+    const confirmedIds = new Set(pending.map((candidate) => candidate!.id))
     await studyDb.notes.put({
       ...note,
       updatedAt: now,
-      candidates: note.candidates.map((item) => item.id === candidateId ? { ...item, status: 'confirmed' } : item),
+      candidates: note.candidates.map((item) => confirmedIds.has(item.id) ? { ...item, status: 'confirmed' } : item),
     })
-    return card
+    return created
   })
 }
 

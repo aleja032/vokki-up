@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
-import { confirmStudyNoteCandidate, deleteStudyNote, getReviewHistory, getStudyCards, getStudyNotes, reviewStudyCard, saveStudyCard, saveStudyNote, seedCardsIfEmpty, updateStudyNote } from './lib/studyDb'
+import { confirmStudyNoteCandidates, deleteStudyNote, getReviewHistory, getStudyCards, getStudyNotes, reviewStudyCard, saveStudyCard, saveStudyNote, seedCardsIfEmpty, updateStudyNote } from './lib/studyDb'
 import { createVocabularyCandidate } from './lib/vocabulary'
 import { getConfiguredGeminiClient, getGeminiClientConfig } from './lib/geminiClient'
 import { visibleExtractionStatus, type ExtractionStatus } from './lib/extractionStatus'
@@ -282,6 +282,8 @@ function NotesCapture() {
   const [attachment, setAttachment] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState('')
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
+  const [selectedCandidateIds, setSelectedCandidateIds] = useState<string[]>([])
+  const [confirmingCandidates, setConfirmingCandidates] = useState(false)
   const [word, setWord] = useState('')
   const [meaning, setMeaning] = useState('')
   const [error, setError] = useState('')
@@ -388,13 +390,13 @@ function NotesCapture() {
     setExtractionStatus(null)
     setExtractingNoteId(sourceNoteId)
     try {
-      const result = await client.extractImageVocabulary(sourceAttachment.blob)
-      const existing = new Set(sourceNote.candidates.map((candidate) => candidate.word.toLocaleLowerCase()))
+      const result = await client.extractImageVocabulary(sourceAttachment.blob, sourceNote.body)
+      const existing = new Set(sourceNote.candidates.map((candidate) => (candidate.canonicalWord ?? candidate.word).trim().toLocaleLowerCase()))
       const candidates = result.words
-        .map(({ word: candidateWord, meaning: candidateMeaning }) => createVocabularyCandidate(candidateWord, candidateMeaning))
+        .map(({ originalInput, canonicalWord, meaning: candidateMeaning, phonetic }) => createVocabularyCandidate(canonicalWord, candidateMeaning, { originalInput, canonicalWord, phonetic }))
         .filter((candidate): candidate is VocabularyCandidate => {
-          if (!candidate || existing.has(candidate.word.toLocaleLowerCase())) return false
-          existing.add(candidate.word.toLocaleLowerCase())
+          if (!candidate || existing.has(candidate.word.trim().toLocaleLowerCase())) return false
+          existing.add(candidate.word.trim().toLocaleLowerCase())
           return true
         })
       if (!candidates.length) {
@@ -406,40 +408,46 @@ function NotesCapture() {
         setExtractionStatus({ noteId: sourceNoteId, kind: 'error', message: 'No se pudieron guardar las sugerencias. Probá de nuevo o agregalas manualmente.' })
         return
       }
-      setExtractionStatus({ noteId: sourceNoteId, kind: 'notice', message: `${candidates.length} ${candidates.length === 1 ? 'palabra sugerida' : 'palabras sugeridas'} para revisar. Confirmá cada una antes de crear tarjetas.` })
+      setExtractionStatus({ noteId: sourceNoteId, kind: 'notice', message: `${candidates.length} ${candidates.length === 1 ? 'palabra sugerida' : 'palabras sugeridas'} para revisar. Seleccioná las que quieras confirmar en grupo.` })
     } catch (cause) {
       setExtractionStatus({ noteId: sourceNoteId, kind: 'error', message: cause instanceof Error ? cause.message : 'No se pudieron extraer palabras. Probá de nuevo o agregalas manualmente.' })
     } finally {
       setExtractingNoteId(null)
     }
   }
-  const editCandidate = (candidate: VocabularyCandidate, field: 'word' | 'meaning', value: string) => {
+  const editCandidate = (candidate: VocabularyCandidate, field: 'word' | 'meaning' | 'phonetic', value: string) => {
     if (!activeNote) return
     void mutateNote(activeNote.id, (current) => ({
       ...current,
-      candidates: current.candidates.map((item) => item.id === candidate.id ? { ...item, [field]: value } : item),
+      candidates: current.candidates.map((item) => item.id === candidate.id ? { ...item, [field]: value, ...(field === 'word' ? { canonicalWord: value } : {}) } : item),
     }))
   }
   const rejectCandidate = (candidateId: string) => {
     if (!activeNote) return
+    setSelectedCandidateIds((current) => current.filter((id) => id !== candidateId))
     void mutateNote(activeNote.id, (current) => ({
       ...current,
       candidates: current.candidates.map((candidate) => candidate.id === candidateId ? { ...candidate, status: 'rejected' } : candidate),
     }))
   }
-  const confirmCandidate = async (candidate: VocabularyCandidate) => {
+  const toggleCandidateSelection = (candidateId: string) => {
+    setSelectedCandidateIds((current) => current.includes(candidateId) ? current.filter((id) => id !== candidateId) : [...current, candidateId])
+  }
+  const confirmSelectedCandidates = async () => {
     if (!activeNote) return
+    const selected = selectedCandidateIds
+    if (!selected.length || confirmingCandidates) return
+    setConfirmingCandidates(true)
     try {
-      const card = await confirmStudyNoteCandidate(activeNote.id, candidate.id)
+      const cards = await confirmStudyNoteCandidates(activeNote.id, selected)
       await refresh()
-      if (!card) {
-        setNotice('Esta palabra ya se había confirmado; no se creó otra tarjeta.')
-        return
-      }
-      setNotice(`“${card.front}” ya está en tus tarjetas.`)
+      setSelectedCandidateIds([])
+      setNotice(cards.length ? `${cards.length} ${cards.length === 1 ? 'tarjeta creada' : 'tarjetas creadas'} en tu biblioteca.` : 'Las palabras seleccionadas ya estaban confirmadas o duplicaban una tarjeta existente.')
       setError('')
     } catch {
-      setError('No se pudo confirmar la palabra. No se creó ninguna tarjeta y sigue disponible para revisar.')
+      setError('No se pudo confirmar el grupo. No se creó ninguna tarjeta y las palabras siguen disponibles para revisar.')
+    } finally {
+      setConfirmingCandidates(false)
     }
   }
   const removeNote = async (note: StudyNote) => {
@@ -484,8 +492,8 @@ function NotesCapture() {
         </section>
 
         <section className="notes-library" aria-labelledby="notes-library-title">
-          <div className="notes-section-heading"><div><p className="eyebrow">TU COLECCIÓN</p><h2 id="notes-library-title">Notas guardadas</h2></div><span className="library-count">{notes.length}</span></div>
-          {notes.length === 0 ? <div className="notes-empty"><span aria-hidden="true">✦</span><strong>Tu próxima palabra empieza acá.</strong><p>Las notas nuevas van a quedar guardadas para que puedas volver a ellas sin conexión.</p></div> : <ul className="notes-list">{notes.map((note) => <li key={note.id} className={activeNote?.id === note.id ? 'is-selected' : ''}><button type="button" className="note-select" onClick={() => { setActiveNoteId(note.id); setNotice('') }}><strong>{note.title}</strong><span>{note.body || 'Imagen adjunta'}</span><small>{note.createdAt.toLocaleDateString('es')} {note.attachment ? '· Con imagen' : ''}</small></button><button type="button" className="note-delete" aria-label={`Eliminar nota ${note.title}`} onClick={() => void removeNote(note)}>×</button></li>)}</ul>}
+              <div className="notes-section-heading"><div><p className="eyebrow">TU COLECCIÓN</p><h2 id="notes-library-title">Notas guardadas</h2></div><span className="library-count">{notes.length}</span></div>
+          {notes.length === 0 ? <div className="notes-empty"><span aria-hidden="true">✦</span><strong>Tu próxima palabra empieza acá.</strong><p>Las notas nuevas van a quedar guardadas para que puedas volver a ellas sin conexión.</p></div> : <ul className="notes-list">{notes.map((note) => <li key={note.id} className={activeNote?.id === note.id ? 'is-selected' : ''}><button type="button" className="note-select" onClick={() => { setActiveNoteId(note.id); setSelectedCandidateIds([]); setNotice('') }}><strong>{note.title}</strong><span>{note.body || 'Imagen adjunta'}</span><small>{note.createdAt.toLocaleDateString('es')} {note.attachment ? '· Con imagen' : ''}</small></button><button type="button" className="note-delete" aria-label={`Eliminar nota ${note.title}`} onClick={() => void removeNote(note)}>×</button></li>)}</ul>}
           {activeNote && <section className="candidate-review" aria-labelledby="candidate-review-title">
             <div className="candidate-heading"><div><p className="eyebrow">REVISIÓN MANUAL</p><h3 id="candidate-review-title">Palabras de “{activeNote.title}”</h3></div><span className="review-count">{activeNote.candidates.filter((candidate) => candidate.status === 'pending').length} por revisar</span></div>
             {activeNote.attachment && <div className="image-extraction-note"><p>La imagen está guardada localmente. {aiConfigured ? 'Solo al tocar el botón se envía una copia a Supabase y Gemini para sugerir palabras. Revisalas antes de crear tarjetas.' : 'La extracción asistida no está configurada. Podés seguir agregando palabras manualmente; configurar Supabase es opcional.'}</p>{aiConfigured && <button type="button" className="candidate-add" onClick={() => void extractImageWords()} disabled={extractingNoteId !== null} aria-busy={extractingNoteId === activeNote.id}>{extractingNoteId === activeNote.id ? 'Analizando imagen…' : extractingNoteId !== null ? 'Esperá: analizando otra nota…' : 'Extraer palabras para revisar'}</button>}{visibleExtractionStatus(extractionStatus, activeNote.id) && <p role={extractionStatus?.kind === 'error' ? 'alert' : 'status'}>{extractionStatus?.message}</p>}</div>}
@@ -496,9 +504,11 @@ function NotesCapture() {
               <button type="submit" className="candidate-add">Agregar para revisar <span aria-hidden="true">+</span></button>
             </form>
             {activeNote.candidates.length === 0 ? <p className="candidate-empty">Todavía no hay palabras. Agregá las que quieras convertir en tarjetas.</p> : <ul className="candidate-list">{activeNote.candidates.map((candidate) => <li key={candidate.id} className={`candidate-item candidate-${candidate.status}`}>
-              <div className="candidate-fields"><label htmlFor={`candidate-word-${candidate.id}`}>Inglés</label><input id={`candidate-word-${candidate.id}`} value={candidate.word} disabled={candidate.status !== 'pending'} onChange={(event) => editCandidate(candidate, 'word', event.target.value)} /><label htmlFor={`candidate-meaning-${candidate.id}`}>Significado</label><input id={`candidate-meaning-${candidate.id}`} value={candidate.meaning} disabled={candidate.status !== 'pending'} onChange={(event) => editCandidate(candidate, 'meaning', event.target.value)} /></div>
-              {candidate.status === 'pending' ? <div className="candidate-actions"><button type="button" className="confirm-candidate" onClick={() => void confirmCandidate(candidate)}>Confirmar y crear tarjeta</button><button type="button" className="reject-candidate" onClick={() => rejectCandidate(candidate.id)}>Descartar</button></div> : <span className="candidate-status">{candidate.status === 'confirmed' ? 'Guardada en tarjetas' : 'Descartada'}</span>}
+              {candidate.status === 'pending' && <label className="candidate-select"><input type="checkbox" checked={selectedCandidateIds.includes(candidate.id)} onChange={() => toggleCandidateSelection(candidate.id)} /> Seleccionar</label>}
+              <div className="candidate-fields"><label htmlFor={`candidate-word-${candidate.id}`}>Inglés corregido</label><input id={`candidate-word-${candidate.id}`} value={candidate.canonicalWord ?? candidate.word} disabled={candidate.status !== 'pending'} onChange={(event) => editCandidate(candidate, 'word', event.target.value)} />{candidate.originalInput && candidate.originalInput.trim().toLocaleLowerCase() !== (candidate.canonicalWord ?? candidate.word).trim().toLocaleLowerCase() && <><span className="candidate-original-label">Entrada original</span><span className="candidate-original">{candidate.originalInput}</span></>}<label htmlFor={`candidate-meaning-${candidate.id}`}>Significado</label><input id={`candidate-meaning-${candidate.id}`} value={candidate.meaning} disabled={candidate.status !== 'pending'} onChange={(event) => editCandidate(candidate, 'meaning', event.target.value)} /><label htmlFor={`candidate-phonetic-${candidate.id}`}>Pronunciación</label><input id={`candidate-phonetic-${candidate.id}`} value={candidate.phonetic ?? ''} placeholder="/ˈbrɪdʒ/" disabled={candidate.status !== 'pending'} onChange={(event) => editCandidate(candidate, 'phonetic', event.target.value)} /></div>
+              {candidate.status === 'pending' ? <div className="candidate-actions"><button type="button" className="reject-candidate" onClick={() => rejectCandidate(candidate.id)}>Descartar</button></div> : <span className="candidate-status">{candidate.status === 'confirmed' ? 'Guardada en tarjetas' : 'Descartada'}</span>}
             </li>)}</ul>}
+            {activeNote.candidates.some((candidate) => candidate.status === 'pending') && <div className="candidate-batch-actions"><span>{selectedCandidateIds.length} seleccionadas</span><button type="button" className="confirm-candidate" disabled={!selectedCandidateIds.length || confirmingCandidates} onClick={() => void confirmSelectedCandidates()}>{confirmingCandidates ? 'Guardando…' : 'Confirmar selección y crear tarjetas'}</button></div>}
           </section>}
         </section>
       </div>

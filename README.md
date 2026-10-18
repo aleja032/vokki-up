@@ -28,7 +28,7 @@ The function accepts four actions: `flashcards`, `quiz`, and `writing-feedback` 
 
 This repository does **not** deploy the function or configure a Supabase project. Before deployment, configure the function's invocation/authentication mode and abuse controls for a public client according to your project's policy. The publishable key is public identification, not protection against request volume or Gemini charges. Keep local/offline study as the fallback if the function is unavailable.
 
-Selecting or saving an image keeps it on the device. A copy is sent to Supabase and Gemini **only** when the learner presses “Extraer palabras para revisar” on a saved note. The learner can edit, reject, or confirm each suggestion.
+Selecting or saving an image keeps it on the device. A copy is sent to Supabase and Gemini **only** when the learner presses “Extraer palabras para revisar” on a saved note. The note text is passed as read-only learner context and remains unchanged. Each suggestion keeps the original transcription beside its canonical corrected English, Spanish meaning, and IPA-style English pronunciation. Learners can edit or reject suggestions, select several, and confirm them together. Confirmation is one local IndexedDB transaction, skips duplicate words, and is safe to retry; attached image blobs remain local. Manual vocabulary capture continues to work offline without AI configuration.
 
 ## Checks
 

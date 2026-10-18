@@ -22,7 +22,7 @@ const schemas: Record<Action, JsonSchema> = {
     type: 'OBJECT', properties: { correctedText: { type: 'STRING' }, feedback: { type: 'STRING' }, suggestions: { type: 'ARRAY', items: { type: 'STRING' } } }, required: ['correctedText', 'feedback', 'suggestions'],
   },
   'image-vocabulary': {
-    type: 'OBJECT', properties: { words: { type: 'ARRAY', items: { type: 'OBJECT', properties: { word: { type: 'STRING' }, meaning: { type: 'STRING' } }, required: ['word', 'meaning'] } } }, required: ['words'],
+    type: 'OBJECT', properties: { words: { type: 'ARRAY', items: { type: 'OBJECT', properties: { originalInput: { type: 'STRING' }, canonicalWord: { type: 'STRING' }, meaning: { type: 'STRING' }, phonetic: { type: 'STRING' } }, required: ['originalInput', 'canonicalWord', 'meaning', 'phonetic'] } } }, required: ['words'],
   },
 }
 
@@ -45,6 +45,7 @@ function validateText(body: Record<string, unknown>): string | null {
 }
 
 function validateImage(body: Record<string, unknown>): string | null {
+  if (body.context !== undefined && (typeof body.context !== 'string' || body.context.length > 5000)) return 'El contexto supera el límite de 5.000 caracteres.'
   if (!isRecord(body.image) || typeof body.image.mimeType !== 'string' || typeof body.image.data !== 'string') return 'Adjuntá una imagen válida.'
   if (!allowedImageTypes.has(body.image.mimeType)) return 'Elegí una imagen PNG, JPEG o WebP.'
   const data = body.image.data
@@ -84,7 +85,8 @@ function isValidGenerated(action: Action, value: unknown): boolean {
       return isNonEmptyString(value.correctedText) && isNonEmptyString(value.feedback) && isStringArray(value.suggestions)
     case 'image-vocabulary':
       return Array.isArray(value.words) && value.words.length <= 12 && value.words.every((word: unknown) =>
-        isRecord(word) && isNonEmptyString(word.word) && isNonEmptyString(word.meaning))
+        isRecord(word) && isNonEmptyString(word.originalInput) && isNonEmptyString(word.canonicalWord)
+        && isNonEmptyString(word.meaning) && isNonEmptyString(word.phonetic))
   }
 }
 
@@ -106,18 +108,18 @@ async function readBoundedBody(request: Request): Promise<string | null> {
   }
 }
 
-function promptFor(action: Action, text?: string): string {
+function promptFor(action: Action, text?: string, context?: string): string {
   const prompts: Record<Action, string> = {
     flashcards: `Create up to 8 English study flashcards from this learner material. Give concise Spanish meanings and natural English examples. Return only the requested structured data.\n\n${text}`,
     quiz: `Create a short English-learning quiz with 5 multiple-choice questions based on this material. Use four options and concise Spanish explanations. The answer must exactly match one option.\n\n${text}`,
     'writing-feedback': `Give kind, concise English writing feedback in Spanish. Preserve the learner's intended meaning, provide corrected text, and list a few actionable suggestions.\n\n${text}`,
-    'image-vocabulary': 'Identify up to 12 useful English words or short phrases clearly visible in this study image. For each, provide a concise Spanish meaning. Return an empty words list if none are legible.',
+    'image-vocabulary': `Identify up to 12 useful English words or short phrases clearly visible in this study image. For each provide originalInput exactly as visibly written or transcribed, canonicalWord as the corrected canonical English spelling (never replace or omit originalInput), a concise Spanish meaning, and an English IPA-style phonetic transcription wrapped in slashes. If a learner note is provided, use it only as context and preserve its text without editing. Return an empty words list if none are legible.${context ? `\n\nLearner note context (verbatim):\n${context}` : ''}`,
   }
   return prompts[action]
 }
 
 async function generate(action: Action, body: Record<string, unknown>, apiKey: string, model: string) {
-  const parts: Record<string, unknown>[] = [{ text: promptFor(action, typeof body.text === 'string' ? body.text.trim() : undefined) }]
+  const parts: Record<string, unknown>[] = [{ text: promptFor(action, typeof body.text === 'string' ? body.text.trim() : undefined, typeof body.context === 'string' ? body.context : undefined) }]
   if (action === 'image-vocabulary') {
     const image = body.image as { mimeType: string; data: string }
     parts.push({ inlineData: { mimeType: image.mimeType, data: image.data } })
