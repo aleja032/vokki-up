@@ -89,9 +89,17 @@ Deliver an intuitive, mobile-first PWA for personal English study from B1 to B2 
   - Checks: `npm test -- --run` passed (49 tests); `npm run build` passed (existing chunk-size advisory only); `npm run lint` passed. No deployment or remote service calls.
   - Implementation: added shared session token acquisition to `supabaseClient.ts`, injected it into the Gemini client, and covered session reuse, anonymous sign-in, auth failure, and request headers.
 
+- [x] **VU-10 — Mobile onboarding and readability polish**
+  - Route: delegated; focused mobile UX clarification and layout refinement.
+  - Scope: make the note-to-batch-card conversion explicit in the UI; increase remaining small typography; ensure optional sync remains visible above mobile navigation; and improve hero-card text contrast/spacing over imagery.
+  - Acceptance: learners understand how to select candidates and create cards; text remains readable on phone screens; sync is not hidden by navigation; and the home hero’s “Repaso local · a tu ritmo” is legible over its visual treatment.
+  - Verification: `npm test -- --run` passed (49 tests); `npm run build` passed (existing chunk-size advisory only); `npm run lint` passed. Phone-width browser QA was unavailable in the delegated session because no browser surface could be opened.
+  - Implementation: added a numbered note-to-card guide, enlarged note/candidate typography and touch targets, reserved mobile safe-bottom space after optional sync, and placed a dark contrast gradient behind hero copy.
+
 ## Progress
 - Created: 2026-10-17
 - Completed: VU-01 — mobile-first Spanish application shell, responsive navigation, and persistent theme preference. Verification: build and lint passed.
+- Completed: VU-10 — mobile onboarding and readability polish. Verification: 49 tests, build, and lint passed; browser QA unavailable in delegated session.
 - Completed: VU-02 — Dexie-backed offline cards, review log, deterministic SRS scheduler, editable/suspendable local cards, and persistence tests. Verification: 7 tests, build, and lint passed.
 - Completed: VU-03 — offline notes, camera/file capture, persisted image previews, truthful candidate confirmation, and atomic local flashcard creation. Verification: 12 tests, build, and lint passed.
 - Completed: VU-04 — secure local Gemini/Supabase Edge Function boundary, validated image requests/responses, and note-scoped extraction UX. Verification: 20 tests, build, lint, and non-network Edge smoke checks passed.
