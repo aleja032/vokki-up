@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Ícono adaptable de Vokki Up">
+  <rect width="512" height="512" fill="#6d4ca2"/>
+  <rect x="182" y="176" width="148" height="176" rx="49" fill="#fffdf8"/>
+  <path d="M216 226l40 65 40-65" fill="none" stroke="#6d4ca2" stroke-linecap="round" stroke-linejoin="round" stroke-width="23"/>
+  <circle cx="316" cy="185" r="17" fill="#ef8b74"/>
+</svg>
