@@ -77,3 +77,14 @@ export interface WritingSession {
     suggestions: string[]
   }
 }
+
+export type StudyActivityType = 'card_created' | 'review' | 'candidate_batch_confirmed' | 'quiz_completed' | 'writing_completed'
+
+export interface StudyActivity {
+  id: string
+  type: StudyActivityType
+  occurredAt: Date
+  summary: string
+  entityId?: string
+  count?: number
+}

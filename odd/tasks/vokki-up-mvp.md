@@ -75,11 +75,12 @@ Deliver an intuitive, mobile-first PWA for personal English study from B1 to B2 
   - Acceptance: a user can upload/take a photo, review and edit AI candidates, see corrections without losing the original input, select multiple entries, and create non-duplicate local cards in one action. Offline/manual fallback remains usable.
   - Checks: 42 deterministic tests passed; production build and lint passed. Browser QA not run. No Edge Function deployment or remote service calls.
 
-- [ ] **VU-09B — Traceable study activity and readable UI refinement**
+- [x] **VU-09B — Traceable study activity and readable UI refinement**
   - Route: delegated; local activity history plus targeted UX refinement.
   - Scope: record meaningful local study actions for progress traceability; make light-theme contrast and type scale legible; reduce visual noise around optional synchronization and active module content.
   - Acceptance: progress explains recent meaningful activity; light-mode text meets readable contrast/size expectations; optional sync is visually calm and does not compete with the active module.
-  - Checks: deterministic history/progress tests, build, lint, and phone/desktop browser QA.
+  - Checks: `npm test -- --run` passed (45 tests); `npm run build` and `npm run lint` passed. Local browser QA confirmed the progress timeline/segments and compact optional-sync panel at desktop width. Phone-width visual QA remains pending because the available browser surface did not provide a viewport override; sync and AI controls were not activated. Production build retains the pre-existing >500 kB chunk advisory.
+  - Implementation: added Dexie v6 optional `activityHistory` store with atomic local events for card creation, reviews, candidate-batch confirmation, quiz completion, and writing completion; progress derives an eight-entry recent timeline and activity-type/7-day/30-day counts. Activity history intentionally remains local-only, so no Supabase migration or sync payload changes were needed. Refined light-theme muted/line tokens and supporting text sizing; moved optional sync below the active module and reduced it to a calm compact strip.
 
 ## Progress
 - Created: 2026-10-17
@@ -90,6 +91,7 @@ Deliver an intuitive, mobile-first PWA for personal English study from B1 to B2 
 - Completed: VU-09A — explicit original/corrected vocabulary fields, Spanish meaning and IPA phonetics, editable/selectable candidates, and atomic duplicate-safe batch confirmation. Verification: 42 tests, production build, and lint passed; browser QA and deployment were intentionally not performed.
 - Completed: VU-05 — persistent local quiz and writing workflows, derived progress/streak dashboard, and safe Gemini-assisted feedback boundary. Verification: 29 tests, build, and lint passed.
 - Completed: VU-07 — neutral profile copy, legible mobile typography/spacing, modular card views, and separate review/create/library flows. Verification: 37 tests, build, lint, and independent desktop/phone browser QA passed.
+- Completed: VU-09B — append-only local activity history, segmented/recent progress, higher-contrast light theme, and compact optional sync presentation. Verification: 45 tests, build, lint, and desktop browser QA passed; phone-width QA remains pending.
 - Next: configure the Gemini secrets outside chat, confirm anonymous sign-ins are enabled, then validate live auth/RLS/sync and device/offline behavior.
 
 

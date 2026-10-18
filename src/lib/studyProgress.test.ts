@@ -1,7 +1,8 @@
 import 'fake-indexeddb/auto'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { buildLocalQuiz, calculateProgress, scoreQuiz } from './studyProgress'
-import { completeWritingSession, getQuizAttempts, getWritingSessions, saveQuizAttempt, saveWritingDraft, studyDb } from './studyDb'
+import type { StudyActivity } from '../types/study'
+import { completeWritingSession, getActivityHistory, getQuizAttempts, getWritingSessions, saveQuizAttempt, saveWritingDraft, studyDb } from './studyDb'
 import type { QuizAttempt, ReviewLog, StudyCard, WritingSession } from '../types/study'
 
 const now = new Date('2026-10-17T12:00:00')
@@ -45,6 +46,19 @@ describe('local quiz', () => {
 })
 
 describe('study progress', () => {
+  it('derives a recent activity timeline and segmented activity counts', () => {
+    const activity: StudyActivity[] = [
+      { id: 'a1', type: 'card_created', occurredAt: new Date('2026-10-17T10:00:00'), summary: 'Guardaste “bright”.' },
+      { id: 'a2', type: 'review', occurredAt: new Date('2026-10-17T11:00:00'), summary: 'Repasaste “bright”.' },
+      { id: 'a3', type: 'quiz_completed', occurredAt: new Date('2026-10-16T10:00:00'), summary: 'Completaste un quiz.' },
+    ]
+    const progress = calculateProgress([], [], [], [], now, activity)
+
+    expect(progress.recentActivity.map((item) => item.id)).toEqual(['a2', 'a1', 'a3'])
+    expect(progress.activityByType).toEqual({ card_created: 1, review: 1, quiz_completed: 1, writing_completed: 0, candidate_batch_confirmed: 0 })
+    expect(progress.activityByPeriod.last7Days).toBe(3)
+  })
+
   it('counts completed activities and a streak ending yesterday without treating drafts as finished', () => {
     const cards = [
       card('mastered', 'dominado', { state: 'review', repetitions: 5, nextReviewAt: new Date('2026-10-18T12:00:00') }),
@@ -91,6 +105,10 @@ describe('activity persistence', () => {
     await saveQuizAttempt(attempt)
     await saveWritingDraft(session)
     await completeWritingSession({ ...session, completedAt: now })
+    expect(await getActivityHistory()).toMatchObject([
+      { type: 'writing_completed', entityId: session.id, summary: 'Finalizaste una sesión de escritura.' },
+      { type: 'quiz_completed', entityId: attempt.id, summary: 'Completaste un quiz: 2 de 3 correctas.' },
+    ])
 
     studyDb.close()
     await studyDb.open()

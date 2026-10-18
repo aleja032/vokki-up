@@ -1,6 +1,6 @@
 import Dexie, { type Table } from 'dexie'
 import { scheduleReview } from './srs'
-import type { QuizAttempt, ReviewLog, StudyCard, StudyNote, StudyRating, WritingSession } from '../types/study'
+import type { QuizAttempt, ReviewLog, StudyActivity, StudyCard, StudyNote, StudyRating, WritingSession } from '../types/study'
 
 class StudyDatabase extends Dexie {
   cards!: Table<StudyCard, string>
@@ -8,6 +8,7 @@ class StudyDatabase extends Dexie {
   notes!: Table<StudyNote, string>
   quizAttempts!: Table<QuizAttempt, string>
   writingSessions!: Table<WritingSession, string>
+  activityHistory!: Table<StudyActivity, string>
 
   constructor() {
     super('vokki-up-study')
@@ -37,6 +38,14 @@ class StudyDatabase extends Dexie {
       await transaction.table<ReviewLog, number>('reviewLogs').toCollection().modify((log) => {
         if (!log.syncId) log.syncId = crypto.randomUUID()
       })
+    })
+    this.version(6).stores({
+      cards: 'id, state, nextReviewAt, suspended, createdAt, updatedAt',
+      reviewLogs: '++id, &syncId, cardId, reviewedAt',
+      notes: 'id, createdAt, updatedAt, deletedAt',
+      quizAttempts: 'id, completedAt',
+      writingSessions: 'id, createdAt, updatedAt, completedAt',
+      activityHistory: 'id, occurredAt, type',
     })
   }
 }
@@ -69,22 +78,38 @@ export function getDueCards(at: Date = new Date()): Promise<StudyCard[]> {
 }
 
 export async function saveStudyCard(card: StudyCard): Promise<void> {
-  await studyDb.cards.put({ ...card, updatedAt: new Date() })
+  await studyDb.transaction('rw', studyDb.cards, studyDb.activityHistory, async () => {
+    const existing = await studyDb.cards.get(card.id)
+    await studyDb.cards.put({ ...card, updatedAt: new Date() })
+    if (!existing) await appendActivity({
+      type: 'card_created', occurredAt: card.createdAt, entityId: card.id,
+      summary: `Guardaste “${card.front}”.`,
+    })
+  })
 }
 
 export async function reviewStudyCard(id: string, rating: StudyRating, reviewedAt: Date = new Date()): Promise<void> {
-  await studyDb.transaction('rw', studyDb.cards, studyDb.reviewLogs, async () => {
+  await studyDb.transaction('rw', studyDb.cards, studyDb.reviewLogs, studyDb.activityHistory, async () => {
     const card = await studyDb.cards.get(id)
     if (!card) throw new Error('Study card not found')
     const schedule = scheduleReview(card, rating, reviewedAt)
     const updated = { ...card, ...schedule, updatedAt: reviewedAt }
     await studyDb.cards.put(updated)
     await studyDb.reviewLogs.add({ syncId: crypto.randomUUID(), cardId: id, rating, reviewedAt, nextReviewAt: schedule.nextReviewAt })
+    await appendActivity({ type: 'review', occurredAt: reviewedAt, entityId: id, summary: `Repasaste “${card.front}”.` })
   })
 }
 
 export function getReviewHistory(): Promise<ReviewLog[]> {
   return studyDb.reviewLogs.orderBy('reviewedAt').reverse().toArray()
+}
+
+function appendActivity(activity: Omit<StudyActivity, 'id'>): Promise<string> {
+  return studyDb.activityHistory.add({ ...activity, id: crypto.randomUUID() })
+}
+
+export function getActivityHistory(): Promise<StudyActivity[]> {
+  return studyDb.activityHistory.orderBy('occurredAt').reverse().toArray()
 }
 
 export function getStudyNotes(): Promise<StudyNote[]> {
@@ -113,7 +138,7 @@ export async function confirmStudyNoteCandidate(noteId: string, candidateId: str
 export async function confirmStudyNoteCandidates(noteId: string, candidateIds: string[]): Promise<StudyCard[]> {
   const selectedIds = [...new Set(candidateIds)]
   if (selectedIds.length === 0) return []
-  return studyDb.transaction('rw', studyDb.notes, studyDb.cards, async () => {
+  return studyDb.transaction('rw', studyDb.notes, studyDb.cards, studyDb.activityHistory, async () => {
     const note = await studyDb.notes.get(noteId)
     if (!note) throw new Error('Study note not found')
     const selected = selectedIds.map((id) => note.candidates.find((item) => item.id === id))
@@ -148,6 +173,12 @@ export async function confirmStudyNoteCandidates(noteId: string, candidateIds: s
       })
     }
     if (created.length) await studyDb.cards.bulkAdd(created)
+    if (pending.length) await appendActivity({
+      type: 'candidate_batch_confirmed', occurredAt: now, entityId: noteId, count: created.length,
+      summary: created.length
+        ? `Sumaste ${created.length} ${created.length === 1 ? 'palabra' : 'palabras'} desde una nota.`
+        : 'Confirmaste palabras de una nota; no se agregaron duplicados.',
+    })
     const confirmedIds = new Set(pending.map((candidate) => candidate!.id))
     await studyDb.notes.put({
       ...note,
@@ -169,8 +200,14 @@ export function getQuizAttempts(): Promise<QuizAttempt[]> {
   return studyDb.quizAttempts.orderBy('completedAt').reverse().toArray()
 }
 
-export function saveQuizAttempt(attempt: QuizAttempt): Promise<string> {
-  return studyDb.quizAttempts.add(attempt)
+export async function saveQuizAttempt(attempt: QuizAttempt): Promise<string> {
+  return studyDb.transaction('rw', studyDb.quizAttempts, studyDb.activityHistory, async () => {
+    await studyDb.quizAttempts.add(attempt)
+    return appendActivity({
+      type: 'quiz_completed', occurredAt: attempt.completedAt, entityId: attempt.id,
+      summary: `Completaste un quiz: ${attempt.correctCount} de ${attempt.questionCount} correctas.`,
+    })
+  })
 }
 
 export function getWritingSessions(): Promise<WritingSession[]> {
@@ -192,11 +229,12 @@ export async function saveWritingDraft(session: WritingSession): Promise<void> {
 }
 
 export async function completeWritingSession(session: WritingSession): Promise<void> {
-  await studyDb.transaction('rw', studyDb.writingSessions, async () => {
+  await studyDb.transaction('rw', studyDb.writingSessions, studyDb.activityHistory, async () => {
     const current = await studyDb.writingSessions.get(session.id)
     if (current && current.updatedAt > session.updatedAt) throw new StaleWritingSessionError()
     if (current?.completedAt) return
     const completedAt = session.completedAt ?? new Date()
     await studyDb.writingSessions.put({ ...session, updatedAt: completedAt, completedAt })
+    await appendActivity({ type: 'writing_completed', occurredAt: completedAt, entityId: session.id, summary: 'Finalizaste una sesión de escritura.' })
   })
 }

@@ -1,4 +1,4 @@
-import type { QuizAttempt, QuizQuestion, ReviewLog, StudyCard, WritingSession } from '../types/study'
+import type { QuizAttempt, QuizQuestion, ReviewLog, StudyActivity, StudyActivityType, StudyCard, WritingSession } from '../types/study'
 
 export const MASTERED_CARD_GOAL = 50
 
@@ -37,7 +37,7 @@ function localDay(date: Date): string {
 }
 
 export function calculateProgress(
-  cards: StudyCard[], reviews: ReviewLog[], quizzes: QuizAttempt[], writing: WritingSession[], now: Date = new Date(),
+  cards: StudyCard[], reviews: ReviewLog[], quizzes: QuizAttempt[], writing: WritingSession[], now: Date = new Date(), activity: StudyActivity[] = [],
 ) {
   const activityDays = new Set([
     ...reviews.map((review) => localDay(review.reviewedAt)),
@@ -52,6 +52,9 @@ export function calculateProgress(
     cursor.setDate(cursor.getDate() - 1)
   }
   const masteredCount = cards.filter((card) => !card.suspended && card.state === 'review' && card.repetitions >= 5).length
+  const activityTypes: StudyActivityType[] = ['card_created', 'review', 'quiz_completed', 'writing_completed', 'candidate_batch_confirmed']
+  const activityByType = Object.fromEntries(activityTypes.map((type) => [type, activity.filter((item) => item.type === type).length])) as Record<StudyActivityType, number>
+  const since = (days: number) => now.getTime() - days * 24 * 60 * 60 * 1000
 
   return {
     cardCount: cards.length,
@@ -61,5 +64,11 @@ export function calculateProgress(
     writingSessions: writing.filter((session) => session.completedAt).length,
     streakDays,
     goalPercent: Math.min(100, Math.round(masteredCount / MASTERED_CARD_GOAL * 100)),
+    recentActivity: [...activity].sort((a, b) => b.occurredAt.getTime() - a.occurredAt.getTime()).slice(0, 8),
+    activityByType,
+    activityByPeriod: {
+      last7Days: activity.filter((item) => item.occurredAt.getTime() >= since(7) && item.occurredAt <= now).length,
+      last30Days: activity.filter((item) => item.occurredAt.getTime() >= since(30) && item.occurredAt <= now).length,
+    },
   }
 }

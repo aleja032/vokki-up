@@ -585,8 +585,6 @@ function App() {
         </header>
 
         <PwaStatus />
-        <SyncStatus />
-
         <main id="main-content" tabIndex={-1}>
           {activeSection === 'Inicio' ? (
             <>
@@ -647,6 +645,7 @@ function App() {
             : activeSection === 'Writing' ? <WritingPractice />
               : <ProgressDashboard onNavigate={navigateTo} />}
         </main>
+        <SyncStatus />
       </div>
 
       <nav className="mobile-nav" aria-label="Navegación principal">

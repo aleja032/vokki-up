@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { getReviewHistory, getStudyCards, reviewStudyCard, saveStudyCard, seedCardsIfEmpty, studyDb } from './studyDb'
-import type { StudyCard } from '../types/study'
+import { confirmStudyNoteCandidates, getActivityHistory, getReviewHistory, getStudyCards, reviewStudyCard, saveStudyCard, saveStudyNote, seedCardsIfEmpty, studyDb } from './studyDb'
+import type { StudyCard, StudyNote } from '../types/study'
 
 const now = new Date('2026-10-17T12:00:00.000Z')
 
@@ -59,5 +59,32 @@ describe('studyDb', () => {
 
     expect(await studyDb.cards.count()).toBe(4)
     expect(await studyDb.cards.get('user-card')).toBeDefined()
+  })
+
+  it('keeps append-only activity events for card creation and reviews across reopen', async () => {
+    await saveStudyCard(makeCard('trace-card'))
+    await reviewStudyCard('trace-card', 'good', now)
+
+    expect(await getActivityHistory()).toMatchObject([
+      { type: 'review', entityId: 'trace-card', occurredAt: now, summary: 'Repasaste “take your time”.' },
+      { type: 'card_created', entityId: 'trace-card', occurredAt: now, summary: 'Guardaste “take your time”.' },
+    ])
+    expect(await studyDb.activityHistory.count()).toBe(2)
+    studyDb.close()
+    await studyDb.open()
+    expect(await getActivityHistory()).toHaveLength(2)
+  })
+
+  it('records an image-candidate batch confirmation as one local study activity', async () => {
+    const note: StudyNote = {
+      id: 'note', title: 'Photo words', body: 'A note', createdAt: now, updatedAt: now,
+      candidates: [{ id: 'candidate-1', word: 'bright', meaning: 'brillante', status: 'pending' }],
+    }
+    await saveStudyNote(note)
+    await confirmStudyNoteCandidates(note.id, ['candidate-1'])
+
+    expect(await getActivityHistory()).toMatchObject([
+      { type: 'candidate_batch_confirmed', entityId: note.id, count: 1, summary: 'Sumaste 1 palabra desde una nota.' },
+    ])
   })
 })

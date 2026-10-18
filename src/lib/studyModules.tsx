@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { getConfiguredGeminiClient, getGeminiClientConfig } from './geminiClient'
 import { buildLocalQuiz, calculateProgress, MASTERED_CARD_GOAL, scoreQuiz } from './studyProgress'
 import {
-  completeWritingSession, getQuizAttempts, getReviewHistory, getStudyCards,
+  completeWritingSession, getActivityHistory, getQuizAttempts, getReviewHistory, getStudyCards,
   getWritingSessions, saveQuizAttempt, saveWritingDraft, seedCardsIfEmpty, StaleWritingSessionError,
 } from './studyDb'
-import type { QuizAttempt, QuizQuestion, ReviewLog, StudyCard, WritingSession } from '../types/study'
+import type { QuizAttempt, QuizQuestion, ReviewLog, StudyActivity, StudyCard, WritingSession } from '../types/study'
 
 const writingPrompt = 'Write 120–180 words in English about a habit that helped you learn something difficult. Describe what changed, give one example, and use at least two linking words such as however, because, or therefore.'
 
@@ -243,6 +243,7 @@ export function ProgressDashboard({ onNavigate }: { onNavigate: (section: 'Tarje
   const [reviews, setReviews] = useState<ReviewLog[]>([])
   const [quizzes, setQuizzes] = useState<QuizAttempt[]>([])
   const [writing, setWriting] = useState<WritingSession[]>([])
+  const [activity, setActivity] = useState<StudyActivity[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -250,17 +251,18 @@ export function ProgressDashboard({ onNavigate }: { onNavigate: (section: 'Tarje
     const timer = window.setTimeout(() => {
       void (async () => {
         await seedCardsIfEmpty()
-        const [nextCards, nextReviews, nextQuizzes, nextWriting] = await Promise.all([
-          getStudyCards(), getReviewHistory(), getQuizAttempts(), getWritingSessions(),
+        const [nextCards, nextReviews, nextQuizzes, nextWriting, nextActivity] = await Promise.all([
+          getStudyCards(), getReviewHistory(), getQuizAttempts(), getWritingSessions(), getActivityHistory(),
         ])
         setCards(nextCards); setReviews(nextReviews); setQuizzes(nextQuizzes); setWriting(nextWriting)
+        setActivity(nextActivity)
       })().catch(() => setError('No pudimos calcular tu progreso local. Revisá el almacenamiento del navegador.'))
         .finally(() => setLoading(false))
     }, 0)
     return () => window.clearTimeout(timer)
   }, [])
 
-  const progress = calculateProgress(cards, reviews, quizzes, writing)
+  const progress = calculateProgress(cards, reviews, quizzes, writing, new Date(), activity)
   const nextSection = progress.dueCount ? 'Tarjetas' : !progress.quizCompletions ? 'Quiz' : 'Writing'
   const nextAction = progress.dueCount ? `Tenés ${progress.dueCount} tarjetas listas para repasar.` : !progress.quizCompletions ? 'Probá un quiz con tus tarjetas.' : 'Dale espacio a una sesión de escritura.'
 
@@ -275,6 +277,15 @@ export function ProgressDashboard({ onNavigate }: { onNavigate: (section: 'Tarje
         <section className="activity-panel" aria-labelledby="b2-goal-title"><p className="eyebrow">META PERSONAL B2</p><h2 id="b2-goal-title">{progress.masteredCount} de {MASTERED_CARD_GOAL} tarjetas consolidadas</h2><div className="goal-track" role="progressbar" aria-label="Meta de tarjetas consolidadas" aria-valuenow={Math.min(progress.masteredCount, MASTERED_CARD_GOAL)} aria-valuemin={0} aria-valuemax={MASTERED_CARD_GOAL}><span style={{ width: `${progress.goalPercent}%` }} /></div><p>{progress.goalPercent}% de tu meta. Una tarjeta cuenta como consolidada tras cinco repasos exitosos y si sigue activa. Es una meta de práctica, no una certificación B2.</p></section>
         <section className="activity-panel" aria-labelledby="next-action-title"><p className="eyebrow">TU PRÓXIMO PASO</p><h2 id="next-action-title">Seguí a tu ritmo.</h2><p>{nextAction}</p><button className="primary-button" type="button" onClick={() => onNavigate(nextSection)}>Ir a {nextSection} →</button><p className="offline-note">La racha cuenta días con repasos, quizzes terminados o escritura finalizada; un borrador no cuenta.</p></section>
       </div>
+      <section className="activity-panel progress-activity" aria-labelledby="recent-activity-title">
+        <div className="progress-activity-heading"><div><p className="eyebrow">TU HISTORIAL LOCAL</p><h2 id="recent-activity-title">Actividad reciente</h2></div><p>{progress.activityByPeriod.last7Days} esta semana · {progress.activityByPeriod.last30Days} en 30 días</p></div>
+        <div className="activity-segments" aria-label="Actividad por tipo">{[
+          ['Tarjetas nuevas', progress.activityByType.card_created], ['Repasos', progress.activityByType.review],
+          ['Lotes desde notas', progress.activityByType.candidate_batch_confirmed], ['Quizzes', progress.activityByType.quiz_completed],
+          ['Writing', progress.activityByType.writing_completed],
+        ].map(([label, count]) => <span key={label}>{label}: <strong>{count}</strong></span>)}</div>
+        {progress.recentActivity.length ? <ol className="recent-activity">{progress.recentActivity.map((item) => <li key={item.id}><span>{item.summary}</span><time dateTime={item.occurredAt.toISOString()}>{item.occurredAt.toLocaleDateString('es', { day: 'numeric', month: 'short' })} · {item.occurredAt.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' })}</time></li>)}</ol> : <p>Todavía no hay actividad registrada. Tus próximas prácticas aparecerán acá.</p>}
+      </section>
     </>}
   </section>
 }

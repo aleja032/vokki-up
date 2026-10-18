@@ -2,6 +2,8 @@
 
 Mobile-first English study app. Notes, vocabulary candidates, flashcards, and review history are stored in the browser with IndexedDB. Image-based vocabulary suggestions are optional and require an explicit learner action; suggestions must be confirmed before becoming cards.
 
+The Progress module also shows a recent local activity timeline for card creation, reviews, confirmed image-candidate batches, completed quizzes, and completed writing sessions. This append-only timeline stays on the device and remains available offline; it does not change notes or sync to Supabase.
+
 ## Local development
 
 ```bash

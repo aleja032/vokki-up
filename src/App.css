@@ -513,11 +513,34 @@ button:focus-visible, a:focus-visible { outline: 3px solid var(--focus); outline
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
 
-.sync-status { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0 24px 16px; padding: 14px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
-.sync-status strong { color: var(--text); font-size: 13px; }
-.sync-status p { margin: 4px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.sync-status { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 10px 24px 16px; padding: 9px 13px; border: 1px solid var(--line); border-radius: 10px; background: color-mix(in srgb, var(--surface) 82%, var(--paper)); }
+.sync-status strong { color: var(--ink); font-size: 13px; }
+.sync-status p { margin: 2px 0 0; color: var(--muted-strong); font-size: 12px; line-height: 1.4; }
 .sync-status button { flex: none; }
-@media (max-width: 640px) { .sync-status { align-items: flex-start; flex-direction: column; margin: 0 14px 14px; } }
+@media (max-width: 640px) { .sync-status { align-items: center; flex-direction: row; margin: 10px 14px 14px; padding: 9px 11px; } .sync-status p { font-size: 11px; } }
+
+.progress-activity { margin-top: 16px; }
+.progress-activity-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.progress-activity-heading h2 { margin-bottom: 0; }
+.progress-activity-heading > p { margin: 0; color: var(--muted-strong); font-size: 12px; }
+.activity-segments { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0 4px; }
+.activity-segments span { padding: 5px 9px; color: var(--muted-strong); background: var(--hover); border-radius: 999px; font-size: 12px; }
+.activity-segments strong { color: var(--ink); }
+.recent-activity { display: grid; gap: 0; margin: 6px 0 0; padding: 0; list-style: none; }
+.recent-activity li { display: flex; justify-content: space-between; gap: 14px; padding: 11px 0; border-top: 1px solid var(--line); color: var(--ink); font-size: 14px; }
+.recent-activity time { flex: none; color: var(--muted-strong); font-size: 12px; }
+@media (max-width: 640px) { .progress-activity-heading { align-items: flex-start; flex-direction: column; gap: 6px; } .recent-activity li { flex-direction: column; gap: 2px; } }
+
+/* Keep supporting content readable in the light theme without flattening hierarchy. */
+.eyebrow { color: var(--muted-strong); font-size: 10px; }
+.activity-panel .eyebrow { font-size: 10px; }
+.activity-panel > p:not(.eyebrow):not(.offline-note), .activity-panel li { font-size: 13px; }
+.activity-history strong { font-size: 13px; }
+.activity-history span, .writing-meta { color: var(--muted-strong); font-size: 12px; }
+.quiz-feedback p, .writing-feedback p, .writing-feedback li, .writing-feedback blockquote { font-size: 13px; }
+.writing-panel label, .writing-feedback strong { color: var(--muted-strong); font-size: 13px; }
+.progress-metrics span { font-size: 13px; }
+.secondary-button, .quiz-option { font-size: 13px; }
 
 @media (max-width: 760px) {
   :root { --text-body: 1rem; --text-support: 0.9375rem; --text-caption: 0.8125rem; }
