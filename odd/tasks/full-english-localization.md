@@ -24,9 +24,10 @@ The settings selector persists a language value but user-facing copy is hard-cod
 - [x] I18N-02 Implement locale state/provider and reusable message access.
 - [x] I18N-03 Replace module and shell copy with locale messages.
 - [x] I18N-04 Add tests and run typecheck/lint/build checks.
+- [x] I18N-05 Apply a selected language only after the user saves settings.
 
 ## Acceptance criteria
-- Selecting English updates the entire visible interface without a reload.
+- Selecting English updates the entire visible interface only after the user saves settings, without a reload.
 - Reloading preserves the selected locale.
 - Spanish remains the default and remains complete.
 - No visible hard-coded Spanish copy remains in active UI components except intentional user content/examples.
@@ -43,7 +44,7 @@ Delegated direct: repository-wide copy mapping and multi-file implementation exc
 - focused localization tests
 
 ## Progress
-Implemented the reusable locale proxy and global provider. Existing message catalogs, site navigation, Home copy, and validation messages now resolve Spanish or English at render time. Language selection updates the provider immediately and persists through the existing settings storage. Focused localization tests, TypeScript, lint, and production build all pass.
+Implemented the reusable locale proxy and global provider. Existing message catalogs, site navigation, Home copy, and validation messages now resolve Spanish or English at render time. Language selection remains a local draft until the user saves settings; saving persists the locale and applies it globally without a reload. Focused localization tests, TypeScript, lint, and production build all pass.
 
 ## Verification evidence
 - `pnpm exec vitest run src/lib/i18n/locale.test.ts` — 3 tests passed.
@@ -52,3 +53,4 @@ Implemented the reusable locale proxy and global provider. Existing message cata
 - `pnpm build` — passed.
 - Work-unit commit: `6840165 feat(i18n): add app-wide English localization`.
 - Follow-up translation coverage: `26b4213 feat(i18n): complete module copy translations`.
+- Save-gated locale behavior: `d178a8d fix(i18n): apply language changes on save`.
