@@ -11,6 +11,13 @@ import type {
 import { validateAiSelection } from './validation';
 import { readBrowserValue } from '@/lib/storage/browser-storage';
 
+let transientApiKey: string | null = null;
+
+/** Keeps guest credentials in this tab's memory only; never writes them to browser storage. */
+export function setTransientAiApiKey(value: string | null) {
+  transientApiKey = value?.trim() || null;
+}
+
 export function readSavedAiSelection(): AiSelection {
   try {
     return validateAiSelection({
@@ -28,6 +35,7 @@ export async function requestCardCapture(
 ): Promise<CardCaptureResult> {
   return requestCapability<CardCaptureResult>('/api/ai/card-capture', {
     selection: readSavedAiSelection(),
+    ...(transientApiKey ? { apiKey: transientApiKey } : {}),
     input
   });
 }

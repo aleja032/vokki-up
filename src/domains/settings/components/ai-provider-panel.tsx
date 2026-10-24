@@ -1,3 +1,8 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { setTransientAiApiKey } from '@/domains/ai/client';
+import { getSupabaseBrowserClient } from '@/lib/supabase/browser-client';
 import { PROVIDER_OPTIONS } from '../data';
 import { settingsMessages } from '../messages';
 import type { AiProvider, ConnectionStatus, ConnectionTest } from '../types';
@@ -30,6 +35,129 @@ interface AiProviderPanelProps {
 export function AiProviderPanel(props: AiProviderPanelProps) {
   const copy = settingsMessages.provider;
   const providerName = settingsMessages.providers[props.provider].name;
+  const [apiKey, setApiKey] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [hasSavedCredential, setHasSavedCredential] = useState(false);
+  const [maskedKey, setMaskedKey] = useState<string | null>(null);
+  const [savedSelection, setSavedSelection] = useState<string | null>(null);
+  const [credentialError, setCredentialError] = useState('');
+  const [isSavingCredential, setIsSavingCredential] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    const refreshCredentialStatus = async () => {
+      try {
+        const response = await fetch('/api/settings/ai-credentials', {
+          cache: 'no-store'
+        });
+        const value: unknown = await response.json();
+        if (
+          !active ||
+          !response.ok ||
+          typeof value !== 'object' ||
+          value === null
+        )
+          return;
+        const status = value as {
+          authenticated?: boolean;
+          hasCredential?: boolean;
+          maskedKey?: string;
+          provider?: string;
+          model?: string;
+        };
+        const authenticated = status.authenticated === true;
+        setIsAuthenticated(authenticated);
+        setHasSavedCredential(authenticated && status.hasCredential === true);
+        setMaskedKey(
+          typeof status.maskedKey === 'string' ? status.maskedKey : null
+        );
+        setSavedSelection(
+          authenticated &&
+            status.hasCredential &&
+            status.provider &&
+            status.model
+            ? `${status.provider} · ${status.model}`
+            : null
+        );
+        if (authenticated) setTransientAiApiKey(null);
+      } catch {
+        if (active)
+          setCredentialError('No se pudo cargar el estado de la API key.');
+      }
+    };
+    void refreshCredentialStatus();
+    window.addEventListener('focus', refreshCredentialStatus);
+    const supabase = getSupabaseBrowserClient();
+    const { data } = supabase?.auth.onAuthStateChange(() => {
+      void refreshCredentialStatus();
+    }) ?? { data: { subscription: null } };
+    return () => {
+      active = false;
+      window.removeEventListener('focus', refreshCredentialStatus);
+      data.subscription?.unsubscribe();
+    };
+  }, []);
+
+  async function saveProviderSettings() {
+    setCredentialError('');
+    if (apiKey.trim()) {
+      if (isAuthenticated) {
+        setIsSavingCredential(true);
+        try {
+          const response = await fetch('/api/settings/ai-credentials', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              provider: props.provider,
+              model: props.model,
+              apiKey: apiKey.trim()
+            }),
+            cache: 'no-store'
+          });
+          const value = await response.json();
+          if (!response.ok) throw new Error('No se pudo guardar la API key.');
+          setHasSavedCredential(value.hasCredential === true);
+          setMaskedKey(
+            typeof value.maskedKey === 'string' ? value.maskedKey : null
+          );
+          setSavedSelection(`${props.provider} · ${props.model}`);
+          setApiKey('');
+          setTransientAiApiKey(null);
+        } catch (error) {
+          setCredentialError(
+            error instanceof Error
+              ? error.message
+              : 'No se pudo guardar la API key.'
+          );
+          setIsSavingCredential(false);
+          return;
+        }
+        setIsSavingCredential(false);
+      } else {
+        setTransientAiApiKey(apiKey);
+      }
+    }
+    props.onSave();
+  }
+
+  async function deleteProviderCredential() {
+    setCredentialError('');
+    if (isAuthenticated && hasSavedCredential) {
+      const response = await fetch('/api/settings/ai-credentials', {
+        method: 'DELETE',
+        cache: 'no-store'
+      });
+      if (!response.ok) {
+        setCredentialError('No se pudo eliminar la API key guardada.');
+        return;
+      }
+    }
+    setApiKey('');
+    setTransientAiApiKey(null);
+    setHasSavedCredential(false);
+    setMaskedKey(null);
+    setSavedSelection(null);
+  }
 
   return (
     <section
@@ -45,7 +173,6 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
           providerName={providerName}
           status={props.connectionStatus}
         />
-
         <fieldset className="prefs-group">
           <legend className="prefs-legend prefs-legend--strong">
             {copy.providerLabel}
@@ -79,7 +206,6 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
             ))}
           </div>
         </fieldset>
-
         <div className="prefs-fields prefs-fields--model">
           <div className="prefs-field">
             <label className="prefs-label" htmlFor="settings-model">
@@ -100,22 +226,38 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
             </span>
           </div>
         </div>
-
         <ApiKeyField
-          hasError={props.connectionTest === 'error'}
+          apiKey={apiKey}
+          hasError={props.connectionTest === 'error' || !!credentialError}
+          hasSavedCredential={hasSavedCredential}
+          isAuthenticated={isAuthenticated}
+          maskedKey={maskedKey}
+          onApiKeyChange={value => {
+            setApiKey(value);
+            setTransientAiApiKey(isAuthenticated ? null : value);
+          }}
           providerName={providerName}
         />
-
+        {savedSelection && (
+          <span className="prefs-hint">
+            {copy.savedApiKey}: {savedSelection}
+          </span>
+        )}
+        {credentialError && (
+          <span className="prefs-hint" role="alert">
+            {credentialError}
+          </span>
+        )}
         <ConnectionTestResult
           providerName={providerName}
           test={props.connectionTest}
         />
-
         <footer className="prefs-footer prefs-footer--provider">
           <button
             className="prefs-remove prefs-remove--wide"
             type="button"
-            disabled
+            disabled={!hasSavedCredential && !apiKey}
+            onClick={deleteProviderCredential}
           >
             <SettingsIcon name="trash" size={16} />
             {copy.removeApiKey}
@@ -131,15 +273,15 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
             </button>
             <button
               className="prefs-button prefs-button--primary"
-              onClick={props.onSave}
+              onClick={saveProviderSettings}
               type="button"
+              disabled={isSavingCredential}
             >
               {copy.save}
             </button>
           </div>
         </footer>
       </div>
-
       <aside className="prefs-aside">
         <section aria-labelledby="settings-uses-title" className="prefs-uses">
           <h2 className="prefs-uses__title" id="settings-uses-title">
@@ -175,16 +317,15 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
             />
           </div>
         </section>
-
         <button
           className="prefs-remove prefs-remove--narrow"
           type="button"
-          disabled
+          disabled={!hasSavedCredential && !apiKey}
+          onClick={deleteProviderCredential}
         >
           <SettingsIcon name="trash" size={16} />
           {copy.removeApiKey}
         </button>
-
         <section aria-labelledby="settings-how-title" className="prefs-how">
           <h2 className="prefs-how__title" id="settings-how-title">
             {copy.howTitle}

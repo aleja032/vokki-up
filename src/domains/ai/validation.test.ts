@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validateAiSelection } from './validation';
+import { validateAiSelection, validateCardCaptureRequest } from './validation';
 
 describe('validateAiSelection', () => {
   it('accepts a model listed for its provider', () => {
@@ -28,5 +28,26 @@ describe('validateAiSelection', () => {
         apiKey: 'secret'
       })
     ).toThrow('Choose a supported provider and model');
+  });
+});
+
+describe('validateCardCaptureRequest guest credential handling', () => {
+  it('accepts a transient key only as an optional in-memory request field', () => {
+    expect(
+      validateCardCaptureRequest({
+        selection: { provider: 'gemini', model: 'gemini-3.5-flash-lite' },
+        apiKey: 'AIzaSyVerySecret1234567890',
+        input: { kind: 'text', text: 'reliable' }
+      }).apiKey
+    ).toBe('AIzaSyVerySecret1234567890');
+  });
+  it('rejects empty or malformed transient keys', () => {
+    expect(() =>
+      validateCardCaptureRequest({
+        selection: { provider: 'gemini', model: 'gemini-3.5-flash-lite' },
+        apiKey: 'short',
+        input: { kind: 'text', text: 'reliable' }
+      })
+    ).toThrow();
   });
 });

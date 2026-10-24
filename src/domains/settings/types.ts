@@ -8,3 +8,9 @@ export type SettingsTab = 'profile' | 'provider';
 export type ConnectionStatus = 'unconfigured' | 'untested' | 'ok' | 'error';
 /** Result of the "Probar conexión" action. Static: nothing runs a real test yet. */
 export type ConnectionTest = 'idle' | 'testing' | 'ok' | 'error';
+
+export type SavedAiCredential = {
+  provider: AiProvider;
+  model: string;
+  maskedKey: string;
+};

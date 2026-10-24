@@ -53,9 +53,17 @@ export function validateAiSelection(value: unknown): AiSelection {
 }
 
 export function validateCardCaptureRequest(value: unknown): CardCaptureRequest {
-  if (!isRecord(value) || !hasOnlyKeys(value, ['selection', 'input']))
+  if (!isRecord(value) || !hasOnlyKeys(value, ['selection', 'input', 'apiKey']))
     throw invalidRequest();
   const selection = validateAiSelection(value.selection);
+  if (
+    value.apiKey !== undefined &&
+    (typeof value.apiKey !== 'string' ||
+      value.apiKey.trim().length < 20 ||
+      value.apiKey.length > 4096 ||
+      /[\r\n\0]/.test(value.apiKey))
+  )
+    throw invalidRequest();
   if (
     !isRecord(value.input) ||
     typeof value.input.kind !== 'string' ||
@@ -79,7 +87,13 @@ export function validateCardCaptureRequest(value: unknown): CardCaptureRequest {
         .filter(term => term.trim().length > 0).length > 20
     )
       throw invalidRequest();
-    return { selection, input: { kind: 'text', text: text.trim() } };
+    return {
+      selection,
+      input: { kind: 'text', text: text.trim() },
+      ...(typeof value.apiKey === 'string'
+        ? { apiKey: value.apiKey.trim() }
+        : {})
+    };
   }
 
   if (value.input.kind === 'image') {
@@ -93,7 +107,13 @@ export function validateCardCaptureRequest(value: unknown): CardCaptureRequest {
     ) {
       throw invalidRequest();
     }
-    return { selection, input: { kind: 'image', mimeType, base64 } };
+    return {
+      selection,
+      input: { kind: 'image', mimeType, base64 },
+      ...(typeof value.apiKey === 'string'
+        ? { apiKey: value.apiKey.trim() }
+        : {})
+    };
   }
   throw invalidRequest();
 }
@@ -108,6 +128,14 @@ export function validateWritingFeedbackRequest(
     throw invalidRequest();
   }
   const selection = validateAiSelection(value.selection);
+  if (
+    value.apiKey !== undefined &&
+    (typeof value.apiKey !== 'string' ||
+      value.apiKey.trim().length < 20 ||
+      value.apiKey.length > 4096 ||
+      /[\r\n\0]/.test(value.apiKey))
+  )
+    throw invalidRequest();
   const categories = ['journal', 'email', 'story', 'opinion'] as const;
   if (
     typeof value.category !== 'string' ||

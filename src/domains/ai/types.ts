@@ -9,6 +9,7 @@ export type CardCaptureInput =
 export type CardCaptureRequest = {
   selection: AiSelection;
   input: CardCaptureInput;
+  apiKey?: string;
 };
 
 export type CardCandidate = {
@@ -68,6 +69,7 @@ export type WritingFeedbackResult = {
 export type AiErrorCode =
   | 'INVALID_REQUEST'
   | 'INVALID_SELECTION'
+  | 'AUTH_REQUIRED'
   | 'CAPABILITY_UNAVAILABLE'
   | 'INTERNAL_ERROR';
 

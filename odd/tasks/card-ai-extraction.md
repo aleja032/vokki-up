@@ -45,3 +45,37 @@ Delegated direct: one read-only explorer mapped the current flow; one bounded wr
 ## Delivery
 - Strategy: single work-unit commit for the bounded AI/Card integration slice.
 - Forecast: approximately 250 authored lines excluding generated files.
+
+## Follow-up scope: authenticated provider credentials
+
+### Objective
+Use the provider abstraction for Cards AI while allowing authenticated users to save their own provider API key encrypted on the server. Anonymous users may use only temporary/local AI state and must not persist credentials or cloud content.
+
+### Constraints
+- Preserve the approved UI structure; only implement required settings and Cards behavior.
+- Never expose full API keys to browser responses, logs, local commits, or client storage after save.
+- Use Supabase-backed server storage and RLS; store only a secret reference plus masked metadata in user settings.
+- Keep anonymous Cards local-only and authenticated Cards sync-ready across devices.
+
+### Tasks
+- [x] AI-05 Define provider credential schema, encryption boundary, and auth policy.
+- [x] AI-06 Add authenticated server endpoints for validate/save/delete provider credentials.
+- [x] AI-07 Make Cards AI resolve the selected user provider and model server-side; reject unauthenticated persistent requests.
+- [x] AI-08 Add login transition handling for local Cards sync and provider settings hydration.
+- [x] AI-09 Add focused tests for auth boundaries, key masking, persistence, and provider routing.
+
+### Acceptance criteria
+- Authenticated users enter a provider key once and Cards AI reuses it after a new login/device.
+- Anonymous users never persist provider keys or Cards data to Supabase.
+- API responses expose only provider/model status and masked last-four metadata.
+- Delete/rotate removes or replaces the server-side secret and invalidates further use.
+- Existing Cards capture/review behavior remains functional and all applicable checks pass.
+
+### Route
+Delegated direct: read-only exploration completed; one writer must implement the multi-file server/auth/persistence slice. Parent owns verification and delivery.
+
+### Progress
+- Status: implementation complete locally; Supabase migration and server encryption key configuration remain pending deployment.
+- Verification: Vitest 4 files/15 tests, typecheck, lint, and production build passed.
+- Work-unit commit: a89cc8b
+- Next step: apply `supabase/migrations/20261024110000_ai_provider_credentials.sql`, configure `AI_CREDENTIAL_ENCRYPTION_KEY` in the server environment, then run an authenticated end-to-end Cards capture.

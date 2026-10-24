@@ -47,8 +47,10 @@ export const settingsMessages = {
     apiKeyHelp: '¿Dónde la consigo?',
     showApiKey: 'Mostrar API key',
     hideApiKey: 'Ocultar API key',
-    apiKeyPrivacy: (providerName: string) =>
-      `Se guarda cifrada en este dispositivo y solo se envía a ${providerName}.`,
+    apiKeyPrivacy: (providerName: string, authenticated: boolean) =>
+      authenticated
+        ? `Se guarda cifrada en el servidor y solo se envía a ${providerName}.`
+        : 'Sin iniciar sesión, la API key solo se conserva temporalmente en esta pestaña y no se guarda.',
     usesTitle: 'Usar IA para',
     useCards: 'Crear tarjetas',
     useCardsHint: 'Corrección, significados y ejemplos',
@@ -56,6 +58,8 @@ export const settingsMessages = {
     useWritingHintNarrow: 'Análisis de claridad, vocabulario y gramática',
     useWritingHintWide: 'Claridad, vocabulario y gramática',
     removeApiKey: 'Eliminar API key',
+    savedApiKey: 'API key guardada',
+    noSavedApiKey: 'No hay una API key guardada.',
     testConnection: 'Probar conexión',
     save: 'Guardar',
     howTitle: 'Cómo funciona',
