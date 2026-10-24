@@ -77,5 +77,5 @@ Delegated direct: read-only exploration completed; one writer must implement the
 ### Progress
 - Status: implementation complete locally; Supabase migration and server encryption key configuration remain pending deployment.
 - Verification: Vitest 4 files/15 tests, typecheck, lint, and production build passed.
-- Work-unit commit: a89cc8b
+- Work-unit commit: aca1b9a
 - Next step: apply `supabase/migrations/20261024110000_ai_provider_credentials.sql`, configure `AI_CREDENTIAL_ENCRYPTION_KEY` in the server environment, then run an authenticated end-to-end Cards capture.
