@@ -51,3 +51,4 @@ Implemented the reusable locale proxy and global provider. Existing message cata
 - `pnpm lint` — passed.
 - `pnpm build` — passed.
 - Work-unit commit: `6840165 feat(i18n): add app-wide English localization`.
+- Follow-up translation coverage: `26b4213 feat(i18n): complete module copy translations`.
