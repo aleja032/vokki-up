@@ -122,7 +122,7 @@
 /* Page */
 
 .drill-page {
-  @apply flex min-h-dvh flex-col gap-6 bg-(--ground) px-6 pt-6 pb-8 text-(--ink);
+  @apply flex min-h-dvh min-w-0 flex-col gap-6 bg-(--ground) px-6 pt-6 pb-8 text-(--ink);
 
   line-height: normal;
 }
@@ -140,7 +140,7 @@
 }
 
 .drill-main {
-  @apply flex min-h-0 flex-1 flex-col gap-6;
+  @apply flex min-h-0 min-w-0 flex-1 flex-col gap-6;
 }
 
 /* Header */
@@ -170,7 +170,7 @@
 }
 
 .drill-header__count {
-  @apply min-w-11 text-right text-sm font-bold;
+  @apply min-w-11 shrink-0 text-right text-sm font-bold whitespace-nowrap;
 }
 
 .drill-header__offline {
@@ -180,43 +180,43 @@
 /* Card */
 
 .drill-card {
-  @apply flex min-h-0 flex-1 flex-col gap-[18px] rounded-[28px] border border-(--line) bg-(--surface) p-6;
+  @apply flex min-h-0 min-w-0 flex-1 flex-col gap-[18px] rounded-[28px] border border-(--line) bg-(--surface) p-6;
 }
 
 .drill-card__meta {
-  @apply flex items-center justify-between;
+  @apply flex items-center justify-between gap-3;
 }
 
 .drill-card__category {
-  @apply rounded-full bg-(--cat-soft) px-3 py-1.5 text-[13px] font-semibold text-(--cat-ink);
+  @apply max-w-[60%] shrink-0 truncate rounded-full bg-(--cat-soft) px-3 py-1.5 text-[13px] font-semibold text-(--cat-ink);
 }
 
 .drill-card__tag {
-  @apply text-[13px] text-(--ink-soft);
+  @apply min-w-0 truncate text-[13px] text-(--ink-soft);
 }
 
 .drill-card__term {
-  @apply mt-5 flex flex-col gap-2;
+  @apply mt-5 flex min-w-0 flex-col gap-2;
 }
 
 .drill-card__word {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[42px] leading-[1.05] font-semibold tracking-[-0.5px];
+  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[42px] leading-[1.05] font-semibold tracking-[-0.5px];
 }
 
 .drill-card__pronunciation {
-  @apply flex items-center gap-2.5;
+  @apply flex min-w-0 items-center gap-2.5;
 }
 
 .drill-card__ipa {
-  @apply font-[family-name:var(--drill-font-ipa)] text-lg text-(--ink-soft);
+  @apply min-w-0 wrap-anywhere font-[family-name:var(--drill-font-ipa)] text-lg text-(--ink-soft);
 }
 
 .drill-card__listen {
-  @apply flex size-11 items-center justify-center rounded-full border-0 bg-(--indigo-soft) p-0 text-(--indigo) disabled:cursor-not-allowed;
+  @apply flex size-11 shrink-0 items-center justify-center rounded-full border-0 bg-(--indigo-soft) p-0 text-(--indigo) disabled:cursor-not-allowed;
 }
 
 .drill-card__answer {
-  @apply flex flex-col gap-4 border-t border-t-(--rule) pt-[18px];
+  @apply flex min-w-0 flex-col gap-4 wrap-anywhere border-t border-t-(--rule) pt-[18px];
 }
 
 .drill-card__block {
@@ -298,7 +298,7 @@
 }
 
 .drill-done__body {
-  @apply flex flex-1 flex-col items-center justify-center gap-4 px-3 text-center;
+  @apply flex min-w-0 flex-1 flex-col items-center justify-center gap-4 px-3 text-center;
 }
 
 .drill-done__icon {
@@ -314,7 +314,7 @@
 }
 
 .drill-done__text {
-  @apply m-0 text-[15px] leading-normal text-(--ink-soft);
+  @apply m-0 text-[15px] wrap-anywhere leading-normal text-(--ink-soft);
 }
 
 .drill-done__text strong {
@@ -322,11 +322,11 @@
 }
 
 .drill-done__chips {
-  @apply mt-2 flex gap-2;
+  @apply mt-2 flex max-w-full flex-wrap justify-center gap-2;
 }
 
 .drill-done__chip {
-  @apply rounded-full bg-(--tone-soft) px-3 py-1.5 text-[13px] font-semibold text-(--tone-ink);
+  @apply max-w-full truncate rounded-full bg-(--tone-soft) px-3 py-1.5 text-[13px] font-semibold text-(--tone-ink);
 }
 
 .drill-done__actions {

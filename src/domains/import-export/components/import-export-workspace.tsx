@@ -278,7 +278,7 @@ export function ImportExportWorkspace() {
             <span>
               {isSample ? 'Muestra incluida' : 'Archivo seleccionado'}
             </span>
-            <strong>{fileName}</strong>
+            <strong title={fileName}>{fileName}</strong>
           </div>
           <div
             className="csv-validation"
@@ -321,9 +321,11 @@ export function ImportExportWorkspace() {
                     className="csv-preview__row"
                     key={`${row.sourceRow}-${row.word}`}
                   >
-                    <strong>{row.word}</strong>
-                    <span>{row.meaning}</span>
-                    <em>{row.group || 'Sin grupo'}</em>
+                    <strong title={row.word}>{row.word}</strong>
+                    <span title={row.meaning}>{row.meaning}</span>
+                    <em title={row.group || 'Sin grupo'}>
+                      {row.group || 'Sin grupo'}
+                    </em>
                   </div>
                 ))}
               </div>

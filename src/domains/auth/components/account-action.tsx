@@ -39,7 +39,11 @@ export function AccountAction() {
   }
 
   return (
-    <Link className="signin-login-cta" href="/login">
+    <Link
+      className="signin-login-cta"
+      href="/login"
+      title={authMessages.login.headerCta}
+    >
       <LogIn aria-hidden="true" size={16} />
       <span className="signin-login-cta__label">
         {authMessages.login.headerCta}

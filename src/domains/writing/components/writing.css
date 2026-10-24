@@ -59,15 +59,15 @@
 /* Heading */
 
 .essay-heading {
-  @apply flex items-center justify-between;
+  @apply flex items-center justify-between gap-3;
 }
 
 .essay-heading__intro {
-  @apply flex flex-col gap-1.5;
+  @apply flex min-w-0 flex-col gap-1.5;
 }
 
 .essay-heading h1 {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[30px] font-semibold tracking-[-0.5px] text-(--ink);
+  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[30px] font-semibold tracking-[-0.5px] text-(--ink);
 }
 
 .essay-heading p {
@@ -75,7 +75,7 @@
 }
 
 .essay-history-link {
-  @apply text-[13px] font-semibold text-(--indigo);
+  @apply shrink-0 text-[13px] font-semibold whitespace-nowrap text-(--indigo);
 }
 
 .essay-history-link:hover {
@@ -126,8 +126,15 @@
   @apply flex items-center justify-between gap-3;
 }
 
+/* Only the narrowest phones: the label and the change button no longer fit on one row. */
+@media (max-width: 359px) {
+  .essay-prompt__head {
+    @apply flex-wrap;
+  }
+}
+
 .essay-prompt__label {
-  @apply text-[12px] tracking-[1.5px] text-(--essay-prompt-accent) uppercase;
+  @apply min-w-0 text-[12px] tracking-[1.5px] text-(--essay-prompt-accent) uppercase;
 }
 
 .essay-prompt__change {
@@ -135,7 +142,7 @@
 }
 
 .essay-prompt__text {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[21px] leading-[1.3] font-medium;
+  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[21px] leading-[1.3] font-medium;
 }
 
 .essay-prompt__emphasis {
@@ -164,7 +171,17 @@
 }
 
 .essay-editor__status {
-  @apply m-0 flex items-center justify-between text-[13px] text-(--ink-soft);
+  @apply m-0 flex items-center justify-between gap-3 text-[13px] text-(--ink-soft);
+}
+
+.essay-word-count {
+  @apply shrink-0 whitespace-nowrap;
+}
+
+@media (max-width: 760px) {
+  .essay-editor__saved {
+    @apply min-w-0 truncate;
+  }
 }
 
 .essay-word-count strong {
@@ -236,7 +253,7 @@
 }
 
 .essay-feedback__headline {
-  @apply flex flex-col gap-0.5;
+  @apply flex min-w-0 flex-col gap-0.5 wrap-anywhere;
 }
 
 .essay-feedback__headline h2 {
@@ -268,11 +285,11 @@
 }
 
 .essay-metric__label {
-  @apply flex justify-between text-[13px] text-(--ink);
+  @apply flex justify-between gap-3 text-[13px] text-(--ink);
 }
 
 .essay-metric__label strong {
-  @apply font-semibold;
+  @apply shrink-0 font-semibold;
 }
 
 .essay-metric progress {
@@ -308,7 +325,7 @@
 }
 
 .essay-correction {
-  @apply flex flex-col gap-1.5 rounded-[14px] bg-(--ground) px-4 py-3.5 text-[14px];
+  @apply flex min-w-0 flex-col gap-1.5 wrap-anywhere rounded-[14px] bg-(--ground) px-4 py-3.5 text-[14px];
 }
 
 .essay-correction p {
@@ -358,15 +375,15 @@
 }
 
 .essay-history-item__title {
-  @apply text-[14px] font-semibold;
+  @apply line-clamp-2 text-[14px] font-semibold wrap-anywhere;
 }
 
 .essay-history-item__meta {
-  @apply text-[12px] text-(--ink-soft);
+  @apply text-[12px] wrap-anywhere text-(--ink-soft);
 }
 
 .essay-history-item__score {
-  @apply text-[15px] font-bold;
+  @apply shrink-0 text-[15px] font-bold whitespace-nowrap;
 }
 
 /* Desktop and tablet (rail shell) */

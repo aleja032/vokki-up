@@ -46,11 +46,14 @@ export function ReviewCardScreen({
           <span
             className="drill-card__category"
             data-category={card.partOfSpeech}
+            title={card.partOfSpeech}
           >
             {card.partOfSpeech}
           </span>
           {card.tags[0] && (
-            <span className="drill-card__tag"># {card.tags[0]}</span>
+            <span className="drill-card__tag" title={card.tags[0]}>
+              # {card.tags[0]}
+            </span>
           )}
         </div>
         <div className="drill-card__term">

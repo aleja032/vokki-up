@@ -160,8 +160,8 @@ export function GroupDetail({
               return (
                 <article className="deck-group-card" key={card.id}>
                   <span className="deck-group-card__copy">
-                    <span>{card.term}</span>
-                    <span>{card.meaning}</span>
+                    <span title={card.term}>{card.term}</span>
+                    <span title={card.meaning}>{card.meaning}</span>
                   </span>
                   <span
                     className="deck-group-card__state"

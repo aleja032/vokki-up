@@ -287,7 +287,7 @@
 }
 
 .deck-page__title h1 {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[32px] font-semibold tracking-[-0.5px];
+  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[32px] font-semibold tracking-[-0.5px];
 }
 
 .deck-page__summary {
@@ -422,7 +422,7 @@
 }
 
 .deck-group {
-  @apply flex flex-[0_0_148px] flex-col gap-3 rounded-[20px] border-2 border-solid border-(--line) bg-(--surface) p-4 text-left font-[family-name:var(--font-ui),sans-serif] text-(--ink);
+  @apply flex min-w-0 flex-[0_0_148px] flex-col gap-3 rounded-[20px] border-2 border-solid border-(--line) bg-(--surface) p-4 text-left font-[family-name:var(--font-ui),sans-serif] text-(--ink);
 }
 
 .deck-group[aria-pressed='true'] {
@@ -455,11 +455,11 @@
 }
 
 .deck-group__copy strong {
-  @apply text-[15px] font-bold;
+  @apply line-clamp-2 text-[15px] font-bold wrap-anywhere;
 }
 
 .deck-group__copy span {
-  @apply text-[12px] text-(--ink-soft);
+  @apply text-[12px] wrap-anywhere text-(--ink-soft);
 }
 
 .deck-group--add {
@@ -470,8 +470,12 @@
   @apply flex items-center justify-between gap-3 rounded-[16px] bg-(--tone-soft) px-4.5 py-3.5 text-left text-[14px] text-(--ink);
 }
 
+.deck-groups__open > span:first-child {
+  @apply line-clamp-2 min-w-0 wrap-anywhere;
+}
+
 .deck-groups__open-label {
-  @apply inline-flex items-center gap-1.5 text-[14px] font-bold text-(--tone-strong);
+  @apply inline-flex shrink-0 items-center gap-1.5 text-[14px] font-bold text-(--tone-strong);
 }
 
 @media (min-width: 761px) {
@@ -548,7 +552,7 @@
 }
 
 .deck-filter {
-  @apply h-10 shrink-0 rounded-full border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold whitespace-nowrap text-(--ink-soft);
+  @apply h-10 max-w-[min(18rem,100%)] shrink-0 truncate rounded-full border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold whitespace-nowrap text-(--ink-soft);
 }
 
 .deck-filter[aria-pressed='true'] {
@@ -600,7 +604,7 @@
 /* Vocabulary card */
 
 .deck-card {
-  @apply flex flex-col gap-3 rounded-[20px] border border-solid border-(--line) bg-(--surface) p-5;
+  @apply flex min-w-0 flex-col gap-3 rounded-[20px] border border-solid border-(--line) bg-(--surface) p-5;
 }
 
 .deck-card__top {
@@ -612,19 +616,19 @@
 }
 
 .deck-card__title h3 {
-  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[23px] leading-[1.15] font-semibold;
+  @apply m-0 line-clamp-2 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[23px] leading-[1.15] font-semibold;
 }
 
 .deck-card__title span {
-  @apply font-[family-name:var(--deck-font-ipa)] text-[14px] text-(--ink-soft);
+  @apply line-clamp-2 font-[family-name:var(--deck-font-ipa)] text-[14px] wrap-anywhere text-(--ink-soft);
 }
 
 .deck-card__category {
-  @apply shrink-0 rounded-full bg-(--cat-soft) px-3 py-1.5 text-[12px] font-semibold text-(--cat-ink);
+  @apply max-w-[45%] shrink-0 truncate rounded-full bg-(--cat-soft) px-3 py-1.5 text-[12px] font-semibold text-(--cat-ink);
 }
 
 .deck-card__meaning {
-  @apply m-0 wrap-anywhere text-[15px] leading-[1.45];
+  @apply m-0 line-clamp-3 wrap-anywhere text-[15px] leading-[1.45];
 }
 
 .deck-card__example {
@@ -632,15 +636,19 @@
 }
 
 .deck-card__footer {
-  @apply flex items-center gap-3 pt-1;
+  @apply flex min-w-0 items-center gap-3 pt-1;
+}
+
+.deck-card__group-name {
+  @apply min-w-0 truncate;
 }
 
 .deck-card__group {
-  @apply inline-flex items-center gap-1.5 text-[12px] font-semibold text-(--ink-soft);
+  @apply inline-flex max-w-[40%] min-w-0 items-center gap-1.5 text-[12px] font-semibold text-(--ink-soft);
 }
 
 .deck-card__group::before {
-  @apply size-2 rounded-full bg-(--tone-strong);
+  @apply size-2 shrink-0 rounded-full bg-(--tone-strong);
 
   content: '';
 }
@@ -669,7 +677,7 @@
 }
 
 .deck-card__state {
-  @apply text-[12px] font-semibold;
+  @apply shrink-0 text-[12px] font-semibold whitespace-nowrap;
 }
 
 .deck-card__state[data-state='new'] {
@@ -685,7 +693,7 @@
 }
 
 .deck-card__due {
-  @apply hidden text-[12px] text-(--ink-soft);
+  @apply hidden shrink-0 text-[12px] whitespace-nowrap text-(--ink-soft);
 }
 
 @media (min-width: 761px) {
@@ -698,7 +706,7 @@
   }
 
   .deck-card__example {
-    @apply block;
+    @apply line-clamp-2;
   }
 
   .deck-card__footer {
@@ -733,11 +741,15 @@
 }
 
 .deck-field__row {
-  @apply flex items-baseline justify-between;
+  @apply flex items-baseline justify-between gap-3;
+}
+
+.deck-field__row > label {
+  @apply min-w-0;
 }
 
 .deck-field__row > span {
-  @apply text-[12px] text-(--ink-soft);
+  @apply shrink-0 text-[12px] whitespace-nowrap text-(--ink-soft);
 }
 
 .deck-field__row > span[data-invalid='true'] {
@@ -774,7 +786,7 @@
 }
 
 .deck-field__error {
-  @apply flex gap-2 text-[14px] text-(--red-ink);
+  @apply flex min-w-0 gap-2 text-[14px] wrap-anywhere text-(--red-ink);
 }
 
 .deck-field__error .deck-icon {
@@ -782,7 +794,7 @@
 }
 
 .deck-field__error-box {
-  @apply flex flex-col gap-2.5 rounded-[14px] border border-solid border-(--deck-danger-edge) bg-(--surface) px-4 py-3.5;
+  @apply flex min-w-0 flex-col gap-2.5 rounded-[14px] border border-solid border-(--deck-danger-edge) bg-(--surface) px-4 py-3.5;
 }
 
 .deck-field__error-box .deck-field__error {
@@ -805,12 +817,16 @@
   @apply flex flex-wrap gap-2.5;
 }
 
-.deck-choice__group {
-  @apply inline-flex h-10 items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
+.deck-choice__label {
+  @apply min-w-0 truncate;
 }
 
-.deck-choice__group > span {
-  @apply size-2.5 rounded-full bg-(--tone-strong);
+.deck-choice__group {
+  @apply inline-flex h-10 max-w-full items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
+}
+
+.deck-choice__group > span:first-child {
+  @apply size-2.5 shrink-0 rounded-full bg-(--tone-strong);
 }
 
 .deck-choice__group[aria-pressed='true'] {
@@ -830,7 +846,7 @@
 }
 
 .deck-choice__tag {
-  @apply inline-flex h-9 items-center gap-1.5 rounded-[10px] bg-(--surface-muted) px-3.5 text-[13px] font-semibold text-(--ink-soft);
+  @apply inline-flex h-9 max-w-full items-center gap-1.5 rounded-[10px] bg-(--surface-muted) px-3.5 text-[13px] font-semibold text-(--ink-soft);
 }
 
 .deck-choice__tag[aria-pressed='true'] {
@@ -923,7 +939,7 @@
 }
 
 .deck-summary > span {
-  @apply flex flex-col gap-1.5;
+  @apply flex min-w-0 flex-col gap-1.5 wrap-anywhere;
 }
 
 .deck-summary strong {
@@ -955,7 +971,7 @@
 }
 
 .deck-preview__tags {
-  @apply text-[12px] text-(--ink-soft);
+  @apply min-w-0 truncate text-[12px] text-(--ink-soft);
 }
 
 .deck-preview__word {
@@ -1191,7 +1207,7 @@
 }
 
 .deck-group-preview__card {
-  @apply flex w-[220px] flex-col gap-3.5 rounded-[20px] border-2 border-solid border-(--tone-strong) bg-(--surface) p-4.5;
+  @apply flex w-[220px] max-w-full flex-col gap-3.5 rounded-[20px] border-2 border-solid border-(--tone-strong) bg-(--surface) p-4.5;
 }
 
 .deck-group-preview__icon {
@@ -1199,11 +1215,11 @@
 }
 
 .deck-group-preview__copy {
-  @apply flex flex-col gap-0.5;
+  @apply flex min-w-0 flex-col gap-0.5;
 }
 
 .deck-group-preview__copy > span:first-child {
-  @apply text-[16px] font-bold wrap-anywhere;
+  @apply line-clamp-2 text-[16px] font-bold wrap-anywhere;
 }
 
 .deck-group-preview__copy > span[data-empty='true'] {
@@ -1245,7 +1261,7 @@
 /* Group detail */
 
 .deck-menu {
-  @apply absolute top-[72px] right-6 z-10 flex w-[238px] flex-col rounded-[16px] border border-solid border-(--line) bg-(--surface) p-2 shadow-[0_12px_32px_rgba(27,26,46,0.16)];
+  @apply absolute top-[72px] right-6 z-10 flex w-[238px] max-w-[calc(100vw-3rem)] flex-col rounded-[16px] border border-solid border-(--line) bg-(--surface) p-2 shadow-[0_12px_32px_rgba(27,26,46,0.16)];
 }
 
 .deck-menu button {
@@ -1261,7 +1277,7 @@
 }
 
 .deck-confirm__copy {
-  @apply flex flex-col gap-1 text-(--deck-danger-ink);
+  @apply flex min-w-0 flex-col gap-1 wrap-anywhere text-(--deck-danger-ink);
 }
 
 .deck-confirm__copy > span:first-child {
@@ -1301,11 +1317,11 @@
 }
 
 .deck-hero h1 {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-[1.05] font-semibold;
+  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-[1.05] font-semibold;
 }
 
 .deck-hero__identity span:not(.deck-hero__icon) {
-  @apply text-[14px] text-(--ink-soft);
+  @apply text-[14px] wrap-anywhere text-(--ink-soft);
 }
 
 .deck-hero__stats {
@@ -1313,15 +1329,15 @@
 }
 
 .deck-hero__stats > div {
-  @apply flex flex-col gap-0.5 rounded-[14px] bg-(--surface) px-3.5 py-3;
+  @apply flex min-w-0 flex-col gap-0.5 rounded-[14px] bg-(--surface) px-3.5 py-3;
 }
 
 .deck-hero__stats strong {
-  @apply text-[20px] font-bold;
+  @apply truncate text-[20px] font-bold;
 }
 
 .deck-hero__stats span {
-  @apply text-[12px] text-(--ink-soft);
+  @apply text-[12px] wrap-anywhere text-(--ink-soft);
 }
 
 .deck-hero__review {
@@ -1332,12 +1348,20 @@
   @apply flex items-center justify-between gap-3;
 }
 
+.deck-screen__list-heading h2 {
+  @apply min-w-0 truncate;
+}
+
+.deck-screen__list-heading button {
+  @apply shrink-0;
+}
+
 .deck-group-cards {
   @apply flex flex-col gap-3;
 }
 
 .deck-group-card {
-  @apply flex items-center justify-between gap-3 rounded-[18px] border border-solid border-(--line) bg-(--surface) px-5 py-4.5;
+  @apply flex min-w-0 items-center justify-between gap-3 rounded-[18px] border border-solid border-(--line) bg-(--surface) px-5 py-4.5;
 }
 
 .deck-group-card__copy {
@@ -1345,11 +1369,11 @@
 }
 
 .deck-group-card__copy > span:first-child {
-  @apply font-[family-name:var(--font-display),Georgia,serif] text-[20px] font-semibold;
+  @apply line-clamp-2 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[20px] font-semibold;
 }
 
 .deck-group-card__copy > span:last-child {
-  @apply text-[14px] text-(--ink-soft);
+  @apply line-clamp-2 text-[14px] wrap-anywhere text-(--ink-soft);
 }
 
 .deck-group-card__state {

@@ -16,8 +16,8 @@ const globalErrorStyles = `
   .ge-card-back { left: 6px; top: 14px; background: var(--indigo-soft); transform: rotate(-8deg); }
   .ge-card-front { left: 40px; top: 4px; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--line); background: var(--surface); color: var(--indigo); font: 600 38px Georgia, serif; transform: rotate(5deg); }
   .ge-eyebrow { margin: 0; color: var(--ink-soft); font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-  .ge-title { margin: 0; font: 600 34px/1.1 Georgia, serif; }
-  .ge-text { margin: 0; color: var(--ink-soft); font-size: 16px; }
+  .ge-title { margin: 0; max-width: 100%; overflow-wrap: anywhere; font: 600 34px/1.1 Georgia, serif; }
+  .ge-text { margin: 0; max-width: 100%; overflow-wrap: anywhere; color: var(--ink-soft); font-size: 16px; }
   .ge-button { height: 52px; margin-top: 8px; padding: 0 28px; border: 0; border-radius: 14px; background: var(--indigo); color: var(--on-indigo); font: 700 16px system-ui, sans-serif; cursor: pointer; }
   .ge-button:focus-visible { outline: 3px solid var(--indigo); outline-offset: 3px; }
 `;

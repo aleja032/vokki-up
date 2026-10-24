@@ -39,10 +39,14 @@ export function VocabularyCardItem({
     <article className="deck-card">
       <div className="deck-card__top">
         <div className="deck-card__title">
-          <h3>{card.term}</h3>
+          <h3 title={card.term}>{card.term}</h3>
           {card.phonetics && <span>{card.phonetics}</span>}
         </div>
-        <span className="deck-card__category" data-category={card.partOfSpeech}>
+        <span
+          className="deck-card__category"
+          data-category={card.partOfSpeech}
+          title={card.partOfSpeech}
+        >
           {card.partOfSpeech}
         </span>
       </div>
@@ -50,7 +54,12 @@ export function VocabularyCardItem({
       {card.example && <p className="deck-card__example">{card.example}</p>}
       <div className="deck-card__footer">
         <span className="deck-card__group" data-tone={group?.tone ?? 'neutral'}>
-          {group?.name ?? overview.noGroup}
+          <span
+            className="deck-card__group-name"
+            title={group?.name ?? overview.noGroup}
+          >
+            {group?.name ?? overview.noGroup}
+          </span>
         </span>
         <div
           className="deck-card__bar"

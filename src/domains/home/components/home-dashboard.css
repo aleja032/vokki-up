@@ -40,15 +40,15 @@
 }
 
 .home-intro__copy {
-  @apply flex flex-col gap-0.5;
+  @apply flex min-w-0 flex-col gap-0.5;
 }
 
 .home-intro h1 {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[30px] leading-[1.2] font-semibold tracking-[-0.5px];
+  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[30px] leading-[1.2] font-semibold tracking-[-0.5px];
 }
 
 .home-intro p {
-  @apply m-0 text-[15px] text-(--ink-soft);
+  @apply m-0 wrap-anywhere text-[15px] text-(--ink-soft);
 }
 
 .home-intro__greeting--dark,
@@ -95,7 +95,7 @@
 }
 
 .next-session__copy {
-  @apply flex flex-col items-start gap-1;
+  @apply flex min-w-0 flex-col items-start gap-1;
 }
 
 .next-session h2 {
@@ -103,11 +103,11 @@
 }
 
 .next-session__title {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[28px] leading-[1.05] font-semibold;
+  @apply m-0 max-w-full wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[28px] leading-[1.05] font-semibold;
 }
 
 .next-session__meta {
-  @apply m-0 text-[14px] text-(--ink-soft);
+  @apply m-0 max-w-full wrap-anywhere text-[14px] text-(--ink-soft);
 }
 
 .next-session__description,
@@ -144,7 +144,25 @@
 }
 
 .week-overview__summary {
-  @apply flex items-center gap-4;
+  @apply flex min-w-0 items-center gap-4;
+}
+
+/* Narrow phones: stack the ring above the three metrics so their labels keep a readable column. */
+@media (max-width: 389px) {
+  .week-overview__summary {
+    @apply flex-col items-stretch;
+  }
+
+  .home-ring--overview {
+    @apply self-center;
+  }
+}
+
+/* 390-399px: the row still fits, but only if the gaps tighten a little. */
+@media (min-width: 390px) and (max-width: 399px) {
+  .week-overview__summary {
+    @apply gap-3;
+  }
 }
 
 .home-ring .progress-ring__track,
@@ -164,16 +182,22 @@
   @apply m-0 grid min-w-0 flex-1 list-none grid-cols-3 gap-2 p-0;
 }
 
+@media (min-width: 390px) and (max-width: 399px) {
+  .week-overview__metrics {
+    @apply gap-1;
+  }
+}
+
 .week-overview__metrics li {
   @apply flex min-w-0 flex-col gap-0.5;
 }
 
 .week-overview__metrics strong {
-  @apply text-[20px] leading-[1.2] font-bold;
+  @apply text-[20px] leading-[1.2] font-bold wrap-anywhere;
 }
 
 .week-overview__metrics li > span:last-child {
-  @apply text-[12px] leading-[1.25] text-(--ink-soft);
+  @apply text-[12px] leading-[1.25] wrap-anywhere text-(--ink-soft);
 }
 
 .week-overview__icon {
@@ -197,7 +221,7 @@
 }
 
 .week-overview__day {
-  @apply flex flex-col items-center gap-1;
+  @apply flex min-w-0 flex-col items-center gap-1;
 }
 
 .week-overview__bar {
@@ -264,11 +288,11 @@
 }
 
 .activity-item__copy strong {
-  @apply text-[15px] font-medium;
+  @apply text-[15px] font-medium wrap-anywhere;
 }
 
 .activity-item__copy > span {
-  @apply text-[13px] text-(--ink-soft);
+  @apply text-[13px] wrap-anywhere text-(--ink-soft);
 }
 
 .activity-item__arrow {
@@ -340,7 +364,7 @@
   }
 
   .next-session__chips li {
-    @apply rounded-[999px] bg-(--home-session-chip) px-3.5 py-2 text-[14px] font-semibold;
+    @apply max-w-full wrap-anywhere rounded-[999px] bg-(--home-session-chip) px-3.5 py-2 text-[14px] font-semibold;
   }
 
   .next-session .primary-action {
@@ -356,7 +380,7 @@
   }
 
   .today-goal > p {
-    @apply m-0 text-[14px] text-(--ink-soft);
+    @apply m-0 max-w-full wrap-anywhere text-[14px] text-(--ink-soft);
   }
 
   .home-ring--goal {
@@ -402,7 +426,7 @@
   }
 
   .stat-card__value {
-    @apply font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-none font-semibold tabular-nums;
+    @apply max-w-full wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-none font-semibold tabular-nums;
   }
 
   .stat-card__value > span[aria-hidden] span {
@@ -410,7 +434,7 @@
   }
 
   .stat-card__label {
-    @apply text-[14px] text-(--ink-soft);
+    @apply max-w-full wrap-anywhere text-[14px] text-(--ink-soft);
   }
 
   /* Mobile-only overview is replaced by goal, statistics and weekly chart */
@@ -480,7 +504,7 @@
 
   .week-chart__count,
   .week-chart__label {
-    @apply text-[12px] leading-[1.2] text-(--ink-soft) tabular-nums;
+    @apply max-w-full text-[12px] leading-[1.2] wrap-anywhere text-(--ink-soft) tabular-nums;
   }
 
   .week-chart__label {

@@ -26,15 +26,15 @@
 }
 
 .status-screen__eyebrow {
-  @apply m-0 text-[13px] font-semibold tracking-[2px] text-(--ink-soft) uppercase;
+  @apply m-0 max-w-full wrap-anywhere text-[13px] font-semibold tracking-[2px] text-(--ink-soft) uppercase;
 }
 
 .status-screen__title {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[34px] leading-[1.1] font-semibold;
+  @apply m-0 max-w-full wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[34px] leading-[1.1] font-semibold;
 }
 
 .status-screen__description {
-  @apply m-0 text-base leading-[1.55] text-(--ink-soft);
+  @apply m-0 max-w-full wrap-anywhere text-base leading-[1.55] text-(--ink-soft);
 }
 
 .status-screen__search {
@@ -46,7 +46,7 @@
 }
 
 .status-screen__action {
-  @apply flex min-h-12 cursor-pointer items-center justify-center rounded-(--control-radius) border-[1.5px] border-solid border-(--line) bg-transparent px-5 py-0 text-[15px] font-semibold text-(--ink);
+  @apply flex min-h-12 min-w-0 cursor-pointer items-center text-center justify-center rounded-(--control-radius) border-[1.5px] border-solid border-(--line) bg-transparent px-5 py-0 text-[15px] font-semibold text-(--ink);
 }
 
 .status-screen__action--primary {

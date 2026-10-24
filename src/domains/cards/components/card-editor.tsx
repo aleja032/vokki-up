@@ -262,7 +262,7 @@ export function CardEditor({
                   onClick={() => selectGroup('')}
                 >
                   <span />
-                  {messages.noGroup}
+                  <span className="deck-choice__label">{messages.noGroup}</span>
                 </button>
                 {groups.map(group => (
                   <button
@@ -270,11 +270,12 @@ export function CardEditor({
                     data-tone={group.tone}
                     type="button"
                     key={group.id}
+                    title={group.name}
                     aria-pressed={values.groupId === group.id}
                     onClick={() => selectGroup(group.id)}
                   >
                     <span />
-                    {group.name}
+                    <span className="deck-choice__label">{group.name}</span>
                   </button>
                 ))}
                 <button
@@ -314,10 +315,11 @@ export function CardEditor({
                     className="deck-choice__tag"
                     type="button"
                     key={tag}
+                    title={tag}
                     aria-pressed={activeTags.includes(tag)}
                     onClick={() => toggleTag(tag)}
                   >
-                    # {tag}
+                    <span className="deck-choice__label"># {tag}</span>
                   </button>
                 ))}
                 <button

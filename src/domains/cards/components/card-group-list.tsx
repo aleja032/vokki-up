@@ -80,6 +80,7 @@ export function CardGroupList({
             data-tone={group.tone}
             type="button"
             key={group.id}
+            title={group.name}
             aria-pressed={activeGroupId === group.id}
             onClick={() => onSelect(group.id)}
           >

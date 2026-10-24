@@ -35,11 +35,19 @@
 /* Connection pill */
 
 .connection-status {
-  @apply inline-flex items-center gap-1.25 rounded-full bg-(--surface-muted) px-2.5 py-1.25 text-[12px] leading-[normal] font-medium whitespace-nowrap text-(--ink-soft);
+  @apply inline-flex max-w-full min-w-0 items-center gap-1.25 rounded-full bg-(--surface-muted) px-2.5 py-1.25 text-[12px] leading-[normal] font-medium whitespace-nowrap text-(--ink-soft);
 }
 
 .connection-status[data-status='online'] {
   @apply bg-(--green-soft) text-(--green);
+}
+
+.connection-status svg {
+  @apply shrink-0;
+}
+
+.connection-status__label {
+  @apply min-w-0 truncate;
 }
 
 /* Mobile header */
@@ -52,8 +60,23 @@
   @apply text-[26px];
 }
 
+/* 320px phones: brand + connection pill + avatar + logout only fit without truncating the pill if the actions tighten a little. */
+@media (max-width: 340px) {
+  .app-header__actions {
+    @apply gap-1.5;
+  }
+
+  .app-header .connection-status {
+    @apply px-2;
+  }
+
+  .app-header .brand {
+    @apply text-[23px];
+  }
+}
+
 .app-header__actions {
-  @apply flex items-center gap-2;
+  @apply flex min-w-0 items-center gap-2;
 }
 
 /* Main area */
@@ -74,6 +97,10 @@
 
 .bottom-navigation__item {
   @apply flex min-w-0 flex-col items-center justify-center gap-1 text-[12px] leading-[normal] font-medium text-(--ink-soft);
+}
+
+.bottom-navigation__item > span:last-child {
+  @apply max-w-full truncate;
 }
 
 .bottom-navigation__pill {
@@ -156,7 +183,7 @@
   }
 
   .app-sidebar__profile {
-    @apply flex flex-col items-center gap-3;
+    @apply flex min-w-0 flex-col items-center gap-3;
   }
 
   .app-sidebar__profile-action {
@@ -169,19 +196,19 @@
   }
 
   .app-sidebar__profile-action .signin-login-cta__label {
-    @apply text-center;
+    @apply overflow-visible text-center text-clip whitespace-normal;
   }
 
   .app-sidebar__profile-copy {
-    @apply flex-col;
+    @apply min-w-0 flex-col;
   }
 
   .app-sidebar__profile-copy strong {
-    @apply text-[14px] leading-[normal] font-semibold;
+    @apply truncate text-[14px] leading-[normal] font-semibold;
   }
 
   .app-sidebar__profile-copy span {
-    @apply text-[12px] leading-[normal] text-(--ink-soft);
+    @apply truncate text-[12px] leading-[normal] text-(--ink-soft);
   }
 
   .user-avatar {
@@ -252,17 +279,13 @@
     @apply h-9 w-full flex-row gap-1.5 rounded-full px-3 py-0 text-[13px] leading-[normal] whitespace-nowrap;
   }
 
+  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-action .signin-login-cta__label {
+    @apply truncate;
+  }
+
   /* Reserve the guest button width while the session loads (no layout shift). */
   .app-sidebar[data-collapsed='false'] .app-sidebar__profile-action .signin-logout[aria-hidden='true'] {
     @apply h-9 w-32;
-  }
-}
-
-/* Page titles on wide layouts follow the proposal (42px Fraunces). */
-@media (min-width: 761px) {
-  .app-main .writing-heading h1,
-  .app-main .settings-heading h1 {
-    @apply text-[42px] tracking-[-0.8px];
   }
 }
 

@@ -33,7 +33,7 @@
 }
 
 .signin-card {
-  @apply flex w-full max-w-[420px] flex-col gap-6 rounded-(--card-radius) border border-solid border-(--line) bg-(--surface) px-5 py-7 text-(--ink);
+  @apply flex w-full max-w-[420px] min-w-0 flex-col gap-6 rounded-(--card-radius) border border-solid border-(--line) bg-(--surface) px-5 py-7 text-(--ink);
 }
 
 .signin-brand {
@@ -49,7 +49,7 @@
 }
 
 .signin-card__header h1 {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[30px] leading-[1.15] font-semibold tracking-[-0.5px];
+  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[30px] leading-[1.15] font-semibold tracking-[-0.5px];
 }
 
 .signin-card__header p {
@@ -63,7 +63,7 @@
 }
 
 .signin-field {
-  @apply flex flex-col gap-2;
+  @apply flex min-w-0 flex-col gap-2;
 }
 
 .signin-field label {
@@ -75,7 +75,7 @@
 }
 
 .signin-field__input {
-  @apply h-[52px] w-full rounded-(--control-radius) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[15px] text-(--ink) placeholder:text-(--ink-faint) focus:outline-2 focus:outline-offset-2 focus:outline-(--indigo);
+  @apply h-[52px] w-full min-w-0 rounded-(--control-radius) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[15px] text-(--ink) placeholder:text-(--ink-faint) focus:outline-2 focus:outline-offset-2 focus:outline-(--indigo);
 }
 
 .signin-field__input--password {
@@ -91,7 +91,7 @@
 }
 
 .signin-field__error {
-  @apply m-0 text-[14px] leading-[1.45] text-(--red-ink);
+  @apply m-0 wrap-anywhere text-[14px] leading-[1.45] text-(--red-ink);
 }
 
 .signin-form__submit {
@@ -107,7 +107,7 @@
 }
 
 .signin-form__root-error {
-  @apply m-0 rounded-(--control-radius) border border-solid border-(--signin-danger) bg-(--red-soft) px-4 py-3 text-[14px] leading-[1.45] text-(--red-ink);
+  @apply m-0 wrap-anywhere rounded-(--control-radius) border border-solid border-(--signin-danger) bg-(--red-soft) px-4 py-3 text-[14px] leading-[1.45] text-(--red-ink);
 }
 
 .signin-form__guest {
@@ -117,7 +117,7 @@
 /* Authenticated card */
 
 .signin-account {
-  @apply flex flex-col gap-1 rounded-(--control-radius) bg-(--surface-muted) px-4 py-3.5;
+  @apply flex min-w-0 flex-col gap-1 rounded-(--control-radius) bg-(--surface-muted) px-4 py-3.5;
 }
 
 .signin-account span {
@@ -145,7 +145,7 @@
 /* Guest call to action (shell header / sidebar) */
 
 .signin-login-cta {
-  @apply inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-(--indigo) px-3 text-[13px] leading-[normal] font-semibold whitespace-nowrap text-(--signin-on-indigo) focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-solid focus-visible:outline-(--focus-ring);
+  @apply inline-flex h-9 max-w-full min-w-0 items-center justify-center gap-1.5 rounded-full bg-(--indigo) px-3 text-[13px] leading-[normal] font-semibold whitespace-nowrap text-(--signin-on-indigo) focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-solid focus-visible:outline-(--focus-ring);
 }
 
 .signin-login-cta:hover {
@@ -154,6 +154,10 @@
 
 .signin-login-cta svg {
   @apply shrink-0;
+}
+
+.signin-login-cta__label {
+  @apply min-w-0 truncate;
 }
 
 @media (min-width: 761px) {

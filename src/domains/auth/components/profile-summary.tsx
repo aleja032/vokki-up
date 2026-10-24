@@ -8,9 +8,11 @@ export function ProfileSummary() {
 
   if (session?.status !== 'authenticated') return null;
 
+  const profileName = session.user.displayName ?? session.user.email;
+
   return (
     <span className="app-sidebar__profile-copy">
-      <strong>{session.user.displayName ?? session.user.email}</strong>
+      <strong title={profileName}>{profileName}</strong>
       <span>{shellMessages.profileLevel}</span>
     </span>
   );

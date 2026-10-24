@@ -71,6 +71,7 @@ export function CardsLibrary({
               className="deck-filter"
               type="button"
               key={category}
+              title={category}
               aria-pressed={activeCategory === category}
               onClick={() => onCategoryChange(category)}
             >
