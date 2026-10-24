@@ -18,7 +18,6 @@ interface ProfilePanelProps {
   displayName: string;
   isActive: boolean;
   isReminderEnabled: boolean;
-  hasReminderConsent: boolean;
   isAuthenticated: boolean;
   reminderDeliveryConfigured: boolean;
   reminderError: string;
@@ -30,7 +29,6 @@ interface ProfilePanelProps {
   onLanguageChange: (value: AppLanguage) => void;
   onLevelChange: (value: LearningLevel) => void;
   onReminderChange: (value: boolean) => void;
-  onReminderConsentChange: (value: boolean) => void;
   onSave: () => void;
   onThemeChange: (value: AppTheme) => void;
   theme: AppTheme;
@@ -171,18 +169,6 @@ export function ProfilePanel(props: ProfilePanelProps) {
               onChange={props.onReminderChange}
             />
           </div>
-          {props.isAuthenticated ? (
-            <label className="prefs-reminder-consent">
-              <input
-                checked={props.hasReminderConsent}
-                onChange={event =>
-                  props.onReminderConsentChange(event.target.checked)
-                }
-                type="checkbox"
-              />
-              <span>{copy.reminderConsent}</span>
-            </label>
-          ) : null}
           {props.reminderError ? (
             <p className="prefs-hint" role="status">
               {props.reminderError}

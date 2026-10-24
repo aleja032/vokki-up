@@ -184,32 +184,16 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
       setReminderError(settingsMessages.profile.reminderSetupRequired);
       return;
     }
-    if (enabled && !hasReminderConsent) {
-      setReminderError(settingsMessages.profile.reminderConsentRequired);
-      return;
-    }
-
     const previous = isReminderEnabled;
+    const previousConsent = hasReminderConsent;
+    const nextConsent = enabled;
     setIsReminderEnabled(enabled);
-    void saveReminderPreferences(enabled, hasReminderConsent).catch(() => {
+    setHasReminderConsent(nextConsent);
+    void saveReminderPreferences(enabled, nextConsent).catch(() => {
       setIsReminderEnabled(previous);
+      setHasReminderConsent(previousConsent);
       setReminderError(settingsMessages.profile.reminderSaveError);
     });
-  }
-
-  function changeReminderConsent(consent: boolean) {
-    if (!isAuthenticated) return;
-    const wasConsented = hasReminderConsent;
-    const wasEnabled = isReminderEnabled;
-    setHasReminderConsent(consent);
-    if (!consent && wasEnabled) setIsReminderEnabled(false);
-    void saveReminderPreferences(consent ? wasEnabled : false, consent).catch(
-      () => {
-        setHasReminderConsent(wasConsented);
-        setIsReminderEnabled(wasEnabled);
-        setReminderError(settingsMessages.profile.reminderSaveError);
-      }
-    );
   }
 
   return {
@@ -240,7 +224,6 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     changeDailyGoal: markDirty(setDailyGoal),
     changeDisplayName: markDirty(setDisplayName),
     changeReminder,
-    changeReminderConsent,
     changeModel: markDirty(setModel),
     changeUseAiForCards: markDirty(setShouldUseAiForCards),
     changeUseAiForWriting: markDirty(setShouldUseAiForWriting),

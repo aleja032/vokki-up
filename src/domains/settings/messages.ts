@@ -26,11 +26,8 @@ export const settingsMessages = createLocalizedMessages({
     reminderLocalOn: 'Solo se guarda en este dispositivo; no se envían emails.',
     reminderLocalOff:
       'Solo para este dispositivo; inicia sesión para recibir emails.',
-    reminderConsent: 'Acepto recibir recordatorios diarios por email.',
     reminderSetupRequired:
       'Email todavía no está configurado para enviar recordatorios.',
-    reminderConsentRequired:
-      'Acepta recibir emails antes de activar el recordatorio.',
     reminderSaveError:
       'No se pudieron guardar los ajustes del recordatorio. Inténtalo de nuevo.',
     themeLabel: 'Tema',

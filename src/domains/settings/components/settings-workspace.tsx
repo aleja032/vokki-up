@@ -69,7 +69,6 @@ export function SettingsWorkspace({
         displayName={preferences.displayName}
         isActive={activeTab === 'profile'}
         isReminderEnabled={preferences.isReminderEnabled}
-        hasReminderConsent={preferences.hasReminderConsent}
         isAuthenticated={preferences.isAuthenticated}
         reminderDeliveryConfigured={preferences.reminderDeliveryConfigured}
         reminderError={preferences.reminderError}
@@ -81,7 +80,6 @@ export function SettingsWorkspace({
         onLanguageChange={preferences.changeLanguage}
         onLevelChange={preferences.changeLevel}
         onReminderChange={preferences.changeReminder}
-        onReminderConsentChange={preferences.changeReminderConsent}
         onSave={preferences.saveChanges}
         onThemeChange={preferences.changeTheme}
         theme={preferences.theme}
