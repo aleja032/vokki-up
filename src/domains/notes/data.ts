@@ -12,6 +12,13 @@ export const NOTE_CATEGORIES: NoteCategory[] = [
 
 export const NOTE_FILTERS: NoteFilter[] = ['Todas', 'Favoritas'];
 
+export function sortNotesFavoritesFirst(notes: Note[]): Note[] {
+  return [...notes].sort(
+    (left, right) =>
+      Number(right.favorite === true) - Number(left.favorite === true)
+  );
+}
+
 export function renameNoteCategory(
   notes: Note[],
   previousCategory: string,

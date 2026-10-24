@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { noteSchema } from './note.schema';
 import { createNoteCategorySchema } from './note.schema';
-import { reassignNoteCategory, renameNoteCategory } from './data';
+import {
+  reassignNoteCategory,
+  renameNoteCategory,
+  sortNotesFavoritesFirst
+} from './data';
 import type { Note } from './types';
 import { notesValidationMessages } from './validation-messages';
 
@@ -89,5 +93,38 @@ describe('note category updates', () => {
     expect(reassignNoteCategory([note], 'Ideas')).toEqual([
       { ...note, category: 'General' }
     ]);
+  });
+});
+
+describe('favorite-first note ordering', () => {
+  it('promotes favorites while preserving order within each group', () => {
+    const notes: Note[] = [
+      { id: 'a', title: 'A', category: 'Ideas', body: '', updatedAt: '' },
+      {
+        id: 'b',
+        title: 'B',
+        category: 'Ideas',
+        body: '',
+        updatedAt: '',
+        favorite: true
+      },
+      {
+        id: 'c',
+        title: 'C',
+        category: 'Ideas',
+        body: '',
+        updatedAt: '',
+        favorite: true
+      },
+      { id: 'd', title: 'D', category: 'Ideas', body: '', updatedAt: '' }
+    ];
+
+    expect(sortNotesFavoritesFirst(notes).map(note => note.id)).toEqual([
+      'b',
+      'c',
+      'a',
+      'd'
+    ]);
+    expect(notes.map(note => note.id)).toEqual(['a', 'b', 'c', 'd']);
   });
 });

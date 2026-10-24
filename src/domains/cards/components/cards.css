@@ -567,6 +567,26 @@
   @apply m-0 px-4 py-8 text-center text-[14px] text-(--ink-soft);
 }
 
+.deck-pagination {
+  @apply flex flex-wrap items-center justify-between gap-3 border-t border-solid border-(--line) pt-3;
+}
+
+.deck-pagination__button {
+  @apply inline-flex min-h-10 items-center justify-center gap-1.5 rounded-[10px] border border-solid border-(--line) bg-(--surface) px-3 text-sm font-semibold text-(--ink);
+}
+
+.deck-pagination__button:disabled {
+  @apply cursor-not-allowed opacity-45;
+}
+
+.deck-pagination__button:focus-visible {
+  @apply outline-2 outline-offset-2 outline-(--indigo);
+}
+
+.deck-pagination__status {
+  @apply text-sm tabular-nums text-(--ink-soft);
+}
+
 @media (min-width: 761px) {
   .deck-library {
     @apply flex-[999_1_520px] gap-5;
@@ -598,6 +618,10 @@
 
   .deck-library__empty {
     @apply py-10 text-[15px];
+  }
+
+  .deck-pagination {
+    @apply justify-end;
   }
 }
 

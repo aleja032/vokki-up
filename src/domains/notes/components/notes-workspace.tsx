@@ -90,7 +90,10 @@ export function NotesWorkspace() {
           key={editingNote.id}
           note={editingNote}
           onChange={handleChange}
-          onSave={handleSave}
+          onSave={() => {
+            handleSave();
+            setEditingNoteId(null);
+          }}
         />
       </div>
     );

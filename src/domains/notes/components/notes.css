@@ -189,6 +189,9 @@
 
 .notes-category-manager__list {
   @apply m-0 flex list-none flex-col gap-2 border-t border-solid border-(--line) pt-3 text-sm text-(--ink);
+  max-height: min(40vh, 18rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .notes-category-manager__list li,
@@ -208,6 +211,9 @@
 
 .notes-cards {
   @apply flex flex-col gap-3.5;
+  max-height: min(58vh, 44rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .note-card {

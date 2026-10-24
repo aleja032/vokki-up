@@ -11,7 +11,8 @@ import {
   INITIAL_NOTES,
   NOTE_CATEGORIES,
   reassignNoteCategory,
-  renameNoteCategory
+  renameNoteCategory,
+  sortNotesFavoritesFirst
 } from '../data';
 import type { Note, NoteFilter } from '../types';
 
@@ -45,20 +46,22 @@ export function useNotesWorkspace() {
   const editingNote = notes.find(note => note.id === editingNoteId);
   const visibleNotes = useMemo(() => {
     const query = searchText.trim().toLocaleLowerCase();
-    return notes.filter(note => {
-      const matchesFilter =
-        activeFilter === 'Todas' ||
-        (activeFilter === 'Favoritas'
-          ? note.favorite === true
-          : note.category === activeFilter);
-      return (
-        matchesFilter &&
-        (!query ||
-          `${note.title} ${note.body} ${note.category}`
-            .toLocaleLowerCase()
-            .includes(query))
-      );
-    });
+    return sortNotesFavoritesFirst(
+      notes.filter(note => {
+        const matchesFilter =
+          activeFilter === 'Todas' ||
+          (activeFilter === 'Favoritas'
+            ? note.favorite === true
+            : note.category === activeFilter);
+        return (
+          matchesFilter &&
+          (!query ||
+            `${note.title} ${note.body} ${note.category}`
+              .toLocaleLowerCase()
+              .includes(query))
+        );
+      })
+    );
   }, [activeFilter, notes, searchText]);
 
   function handleCreateNote() {
