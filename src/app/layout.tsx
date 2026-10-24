@@ -7,6 +7,7 @@ import {
 import { siteConfig } from '@/config/site';
 import { ServiceWorkerRegistration } from '@/components/pwa/service-worker-registration';
 import { ShellSessionBridge } from '@/domains/auth/components/shell-session-bridge';
+import { THEME_INIT_SCRIPT } from '@/lib/theme/theme-init-script';
 import './globals.css';
 import './error-pages.css';
 
@@ -47,7 +48,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body
         className={`${dmSans.variable} ${fraunces.variable} ${notoSans.variable}`}
       >

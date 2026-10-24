@@ -1,5 +1,5 @@
-const STORAGE_PREFIX = 'vokki-up';
-const STORAGE_VERSION = 1;
+export const STORAGE_PREFIX = 'vokki-up';
+export const STORAGE_VERSION = 1;
 
 type StorageEnvelope = {
   version: number;
