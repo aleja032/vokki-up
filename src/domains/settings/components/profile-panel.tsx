@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { APP_LANGUAGES, LEARNING_LEVELS } from '../data';
 import { settingsMessages } from '../messages';
+import { useAuthSession } from '@/domains/auth/use-auth-session';
 import type { AppTheme } from '../types';
 import { SettingsIcon } from './settings-icon';
 import { SettingsSaveState } from './settings-save-state';
@@ -17,6 +18,10 @@ interface ProfilePanelProps {
   displayName: string;
   isActive: boolean;
   isReminderEnabled: boolean;
+  hasReminderConsent: boolean;
+  isAuthenticated: boolean;
+  reminderDeliveryConfigured: boolean;
+  reminderError: string;
   isSaved: boolean;
   language: AppLanguage;
   level: LearningLevel;
@@ -25,6 +30,7 @@ interface ProfilePanelProps {
   onLanguageChange: (value: AppLanguage) => void;
   onLevelChange: (value: LearningLevel) => void;
   onReminderChange: (value: boolean) => void;
+  onReminderConsentChange: (value: boolean) => void;
   onSave: () => void;
   onThemeChange: (value: AppTheme) => void;
   theme: AppTheme;
@@ -32,9 +38,13 @@ interface ProfilePanelProps {
 
 export function ProfilePanel(props: ProfilePanelProps) {
   const copy = settingsMessages.profile;
+  const { session, isLoading } = useAuthSession();
+  const isAuthenticated = session?.status === 'authenticated';
+  const identityName = isAuthenticated
+    ? session.user.displayName || session.user.email
+    : props.displayName;
   const initial =
-    props.displayName.charAt(0).toLocaleUpperCase() ||
-    copy.fallbackName.charAt(0);
+    identityName.charAt(0).toLocaleUpperCase() || copy.fallbackName.charAt(0);
 
   return (
     <section
@@ -51,18 +61,29 @@ export function ProfilePanel(props: ProfilePanelProps) {
               {initial}
             </span>
             <span className="prefs-account__copy">
-              <span className="prefs-account__name">
-                {props.displayName || copy.fallbackName}
+              <span
+                className="prefs-account__name"
+                title={identityName || copy.fallbackName}
+              >
+                {identityName || copy.fallbackName}
               </span>
-              <span className="prefs-account__note">{copy.noAccount}</span>
+              {isAuthenticated ? (
+                <span className="prefs-account__note">
+                  {session.user.email}
+                </span>
+              ) : !isLoading ? (
+                <span className="prefs-account__note">{copy.noAccount}</span>
+              ) : null}
             </span>
           </div>
-          <Link
-            className="prefs-button prefs-button--outline prefs-account__action"
-            href="/login"
-          >
-            {copy.signIn}
-          </Link>
+          {!isLoading && !isAuthenticated ? (
+            <Link
+              className="prefs-button prefs-button--outline prefs-account__action"
+              href="/login"
+            >
+              {copy.signIn}
+            </Link>
+          ) : null}
         </div>
 
         <div className="prefs-fields">
@@ -133,7 +154,15 @@ export function ProfilePanel(props: ProfilePanelProps) {
             <span className="prefs-row__copy">
               <span className="prefs-row__title">{copy.reminderTitle}</span>
               <span className="prefs-hint">
-                {props.isReminderEnabled ? copy.reminderOn : copy.reminderOff}
+                {props.isAuthenticated
+                  ? !props.reminderDeliveryConfigured
+                    ? copy.reminderSetupRequired
+                    : props.isReminderEnabled
+                      ? copy.reminderOn
+                      : copy.reminderOff
+                  : props.isReminderEnabled
+                    ? copy.reminderLocalOn
+                    : copy.reminderLocalOff}
               </span>
             </span>
             <SettingsSwitch
@@ -142,6 +171,23 @@ export function ProfilePanel(props: ProfilePanelProps) {
               onChange={props.onReminderChange}
             />
           </div>
+          {props.isAuthenticated ? (
+            <label className="prefs-reminder-consent">
+              <input
+                checked={props.hasReminderConsent}
+                onChange={event =>
+                  props.onReminderConsentChange(event.target.checked)
+                }
+                type="checkbox"
+              />
+              <span>{copy.reminderConsent}</span>
+            </label>
+          ) : null}
+          {props.reminderError ? (
+            <p className="prefs-hint" role="status">
+              {props.reminderError}
+            </p>
+          ) : null}
         </div>
 
         <fieldset className="prefs-group">
@@ -188,14 +234,6 @@ export function ProfilePanel(props: ProfilePanelProps) {
             </span>
             <SettingsIcon name="download" size={18} />
           </Link>
-          <button
-            className="prefs-action prefs-action--danger"
-            disabled
-            type="button"
-          >
-            {copy.deleteAll}
-            <SettingsIcon name="trash" size={18} />
-          </button>
         </section>
       </aside>
     </section>

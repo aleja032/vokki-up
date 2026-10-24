@@ -29,11 +29,15 @@ export function ConnectionStatusBanner({
 }
 
 interface ConnectionTestResultProps {
+  errorMessage?: string;
+  latencyMs?: number;
   providerName: string;
   test: ConnectionTest;
 }
 
 export function ConnectionTestResult({
+  errorMessage,
+  latencyMs,
   providerName,
   test
 }: ConnectionTestResultProps) {
@@ -52,7 +56,7 @@ export function ConnectionTestResult({
       <div className="prefs-result prefs-result--ok" role="status">
         <SettingsIcon className="prefs-result__icon" name="check" />
         <span>
-          <strong>{copy.okTitle}</strong> {copy.okText(providerName)}
+          <strong>{copy.okTitle}</strong> {copy.okText(providerName, latencyMs)}
         </span>
       </div>
     );
@@ -62,7 +66,13 @@ export function ConnectionTestResult({
       <div className="prefs-result prefs-result--error" role="alert">
         <SettingsIcon className="prefs-result__icon" name="warning" />
         <span>
-          <strong>{copy.errorTitle}</strong> {copy.errorText(providerName)}
+          <strong>
+            {errorMessage ? copy.errorGenericTitle : copy.errorTitle}
+          </strong>{' '}
+          {errorMessage ?? copy.errorText(providerName)}
+          {errorMessage && latencyMs !== undefined
+            ? copy.errorLatency(latencyMs)
+            : ''}
         </span>
       </div>
     );

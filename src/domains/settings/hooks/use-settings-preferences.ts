@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState, type SetStateAction } from 'react';
+import { useEffect, useRef, useState, type SetStateAction } from 'react';
 import { APP_LANGUAGES, LEARNING_LEVELS, PROVIDER_OPTIONS } from '../data';
 import { settingsMessages } from '../messages';
+import { useAuthSession } from '@/domains/auth/use-auth-session';
 import type { AiProvider, AppTheme, SettingsTab } from '../types';
 import type { JsonValue } from '@/lib/sync/types';
 import { scalarChangeBuilder } from '@/lib/sync/change-builders';
@@ -10,7 +11,7 @@ import { useTrackedBrowserState } from '@/lib/sync/use-tracked-browser-state';
 
 export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
   const [activeTab, setActiveTab] = useState<SettingsTab>(initialTab);
-  const [theme, setTheme] = useTrackedSetting<AppTheme>(
+  const [theme, setTheme, isThemeLoaded] = useTrackedSetting<AppTheme>(
     'settings/theme',
     'light',
     isAppTheme
@@ -40,6 +41,24 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     false,
     isBoolean
   );
+  const [hasReminderConsent, setHasReminderConsent] = useTrackedSetting(
+    'settings/reminder-consent',
+    false,
+    isBoolean
+  );
+  const [reminderDeliveryConfigured, setReminderDeliveryConfigured] =
+    useState(false);
+  const [reminderError, setReminderError] = useState('');
+  const { session, isLoading: isAuthSessionLoading } = useAuthSession();
+  const userId = session?.status === 'authenticated' ? session.user.id : null;
+  const isAuthenticated = userId !== null;
+  const reminderSetters = useRef({
+    setIsReminderEnabled,
+    setHasReminderConsent
+  });
+  useEffect(() => {
+    reminderSetters.current = { setIsReminderEnabled, setHasReminderConsent };
+  });
   const [provider, setProvider] = useTrackedSetting<AiProvider>(
     'settings/provider',
     'gemini',
@@ -66,9 +85,43 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     PROVIDER_OPTIONS[0];
 
   useEffect(() => {
+    if (isAuthSessionLoading) return;
+    if (!userId) return;
+
+    let active = true;
+    void fetch('/api/reminders/send?preferences=1', { cache: 'no-store' })
+      .then(async response => {
+        if (!response.ok)
+          throw new Error('Reminder preferences are unavailable.');
+        return (await response.json()) as {
+          enabled: boolean;
+          consent: boolean;
+          deliveryConfigured: boolean;
+        };
+      })
+      .then(preferences => {
+        if (!active) return;
+        reminderSetters.current.setIsReminderEnabled(preferences.enabled);
+        reminderSetters.current.setHasReminderConsent(preferences.consent);
+        setReminderDeliveryConfigured(preferences.deliveryConfigured);
+        setReminderError('');
+      })
+      .catch(() => {
+        if (!active) return;
+        setReminderDeliveryConfigured(false);
+        setReminderError(settingsMessages.profile.reminderSaveError);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [isAuthSessionLoading, userId]);
+
+  useEffect(() => {
+    if (!isThemeLoaded) return;
     if (theme === 'system') delete document.documentElement.dataset.theme;
     else document.documentElement.dataset.theme = theme;
-  }, [theme]);
+  }, [isThemeLoaded, theme]);
 
   function markDirty<T>(setter: (value: SetStateAction<T>) => void) {
     return (value: T) => {
@@ -91,6 +144,63 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     setIsSaved(true);
   }
 
+  async function saveReminderPreferences(enabled: boolean, consent: boolean) {
+    const response = await fetch('/api/reminders/send', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ enabled, consent })
+    });
+    const result = (await response.json()) as {
+      enabled?: boolean;
+      consent?: boolean;
+      deliveryConfigured?: boolean;
+    };
+    if (!response.ok || typeof result.enabled !== 'boolean') {
+      throw new Error(settingsMessages.profile.reminderSaveError);
+    }
+    setIsReminderEnabled(result.enabled);
+    setHasReminderConsent(result.consent === true);
+    setReminderDeliveryConfigured(result.deliveryConfigured === true);
+    setReminderError('');
+  }
+
+  function changeReminder(enabled: boolean) {
+    if (!isAuthenticated) {
+      markDirty(setIsReminderEnabled)(enabled);
+      return;
+    }
+    if (enabled && !reminderDeliveryConfigured) {
+      setReminderError(settingsMessages.profile.reminderSetupRequired);
+      return;
+    }
+    if (enabled && !hasReminderConsent) {
+      setReminderError(settingsMessages.profile.reminderConsentRequired);
+      return;
+    }
+
+    const previous = isReminderEnabled;
+    setIsReminderEnabled(enabled);
+    void saveReminderPreferences(enabled, hasReminderConsent).catch(() => {
+      setIsReminderEnabled(previous);
+      setReminderError(settingsMessages.profile.reminderSaveError);
+    });
+  }
+
+  function changeReminderConsent(consent: boolean) {
+    if (!isAuthenticated) return;
+    const wasConsented = hasReminderConsent;
+    const wasEnabled = isReminderEnabled;
+    setHasReminderConsent(consent);
+    if (!consent && wasEnabled) setIsReminderEnabled(false);
+    void saveReminderPreferences(consent ? wasEnabled : false, consent).catch(
+      () => {
+        setHasReminderConsent(wasConsented);
+        setIsReminderEnabled(wasEnabled);
+        setReminderError(settingsMessages.profile.reminderSaveError);
+      }
+    );
+  }
+
   return {
     activeTab,
     setActiveTab,
@@ -100,6 +210,10 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     dailyGoal,
     displayName,
     isReminderEnabled,
+    hasReminderConsent,
+    reminderDeliveryConfigured,
+    reminderError,
+    isAuthenticated,
     provider,
     model,
     shouldUseAiForCards,
@@ -111,7 +225,8 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     changeLevel: markDirty(setLevel),
     changeDailyGoal: markDirty(setDailyGoal),
     changeDisplayName: markDirty(setDisplayName),
-    changeReminder: markDirty(setIsReminderEnabled),
+    changeReminder,
+    changeReminderConsent,
     changeModel: markDirty(setModel),
     changeUseAiForCards: markDirty(setShouldUseAiForCards),
     changeUseAiForWriting: markDirty(setShouldUseAiForWriting),

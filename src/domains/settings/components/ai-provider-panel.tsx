@@ -42,6 +42,36 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
   const [savedSelection, setSavedSelection] = useState<string | null>(null);
   const [credentialError, setCredentialError] = useState('');
   const [isSavingCredential, setIsSavingCredential] = useState(false);
+  const [isTestingConnection, setIsTestingConnection] = useState(false);
+  const [connectionResult, setConnectionResult] = useState<{
+    success: boolean;
+    latencyMs?: number;
+    error?: string;
+  } | null>(null);
+  const hasCredential = hasSavedCredential || Boolean(apiKey.trim());
+  const hasPreviewResult =
+    props.connectionStatus === 'ok' ||
+    props.connectionStatus === 'error' ||
+    props.connectionTest !== 'idle';
+  const connectionStatus = hasPreviewResult
+    ? props.connectionStatus
+    : hasCredential
+      ? 'untested'
+      : props.connectionStatus;
+  const visibleConnectionStatus = connectionResult
+    ? connectionResult.success
+      ? 'ok'
+      : 'error'
+    : isTestingConnection
+      ? 'untested'
+      : connectionStatus;
+  const visibleConnectionTest = isTestingConnection
+    ? 'testing'
+    : connectionResult
+      ? connectionResult.success
+        ? 'ok'
+        : 'error'
+      : props.connectionTest;
 
   useEffect(() => {
     let active = true;
@@ -171,7 +201,7 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
         <ConnectionStatusBanner
           model={props.model}
           providerName={providerName}
-          status={props.connectionStatus}
+          status={visibleConnectionStatus}
         />
         <fieldset className="prefs-group">
           <legend className="prefs-legend prefs-legend--strong">
@@ -187,7 +217,10 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
                 aria-checked={props.provider === option.id}
                 className="prefs-provider"
                 key={option.id}
-                onClick={() => props.onProviderChange(option.id)}
+                onClick={() => {
+                  setConnectionResult(null);
+                  props.onProviderChange(option.id);
+                }}
                 role="radio"
                 type="button"
               >
@@ -214,7 +247,10 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
             <select
               className="prefs-input prefs-input--select"
               id="settings-model"
-              onChange={event => props.onModelChange(event.target.value)}
+              onChange={event => {
+                setConnectionResult(null);
+                props.onModelChange(event.target.value);
+              }}
               value={props.model}
             >
               {props.models.map(value => (
@@ -228,7 +264,7 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
         </div>
         <ApiKeyField
           apiKey={apiKey}
-          hasError={props.connectionTest === 'error' || !!credentialError}
+          hasError={visibleConnectionTest === 'error' || !!credentialError}
           hasSavedCredential={hasSavedCredential}
           isAuthenticated={isAuthenticated}
           maskedKey={maskedKey}
@@ -249,8 +285,10 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
           </span>
         )}
         <ConnectionTestResult
+          errorMessage={connectionResult?.error}
+          latencyMs={connectionResult?.latencyMs}
           providerName={providerName}
-          test={props.connectionTest}
+          test={visibleConnectionTest}
         />
         <footer className="prefs-footer prefs-footer--provider">
           <button
@@ -267,9 +305,15 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
             <button
               className="prefs-button prefs-button--outline"
               type="button"
-              disabled
+              disabled={
+                isTestingConnection ||
+                (isAuthenticated ? !hasSavedCredential : !apiKey.trim())
+              }
+              onClick={testConnection}
             >
-              {copy.testConnection}
+              {isTestingConnection
+                ? copy.testingConnection
+                : copy.testConnection}
             </button>
             <button
               className="prefs-button prefs-button--primary"
@@ -339,4 +383,57 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
       </aside>
     </section>
   );
+
+  async function testConnection() {
+    setConnectionResult(null);
+    setCredentialError('');
+    setIsTestingConnection(true);
+    try {
+      const response = await fetch('/api/ai/connection-test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          selection: { provider: props.provider, model: props.model },
+          ...(!isAuthenticated && apiKey.trim()
+            ? { apiKey: apiKey.trim() }
+            : {})
+        }),
+        cache: 'no-store'
+      });
+      const value: unknown = await response.json();
+      if (!response.ok) {
+        const errorMessage =
+          typeof value === 'object' &&
+          value !== null &&
+          'error' in value &&
+          typeof value.error === 'object' &&
+          value.error !== null &&
+          'message' in value.error &&
+          typeof value.error.message === 'string'
+            ? value.error.message
+            : copy.genericError;
+        const latencyMs =
+          typeof value === 'object' &&
+          value !== null &&
+          'latencyMs' in value &&
+          typeof value.latencyMs === 'number'
+            ? value.latencyMs
+            : undefined;
+        setConnectionResult({ success: false, error: errorMessage, latencyMs });
+        return;
+      }
+      const latencyMs =
+        typeof value === 'object' &&
+        value !== null &&
+        'latencyMs' in value &&
+        typeof value.latencyMs === 'number'
+          ? value.latencyMs
+          : undefined;
+      setConnectionResult({ success: true, latencyMs });
+    } catch {
+      setConnectionResult({ success: false, error: copy.genericError });
+    } finally {
+      setIsTestingConnection(false);
+    }
+  }
 }

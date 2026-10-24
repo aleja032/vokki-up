@@ -20,8 +20,18 @@ export const settingsMessages = {
     decreaseGoal: 'Reducir meta',
     increaseGoal: 'Aumentar meta',
     reminderTitle: 'Recordatorio diario',
-    reminderOn: 'Todos los días a las 8:00 p. m.',
+    reminderOn: 'Todos los días cerca de las 20:00 UTC.',
     reminderOff: 'Desactivado',
+    reminderLocalOn: 'Solo se guarda en este dispositivo; no se envían emails.',
+    reminderLocalOff:
+      'Solo para este dispositivo; inicia sesión para recibir emails.',
+    reminderConsent: 'Acepto recibir recordatorios diarios por email.',
+    reminderSetupRequired:
+      'Email todavía no está configurado para enviar recordatorios.',
+    reminderConsentRequired:
+      'Acepta recibir emails antes de activar el recordatorio.',
+    reminderSaveError:
+      'No se pudieron guardar los ajustes del recordatorio. Inténtalo de nuevo.',
     themeLabel: 'Tema',
     dataTitle: 'Tus datos',
     dataSummary:
@@ -61,6 +71,8 @@ export const settingsMessages = {
     savedApiKey: 'API key guardada',
     noSavedApiKey: 'No hay una API key guardada.',
     testConnection: 'Probar conexión',
+    testingConnection: 'Probando…',
+    genericError: 'No se pudo completar la prueba. Inténtalo de nuevo.',
     save: 'Guardar',
     howTitle: 'Cómo funciona',
     howItems: [
@@ -95,7 +107,10 @@ export const settingsMessages = {
   connectionTest: {
     testing: 'Probando conexión…',
     okTitle: 'Conexión correcta.',
-    okText: (providerName: string) => `${providerName} respondió en 820 ms.`,
+    okText: (providerName: string, latencyMs?: number) =>
+      `${providerName} respondió en ${latencyMs ?? 820} ms.`,
+    errorGenericTitle: 'No se pudo probar la conexión.',
+    errorLatency: (latencyMs: number) => ` (respuesta en ${latencyMs} ms).`,
     errorTitle: 'La API key no es válida (401).',
     errorText: (providerName: string) =>
       `Revisa que esté completa y que pertenezca a ${providerName}.`

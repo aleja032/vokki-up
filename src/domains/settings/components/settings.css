@@ -67,7 +67,7 @@
 }
 
 .prefs__heading {
-  @apply flex items-center gap-3;
+  @apply flex min-w-0 items-center gap-3;
 }
 
 .prefs__back {
@@ -75,7 +75,7 @@
 }
 
 .prefs__title {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[26px] leading-[normal] font-semibold text-(--ink);
+  @apply m-0 min-w-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[26px] leading-[normal] font-semibold text-(--ink);
 }
 
 .prefs-tabs {
@@ -83,7 +83,7 @@
 }
 
 .prefs-tab {
-  @apply h-11 rounded-[12px] px-4 text-[15px] font-bold text-(--ink-soft);
+  @apply h-11 min-w-0 truncate rounded-[12px] px-4 text-[15px] font-bold text-(--ink-soft);
 }
 
 .prefs-tab[aria-selected='true'] {
@@ -113,7 +113,7 @@
 }
 
 .prefs-field {
-  @apply flex flex-col gap-2;
+  @apply flex min-w-0 flex-col gap-2;
 }
 
 .prefs-label {
@@ -121,11 +121,11 @@
 }
 
 .prefs-input {
-  @apply box-border h-[52px] w-full rounded-[14px] border-[1.5px] border-(--line) bg-(--surface) px-4 text-[15px] font-medium text-(--ink);
+  @apply box-border h-[52px] w-full min-w-0 rounded-[14px] border-[1.5px] border-(--line) bg-(--surface) px-4 text-[15px] font-medium text-(--ink);
 }
 
 .prefs-input--select {
-  @apply px-3.5;
+  @apply pl-4 pr-10;
 }
 
 .prefs-input:focus-visible,
@@ -152,11 +152,11 @@
 /* Profile */
 
 .prefs-account {
-  @apply flex flex-col gap-4 rounded-[22px] border border-(--line) bg-(--surface) p-[22px];
+  @apply flex min-w-0 flex-col gap-4 rounded-[22px] border border-(--line) bg-(--surface) p-[22px];
 }
 
 .prefs-account__identity {
-  @apply flex items-center gap-4;
+  @apply flex min-w-0 items-center gap-4;
 }
 
 .prefs-avatar {
@@ -164,15 +164,15 @@
 }
 
 .prefs-account__copy {
-  @apply flex flex-col gap-1;
+  @apply flex min-w-0 flex-col gap-1;
 }
 
 .prefs-account__name {
-  @apply text-[18px] font-bold text-(--ink);
+  @apply line-clamp-2 wrap-anywhere text-[18px] font-bold text-(--ink);
 }
 
 .prefs-account__note {
-  @apply text-[13px] leading-[1.4] text-(--ink-soft);
+  @apply wrap-anywhere text-[13px] leading-[1.4] text-(--ink-soft);
 }
 
 .prefs-account__action {
@@ -184,7 +184,7 @@
 }
 
 .prefs-level {
-  @apply h-11 rounded-[12px] border-[1.5px] border-(--line) bg-(--surface) text-[14px] font-bold text-(--ink-soft);
+  @apply h-11 min-w-0 truncate rounded-[12px] border-[1.5px] border-(--line) bg-(--surface) text-[14px] font-bold text-(--ink-soft);
 }
 
 .prefs-level[aria-pressed='true'] {
@@ -200,15 +200,23 @@
 }
 
 .prefs-row__copy {
-  @apply flex flex-col gap-0.5;
+  @apply flex min-w-0 flex-col gap-0.5 wrap-anywhere;
 }
 
 .prefs-row__title {
   @apply text-[15px] font-semibold text-(--ink);
 }
 
+.prefs-reminder-consent {
+  @apply flex items-start gap-2 text-[13px] leading-[1.4] text-(--ink-soft);
+}
+
+.prefs-reminder-consent input {
+  @apply mt-0.5 size-4 shrink-0 accent-(--indigo);
+}
+
 .prefs-stepper {
-  @apply flex items-center gap-2;
+  @apply flex shrink-0 items-center gap-2;
 }
 
 .prefs-stepper__button {
@@ -224,7 +232,20 @@
 }
 
 .prefs-theme {
-  @apply h-11 rounded-[12px] px-2.5 text-[14px] font-semibold text-(--ink-soft);
+  @apply h-11 min-w-0 truncate rounded-[12px] px-2.5 text-[14px] font-semibold text-(--ink-soft);
+}
+
+/* Narrow phones: the longest theme label ("Automático") needs less padding, and a smaller type size below 340px, to fit its third. */
+@media (max-width: 375px) {
+  .prefs-theme {
+    @apply px-0.5;
+  }
+}
+
+@media (max-width: 340px) {
+  .prefs-theme {
+    @apply text-[12px];
+  }
 }
 
 .prefs-theme[aria-pressed='true'] {
@@ -246,17 +267,21 @@
 }
 
 .prefs-action {
-  @apply flex h-14 items-center justify-between gap-3 rounded-2xl border border-(--line) bg-(--surface) px-5 text-[15px] font-semibold text-(--ink);
+  @apply flex h-14 min-w-0 items-center justify-between gap-3 rounded-2xl border border-(--line) bg-(--surface) px-5 text-[15px] font-semibold text-(--ink);
 }
 
-.prefs-action--danger {
-  @apply border-[1.5px] border-(--prefs-danger-line) text-(--prefs-danger-ink);
+.prefs-action > span {
+  @apply min-w-0 truncate;
+}
+
+.prefs-action > svg {
+  @apply shrink-0;
 }
 
 /* Buttons */
 
 .prefs-button {
-  @apply inline-flex h-[52px] items-center justify-center rounded-[14px] px-6 text-[15px] font-bold;
+  @apply inline-flex h-[52px] max-w-full min-w-0 items-center justify-center rounded-[14px] px-6 text-[15px] font-bold;
 }
 
 .prefs-button--primary {
@@ -338,7 +363,7 @@
 }
 
 .prefs-status__copy {
-  @apply flex flex-col gap-0.5;
+  @apply flex min-w-0 flex-col gap-0.5 wrap-anywhere;
 }
 
 .prefs-status__title {
@@ -378,7 +403,7 @@
 }
 
 .prefs-provider__copy {
-  @apply flex flex-1 flex-col gap-0.5;
+  @apply flex min-w-0 flex-1 flex-col gap-0.5 wrap-anywhere;
 }
 
 .prefs-provider__name {
@@ -393,8 +418,12 @@
   @apply flex items-baseline justify-between gap-3;
 }
 
+.prefs-key__header > .prefs-label {
+  @apply min-w-0 wrap-anywhere;
+}
+
 .prefs-key__help {
-  @apply text-[13px] font-semibold text-(--indigo) hover:text-(--indigo-strong);
+  @apply min-w-0 truncate text-[13px] font-semibold text-(--indigo) hover:text-(--indigo-strong);
 }
 
 .prefs-key__field {
@@ -416,7 +445,7 @@
 }
 
 .prefs-key__privacy {
-  @apply flex gap-2 text-[13px] leading-[1.45] text-(--ink-soft);
+  @apply flex min-w-0 gap-2 wrap-anywhere text-[13px] leading-[1.45] text-(--ink-soft);
 }
 
 .prefs-key__lock {
@@ -441,6 +470,10 @@
 
 .prefs-result__icon {
   @apply shrink-0;
+}
+
+.prefs-result > span:last-child {
+  @apply min-w-0 wrap-anywhere;
 }
 
 .prefs-spinner {
@@ -474,7 +507,7 @@
 }
 
 .prefs-use__copy {
-  @apply flex flex-col gap-0.5;
+  @apply flex min-w-0 flex-col gap-0.5 wrap-anywhere;
 }
 
 .prefs-use__label {
