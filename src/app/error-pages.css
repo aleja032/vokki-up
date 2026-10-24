@@ -1,0 +1,180 @@
+@reference 'tailwindcss';
+
+/* Status screens (404, error) and the loading skeleton share one layout language. */
+
+.status-screen {
+  @apply mx-auto flex w-full max-w-140 flex-col items-center justify-center gap-4 px-2 text-center;
+  min-height: calc(100dvh - 76px - 76px - 48px);
+}
+
+.status-screen__art {
+  @apply relative h-32 w-42;
+}
+
+.status-screen__card {
+  @apply absolute flex h-24 w-30 items-center justify-center rounded-[18px];
+}
+
+.status-screen__card--back {
+  @apply top-3.5 left-1.5 bg-(--indigo-soft);
+  transform: rotate(-8deg);
+}
+
+.status-screen__card--front {
+  @apply top-1 left-10 border-[1.5px] border-solid border-(--line) bg-(--surface) font-[family-name:var(--font-display),Georgia,serif] text-[38px] font-semibold text-(--indigo);
+  transform: rotate(5deg);
+}
+
+.status-screen__eyebrow {
+  @apply m-0 text-[13px] font-semibold tracking-[2px] text-(--ink-soft) uppercase;
+}
+
+.status-screen__title {
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[34px] leading-[1.1] font-semibold;
+}
+
+.status-screen__description {
+  @apply m-0 text-base leading-[1.55] text-(--ink-soft);
+}
+
+.status-screen__search {
+  @apply hidden;
+}
+
+.status-screen__actions {
+  @apply flex w-full flex-col gap-3 pt-2;
+}
+
+.status-screen__action {
+  @apply flex min-h-12 cursor-pointer items-center justify-center rounded-(--control-radius) border-[1.5px] border-solid border-(--line) bg-transparent px-5 py-0 text-[15px] font-semibold text-(--ink);
+}
+
+.status-screen__action--primary {
+  @apply min-h-13 border-(--indigo) bg-(--indigo) text-[16px] font-bold text-(--surface);
+}
+
+.status-screen__action--secondary {
+  @apply bg-(--surface);
+}
+
+.status-screen__action:focus-visible,
+.status-screen__search input:focus-visible {
+  @apply outline-3 outline-offset-3 outline-solid outline-(--focus-ring);
+}
+
+@media (min-width: 761px) {
+  .status-screen {
+    @apply gap-5.5;
+    min-height: calc(100dvh - 104px);
+  }
+
+  .status-screen__art {
+    @apply h-40 w-55;
+  }
+
+  .status-screen__card {
+    @apply h-29.5 w-37.5 rounded-[22px];
+  }
+
+  .status-screen__card--back {
+    @apply top-5 left-2.5;
+  }
+
+  .status-screen__card--front {
+    @apply top-1.5 left-14 text-[48px];
+  }
+
+  .status-screen__title {
+    @apply text-[48px] leading-[1.05] tracking-[-1px];
+  }
+
+  .status-screen__description {
+    @apply text-[18px];
+  }
+
+  .status-screen__search {
+    @apply relative mt-2 block w-full max-w-110;
+  }
+
+  .status-screen__search svg {
+    @apply absolute top-4 left-4 text-(--ink-soft);
+  }
+
+  .status-screen__search input {
+    @apply h-13 w-full rounded-(--control-radius) border-[1.5px] border-solid border-(--line) bg-(--surface) py-0 pr-4 pl-11.5 text-(--ink);
+    font: inherit;
+  }
+
+  .status-screen__actions {
+    @apply w-auto flex-row flex-wrap justify-center pt-3;
+  }
+
+  .status-screen__action {
+    @apply px-5.5;
+  }
+
+  .status-screen__action--primary {
+    @apply px-6.5;
+  }
+}
+
+/* Loading skeleton */
+
+.status-skeleton {
+  @apply flex flex-col gap-4;
+}
+
+.status-skeleton__bar,
+.status-skeleton__panel,
+.status-skeleton__tile {
+  @apply block bg-(--surface-muted);
+  animation: status-skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.status-skeleton__bar {
+  @apply rounded-[10px];
+}
+
+.status-skeleton__bar--title {
+  @apply h-9 w-[min(280px,70%)];
+}
+
+.status-skeleton__bar--subtitle {
+  @apply h-4.5 w-[min(420px,90%)];
+}
+
+.status-skeleton__panel {
+  @apply mt-2 h-45 rounded-[24px] bg-(--indigo-soft);
+}
+
+.status-skeleton__grid {
+  @apply grid grid-cols-2 gap-4;
+}
+
+.status-skeleton__tile {
+  @apply h-32 rounded-[20px];
+}
+
+@media (min-width: 761px) {
+  .status-skeleton__bar--title {
+    @apply h-11;
+  }
+
+  .status-skeleton__grid {
+    @apply grid-cols-4;
+  }
+}
+
+@keyframes status-skeleton-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-skeleton__bar,
+  .status-skeleton__panel,
+  .status-skeleton__tile {
+    animation: none;
+  }
+}

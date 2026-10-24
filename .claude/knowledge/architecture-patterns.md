@@ -177,7 +177,7 @@ domains/
 **Rules**:
 
 - ✅ Can import from: `components/` (global UI), `lib/`, `utils/`
-- ✅ Can import from: Other `domains/` (carefully, avoid cycles)
+- ❌ MUST NOT import from: other `domains/` (see `ddd-domain-structure.md` Cross-Domain Isolation). Share contracts via `lib/`; compose several domains only in `app/`
 - ❌ MUST NOT import from: `app/`
 - 📋 Responsibility: Contain ALL logic related to the feature
 

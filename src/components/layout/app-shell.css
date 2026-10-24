@@ -1,0 +1,277 @@
+@reference 'tailwindcss';
+
+/*
+ * Application shell, mobile first.
+ * - up to 760px: header with brand, connection pill and avatar + bottom navigation.
+ *   The proposal sets height 76px + 1px top border (content-box) = 77px.
+ * - 761px and up: sidebar rail (92px). Tablet always uses the rail.
+ * - 1101px and up: expanded 240px sidebar unless the user collapsed it.
+ */
+
+.app-shell {
+  @apply min-h-dvh;
+}
+
+.app-shell__content {
+  @apply flex min-h-dvh min-w-0 flex-col;
+}
+
+/* Brand */
+
+.brand {
+  @apply font-[family-name:var(--font-display),Georgia,serif] text-[28px] leading-[normal] font-semibold tracking-[-0.5px] whitespace-nowrap text-(--ink);
+}
+
+.brand__accent {
+  @apply text-(--indigo) italic;
+}
+
+/* Avatar */
+
+.user-avatar {
+  @apply flex size-11 shrink-0 items-center justify-center rounded-full bg-(--indigo) text-[15px] font-bold text-(--surface);
+}
+
+/* Connection pill */
+
+.connection-status {
+  @apply inline-flex items-center gap-1.25 rounded-full bg-(--surface-muted) px-2.5 py-1.25 text-[12px] leading-[normal] font-medium whitespace-nowrap text-(--ink-soft);
+}
+
+.connection-status[data-status='online'] {
+  @apply bg-(--green-soft) text-(--green);
+}
+
+/* Mobile header */
+
+.app-header {
+  @apply flex items-center justify-between px-6 pt-[max(20px,env(safe-area-inset-top))] pb-1;
+}
+
+.app-header .brand {
+  @apply text-[26px];
+}
+
+.app-header__actions {
+  @apply flex items-center gap-2;
+}
+
+/* Main area */
+
+.app-main {
+  @apply w-full min-w-0 flex-1 px-6 pt-3 pb-[calc(77px+32px+env(safe-area-inset-bottom))];
+}
+
+.app-main__inner {
+  @apply mx-auto max-w-280;
+}
+
+/* Bottom navigation (mobile) */
+
+.bottom-navigation {
+  @apply fixed inset-x-0 bottom-0 z-10 grid h-[calc(77px+env(safe-area-inset-bottom))] grid-cols-4 border-t border-t-(--line) bg-(--surface) px-2 pt-0 pb-[env(safe-area-inset-bottom)];
+}
+
+.bottom-navigation__item {
+  @apply flex min-w-0 flex-col items-center justify-center gap-1 text-[12px] leading-[normal] font-medium text-(--ink-soft);
+}
+
+.bottom-navigation__pill {
+  @apply flex h-7.5 w-14 items-center justify-center rounded-full;
+}
+
+.bottom-navigation__item[aria-current='page'] {
+  @apply font-bold text-(--indigo);
+}
+
+.bottom-navigation__item[aria-current='page'] .bottom-navigation__pill {
+  @apply bg-(--indigo-soft);
+}
+
+/* Sidebar: hidden on mobile */
+
+.app-sidebar {
+  @apply hidden;
+}
+
+@media (min-width: 761px) {
+  .app-shell {
+    @apply grid grid-cols-[92px_minmax(0,1fr)];
+  }
+
+  .app-header,
+  .bottom-navigation {
+    @apply hidden;
+  }
+
+  .app-main {
+    @apply px-[clamp(20px,4vw,56px)] pt-10 pb-16;
+  }
+
+  /* Rail (also the tablet layout). */
+  .app-sidebar {
+    @apply sticky top-0 flex h-dvh min-h-140 flex-col gap-9 border-r border-r-(--line) bg-(--surface) px-4 py-8;
+  }
+
+  .app-sidebar__header {
+    @apply flex min-h-11 items-center justify-center gap-2;
+  }
+
+  .app-sidebar__brand {
+    @apply hidden px-3;
+  }
+
+  .sidebar-toggle {
+    @apply hidden size-11 shrink-0 items-center justify-center rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) text-(--ink-soft);
+  }
+
+  .sidebar-nav {
+    @apply flex flex-col gap-1.5;
+  }
+
+  .sidebar-nav__item {
+    @apply flex h-12 items-center justify-center gap-3 rounded-[14px] text-[15px] font-medium text-(--ink-soft) transition-[background-color,color] duration-160 ease-[ease];
+  }
+
+  .sidebar-nav__item:hover {
+    @apply bg-(--surface-muted) text-(--ink);
+  }
+
+  .sidebar-nav__item[aria-current='page'] {
+    @apply bg-(--indigo-soft) font-bold text-(--indigo-strong);
+  }
+
+  .app-sidebar__label,
+  .app-sidebar .connection-status__label,
+  .app-sidebar__profile-copy {
+    @apply sr-only;
+  }
+
+  .app-sidebar__footer {
+    @apply mt-auto flex flex-col items-center gap-4;
+  }
+
+  .app-sidebar .connection-status {
+    @apply justify-center px-3 py-1.5;
+  }
+
+  .app-sidebar__profile {
+    @apply flex flex-col items-center gap-3;
+  }
+
+  .app-sidebar__profile-action {
+    @apply flex shrink-0 items-center justify-center;
+  }
+
+  /* Rail: the guest button stacks icon over a two-line label inside the 60px inner width. */
+  .app-sidebar__profile-action .signin-login-cta {
+    @apply h-auto w-15 flex-col gap-0.5 rounded-[14px] px-1 py-1.5 text-[11px] leading-[1.1] whitespace-normal;
+  }
+
+  .app-sidebar__profile-action .signin-login-cta__label {
+    @apply text-center;
+  }
+
+  .app-sidebar__profile-copy {
+    @apply flex-col;
+  }
+
+  .app-sidebar__profile-copy strong {
+    @apply text-[14px] leading-[normal] font-semibold;
+  }
+
+  .app-sidebar__profile-copy span {
+    @apply text-[12px] leading-[normal] text-(--ink-soft);
+  }
+
+  .user-avatar {
+    @apply size-10 text-[16px];
+  }
+}
+
+/* Expanded sidebar: wide screens when not collapsed by the user. */
+@media (min-width: 1101px) {
+  .app-shell {
+    @apply grid-cols-[240px_minmax(0,1fr)];
+  }
+
+  .app-shell:has(> .app-sidebar[data-collapsed='true']) {
+    @apply grid-cols-[92px_minmax(0,1fr)];
+  }
+
+  .sidebar-toggle {
+    @apply flex;
+  }
+
+  .app-sidebar[data-collapsed='false'] {
+    @apply px-5;
+  }
+
+  .app-sidebar[data-collapsed='false'] .app-sidebar__header {
+    @apply justify-between;
+  }
+
+  .app-sidebar[data-collapsed='false'] .app-sidebar__brand {
+    @apply block;
+  }
+
+  .app-sidebar[data-collapsed='false'] .sidebar-nav__item {
+    @apply justify-start px-4;
+  }
+
+  .app-sidebar[data-collapsed='false'] .app-sidebar__label,
+  .app-sidebar[data-collapsed='false'] .connection-status__label {
+    @apply not-sr-only;
+  }
+
+  .app-sidebar[data-collapsed='false'] .app-sidebar__footer {
+    @apply items-stretch px-2;
+  }
+
+  .app-sidebar[data-collapsed='false'] .connection-status {
+    @apply gap-1.5 self-start px-3 py-1.5 text-[13px];
+  }
+
+  .app-sidebar[data-collapsed='false'] .app-sidebar__profile {
+    @apply flex-row;
+  }
+
+  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-copy {
+    @apply not-sr-only flex;
+  }
+
+  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-action {
+    @apply ml-auto;
+  }
+
+  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-action:has(> .signin-login-cta) {
+    @apply ml-0 flex-1;
+  }
+
+  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-action .signin-login-cta {
+    @apply h-9 w-full flex-row gap-1.5 rounded-full px-3 py-0 text-[13px] leading-[normal] whitespace-nowrap;
+  }
+
+  /* Reserve the guest button width while the session loads (no layout shift). */
+  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-action .signin-logout[aria-hidden='true'] {
+    @apply h-9 w-32;
+  }
+}
+
+/* Page titles on wide layouts follow the proposal (42px Fraunces). */
+@media (min-width: 761px) {
+  .app-main .writing-heading h1,
+  .app-main .settings-heading h1 {
+    @apply text-[42px] tracking-[-0.8px];
+  }
+}
+
+/* Focus */
+
+.sidebar-toggle:focus-visible,
+.sidebar-nav__item:focus-visible,
+.bottom-navigation__item:focus-visible,
+.user-avatar:focus-visible,
+.brand:focus-visible {
+  @apply outline-3 outline-offset-3 outline-solid outline-(--focus-ring);
+}

@@ -1,0 +1,1384 @@
+@reference 'tailwindcss';
+
+/*
+ * AI card-capture flow (static mockup), mobile first.
+ * Proposal artboards: Crear con IA (agregar), Generando propuestas,
+ * Revisar propuestas, Tarjetas creadas, Crear con IA (escritorio),
+ * Sin conexion, Imagen sin palabras, Error del servicio de IA.
+ * - up to 760px: full-screen flow (covers the shell) with header, scrolling body and footer.
+ * - 761px and up: page inside the shell; the review step uses two columns.
+ */
+
+/* Palette: proposal values for the light theme, existing dark tokens otherwise. */
+
+:root {
+  --aicap-edge: #d3cdc0;
+  --aicap-dashed: #b9b3a6;
+  --aicap-ghost: #b9b3a6;
+  --aicap-danger: #c2452d;
+  --aicap-danger-ink: #7e2a17;
+  --aicap-danger-edge: #e3a99a;
+  --aicap-disabled: #a9a3dd;
+  --aicap-on-indigo: #ffffff;
+  --aicap-green-ink: #1a6b47;
+  --aicap-green-notice: #14553a;
+  --aicap-amber-ink: #5c3b00;
+  --aicap-amber-pale: #fff7e6;
+  --aicap-amber-edge: #e0b867;
+  --aicap-amber-text: #7a4f00;
+  --aicap-amber-strong: #9a6200;
+  --aicap-teal: #1b7f92;
+  --aicap-bar-light: #b9b3ee;
+  --aicap-spin-track: #c9c3f5;
+  --aicap-offline-dot: #8e8a9e;
+  --aicap-blur-bg: #e2ddd3;
+  --aicap-font-ipa: var(--font-ipa), 'Noto Sans', sans-serif;
+
+  --aicap-noun-soft: #e9e6fb;
+  --aicap-noun-ink: #3a2cb0;
+  --aicap-verb-soft: #ddf2e7;
+  --aicap-verb-ink: #1a6b47;
+  --aicap-adjective-soft: #fcebc4;
+  --aicap-adjective-ink: #7a4f00;
+  --aicap-adverb-soft: #d9eef2;
+  --aicap-adverb-ink: #135f6e;
+  --aicap-phrase-soft: #fbe4dd;
+  --aicap-phrase-ink: #a8381f;
+}
+
+:root[data-theme='dark'],
+:root.dark {
+  --aicap-edge: #4a4a52;
+  --aicap-dashed: #5a5a63;
+  --aicap-ghost: #5a5a63;
+  --aicap-danger: #e0705a;
+  --aicap-danger-ink: #f4b3a0;
+  --aicap-danger-edge: #7a4034;
+  --aicap-disabled: #4d4a7a;
+  --aicap-on-indigo: #141416;
+  --aicap-green-ink: #67bd91;
+  --aicap-green-notice: #67bd91;
+  --aicap-amber-ink: #e3b25a;
+  --aicap-amber-pale: #2f2618;
+  --aicap-amber-edge: #6b5530;
+  --aicap-amber-text: #e3b25a;
+  --aicap-amber-strong: #e3b25a;
+  --aicap-teal: #72bac6;
+  --aicap-bar-light: #4d4a7a;
+  --aicap-spin-track: #4d4a7a;
+  --aicap-offline-dot: #86838d;
+  --aicap-blur-bg: #33333a;
+
+  --aicap-noun-soft: #302d4c;
+  --aicap-noun-ink: #b0a9fa;
+  --aicap-verb-soft: #1e3429;
+  --aicap-verb-ink: #67bd91;
+  --aicap-adjective-soft: #3b3020;
+  --aicap-adjective-ink: #e3b25a;
+  --aicap-adverb-soft: #1d3439;
+  --aicap-adverb-ink: #72bac6;
+  --aicap-phrase-soft: #422821;
+  --aicap-phrase-ink: #f09a7e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --aicap-edge: #4a4a52;
+    --aicap-dashed: #5a5a63;
+    --aicap-ghost: #5a5a63;
+    --aicap-danger: #e0705a;
+    --aicap-danger-ink: #f4b3a0;
+    --aicap-danger-edge: #7a4034;
+    --aicap-disabled: #4d4a7a;
+    --aicap-on-indigo: #141416;
+    --aicap-green-ink: #67bd91;
+    --aicap-green-notice: #67bd91;
+    --aicap-amber-ink: #e3b25a;
+    --aicap-amber-pale: #2f2618;
+    --aicap-amber-edge: #6b5530;
+    --aicap-amber-text: #e3b25a;
+    --aicap-amber-strong: #e3b25a;
+    --aicap-teal: #72bac6;
+    --aicap-bar-light: #4d4a7a;
+    --aicap-spin-track: #4d4a7a;
+    --aicap-offline-dot: #86838d;
+    --aicap-blur-bg: #33333a;
+
+    --aicap-noun-soft: #302d4c;
+    --aicap-noun-ink: #b0a9fa;
+    --aicap-verb-soft: #1e3429;
+    --aicap-verb-ink: #67bd91;
+    --aicap-adjective-soft: #3b3020;
+    --aicap-adjective-ink: #e3b25a;
+    --aicap-adverb-soft: #1d3439;
+    --aicap-adverb-ink: #72bac6;
+    --aicap-phrase-soft: #422821;
+    --aicap-phrase-ink: #f09a7e;
+  }
+}
+
+/* Motion (visual only; no progress is simulated) */
+
+@keyframes aicap-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes aicap-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.aicap-spin {
+  animation: aicap-spin 0.9s linear infinite;
+}
+
+.aicap-pulse {
+  animation: aicap-pulse 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aicap-spin,
+  .aicap-pulse {
+    animation: none;
+  }
+}
+
+/* Icon */
+
+.aicap-icon {
+  @apply shrink-0 fill-none stroke-current;
+
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Frame */
+
+.aicap {
+  @apply fixed inset-0 z-30 flex flex-col bg-(--ground) text-[16px] leading-[normal] text-(--ink);
+}
+
+.aicap__bar {
+  @apply flex shrink-0 items-center gap-3 border-b border-b-(--line) px-6 py-4;
+}
+
+/* Screens without a top bar in the proposal keep the heading for assistive tech. */
+.aicap__bar--silent {
+  @apply sr-only;
+}
+
+.aicap__back {
+  @apply flex size-[46px] shrink-0 items-center justify-center rounded-[14px] border border-solid border-(--line) bg-(--surface) text-(--ink);
+}
+
+.aicap__bar-title {
+  @apply m-0 flex-1 text-[18px] leading-[normal] font-bold;
+}
+
+.aicap__bar-heading {
+  @apply flex flex-1 flex-col gap-0.5;
+}
+
+.aicap__bar-heading .aicap__bar-title {
+  @apply flex-none;
+}
+
+.aicap__bar-subtitle {
+  @apply text-[13px] text-(--ink-soft);
+}
+
+.aicap__page-head {
+  @apply hidden;
+}
+
+.aicap__body {
+  @apply flex min-h-0 flex-1 flex-col gap-7 overflow-y-auto overscroll-contain px-6 pt-6 pb-10;
+}
+
+.aicap__body--roomy {
+  @apply pt-10;
+}
+
+.aicap__body--medium {
+  @apply pt-8;
+}
+
+.aicap__body--tight {
+  @apply gap-5;
+}
+
+.aicap__footer {
+  @apply flex shrink-0 flex-col gap-3 border-t border-t-(--line) bg-(--surface) px-6 pt-5 pb-[max(28px,env(safe-area-inset-bottom))];
+}
+
+.aicap__footer:has(.aicap-footer__hint) {
+  @apply gap-2.5;
+}
+
+.aicap-footer__hint {
+  @apply text-center text-[13px] text-(--ink-soft);
+}
+
+.aicap-footer__pair {
+  @apply grid grid-cols-2 gap-3;
+}
+
+/* Pills */
+
+.aicap-pill {
+  @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold;
+}
+
+.aicap-pill__dot {
+  @apply size-2 rounded-full;
+}
+
+.aicap-pill--online {
+  @apply bg-(--green-soft) text-(--aicap-green-ink);
+}
+
+.aicap-pill--online .aicap-pill__dot {
+  @apply bg-(--green);
+}
+
+.aicap-pill--offline {
+  @apply bg-(--surface-muted) text-(--ink-soft);
+}
+
+.aicap-pill--offline .aicap-pill__dot {
+  @apply bg-(--aicap-offline-dot);
+}
+
+.aicap-badge {
+  @apply inline-flex items-center gap-1.5 rounded-full border border-dashed border-(--aicap-dashed) px-3 py-[5px] text-[13px] font-medium text-(--ink-soft);
+}
+
+.aicap-badge strong {
+  @apply font-bold text-(--indigo);
+}
+
+/* Buttons */
+
+.aicap-button {
+  @apply inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-[12px] px-[18px] text-[14px] font-semibold;
+}
+
+.aicap-button--lg {
+  @apply h-[52px] gap-2.5 rounded-[14px] px-6 text-[16px] font-bold;
+}
+
+.aicap-button--md {
+  @apply h-12 rounded-[14px] px-5 text-[15px] font-semibold;
+}
+
+.aicap-button--sm {
+  @apply h-10 gap-1.5 px-4 text-[13px];
+}
+
+.aicap-button--xs {
+  @apply h-10 px-3.5 text-[13px];
+}
+
+.aicap-button--primary {
+  @apply bg-(--indigo) text-(--aicap-on-indigo);
+}
+
+.aicap-button--primary[data-disabled='true'] {
+  @apply bg-(--aicap-disabled);
+}
+
+/* Mockup only: links marked aria-disabled do not navigate. */
+.aicap a[aria-disabled='true'] {
+  @apply pointer-events-none;
+}
+
+.aicap-button--outline {
+  @apply border-[1.5px] border-solid border-(--aicap-edge) bg-(--surface) text-(--ink);
+}
+
+.aicap-button--lg.aicap-button--outline {
+  @apply text-[15px] font-semibold;
+}
+
+/* The proposal outlined links are content-box anchors: height plus border. */
+a.aicap-button--outline {
+  @apply box-content;
+}
+
+.aicap-button--danger {
+  @apply bg-(--aicap-danger) text-(--aicap-on-indigo);
+}
+
+.aicap-button--danger-outline {
+  @apply border-[1.5px] border-solid border-(--aicap-danger-edge) bg-(--surface) text-(--aicap-danger-ink);
+}
+
+/* Mode tabs */
+
+.aicap-modes {
+  @apply grid grid-cols-2 gap-1.5 rounded-[16px] bg-(--surface-muted) p-1.5;
+}
+
+.aicap-modes__tab {
+  @apply flex h-11 items-center justify-center gap-2 rounded-[12px] px-4 text-[15px] font-semibold text-(--ink-soft);
+}
+
+.aicap-modes__tab[aria-selected='true'] {
+  @apply bg-(--surface) font-bold text-(--ink) shadow-[0_1px_2px_rgba(27,26,46,0.08)];
+}
+
+.aicap-modes__badge {
+  @apply rounded-[6px] bg-(--indigo) px-1.5 py-0.5 text-[11px] font-extrabold text-(--aicap-on-indigo);
+}
+
+/* Steps */
+
+.aicap-steps {
+  @apply m-0 grid list-none grid-cols-3 gap-2 p-0;
+}
+
+.aicap-steps__item {
+  @apply flex flex-col gap-2;
+}
+
+.aicap-steps__bar {
+  @apply h-1 rounded-full bg-(--line);
+}
+
+.aicap-steps__bar[data-tone='done'] {
+  @apply bg-(--indigo);
+}
+
+.aicap-steps__bar[data-tone='working'] {
+  @apply bg-(--aicap-bar-light);
+}
+
+.aicap-steps__bar[data-tone='saved'] {
+  @apply bg-(--green);
+}
+
+.aicap-steps__label {
+  @apply text-[12px] text-(--ink-soft);
+}
+
+.aicap-steps__label[data-current='true'] {
+  @apply font-bold text-(--indigo-strong);
+}
+
+.aicap-steps__label[data-saved='true'] {
+  @apply text-(--aicap-green-ink);
+}
+
+/* Blocks (add step) */
+
+.aicap-block {
+  @apply flex flex-col gap-3;
+}
+
+.aicap-block__title {
+  @apply m-0 text-[18px] font-bold;
+}
+
+.aicap-block__hint {
+  @apply text-[13px] text-(--ink-soft);
+}
+
+.aicap-textarea {
+  @apply w-full resize-none rounded-[16px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 py-3.5 text-[16px] leading-normal text-(--ink) focus:outline-2 focus:outline-offset-2 focus:outline-(--focus-ring);
+
+  font-family: inherit;
+}
+
+.aicap-textarea--compact {
+  @apply resize-y rounded-[14px] text-[15px];
+}
+
+.aicap-chips {
+  @apply flex flex-wrap gap-2;
+}
+
+.aicap-chip {
+  @apply inline-flex h-[34px] items-center gap-1.5 rounded-full px-3.5 text-[14px] font-semibold;
+}
+
+.aicap-chip--indigo {
+  @apply bg-(--indigo-soft) text-(--indigo-strong);
+}
+
+.aicap-chip--sand {
+  @apply bg-(--surface-muted) text-(--ink);
+}
+
+.aicap-divider {
+  @apply flex items-center gap-3.5 text-[13px] font-semibold text-(--ink-soft);
+}
+
+.aicap-divider span {
+  @apply h-px flex-1 bg-(--line);
+}
+
+.aicap-dropzone {
+  @apply flex flex-col items-center gap-4 rounded-[20px] border-[1.5px] border-dashed border-(--aicap-dashed) bg-(--surface) px-6 py-7 text-center;
+}
+
+.aicap-dropzone__icon {
+  @apply flex size-14 items-center justify-center rounded-[18px] bg-(--indigo-soft) text-(--indigo);
+}
+
+.aicap-dropzone__text {
+  @apply text-[15px] leading-[1.45];
+}
+
+.aicap-dropzone__actions {
+  @apply flex flex-wrap justify-center gap-3;
+}
+
+.aicap-dropzone__limits {
+  @apply text-[12px] text-(--ink-soft);
+}
+
+.aicap-file {
+  @apply flex items-center gap-3.5 rounded-[18px] border-[1.5px] border-solid border-(--indigo) bg-(--surface) p-3.5;
+}
+
+.aicap-file__thumb {
+  @apply flex size-16 shrink-0 flex-col gap-1.5 rounded-[12px] bg-(--surface-muted) p-2.5;
+}
+
+.aicap-file__thumb span {
+  @apply h-[5px] rounded-[3px] bg-(--aicap-ghost);
+}
+
+.aicap-file__thumb span:nth-child(1) {
+  @apply w-4/5;
+}
+
+.aicap-file__thumb span:nth-child(2) {
+  @apply w-3/5;
+}
+
+.aicap-file__thumb span:nth-child(3) {
+  @apply w-[90%];
+}
+
+.aicap-file__thumb span:nth-child(4) {
+  @apply w-1/2;
+}
+
+.aicap-file__copy {
+  @apply flex min-w-0 flex-1 flex-col gap-0.5;
+}
+
+.aicap-file__name {
+  @apply text-[15px] font-semibold;
+}
+
+.aicap-file__detail {
+  @apply text-[13px] text-(--ink-soft);
+}
+
+.aicap-file__remove {
+  @apply flex size-11 items-center justify-center rounded-[12px] bg-(--ground) text-(--ink-soft);
+}
+
+.aicap-file--compact {
+  @apply gap-3.5 border-0 bg-(--ground) p-3;
+
+  border-radius: 16px;
+}
+
+.aicap-file--compact .aicap-file__thumb {
+  @apply size-14 gap-[5px] rounded-[10px] p-[9px];
+}
+
+.aicap-file--compact .aicap-file__thumb span {
+  @apply h-1;
+}
+
+.aicap-file--compact .aicap-file__name {
+  @apply text-[14px];
+}
+
+.aicap-file--compact .aicap-file__detail {
+  @apply text-[12px];
+}
+
+.aicap-groups {
+  @apply flex flex-wrap gap-2.5;
+
+  --aicap-tone-soft: var(--surface-muted);
+  --aicap-tone-strong: var(--ink-soft);
+}
+
+.aicap-group {
+  @apply inline-flex h-10 items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold;
+}
+
+.aicap-group[data-tone='indigo'] {
+  --aicap-tone-soft: var(--indigo-soft);
+  --aicap-tone-strong: var(--indigo);
+}
+
+.aicap-group[data-tone='teal'] {
+  --aicap-tone-soft: var(--blue-soft);
+  --aicap-tone-strong: var(--aicap-teal);
+}
+
+.aicap-group[data-tone='amber'] {
+  --aicap-tone-soft: var(--amber-soft);
+  --aicap-tone-strong: var(--aicap-amber-strong);
+}
+
+.aicap-group__dot {
+  @apply size-2.5 rounded-full bg-(--aicap-tone-strong);
+}
+
+.aicap-group[aria-pressed='true'] {
+  @apply border-(--aicap-tone-strong) bg-(--aicap-tone-soft);
+}
+
+.aicap-group--add {
+  @apply box-content gap-1.5 border-dashed border-(--aicap-dashed) bg-transparent px-3.5 text-(--indigo);
+}
+
+.aicap-note {
+  @apply flex gap-3.5 rounded-[18px] bg-(--indigo-soft) px-5 py-4.5 text-(--ink);
+}
+
+.aicap-note__icon {
+  @apply shrink-0 pt-0.5 text-(--indigo);
+}
+
+.aicap-note__text {
+  @apply text-[14px] leading-[1.55];
+}
+
+.aicap-note--compact {
+  @apply gap-3 rounded-[16px] p-4;
+}
+
+.aicap-note--compact .aicap-note__icon {
+  @apply pt-0;
+}
+
+.aicap-note--compact .aicap-note__text {
+  @apply text-[13px] leading-normal;
+}
+
+/* Panels, headings */
+
+.aicap-panel {
+  @apply flex flex-col gap-3.5 rounded-[22px] border border-solid border-(--line) bg-(--surface) px-6 py-[22px];
+}
+
+.aicap-panel--progress {
+  @apply gap-6 rounded-[24px] py-7;
+}
+
+.aicap-panel--details {
+  @apply py-5;
+}
+
+.aicap-panel__heading {
+  @apply flex flex-col gap-1.5;
+}
+
+.aicap-panel__sub {
+  @apply text-[15px] text-(--ink-soft);
+}
+
+.aicap-panel__title {
+  @apply m-0 text-[16px] font-bold;
+}
+
+.aicap-eyebrow {
+  @apply m-0 text-[12px] font-normal tracking-[1.5px] text-(--ink-soft) uppercase;
+}
+
+.aicap-display {
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] font-semibold;
+}
+
+.aicap-display--sm {
+  @apply text-[28px] leading-[1.15];
+}
+
+.aicap-display--md {
+  @apply text-[30px] leading-[1.15];
+}
+
+.aicap-display--lg {
+  @apply text-[34px] leading-[1.1];
+}
+
+.aicap-panel--progress .aicap-display {
+  @apply text-[28px];
+}
+
+/* Progress */
+
+.aicap-progress {
+  @apply m-0 flex list-none flex-col gap-4.5 p-0;
+}
+
+.aicap-progress__item {
+  @apply flex items-start gap-3.5;
+}
+
+.aicap-progress__mark {
+  @apply flex size-7 shrink-0 items-center justify-center rounded-full;
+}
+
+.aicap-progress__mark--done {
+  @apply bg-(--green-soft) text-(--aicap-green-ink);
+}
+
+.aicap-progress__mark--active {
+  @apply border-[3px] border-solid border-(--indigo-soft) border-t-(--indigo);
+}
+
+.aicap-progress__mark--pending {
+  @apply border-2 border-solid border-(--line);
+}
+
+.aicap-progress__copy {
+  @apply flex flex-col gap-0.5 pt-[3px];
+}
+
+.aicap-progress__label {
+  @apply text-[15px] font-semibold;
+}
+
+.aicap-progress__label[data-pending='true'] {
+  @apply text-(--ink-soft);
+}
+
+.aicap-progress__detail {
+  @apply text-[13px] text-(--ink-soft);
+}
+
+.aicap-skeletons {
+  @apply flex flex-col gap-3.5;
+}
+
+.aicap-skeleton {
+  @apply flex flex-col gap-3 rounded-[20px] border border-solid border-(--line) bg-(--surface) p-[22px];
+}
+
+.aicap-skeleton__line {
+  @apply h-3 rounded-[6px] bg-(--surface-muted);
+}
+
+.aicap-skeleton__line--title {
+  @apply h-[22px] rounded-[8px];
+}
+
+.aicap-skeleton:nth-child(1) .aicap-skeleton__line:nth-child(1) {
+  @apply w-[55%];
+}
+
+.aicap-skeleton:nth-child(1) .aicap-skeleton__line:nth-child(2) {
+  @apply w-[35%];
+}
+
+.aicap-skeleton:nth-child(1) .aicap-skeleton__line:nth-child(3) {
+  @apply w-[85%];
+}
+
+.aicap-skeleton:nth-child(2) .aicap-skeleton__line:nth-child(1) {
+  @apply w-[45%];
+}
+
+.aicap-skeleton:nth-child(2) .aicap-skeleton__line:nth-child(2) {
+  @apply w-[30%];
+}
+
+.aicap-skeleton:nth-child(2) .aicap-skeleton__line:nth-child(3) {
+  @apply w-[75%];
+}
+
+/* Review */
+
+.aicap-review {
+  @apply flex flex-col gap-5;
+}
+
+.aicap-review__main {
+  @apply flex min-w-0 flex-col gap-5;
+}
+
+.aicap-input,
+.aicap-review__heading,
+.aicap-savebar {
+  @apply hidden;
+}
+
+.aicap-bulk {
+  @apply flex flex-wrap items-center justify-between gap-3 pb-1;
+}
+
+.aicap-bulk__accept {
+  @apply inline-flex h-10 items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--aicap-edge) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
+}
+
+.aicap-bulk__discard {
+  @apply inline-flex h-10 items-center gap-2 rounded-[12px] bg-transparent px-4 text-[14px] font-semibold text-(--red-ink);
+}
+
+.aicap-review[data-state='discard-confirm'] .aicap-bulk,
+.aicap-review[data-state='discarded'] .aicap-bulk {
+  @apply hidden;
+}
+
+.aicap-review[data-state='discarded'] .aicap-proposals {
+  @apply hidden;
+}
+
+/* The mobile head only holds the bulk actions, so it vanishes with them. */
+@media (max-width: 760px) {
+  .aicap-review[data-state='discard-confirm'] .aicap-review__head,
+  .aicap-review[data-state='discarded'] .aicap-review__head {
+    @apply hidden;
+  }
+}
+
+.aicap-confirm {
+  @apply flex flex-col gap-4 rounded-[20px] bg-(--red-soft) p-5 text-(--aicap-danger-ink);
+}
+
+.aicap-confirm__copy {
+  @apply flex flex-col gap-1;
+}
+
+.aicap-confirm__title {
+  @apply text-[16px] font-bold;
+}
+
+.aicap-confirm__body {
+  @apply text-[14px] leading-[1.45];
+}
+
+.aicap-confirm__actions {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.aicap-confirm__cancel,
+.aicap-confirm__accept {
+  @apply flex h-12 items-center justify-center rounded-[14px] px-4 text-[15px];
+}
+
+.aicap-confirm__cancel {
+  @apply border-[1.5px] border-solid border-(--aicap-danger-edge) bg-(--surface) font-semibold text-(--ink);
+}
+
+.aicap-confirm__accept {
+  @apply bg-(--aicap-danger) font-bold text-(--aicap-on-indigo);
+}
+
+.aicap-discarded {
+  @apply flex flex-col items-center gap-3.5 rounded-[24px] border border-solid border-(--line) bg-(--surface) px-6 py-8 text-center;
+}
+
+.aicap-discarded__icon {
+  @apply flex size-14 items-center justify-center rounded-[18px] bg-(--surface-muted) text-(--ink-soft);
+}
+
+.aicap-discarded__title {
+  @apply text-[18px] font-bold;
+}
+
+.aicap-discarded__body {
+  @apply text-[14px] leading-[1.45] text-(--ink-soft);
+}
+
+.aicap-discarded__actions {
+  @apply flex flex-wrap justify-center gap-3 pt-2;
+}
+
+.aicap-proposals {
+  @apply flex flex-col gap-5;
+}
+
+.aicap-proposal {
+  @apply flex flex-col gap-4 rounded-[22px] border-2 border-solid border-(--line) bg-(--surface) p-[22px];
+}
+
+.aicap-proposal[data-tone='accepted'] {
+  @apply border-(--green);
+}
+
+.aicap-proposal[data-tone='error'] {
+  @apply border-(--aicap-danger-edge);
+}
+
+.aicap-proposal__top {
+  @apply flex items-center justify-between gap-3;
+}
+
+.aicap-proposal__source {
+  @apply text-[12px] text-(--ink-soft);
+}
+
+.aicap-proposal__pill {
+  @apply rounded-full bg-(--surface-muted) px-3 py-[5px] text-[12px] font-bold text-(--ink-soft);
+}
+
+.aicap-proposal__pill[data-tone='accepted'] {
+  @apply bg-(--green-soft) text-(--aicap-green-ink);
+}
+
+.aicap-proposal__pill[data-tone='error'] {
+  @apply bg-(--red-soft) text-(--red-ink);
+}
+
+.aicap-correction {
+  @apply flex flex-wrap items-center justify-between gap-2.5 rounded-[14px] bg-(--amber-soft) px-3.5 py-3 text-(--aicap-amber-ink);
+}
+
+.aicap-correction__text {
+  @apply text-[14px] leading-[1.4];
+}
+
+.aicap-correction__toggle {
+  @apply h-9 rounded-[10px] border border-solid border-(--aicap-amber-edge) bg-(--aicap-amber-pale) px-3 text-[12px] font-semibold text-(--aicap-amber-ink);
+}
+
+.aicap-proposal__head {
+  @apply flex items-start justify-between gap-3;
+}
+
+.aicap-proposal__word {
+  @apply flex min-w-0 flex-col gap-1;
+}
+
+.aicap-proposal__term {
+  @apply font-[family-name:var(--font-display),Georgia,serif] text-[26px] leading-[1.15] font-semibold;
+}
+
+.aicap-proposal__ipa {
+  @apply font-[family-name:var(--aicap-font-ipa)] text-[14px] leading-[19px] text-(--ink-soft);
+}
+
+.aicap-proposal__category,
+.aicap-list__category {
+  @apply shrink-0 rounded-full bg-(--aicap-cat-soft) px-3 py-1.5 text-[12px] font-semibold text-(--aicap-cat-ink);
+}
+
+.aicap-proposal__category[data-category='Sustantivo'],
+.aicap-list__category[data-category='Sustantivo'] {
+  --aicap-cat-soft: var(--aicap-noun-soft);
+  --aicap-cat-ink: var(--aicap-noun-ink);
+}
+
+.aicap-proposal__category[data-category='Verbo'],
+.aicap-list__category[data-category='Verbo'] {
+  --aicap-cat-soft: var(--aicap-verb-soft);
+  --aicap-cat-ink: var(--aicap-verb-ink);
+}
+
+.aicap-proposal__category[data-category='Adjetivo'],
+.aicap-list__category[data-category='Adjetivo'] {
+  --aicap-cat-soft: var(--aicap-adjective-soft);
+  --aicap-cat-ink: var(--aicap-adjective-ink);
+}
+
+.aicap-proposal__category[data-category='Adverbio'],
+.aicap-list__category[data-category='Adverbio'] {
+  --aicap-cat-soft: var(--aicap-adverb-soft);
+  --aicap-cat-ink: var(--aicap-adverb-ink);
+}
+
+.aicap-proposal__category[data-category='Expresión'],
+.aicap-list__category[data-category='Expresión'] {
+  --aicap-cat-soft: var(--aicap-phrase-soft);
+  --aicap-cat-ink: var(--aicap-phrase-ink);
+}
+
+.aicap-proposal__meaning {
+  @apply text-[16px] leading-[1.45];
+}
+
+.aicap-proposal__example {
+  @apply rounded-[12px] bg-(--ground) px-3.5 py-3 text-[14px] leading-normal text-(--ink-soft) italic;
+}
+
+.aicap-proposal__related {
+  @apply flex flex-wrap items-center gap-2;
+}
+
+.aicap-proposal__related-label {
+  @apply mr-1 text-[12px] font-semibold text-(--ink-soft);
+}
+
+.aicap-proposal__related-chip {
+  @apply box-content inline-flex h-[30px] items-center rounded-full border border-solid border-(--line) px-3 text-[13px] font-semibold;
+}
+
+.aicap-alert {
+  @apply flex flex-col gap-3 rounded-[14px] bg-(--red-soft) px-4 py-3.5 text-(--aicap-danger-ink);
+}
+
+.aicap-alert__text {
+  @apply flex gap-2.5 text-[14px] leading-[1.45];
+}
+
+.aicap-alert__icon {
+  @apply flex shrink-0;
+}
+
+.aicap-alert__text .aicap-icon {
+  @apply mt-px;
+}
+
+.aicap-only-wide {
+  @apply hidden;
+}
+
+.aicap-alert__actions {
+  @apply flex flex-wrap gap-2.5;
+}
+
+.aicap-proposal__actions {
+  @apply mt-1 grid grid-cols-3 gap-2.5 border-t border-t-(--rule) pt-5;
+}
+
+.aicap-action {
+  @apply h-11 rounded-[12px] border-[1.5px] border-solid border-(--aicap-edge) bg-(--surface) px-2.5 text-[14px] font-semibold text-(--ink);
+}
+
+.aicap-action--reject {
+  @apply border-(--aicap-danger-edge) text-(--red-ink);
+}
+
+.aicap-action--accept {
+  @apply border-0 bg-(--indigo) font-bold text-(--aicap-on-indigo);
+}
+
+.aicap-action--accept[aria-pressed='true'] {
+  @apply bg-(--green-soft) text-(--aicap-green-ink);
+}
+
+.aicap-rejected {
+  @apply flex items-center gap-3 rounded-[16px] border-[1.5px] border-dashed border-(--aicap-edge) px-[18px] py-3.5;
+}
+
+.aicap-rejected__text {
+  @apply flex-1 text-[14px] text-(--ink-soft);
+}
+
+.aicap-rejected__undo {
+  @apply h-10 rounded-[12px] bg-(--surface-muted) px-4 text-[13px] font-semibold text-(--ink);
+}
+
+/* Hero, list, callouts (created and error screens) */
+
+.aicap-hero {
+  @apply flex flex-col items-center gap-4 text-center;
+}
+
+.aicap-hero--padded {
+  @apply px-2 pt-4;
+}
+
+.aicap-hero__icon {
+  @apply flex size-22 items-center justify-center rounded-[28px] bg-(--surface-muted) text-(--ink-soft);
+}
+
+.aicap-hero__icon--success {
+  @apply size-24 rounded-[30px] bg-(--green-soft) text-(--aicap-green-ink);
+}
+
+.aicap-hero__icon--danger {
+  @apply bg-(--red-soft) text-(--aicap-danger);
+}
+
+.aicap-hero__body {
+  @apply m-0 text-[15px] leading-[1.55] text-(--ink-soft);
+}
+
+.aicap-hero__body--lg {
+  @apply text-[16px];
+}
+
+.aicap-hero--padded .aicap-hero__body {
+  @apply leading-normal;
+}
+
+.aicap-list {
+  @apply rounded-[24px] border border-solid border-(--line) bg-(--surface) px-5 py-2;
+}
+
+.aicap-list__row {
+  @apply flex items-center justify-between gap-3 border-b border-b-(--rule) py-4 last:border-b-0;
+}
+
+.aicap-list__copy {
+  @apply flex flex-col gap-0.5;
+}
+
+.aicap-list__word {
+  @apply font-[family-name:var(--font-display),Georgia,serif] text-[20px] font-semibold;
+}
+
+.aicap-list__meaning {
+  @apply text-[13px] text-(--ink-soft);
+}
+
+.aicap-list__category {
+  @apply py-[5px];
+}
+
+.aicap-stored {
+  @apply inline-flex items-center gap-1.5 self-center rounded-full bg-(--surface-muted) px-3 py-1.5 text-[13px] font-medium text-(--ink-soft);
+}
+
+.aicap-callout {
+  @apply flex items-start gap-3 rounded-[18px] px-5 py-4 text-[14px] leading-normal;
+}
+
+.aicap-callout .aicap-icon {
+  @apply mt-px;
+}
+
+.aicap-callout--success {
+  @apply bg-(--green-soft) text-(--aicap-green-notice);
+}
+
+.aicap-callout--info {
+  @apply items-center bg-(--indigo-soft) font-semibold text-(--indigo-strong);
+}
+
+.aicap-callout__spinner {
+  @apply size-5 shrink-0 rounded-full border-[3px] border-solid border-(--aicap-spin-track) border-t-(--indigo);
+}
+
+.aicap-blurred {
+  @apply relative size-30;
+}
+
+.aicap-blurred__page {
+  @apply flex size-30 flex-col gap-2.5 rounded-[22px] border-[3px] border-solid border-(--aicap-danger) bg-(--aicap-blur-bg) px-[18px] py-[22px] blur-[1.5px];
+}
+
+.aicap-blurred__page span {
+  @apply h-[7px] rounded-[4px] bg-(--aicap-ghost);
+}
+
+.aicap-blurred__page span:nth-child(1) {
+  @apply w-4/5;
+}
+
+.aicap-blurred__page span:nth-child(2) {
+  @apply w-[55%];
+}
+
+.aicap-blurred__page span:nth-child(3) {
+  @apply w-[90%];
+}
+
+.aicap-blurred__page span:nth-child(4) {
+  @apply w-[45%];
+}
+
+.aicap-blurred__badge {
+  @apply absolute box-content -right-2.5 -bottom-2.5 flex size-10 items-center justify-center rounded-full border-[3px] border-solid border-(--ground) bg-(--aicap-danger) text-(--aicap-on-indigo);
+}
+
+.aicap-tips {
+  @apply m-0 flex list-disc flex-col gap-2 pl-5 text-[15px] leading-normal;
+}
+
+.aicap-warnings {
+  @apply flex flex-col gap-3;
+}
+
+.aicap-warnings .aicap-eyebrow {
+  @apply font-bold;
+}
+
+.aicap-warning {
+  @apply flex items-start gap-3 rounded-[16px] border-[1.5px] border-solid bg-(--surface) px-[18px] py-4;
+}
+
+.aicap-warning[data-tone='error'] {
+  @apply border-(--aicap-danger-edge);
+}
+
+.aicap-warning[data-tone='warning'] {
+  @apply border-(--aicap-amber-edge);
+}
+
+.aicap-warning__icon {
+  @apply mt-px shrink-0;
+}
+
+.aicap-warning[data-tone='error'] .aicap-warning__icon {
+  @apply text-(--aicap-danger);
+}
+
+.aicap-warning[data-tone='warning'] .aicap-warning__icon {
+  @apply text-(--aicap-amber-strong);
+}
+
+.aicap-warning__copy {
+  @apply flex flex-col gap-0.5;
+}
+
+.aicap-warning__file {
+  @apply text-[14px] font-semibold;
+}
+
+.aicap-warning__message {
+  @apply text-[13px];
+}
+
+.aicap-warning[data-tone='error'] .aicap-warning__message {
+  @apply text-(--red-ink);
+}
+
+.aicap-warning[data-tone='warning'] .aicap-warning__message {
+  @apply text-(--aicap-amber-text);
+}
+
+.aicap-detail {
+  @apply flex items-center justify-between gap-3 text-[14px];
+}
+
+.aicap-detail span {
+  @apply text-(--ink-soft);
+}
+
+.aicap-detail strong {
+  @apply font-semibold;
+}
+
+.aicap-detail--support {
+  @apply border-t border-t-(--rule) pt-3.5;
+}
+
+.aicap-support {
+  @apply inline-flex h-9 items-center gap-1.5 rounded-[10px] border border-solid border-(--line) bg-(--ground) px-3 text-[13px] font-semibold text-(--ink);
+}
+
+/* Wide screens: page inside the shell */
+
+@media (min-width: 761px) {
+  .aicap {
+    @apply static z-auto flex bg-transparent;
+
+    gap: 28px;
+  }
+
+  .aicap__bar,
+  .aicap-steps--mobile,
+  .aicap-modes--mobile,
+  .aicap__footer--mobile-only,
+  .aicap-review .aicap-footer__hint {
+    @apply hidden;
+  }
+
+  .aicap__page-head {
+    @apply flex flex-wrap items-end justify-between gap-5;
+  }
+
+  .aicap__page-title {
+    @apply flex flex-col gap-1.5;
+  }
+
+  .aicap__crumb {
+    @apply inline-flex items-center gap-1.5 text-[14px] font-semibold text-(--indigo);
+  }
+
+  .aicap__page-title h1 {
+    @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[42px] leading-[normal] font-semibold tracking-[-0.8px];
+  }
+
+  .aicap__page-head .aicap-modes {
+    @apply box-content min-w-75;
+  }
+
+  .aicap-modes__tab {
+    @apply px-[18px];
+  }
+
+  .aicap__body {
+    @apply min-h-auto flex-none overflow-visible p-0;
+  }
+
+  .aicap[data-layout='narrow'] .aicap__body,
+  .aicap[data-layout='narrow'] .aicap__footer {
+    @apply w-full max-w-160;
+  }
+
+  .aicap__footer {
+    @apply flex-row flex-wrap items-center gap-3 border-t-0 bg-transparent p-0;
+  }
+
+  .aicap__footer:has(.aicap-footer__hint) {
+    @apply gap-3.5;
+  }
+
+  .aicap-footer__hint {
+    @apply text-left text-[14px];
+  }
+
+  .aicap-footer__pair {
+    @apply flex;
+  }
+
+  .aicap-review {
+    @apply flex-row flex-wrap items-start gap-8;
+  }
+
+  .aicap-input {
+    @apply box-content flex min-w-0 flex-[1_1_320px] flex-col gap-[22px] rounded-[26px] border border-solid border-(--line) bg-(--surface) p-7;
+  }
+
+  .aicap-input__heading {
+    @apply flex flex-col gap-1;
+  }
+
+  .aicap-input__heading h2 {
+    @apply m-0 text-[18px] font-bold;
+  }
+
+  .aicap-input__heading span {
+    @apply text-[14px] text-(--ink-soft);
+  }
+
+  .aicap-input__field {
+    @apply flex flex-col gap-2;
+  }
+
+  .aicap-input__field label,
+  .aicap-input__label {
+    @apply text-[14px] font-semibold;
+  }
+
+  .aicap-input__hint {
+    @apply text-[12px] text-(--ink-soft);
+  }
+
+  .aicap-input__regenerate {
+    @apply mt-2;
+  }
+
+  .aicap-review__main {
+    @apply flex-[999_1_560px];
+  }
+
+  .aicap-review__head {
+    @apply flex flex-wrap items-center justify-between gap-4;
+  }
+
+  .aicap-review__heading {
+    @apply flex flex-col gap-1;
+  }
+
+  .aicap-review__heading h2 {
+    @apply m-0 text-[18px] font-bold;
+  }
+
+  .aicap-review__heading span {
+    @apply text-[14px] text-(--ink-soft);
+  }
+
+  .aicap-bulk {
+    @apply justify-start gap-3 pb-0;
+  }
+
+  .aicap-bulk__accept,
+  .aicap-bulk__discard {
+    @apply h-11 px-[18px];
+  }
+
+  .aicap-bulk__discard {
+    @apply border-[1.5px] border-solid border-(--aicap-danger-edge) bg-(--surface);
+  }
+
+  .aicap-confirm {
+    @apply flex-row flex-wrap items-center justify-between gap-4 px-6 py-5;
+  }
+
+  .aicap-confirm__actions {
+    @apply flex gap-3;
+  }
+
+  .aicap-confirm__cancel,
+  .aicap-confirm__accept {
+    @apply h-11 px-[18px] text-[14px];
+
+    border-radius: 12px;
+  }
+
+  .aicap-discarded {
+    @apply hidden;
+  }
+
+  .aicap-review[data-state='discarded'] .aicap-proposals {
+    @apply grid;
+  }
+
+  .aicap-proposals {
+    @apply grid grid-cols-[repeat(auto-fill,minmax(min(340px,100%),1fr))] items-start gap-5;
+  }
+
+  .aicap-proposal {
+    @apply p-6;
+  }
+
+  .aicap-correction__toggle,
+  .aicap-alert__icon,
+  .aicap-only-compact {
+    @apply hidden;
+  }
+
+  .aicap-only-wide {
+    @apply inline;
+  }
+
+  .aicap-alert {
+    @apply flex-row flex-wrap items-center justify-between;
+  }
+
+  .aicap-rejected {
+    @apply rounded-[18px] px-5 py-4;
+  }
+
+  .aicap-savebar {
+    @apply mt-3 flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-solid border-(--line) bg-(--surface) px-6 py-5;
+  }
+
+  .aicap-savebar__hint {
+    @apply text-[14px] text-(--ink-soft);
+  }
+
+  .aicap-savebar__actions {
+    @apply flex flex-wrap gap-3;
+  }
+
+  .aicap-savebar .aicap-button--lg {
+    @apply px-[22px];
+  }
+
+  .aicap-savebar .aicap-button--primary {
+    @apply px-[26px];
+  }
+}
+
+/* The proposal desktop page uses a wider container than the shell default. */
+
+@media (min-width: 761px) {
+  .app-main__inner:has(.aicap) {
+    max-width: 1240px;
+  }
+}

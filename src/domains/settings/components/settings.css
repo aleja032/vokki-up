@@ -1,0 +1,743 @@
+@reference 'tailwindcss';
+
+/*
+ * Settings, mobile first (proposal artboards: Ajustes, Ajustes escritorio).
+ * Up to 760px: stacked cards, segmented tabs, sticky save footer above the bottom navigation.
+ * 761px and up: underline tabs, one large form card plus a side column (the card wraps under it on narrow tablets).
+ * The card and aside wrappers use `display: contents` on mobile so DOM order can be re-ordered with `order`.
+ */
+
+.prefs {
+  --prefs-on-indigo: #ffffff;
+  --prefs-line-strong: #d3cdc0;
+  --prefs-switch-off: #d3cdc0;
+  --prefs-spinner-track: #c9c3f5;
+  --prefs-idle-dot: #8e8a9e;
+  --prefs-ok-ink: #14553a;
+  --prefs-ok-dot: #1f7a52;
+  --prefs-warn-ink: #5c3b00;
+  --prefs-warn-dot: #9a6200;
+  --prefs-error-ink: #7e2a17;
+  --prefs-error-dot: #c2452d;
+  --prefs-danger-line: #e3a99a;
+  --prefs-danger-ink: #a8381f;
+
+  @apply flex flex-col gap-6 leading-[normal];
+}
+
+:root[data-theme='dark'] .prefs,
+:root.dark .prefs {
+  --prefs-on-indigo: var(--ground);
+  --prefs-line-strong: #4a4a53;
+  --prefs-switch-off: #4a4a53;
+  --prefs-spinner-track: #4b4678;
+  --prefs-idle-dot: var(--ink-faint);
+  --prefs-ok-ink: var(--green);
+  --prefs-ok-dot: var(--green);
+  --prefs-warn-ink: var(--amber-ink);
+  --prefs-warn-dot: var(--amber);
+  --prefs-error-ink: var(--red-ink);
+  --prefs-error-dot: var(--red-ink);
+  --prefs-danger-line: #7a4639;
+  --prefs-danger-ink: var(--red-ink);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .prefs {
+    --prefs-on-indigo: var(--ground);
+    --prefs-line-strong: #4a4a53;
+    --prefs-switch-off: #4a4a53;
+    --prefs-spinner-track: #4b4678;
+    --prefs-idle-dot: var(--ink-faint);
+    --prefs-ok-ink: var(--green);
+    --prefs-ok-dot: var(--green);
+    --prefs-warn-ink: var(--amber-ink);
+    --prefs-warn-dot: var(--amber);
+    --prefs-error-ink: var(--red-ink);
+    --prefs-error-dot: var(--red-ink);
+    --prefs-danger-line: #7a4639;
+    --prefs-danger-ink: var(--red-ink);
+  }
+}
+
+/* Header and tabs */
+
+.prefs__header {
+  @apply -mx-6 flex flex-col gap-4 border-b border-b-(--line) px-6 pt-2 pb-5;
+}
+
+.prefs__heading {
+  @apply flex items-center gap-3;
+}
+
+.prefs__back {
+  @apply flex size-11 shrink-0 items-center justify-center rounded-[14px] border border-(--line) bg-(--surface) text-(--ink);
+}
+
+.prefs__title {
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[26px] leading-[normal] font-semibold text-(--ink);
+}
+
+.prefs-tabs {
+  @apply grid grid-cols-2 gap-1.5 rounded-2xl bg-(--surface-muted) p-1.5;
+}
+
+.prefs-tab {
+  @apply h-11 rounded-[12px] px-4 text-[15px] font-bold text-(--ink-soft);
+}
+
+.prefs-tab[aria-selected='true'] {
+  @apply bg-(--surface) text-(--ink);
+}
+
+/* The mobile artboard lists the AI provider tab first. */
+.prefs-tab[data-tab='provider'] {
+  @apply order-first;
+}
+
+/* Panels */
+
+.prefs-panel {
+  @apply flex flex-col gap-7;
+}
+
+.prefs-card,
+.prefs-aside {
+  @apply contents;
+}
+
+/* Fields */
+
+.prefs-fields {
+  @apply flex flex-col gap-7;
+}
+
+.prefs-field {
+  @apply flex flex-col gap-2;
+}
+
+.prefs-label {
+  @apply text-[14px] font-semibold text-(--ink);
+}
+
+.prefs-input {
+  @apply box-border h-[52px] w-full rounded-[14px] border-[1.5px] border-(--line) bg-(--surface) px-4 text-[15px] font-medium text-(--ink);
+}
+
+.prefs-input--select {
+  @apply px-3.5;
+}
+
+.prefs-input:focus-visible,
+.prefs-switch__input:focus-visible + .prefs-switch__track {
+  @apply outline-3 outline-offset-3 outline-solid outline-(--focus-ring);
+}
+
+.prefs-hint {
+  @apply text-[13px] text-(--ink-soft);
+}
+
+.prefs-group {
+  @apply m-0 min-w-0 border-0 p-0;
+}
+
+.prefs-legend {
+  @apply mb-3 p-0 text-[14px] font-semibold text-(--ink);
+}
+
+.prefs-legend--strong {
+  @apply text-[16px] font-bold;
+}
+
+/* Profile */
+
+.prefs-account {
+  @apply flex flex-col gap-4 rounded-[22px] border border-(--line) bg-(--surface) p-[22px];
+}
+
+.prefs-account__identity {
+  @apply flex items-center gap-4;
+}
+
+.prefs-avatar {
+  @apply flex size-16 shrink-0 items-center justify-center rounded-full bg-(--indigo) text-[24px] font-bold text-(--prefs-on-indigo);
+}
+
+.prefs-account__copy {
+  @apply flex flex-col gap-1;
+}
+
+.prefs-account__name {
+  @apply text-[18px] font-bold text-(--ink);
+}
+
+.prefs-account__note {
+  @apply text-[13px] leading-[1.4] text-(--ink-soft);
+}
+
+.prefs-account__action {
+  @apply mt-1 h-12 px-5;
+}
+
+.prefs-levels {
+  @apply grid grid-cols-6 gap-2;
+}
+
+.prefs-level {
+  @apply h-11 rounded-[12px] border-[1.5px] border-(--line) bg-(--surface) text-[14px] font-bold text-(--ink-soft);
+}
+
+.prefs-level[aria-pressed='true'] {
+  @apply border-(--indigo) bg-(--indigo-soft) text-(--indigo-strong);
+}
+
+.prefs-rows {
+  @apply flex flex-col gap-7;
+}
+
+.prefs-row {
+  @apply flex items-center justify-between gap-4 rounded-[18px] border border-(--line) bg-(--surface) px-5 py-[18px];
+}
+
+.prefs-row__copy {
+  @apply flex flex-col gap-0.5;
+}
+
+.prefs-row__title {
+  @apply text-[15px] font-semibold text-(--ink);
+}
+
+.prefs-stepper {
+  @apply flex items-center gap-2;
+}
+
+.prefs-stepper__button {
+  @apply size-11 rounded-[12px] border-[1.5px] border-(--prefs-line-strong) bg-(--surface) text-[20px] font-bold text-(--ink) disabled:cursor-not-allowed disabled:opacity-40;
+}
+
+.prefs-stepper__value {
+  @apply min-w-9 text-center text-[20px] font-bold text-(--ink);
+}
+
+.prefs-themes {
+  @apply grid grid-cols-3 gap-1.5 rounded-2xl bg-(--surface-muted) p-1.5;
+}
+
+.prefs-theme {
+  @apply h-11 rounded-[12px] px-2.5 text-[14px] font-semibold text-(--ink-soft);
+}
+
+.prefs-theme[aria-pressed='true'] {
+  @apply bg-(--surface) text-(--ink);
+}
+
+/* Data */
+
+.prefs-data {
+  @apply order-1 flex flex-col gap-3;
+}
+
+.prefs-data__title {
+  @apply m-0 text-[16px] font-bold text-(--ink);
+}
+
+.prefs-data__summary {
+  @apply m-0 hidden text-[14px] leading-normal text-(--ink-soft);
+}
+
+.prefs-action {
+  @apply flex h-14 items-center justify-between gap-3 rounded-2xl border border-(--line) bg-(--surface) px-5 text-[15px] font-semibold text-(--ink);
+}
+
+.prefs-action--danger {
+  @apply border-[1.5px] border-(--prefs-danger-line) text-(--prefs-danger-ink);
+}
+
+/* Buttons */
+
+.prefs-button {
+  @apply inline-flex h-[52px] items-center justify-center rounded-[14px] px-6 text-[15px] font-bold;
+}
+
+.prefs-button--primary {
+  @apply bg-(--indigo) text-(--prefs-on-indigo);
+}
+
+.prefs-button--outline {
+  @apply border-[1.5px] border-(--prefs-line-strong) bg-(--surface) font-semibold text-(--ink);
+}
+
+.prefs-remove {
+  @apply h-11 items-center gap-2 rounded-[12px] border-[1.5px] border-(--prefs-danger-line) bg-(--surface) px-4 text-[14px] font-semibold text-(--prefs-danger-ink);
+}
+
+.prefs-remove--narrow {
+  @apply order-2 inline-flex self-start;
+}
+
+.prefs-remove--wide {
+  @apply hidden;
+}
+
+/* Footer */
+
+.prefs-footer {
+  @apply sticky bottom-[calc(76px+env(safe-area-inset-bottom))] z-1 order-3 -mx-6 -mb-8 flex flex-col border-t border-t-(--line) bg-(--surface) px-6 pt-5 pb-7;
+}
+
+.prefs-footer__actions {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.prefs-footer--profile .prefs-footer__actions {
+  @apply grid-cols-1;
+}
+
+.prefs-footer--profile .prefs-button {
+  @apply w-full text-[16px];
+}
+
+.prefs-footer--provider .prefs-button {
+  @apply px-4;
+}
+
+.prefs-save-state {
+  @apply sr-only;
+}
+
+/* AI provider */
+
+.prefs-status {
+  --prefs-status-bg: var(--surface-muted);
+  --prefs-status-ink: var(--ink);
+  --prefs-status-dot: var(--prefs-idle-dot);
+
+  @apply flex items-center gap-3.5 rounded-[18px] bg-(--prefs-status-bg) px-[18px] py-4 text-(--prefs-status-ink);
+}
+
+.prefs-status[data-status='untested'] {
+  --prefs-status-bg: var(--amber-soft);
+  --prefs-status-ink: var(--prefs-warn-ink);
+  --prefs-status-dot: var(--prefs-warn-dot);
+}
+
+.prefs-status[data-status='ok'] {
+  --prefs-status-bg: var(--green-soft);
+  --prefs-status-ink: var(--prefs-ok-ink);
+  --prefs-status-dot: var(--prefs-ok-dot);
+}
+
+.prefs-status[data-status='error'] {
+  --prefs-status-bg: var(--red-soft);
+  --prefs-status-ink: var(--prefs-error-ink);
+  --prefs-status-dot: var(--prefs-error-dot);
+}
+
+.prefs-status__dot {
+  @apply size-3 shrink-0 rounded-full bg-(--prefs-status-dot);
+}
+
+.prefs-status__copy {
+  @apply flex flex-col gap-0.5;
+}
+
+.prefs-status__title {
+  @apply text-[15px] font-bold;
+}
+
+.prefs-status__text {
+  @apply text-[13px] leading-[1.4];
+}
+
+.prefs-providers {
+  @apply flex flex-col gap-2.5;
+}
+
+.prefs-provider {
+  @apply flex items-center gap-3.5 rounded-2xl border-2 border-(--line) bg-(--surface) px-[18px] py-4 text-left text-(--ink);
+}
+
+.prefs-provider[aria-checked='true'] {
+  @apply border-(--indigo);
+}
+
+.prefs-provider__radio {
+  @apply box-border flex size-[22px] shrink-0 items-center justify-center rounded-full border-2 border-(--line);
+}
+
+.prefs-provider[aria-checked='true'] .prefs-provider__radio {
+  @apply border-(--indigo);
+}
+
+.prefs-provider__dot {
+  @apply size-2.5 rounded-full bg-transparent;
+}
+
+.prefs-provider[aria-checked='true'] .prefs-provider__dot {
+  @apply bg-(--indigo);
+}
+
+.prefs-provider__copy {
+  @apply flex flex-1 flex-col gap-0.5;
+}
+
+.prefs-provider__name {
+  @apply text-[15px] font-bold;
+}
+
+.prefs-provider__hint {
+  @apply text-[13px] text-(--ink-soft);
+}
+
+.prefs-key__header {
+  @apply flex items-baseline justify-between gap-3;
+}
+
+.prefs-key__help {
+  @apply text-[13px] font-semibold text-(--indigo) hover:text-(--indigo-strong);
+}
+
+.prefs-key__field {
+  @apply relative;
+}
+
+.prefs-input--key {
+  @apply border-2 pr-[60px] font-medium;
+
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+
+.prefs-input--key[aria-invalid='true'] {
+  @apply border-(--prefs-error-dot);
+}
+
+.prefs-key__toggle {
+  @apply absolute top-1 right-1 flex size-11 items-center justify-center rounded-[12px] text-(--ink-soft);
+}
+
+.prefs-key__privacy {
+  @apply flex gap-2 text-[13px] leading-[1.45] text-(--ink-soft);
+}
+
+.prefs-key__lock {
+  @apply mt-px shrink-0;
+}
+
+.prefs-result {
+  @apply flex items-start gap-3 rounded-2xl px-[18px] py-3.5 text-[14px] leading-[1.45];
+}
+
+.prefs-result--testing {
+  @apply items-center bg-(--indigo-soft) font-semibold text-(--indigo-strong);
+}
+
+.prefs-result--ok {
+  @apply bg-(--green-soft) text-(--prefs-ok-ink);
+}
+
+.prefs-result--error {
+  @apply bg-(--red-soft) text-(--prefs-error-ink);
+}
+
+.prefs-result__icon {
+  @apply shrink-0;
+}
+
+.prefs-spinner {
+  @apply box-border size-5 shrink-0 rounded-full border-[3px] border-(--prefs-spinner-track) border-t-(--indigo);
+
+  animation: prefs-spin 0.9s linear infinite;
+}
+
+@keyframes prefs-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prefs-spinner {
+    animation: none;
+  }
+}
+
+.prefs-uses {
+  @apply order-1 flex flex-col gap-1 rounded-[20px] border border-(--line) bg-(--surface) px-5 py-2;
+}
+
+.prefs-uses__title {
+  @apply m-0 pt-3.5 pb-1.5 text-[16px] font-bold text-(--ink);
+}
+
+.prefs-use {
+  @apply flex items-center justify-between gap-4 border-t border-t-(--rule) py-3;
+}
+
+.prefs-use__copy {
+  @apply flex flex-col gap-0.5;
+}
+
+.prefs-use__label {
+  @apply text-[15px] font-semibold text-(--ink);
+}
+
+.prefs-how {
+  @apply hidden;
+}
+
+/* Switch */
+
+.prefs-switch {
+  @apply relative flex h-11 w-14 shrink-0 items-center justify-center;
+}
+
+.prefs-switch__input {
+  @apply absolute inset-0 m-0 size-full cursor-pointer opacity-0;
+}
+
+.prefs-switch__track {
+  @apply pointer-events-none box-border flex h-8 w-[52px] items-center justify-start rounded-full bg-(--prefs-switch-off) p-[3px];
+}
+
+.prefs-switch__knob {
+  @apply size-[26px] rounded-full bg-white shadow-[0_1px_3px_rgba(27,26,46,0.25)];
+}
+
+.prefs-switch__input:checked + .prefs-switch__track {
+  @apply justify-end bg-(--indigo);
+}
+
+/* Copy that only exists in one of the two artboards. */
+
+.prefs-narrow-only {
+  @apply inline;
+}
+
+.prefs-wide-only {
+  @apply hidden;
+}
+
+@media (min-width: 761px) {
+  .prefs {
+    @apply gap-7;
+  }
+
+  .prefs__header {
+    @apply mx-0 gap-7 border-b-0 p-0;
+  }
+
+  .prefs__back,
+  .prefs-narrow-only,
+  .prefs-remove--narrow,
+  .prefs-key__lock,
+  .prefs-result__icon,
+  .prefs-field__hint {
+    @apply hidden;
+  }
+
+  .prefs-wide-only {
+    @apply inline;
+  }
+
+  .prefs__title {
+    @apply text-[42px] tracking-[-0.8px];
+  }
+
+  .prefs-tabs {
+    @apply flex gap-2 rounded-none border-b border-b-(--line) bg-transparent p-0;
+  }
+
+  .prefs-tab {
+    @apply -mb-px h-12 rounded-none border-b-[3px] border-b-transparent bg-transparent px-[18px];
+  }
+
+  .prefs-tab[aria-selected='true'] {
+    @apply border-b-(--indigo) bg-transparent;
+  }
+
+  .prefs-tab[data-tab='provider'] {
+    @apply order-none;
+  }
+
+  .prefs-panel {
+    @apply flex-row flex-wrap items-start gap-8;
+  }
+
+  .prefs-card {
+    @apply flex min-w-0 flex-[999_1_520px] flex-col gap-7 rounded-[26px] border border-(--line) bg-(--surface) p-8;
+  }
+
+  .prefs-aside {
+    @apply flex min-w-0 flex-[1_1_300px] flex-col gap-4;
+  }
+
+  .prefs-fields,
+  .prefs-rows {
+    @apply grid gap-6;
+
+    grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  }
+
+  .prefs-fields--model {
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  }
+
+  .prefs-rows {
+    @apply gap-4;
+  }
+
+  .prefs-input--key {
+    @apply font-medium;
+  }
+
+  .prefs-account {
+    @apply flex-row flex-wrap items-center gap-5 rounded-none border-0 bg-transparent p-0;
+  }
+
+  .prefs-account__identity {
+    @apply contents;
+  }
+
+  .prefs-avatar {
+    @apply size-[72px] text-[28px];
+  }
+
+  .prefs-account__copy {
+    @apply min-w-50 flex-1;
+  }
+
+  .prefs-account__name {
+    @apply text-[20px];
+  }
+
+  .prefs-account__note {
+    @apply text-[14px] leading-normal;
+  }
+
+  .prefs-account__action {
+    @apply mt-0;
+  }
+
+  .prefs-levels {
+    @apply flex flex-wrap gap-2.5;
+  }
+
+  .prefs-level {
+    @apply w-16;
+  }
+
+  .prefs-row {
+    @apply border-0 bg-(--ground);
+  }
+
+  .prefs-themes {
+    @apply inline-grid min-w-[min(432px,100%)];
+  }
+
+  .prefs-theme {
+    @apply px-3.5;
+  }
+
+  .prefs-legend {
+    @apply mb-3;
+  }
+
+  .prefs-legend--strong {
+    @apply mb-3.5;
+  }
+
+  .prefs-data {
+    @apply order-none gap-3.5 rounded-[22px] border border-(--line) bg-(--surface) p-6;
+  }
+
+  .prefs-data__summary {
+    @apply block;
+  }
+
+  .prefs-action {
+    @apply mt-0 h-[52px] rounded-[14px] px-[18px];
+  }
+
+  .prefs-data__summary + .prefs-action {
+    @apply mt-1;
+  }
+
+  .prefs-footer {
+    @apply static order-none mx-0 mb-0 flex-row items-center justify-end gap-3 border-t border-t-(--rule) bg-transparent p-0 pt-6;
+  }
+
+  .prefs-footer--provider {
+    @apply flex-wrap justify-between;
+  }
+
+  .prefs-footer__actions,
+  .prefs-footer--profile .prefs-footer__actions {
+    @apply flex items-center gap-3;
+  }
+
+  .prefs-footer--profile .prefs-button {
+    @apply w-auto text-[16px];
+  }
+
+  .prefs-footer--provider .prefs-button {
+    @apply px-[22px];
+  }
+
+  .prefs-footer--provider .prefs-button--primary {
+    @apply px-7;
+  }
+
+  .prefs-footer--profile .prefs-button--primary {
+    @apply px-7;
+  }
+
+  .prefs-save-state {
+    @apply not-sr-only mr-1 inline-flex items-center gap-1.5 text-[13px] text-(--ink-soft);
+  }
+
+  .prefs-remove--wide {
+    @apply inline-flex border-0 bg-transparent;
+  }
+
+  .prefs-status {
+    @apply px-5;
+  }
+
+  .prefs-status__text {
+    @apply leading-[normal];
+  }
+
+  .prefs-providers {
+    @apply grid gap-3;
+
+    grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  }
+
+  .prefs-provider__copy {
+    @apply flex-none;
+  }
+
+  .prefs-uses {
+    @apply order-none gap-0 rounded-[22px] px-6;
+  }
+
+  .prefs-uses__title {
+    @apply pt-4;
+  }
+
+  .prefs-use {
+    @apply py-3.5;
+  }
+
+  .prefs-how {
+    @apply flex flex-col gap-2.5 rounded-[22px] bg-(--indigo-soft) p-6 text-(--ink);
+  }
+
+  .prefs-how__title {
+    @apply m-0 text-[16px] font-bold;
+  }
+
+  .prefs-how__list {
+    @apply m-0 flex list-disc flex-col gap-2 pl-5 text-[14px] leading-normal;
+  }
+}

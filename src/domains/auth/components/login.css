@@ -1,0 +1,167 @@
+@reference 'tailwindcss';
+
+/*
+ * Sign-in screen and logout button, mobile first.
+ * One centered card (max 420px); the same layout on desktop.
+ * Colors come from the shared :root tokens; the extra tokens below cover
+ * the text on indigo and the disabled / danger states in both themes.
+ */
+
+:root {
+  --signin-on-indigo: #ffffff;
+  --signin-disabled: #a9a3dd;
+  --signin-danger: #c2452d;
+}
+
+:root[data-theme='dark'],
+:root.dark {
+  --signin-on-indigo: #141416;
+  --signin-disabled: #4d4a7a;
+  --signin-danger: #e0705a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --signin-on-indigo: #141416;
+    --signin-disabled: #4d4a7a;
+    --signin-danger: #e0705a;
+  }
+}
+
+.signin-workspace {
+  @apply flex min-h-dvh w-full items-center justify-center px-4 py-6;
+}
+
+.signin-card {
+  @apply flex w-full max-w-[420px] flex-col gap-6 rounded-(--card-radius) border border-solid border-(--line) bg-(--surface) px-5 py-7 text-(--ink);
+}
+
+.signin-brand {
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[28px] font-semibold tracking-[-0.5px] whitespace-nowrap text-(--ink);
+}
+
+.signin-brand__accent {
+  @apply text-(--indigo) italic;
+}
+
+.signin-card__header {
+  @apply flex flex-col gap-2;
+}
+
+.signin-card__header h1 {
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[30px] leading-[1.15] font-semibold tracking-[-0.5px];
+}
+
+.signin-card__header p {
+  @apply m-0 text-[15px] leading-normal text-(--ink-soft);
+}
+
+/* Form */
+
+.signin-form {
+  @apply flex flex-col gap-5;
+}
+
+.signin-field {
+  @apply flex flex-col gap-2;
+}
+
+.signin-field label {
+  @apply text-[14px] font-semibold;
+}
+
+.signin-field__control {
+  @apply relative;
+}
+
+.signin-field__input {
+  @apply h-[52px] w-full rounded-(--control-radius) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[15px] text-(--ink) placeholder:text-(--ink-faint) focus:outline-2 focus:outline-offset-2 focus:outline-(--indigo);
+}
+
+.signin-field__input--password {
+  @apply pr-12;
+}
+
+.signin-field__input[aria-invalid='true'] {
+  @apply border-2 border-(--signin-danger);
+}
+
+.signin-field__toggle {
+  @apply absolute top-1/2 right-1.5 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[10px] border-0 bg-transparent text-(--ink-soft) hover:text-(--ink) focus-visible:outline-2 focus-visible:outline-(--indigo);
+}
+
+.signin-field__error {
+  @apply m-0 text-[14px] leading-[1.45] text-(--red-ink);
+}
+
+.signin-form__submit {
+  @apply flex h-[52px] w-full cursor-pointer items-center justify-center rounded-(--control-radius) border-0 bg-(--indigo) px-6 font-[family-name:var(--font-ui),sans-serif] text-[16px] font-bold text-(--signin-on-indigo) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--indigo);
+}
+
+.signin-form__submit:disabled {
+  @apply cursor-not-allowed bg-(--signin-disabled);
+}
+
+.signin-form__root {
+  @apply empty:hidden;
+}
+
+.signin-form__root-error {
+  @apply m-0 rounded-(--control-radius) border border-solid border-(--signin-danger) bg-(--red-soft) px-4 py-3 text-[14px] leading-[1.45] text-(--red-ink);
+}
+
+.signin-form__guest {
+  @apply flex h-12 items-center justify-center rounded-(--control-radius) border-[1.5px] border-solid border-(--line) px-4 text-[15px] font-semibold text-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--indigo);
+}
+
+/* Authenticated card */
+
+.signin-account {
+  @apply flex flex-col gap-1 rounded-(--control-radius) bg-(--surface-muted) px-4 py-3.5;
+}
+
+.signin-account span {
+  @apply text-[12px] text-(--ink-soft);
+}
+
+.signin-account strong {
+  @apply text-[15px] font-semibold break-all;
+}
+
+/* Logout button */
+
+.signin-logout {
+  @apply flex h-12 cursor-pointer items-center justify-center gap-2 rounded-(--control-radius) border-[1.5px] border-solid border-(--line) bg-transparent px-4 text-[15px] font-semibold text-(--ink) hover:bg-(--surface-muted) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--indigo);
+}
+
+.signin-logout[data-variant='full'] {
+  @apply w-full;
+}
+
+.signin-logout[data-variant='compact'] {
+  @apply size-10 shrink-0 rounded-full p-0;
+}
+
+/* Guest call to action (shell header / sidebar) */
+
+.signin-login-cta {
+  @apply inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-(--indigo) px-3 text-[13px] leading-[normal] font-semibold whitespace-nowrap text-(--signin-on-indigo) focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-solid focus-visible:outline-(--focus-ring);
+}
+
+.signin-login-cta:hover {
+  @apply bg-(--indigo-strong);
+}
+
+.signin-login-cta svg {
+  @apply shrink-0;
+}
+
+@media (min-width: 761px) {
+  .signin-workspace {
+    @apply px-8 py-12;
+  }
+
+  .signin-card {
+    @apply px-8 py-9;
+  }
+}

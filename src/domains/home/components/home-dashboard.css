@@ -1,0 +1,525 @@
+@reference 'tailwindcss';
+
+/*
+ * Home dashboard, mobile first (proposal artboards: Inicio, Inicio modo oscuro, Inicio escritorio).
+ * Mobile: next session, weekly overview (ring, metrics, mini chart), today's activity.
+ * 761px and up: goal card, statistics strip and weekly chart replace the mobile overview.
+ */
+
+.home-dashboard {
+  --home-session-bg: var(--indigo-soft);
+  --home-session-border: transparent;
+  --home-session-eyebrow: var(--indigo-strong);
+  --home-session-chip: var(--surface);
+  --home-on-indigo: #ffffff;
+
+  @apply flex flex-col gap-6;
+}
+
+:root[data-theme='dark'] .home-dashboard,
+:root.dark .home-dashboard {
+  --home-session-bg: var(--surface);
+  --home-session-border: var(--line);
+  --home-session-chip: var(--surface-muted);
+  --home-on-indigo: var(--ground);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .home-dashboard {
+    --home-session-bg: var(--surface);
+    --home-session-border: var(--line);
+    --home-session-chip: var(--surface-muted);
+    --home-on-indigo: var(--ground);
+  }
+}
+
+/* Intro */
+
+.home-intro {
+  @apply flex flex-wrap items-end justify-between gap-5;
+}
+
+.home-intro__copy {
+  @apply flex flex-col gap-0.5;
+}
+
+.home-intro h1 {
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[30px] leading-[1.2] font-semibold tracking-[-0.5px];
+}
+
+.home-intro p {
+  @apply m-0 text-[15px] text-(--ink-soft);
+}
+
+.home-intro__greeting--dark,
+.home-intro__support--dark,
+.home-intro__support--wide,
+.home-intro__action {
+  @apply hidden;
+}
+
+:root[data-theme='dark'] .home-intro__greeting--light,
+:root[data-theme='dark'] .home-intro__support--light,
+:root.dark .home-intro__greeting--light,
+:root.dark .home-intro__support--light {
+  @apply hidden;
+}
+
+:root[data-theme='dark'] .home-intro__greeting--dark,
+:root[data-theme='dark'] .home-intro__support--dark,
+:root.dark .home-intro__greeting--dark,
+:root.dark .home-intro__support--dark {
+  @apply inline;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .home-intro__greeting--light,
+  :root:not([data-theme='light']) .home-intro__support--light {
+    @apply hidden;
+  }
+
+  :root:not([data-theme='light']) .home-intro__greeting--dark,
+  :root:not([data-theme='light']) .home-intro__support--dark {
+    @apply inline;
+  }
+}
+
+/* Featured row: next session (+ goal on wide screens) */
+
+.home-dashboard__featured {
+  @apply flex flex-wrap gap-6;
+}
+
+.next-session {
+  @apply flex min-w-0 flex-[1_1_100%] flex-col gap-4.5 rounded-[24px] border-(--home-session-border) bg-(--home-session-bg) p-6;
+}
+
+.next-session__copy {
+  @apply flex flex-col items-start gap-1;
+}
+
+.next-session h2 {
+  @apply m-0 mb-3.5 text-[12px] font-normal tracking-[1.5px] text-(--home-session-eyebrow) uppercase;
+}
+
+.next-session__title {
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[28px] leading-[1.05] font-semibold;
+}
+
+.next-session__meta {
+  @apply m-0 text-[14px] text-(--ink-soft);
+}
+
+.next-session__description,
+.next-session__chips {
+  @apply hidden;
+}
+
+.next-session .primary-action {
+  @apply mt-2 min-h-13 w-full gap-2 self-stretch rounded-[14px] bg-(--indigo) text-[16px] text-(--home-on-indigo);
+}
+
+.next-session .primary-action:hover {
+  @apply bg-(--indigo-strong) text-(--home-on-indigo);
+}
+
+.today-goal {
+  @apply hidden;
+}
+
+/* Statistics strip: desktop only */
+
+.statistics-strip {
+  @apply hidden;
+}
+
+/* Mobile weekly overview */
+
+.week-overview {
+  @apply flex flex-col gap-4.5 rounded-[24px] p-5.5;
+}
+
+.week-overview .section-heading h2 {
+  @apply text-[16px];
+}
+
+.week-overview__summary {
+  @apply flex items-center gap-4;
+}
+
+.home-ring .progress-ring__track,
+.home-ring .progress-ring__value {
+  @apply stroke-8;
+}
+
+.home-ring--overview {
+  @apply size-22 flex-[0_0_88px];
+}
+
+.home-ring--overview .progress-ring__label strong {
+  @apply text-[24px];
+}
+
+.week-overview__metrics {
+  @apply m-0 grid min-w-0 flex-1 list-none grid-cols-3 gap-2 p-0;
+}
+
+.week-overview__metrics li {
+  @apply flex min-w-0 flex-col gap-0.5;
+}
+
+.week-overview__metrics strong {
+  @apply text-[20px] leading-[1.2] font-bold;
+}
+
+.week-overview__metrics li > span:last-child {
+  @apply text-[12px] leading-[1.25] text-(--ink-soft);
+}
+
+.week-overview__icon {
+  @apply flex;
+}
+
+.week-overview__icon[data-tone='amber'] {
+  @apply text-(--amber-ink);
+}
+
+.week-overview__icon[data-tone='indigo'] {
+  @apply text-(--indigo);
+}
+
+.week-overview__icon[data-tone='green'] {
+  @apply text-(--green);
+}
+
+.week-overview__chart {
+  @apply grid h-11 grid-cols-7 items-end gap-1.5;
+}
+
+.week-overview__day {
+  @apply flex flex-col items-center gap-1;
+}
+
+.week-overview__bar {
+  @apply h-[clamp(4px,calc(var(--day-count)*1.45px),28px)] w-full rounded-[6px] bg-(--indigo-soft);
+}
+
+.week-overview__bar[data-today='true'] {
+  @apply bg-(--indigo);
+}
+
+.week-overview__label {
+  @apply text-[11px] leading-[1.2] text-(--ink-soft);
+}
+
+.week-overview__label[data-today='true'] {
+  @apply font-bold text-(--ink);
+}
+
+/* Today's activity: single bordered list on mobile */
+
+.home-dashboard__lower {
+  @apply flex flex-col gap-6;
+}
+
+.today-activity {
+  @apply flex flex-col gap-2 bg-transparent;
+  border: 0;
+}
+
+.today-activity .section-heading h2 {
+  @apply text-[16px];
+}
+
+.activity-list {
+  @apply flex flex-col overflow-hidden rounded-[20px] border border-solid border-(--line) bg-(--surface);
+}
+
+.activity-item {
+  @apply flex items-center gap-3.5 px-4.5 py-4 text-(--ink);
+}
+
+.activity-item + .activity-item {
+  @apply border-t border-t-(--rule);
+}
+
+.activity-item__icon {
+  @apply flex size-10 flex-[0_0_40px] items-center justify-center rounded-[12px];
+}
+
+.activity-item__icon[data-icon='cards'] {
+  @apply bg-(--indigo-soft) text-(--indigo);
+}
+
+.activity-item__icon[data-icon='writing'] {
+  @apply bg-(--amber-soft) text-(--amber-ink);
+}
+
+.activity-item__icon[data-icon='notes'] {
+  @apply bg-(--green-soft) text-(--green);
+}
+
+.activity-item__copy {
+  @apply flex min-w-0 flex-1 flex-col;
+}
+
+.activity-item__copy strong {
+  @apply text-[15px] font-medium;
+}
+
+.activity-item__copy > span {
+  @apply text-[13px] text-(--ink-soft);
+}
+
+.activity-item__arrow {
+  @apply flex-none text-(--ink-soft);
+}
+
+.weekly-progress {
+  @apply hidden;
+}
+
+/* Wide layouts (tablet and desktop) */
+
+@media (min-width: 761px) {
+  .home-intro h1 {
+    @apply text-[42px] leading-[1.12] tracking-[-0.8px];
+  }
+
+  .home-intro p {
+    @apply text-[17px];
+  }
+
+  .home-intro:has(.home-intro__support--wide) .home-intro__support--light {
+    @apply hidden;
+  }
+
+  .home-intro:has(.home-intro__support--wide) .home-intro__support--wide {
+    @apply inline;
+  }
+
+  :root[data-theme='dark'] .home-intro__support--wide,
+  :root.dark .home-intro__support--wide {
+    @apply hidden;
+  }
+
+  .home-intro__action {
+    @apply inline-flex h-12 items-center gap-2 rounded-[14px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-5 py-0 text-[15px] font-semibold text-(--ink);
+  }
+
+  .home-dashboard {
+    @apply gap-8;
+  }
+
+  .next-session {
+    @apply flex-[2_1_480px] gap-5.5 rounded-[28px] p-9;
+  }
+
+  .next-session__copy {
+    @apply gap-2;
+  }
+
+  .next-session h2 {
+    @apply text-[13px];
+  }
+
+  .next-session__title {
+    @apply text-[40px];
+  }
+
+  .next-session__meta {
+    @apply hidden;
+  }
+
+  .next-session__description {
+    @apply m-0 block text-[16px] text-(--ink-soft);
+  }
+
+  .next-session__chips {
+    @apply mx-0 mt-3.5 mb-0 flex list-none flex-wrap gap-2.5 p-0;
+  }
+
+  .next-session__chips li {
+    @apply rounded-[999px] bg-(--home-session-chip) px-3.5 py-2 text-[14px] font-semibold;
+  }
+
+  .next-session .primary-action {
+    @apply min-h-13.5 w-auto gap-2.5 self-start rounded-[16px] px-7 py-0;
+  }
+
+  .today-goal {
+    @apply flex min-w-0 flex-[1_1_280px] flex-col items-center justify-center gap-4.5 rounded-[28px] p-8 text-center;
+  }
+
+  .today-goal h2 {
+    @apply m-0 text-[16px] font-bold;
+  }
+
+  .today-goal > p {
+    @apply m-0 text-[14px] text-(--ink-soft);
+  }
+
+  .home-ring--goal {
+    @apply size-37.5 flex-[0_0_150px];
+  }
+
+  .home-ring--goal .progress-ring__label strong {
+    @apply text-[40px];
+  }
+
+  .home-ring--goal .progress-ring__label span {
+    @apply text-[13px];
+  }
+
+  /* Statistics strip */
+
+  .statistics-strip {
+    @apply grid grid-cols-2 gap-5;
+  }
+
+  .stat-card {
+    @apply flex min-w-0 flex-col items-start gap-3 rounded-[22px] p-6;
+  }
+
+  .stat-card__icon {
+    @apply flex size-11 items-center justify-center rounded-[14px];
+  }
+
+  .stat-card__icon[data-tone='amber'] {
+    @apply bg-(--amber-soft) text-(--amber-ink);
+  }
+
+  .stat-card__icon[data-tone='indigo'] {
+    @apply bg-(--indigo-soft) text-(--indigo);
+  }
+
+  .stat-card__icon[data-tone='green'] {
+    @apply bg-(--green-soft) text-(--green);
+  }
+
+  .stat-card__icon[data-tone='blue'] {
+    @apply bg-(--blue-soft) text-(--blue);
+  }
+
+  .stat-card__value {
+    @apply font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-none font-semibold tabular-nums;
+  }
+
+  .stat-card__value > span[aria-hidden] span {
+    font: inherit;
+  }
+
+  .stat-card__label {
+    @apply text-[14px] text-(--ink-soft);
+  }
+
+  /* Mobile-only overview is replaced by goal, statistics and weekly chart */
+
+  .week-overview {
+    @apply hidden;
+  }
+
+  /* Lower row */
+
+  .home-dashboard__lower {
+    @apply grid grid-cols-[repeat(auto-fit,minmax(min(360px,100%),1fr))] gap-6;
+  }
+
+  .today-activity {
+    @apply gap-4 rounded-[24px] border border-solid border-(--line) bg-(--surface) p-7;
+  }
+
+  .today-activity .section-heading h2 {
+    @apply text-[18px];
+  }
+
+  .activity-list {
+    @apply gap-2.5 overflow-visible rounded-none bg-transparent;
+    border: 0;
+  }
+
+  .activity-item {
+    @apply gap-4 rounded-[16px] bg-(--ground) px-4.5 py-4 transition-[background-color] duration-160 ease-[ease];
+  }
+
+  .activity-item + .activity-item {
+    border-top: 0;
+  }
+
+  .activity-item:hover {
+    @apply bg-(--surface-muted);
+  }
+
+  .activity-item__icon {
+    @apply size-11 basis-11 rounded-[14px];
+  }
+
+  .activity-item__copy {
+    @apply gap-0.5;
+  }
+
+  .weekly-progress {
+    @apply flex min-w-0 flex-col gap-5 rounded-[24px] p-7;
+  }
+
+  .weekly-progress .section-heading h2 {
+    @apply text-[18px];
+  }
+
+  .weekly-progress__caption {
+    @apply text-[13px] text-(--ink-soft);
+  }
+
+  .week-chart {
+    @apply grid h-45 grid-cols-7 items-end gap-3;
+  }
+
+  .week-chart__day {
+    @apply flex min-w-0 flex-col items-center gap-2;
+  }
+
+  .week-chart__count,
+  .week-chart__label {
+    @apply text-[12px] leading-[1.2] text-(--ink-soft) tabular-nums;
+  }
+
+  .week-chart__label {
+    @apply text-[13px];
+  }
+
+  .week-chart__bar {
+    @apply h-[clamp(6px,calc(var(--day-count)*7.14px),128px)] w-full rounded-[10px] bg-(--indigo-soft);
+  }
+
+  .week-chart__bar[data-empty='true'] {
+    @apply bg-(--surface-muted);
+  }
+
+  .week-chart__bar[data-today='true'] {
+    @apply bg-(--indigo);
+  }
+
+  .week-chart__count[data-today='true'],
+  .week-chart__label[data-today='true'] {
+    @apply font-bold text-(--ink);
+  }
+}
+
+/* Four statistics in one row once there is room. */
+@media (min-width: 1001px) {
+  .statistics-strip {
+    @apply grid-cols-4;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1000px) {
+  .home-dashboard__lower {
+    @apply grid-cols-1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activity-item {
+    transition: none;
+  }
+}

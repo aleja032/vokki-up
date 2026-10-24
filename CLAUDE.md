@@ -1,12 +1,22 @@
 # CLAUDE.md: Project Context for AI Agents
 
-This file provides guidance to Opencode when working with code in this repository.
+This file provides guidance to Claude Code when working with code in this repository.
 
 ## Project Overview
 
-This is a Next.js 15 application using React 19, TypeScript, and Tailwind CSS v4. It follows a Screaming Architecture approach with domain-driven organization at the top level, where each domain implements Atomic Design principles for component structure. The project includes Storybook for component development and uses shadcn/ui for the component library foundation and Jest with Testing Library for testing.
+Vokki Up is a mobile-first, local-first English-learning PWA for Spanish speakers (UI copy is Spanish, identifiers are English). It is a Next.js 16 application using React 19, TypeScript, and Tailwind CSS v4. It follows a Screaming Architecture approach with domain-driven organization under `src/domains`, and uses shadcn/ui for the component library foundation and Vitest for testing.
 
-**Tech Stack**: Next 15, React 19, TailwindCSS v4, shadcn/ui, TypeScript, zod, React Hook Form
+**Tech Stack (installed)**: Next 16, React 19, TailwindCSS v4, shadcn/ui, TypeScript, Vitest, zod 4, React Hook Form (+ `@hookform/resolvers`), Zustand, pnpm
+
+**Required by the rules but NOT installed yet**: nuqs. Install it before writing URL-state code.
+
+## Current State (verify before assuming)
+
+- **Tests**: Vitest, no `test` script and no config. Run `npx vitest run`. There is no `@/` alias in Vitest, so modules reached by tests use relative imports.
+- **Storybook was removed**: ignore `document-component-storybook.md`.
+- **Domains are flat** (`components/`, `data.ts`, `types.ts`); the target anatomy is in `ddd-domain-structure.md`.
+- **Boundaries**: no cross-domain imports. Shared contracts live in `src/lib`; code that composes several domains lives in `src/app` (e.g. `home-dashboard-container.tsx`). `src/lib` and `src/components` never import `src/domains`.
+- **Git Bash**: run `export MSYS_NO_PATHCONV=1` before `rg` patterns containing `@/`, or results come back falsely empty.
 
 ## General Rules
 
@@ -41,11 +51,13 @@ Before planning or implementing a feature, verify that the user has explicitly i
 **Agents in this project:**
 
 - **Business Analysis & Ideation** → `.claude/agents/business-analyst.md`
-- **Next.js 15 & App Router Architecture** → `.claude/agents/nextjs-builder.md`
+- **Next.js 16 & App Router Architecture** → `.claude/agents/nextjs-builder.md`
 - **Domain Business Logic & Entities** → `.claude/agents/domain-architect.md`
 - **UX/UI Design & Architecture** → `.claude/agents/ux-ui-designer.md`
-- **Wireframe Design** → `.claude/agents/wireframe-designer.md`
+- **shadcn/ui Component Selection** → `.claude/agents/shadcn-builder.md`
 - **Code Quality Review** → `.claude/agents/code-reviewer.md`
+- **Code Audit** → `.claude/agents/code-audit.md`
+- **Project Knowledge** → `.claude/agents/project-consultant.md`
 - **Doc Gardener** → `.claude/agents/doc-gardener.md`
 
 **How to use agents:**
@@ -79,8 +91,7 @@ Implement directly (typos, simple edits) - no session needed.
 ### Load As Needed (Use Grep for sections)
 
 - `.claude/knowledge/architecture-patterns.md` - Architecture rules
-- `.claude/knowledge/business-rules.md` - Domain rules
-- `.claude/knowledge/context-strategy.md` - Context loading strategy
+- `.claude/knowledge/business-logic.md` - Domain rules
 - `.claude/knowledge/file-structure.md` - Naming conventions
 - `.claude/knowledge/tech-stack.md` - Technologies, commands
 
@@ -127,20 +138,16 @@ Implement directly (typos, simple edits) - no session needed.
 | `text-management.md`              | `src/**/*.{ts,tsx}`         | Domain messages, no hardcoded strings                                      |
 | `styling.md`                      | `src/**/*.{ts,tsx}`         | Tailwind + `@apply`, mobile-first, no inline styles                        |
 | `project-characteristics.md`      | `src/**/*.{ts,tsx}`         | RSC-first, Zustand, nuqs, Server Actions                                   |
-| `document-component-storybook.md` | `src/**/*.{ts,tsx}`         | Storybook story structure aligned with Figma                               |
+| `document-component-storybook.md` | `src/**/*.{ts,tsx}`         | Storybook stories (Storybook removed — not applicable)                     |
 | `ddd-domain-structure.md`         | `src/domains/**/*.{ts,tsx}` | DDD domain anatomy: components, hooks, stores, actions, schemas, messages  |
 | `forms.md`                        | `src/**/*.{ts,tsx}`         | React Hook Form + Zod obligatorio, schema por archivo, hook por formulario |
 | `naming-language.md`              | `src/**/*.{ts,tsx}`         | English-only identifiers, without exceptions                               |
-
-## General instructions
-
-- Avoid read files from `.opencode/*`
 
 ## Available Skills
 
 ### Skills
 
-Canonical source: `AGENTS/` (root). `.claude/skills` and `.opencode/skills` are symlinks to it.
+Canonical source: `.agents/skills/`. `.claude/skills` entries are symlinks to it.
 
 | Skill                                | Description                                                                                  | Source                                                                                                          |
 | ------------------------------------ | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
@@ -159,7 +166,7 @@ Canonical source: `AGENTS/` (root). `.claude/skills` and `.opencode/skills` are 
 ## How Skills Work
 
 1. **Auto-detection**: Claude Code reads CLAUDE.md which contains skill triggers
-2. **Context matching**: When editing Go/TUI code, gentleman-bubbletea loads
+2. **Context matching**: When editing forms, Tailwind, or naming, the matching skill loads
 3. **Pattern application**: AI follows the exact patterns from the skill
 4. **First-time-correct**: No trial and error - skills provide exact conventions
 
@@ -172,7 +179,7 @@ Before starting work:
 - [ ] Understand my role (check `.claude/agents/{my-name}.md` if specialized agent)?
 - [ ] Know which MCP tools I have access to?
 - [ ] Will create plan in `.claude/plans/` (not implement directly)?
-- [ ] If there is information that replaces or modifies the knowledge, run the `project-consult` agent to update the files involved in `.claude/knowledge/`.
+- [ ] If there is information that replaces or modifies the knowledge, run the `project-consultant` agent to update the files involved in `.claude/knowledge/`.
 
 If any ❌, STOP and review documentation.
 

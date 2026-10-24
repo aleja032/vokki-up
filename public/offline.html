@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#4A3AC9" />
+    <title>Sin conexión · Vokki Up</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --ground: #f7f4ee;
+        --surface: #ffffff;
+        --line: #e2ddd3;
+        --ink: #1b1a2e;
+        --ink-soft: #5b5870;
+        --indigo: #4a3ac9;
+        --indigo-strong: #3a2cb0;
+        --indigo-soft: #e9e6fb;
+        --on-indigo: #ffffff;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ground: #141416;
+          --surface: #1d1d21;
+          --line: #33333a;
+          --ink: #edebe6;
+          --ink-soft: #a6a3ad;
+          --indigo: #9a91f5;
+          --indigo-strong: #b0a9fa;
+          --indigo-soft: #302d4c;
+          --on-indigo: #141416;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        display: grid;
+        min-height: 100vh;
+        margin: 0;
+        padding: 24px;
+        place-items: center;
+        background: var(--ground);
+        color: var(--ink);
+        font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        line-height: 1.5;
+      }
+
+      main {
+        display: flex;
+        width: 100%;
+        max-width: 480px;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        text-align: center;
+      }
+
+      .brand {
+        font-family: Fraunces, Georgia, 'Times New Roman', serif;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+      }
+
+      .brand em {
+        color: var(--indigo);
+      }
+
+      .art {
+        position: relative;
+        width: 168px;
+        height: 128px;
+      }
+
+      .art span {
+        position: absolute;
+        width: 120px;
+        height: 96px;
+        border-radius: 18px;
+      }
+
+      .art .back {
+        top: 14px;
+        left: 6px;
+        background: var(--indigo-soft);
+        transform: rotate(-8deg);
+      }
+
+      .art .front {
+        top: 4px;
+        left: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1.5px solid var(--line);
+        background: var(--surface);
+        color: var(--ink-soft);
+        transform: rotate(5deg);
+      }
+
+      .art svg {
+        width: 40px;
+        height: 40px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: Fraunces, Georgia, 'Times New Roman', serif;
+        font-size: 34px;
+        font-weight: 600;
+        line-height: 1.1;
+      }
+
+      p {
+        margin: 0;
+        color: var(--ink-soft);
+        font-size: 16px;
+        line-height: 1.55;
+      }
+
+      a {
+        display: flex;
+        width: 100%;
+        min-height: 52px;
+        margin-top: 8px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 24px;
+        border-radius: 14px;
+        background: var(--indigo);
+        color: var(--on-indigo);
+        font-size: 16px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      a:focus-visible {
+        outline: 3px solid var(--indigo);
+        outline-offset: 3px;
+      }
+
+      @media (min-width: 761px) {
+        h1 {
+          font-size: 44px;
+          letter-spacing: -0.8px;
+        }
+
+        p {
+          font-size: 18px;
+        }
+
+        a {
+          width: auto;
+          padding: 0 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="brand">Vokki <em>Up</em></div>
+      <div class="art" aria-hidden="true">
+        <span class="back"></span>
+        <span class="front">
+          <svg viewBox="0 0 24 24">
+            <path d="M5 12.5a10 10 0 0 1 14 0" />
+            <path d="M8.5 16a5 5 0 0 1 7 0" />
+            <path d="M2 9a15 15 0 0 1 20 0" />
+            <path d="M12 20h.01" />
+            <path d="M3 3l18 18" />
+          </svg>
+        </span>
+      </div>
+      <h1>Sin conexión</h1>
+      <p>
+        Tus tarjetas y notas siguen guardadas en tu dispositivo. Vuelve a
+        intentarlo cuando tengas internet; las páginas que ya visitaste pueden
+        seguir disponibles.
+      </p>
+      <a href="/">Intentar de nuevo</a>
+    </main>
+  </body>
+</html>

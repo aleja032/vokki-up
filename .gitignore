@@ -132,3 +132,9 @@ $RECYCLE.BIN/
 *storybook.log
 
 .atl/
+
+### Local design tooling and reference assets
+# These are development-only inputs and must not ship with the app.
+/.impeccable/
+/.agents/skills/design-taste-frontend/
+/Vokki Up — Propuesta visual.html

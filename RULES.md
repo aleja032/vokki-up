@@ -1,7 +1,7 @@
 # RULES.md — Code Culture
 
 Quick-reference card for this project's non-negotiable conventions.
-Full detail in `.claude/rules/` or `.opencode/rules/` and `.claude/knowledge/critical-constraints.md` or `.opencode/knowledge/critical-constraints.md`.
+Full detail in `.claude/rules/` and `.claude/knowledge/critical-constraints.md`.
 
 ---
 
@@ -117,4 +117,4 @@ Full detail in `.claude/rules/` or `.opencode/rules/` and `.claude/knowledge/cri
 ## Git
 
 - Conventional commits only — no AI attribution, no co-author tags
-- Full rules → `.claude/skills/commit-conventions/SKILL.md` or `.opencode/skills/commit-conventions/SKILL.md`
+- Full rules → `.claude/skills/commit-conventions/SKILL.md`

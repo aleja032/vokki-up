@@ -1,0 +1,30 @@
+'use client';
+
+import type { ReactNode } from 'react';
+import {
+  ShellSlotsProvider,
+  type ShellSessionStatus
+} from '@/components/layout/shell-slots';
+import { useAuthSession } from '../use-auth-session';
+import { AccountAction } from './account-action';
+import { ProfileSummary } from './profile-summary';
+
+export function ShellSessionBridge({ children }: { children: ReactNode }) {
+  const { session, isLoading } = useAuthSession();
+  const sessionStatus: ShellSessionStatus =
+    isLoading || session === null
+      ? 'loading'
+      : session.status === 'authenticated'
+        ? 'authenticated'
+        : 'guest';
+
+  return (
+    <ShellSlotsProvider
+      profileAction={<AccountAction />}
+      profileSummary={<ProfileSummary />}
+      sessionStatus={sessionStatus}
+    >
+      {children}
+    </ShellSlotsProvider>
+  );
+}

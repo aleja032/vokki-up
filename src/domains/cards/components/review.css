@@ -1,0 +1,542 @@
+@reference 'tailwindcss';
+
+/*
+ * Review module, mobile first (proposal artboards: Repasar tarjetas 430px and
+ * Repaso escritorio 1440px). The route is full screen, without the app shell.
+ * - up to 760px: close button + progress header, card fills the screen,
+ *   reveal and rating buttons stacked below it.
+ * - 761px and up: white header with exit pill, progress and offline notice,
+ *   centered 760px column.
+ */
+
+:root {
+  --drill-edge: #d3cdc0;
+  --drill-green-ink: #1a6b47;
+  --drill-on-indigo: #ffffff;
+  --drill-font-ipa: var(--font-ipa), 'Noto Sans', sans-serif;
+
+  --drill-noun-soft: #e9e6fb;
+  --drill-noun-ink: #3a2cb0;
+  --drill-verb-soft: #ddf2e7;
+  --drill-verb-ink: #1a6b47;
+  --drill-adjective-soft: #fcebc4;
+  --drill-adjective-ink: #7a4f00;
+  --drill-adverb-soft: #d9eef2;
+  --drill-adverb-ink: #135f6e;
+  --drill-phrase-soft: #fbe4dd;
+  --drill-phrase-ink: #a8381f;
+  --drill-gray-soft: #efebe3;
+  --drill-gray-ink: #5b5870;
+}
+
+:root[data-theme='dark'],
+:root.dark {
+  --drill-edge: #4a4a52;
+  --drill-green-ink: #67bd91;
+  --drill-on-indigo: #141416;
+
+  --drill-noun-soft: #302d4c;
+  --drill-noun-ink: #b0a9fa;
+  --drill-verb-soft: #1e3429;
+  --drill-verb-ink: #67bd91;
+  --drill-adjective-soft: #3b3020;
+  --drill-adjective-ink: #e3b25a;
+  --drill-adverb-soft: #1d3439;
+  --drill-adverb-ink: #72bac6;
+  --drill-phrase-soft: #422821;
+  --drill-phrase-ink: #f09a7e;
+  --drill-gray-soft: #26262b;
+  --drill-gray-ink: #a6a3ad;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --drill-edge: #4a4a52;
+    --drill-green-ink: #67bd91;
+    --drill-on-indigo: #141416;
+
+    --drill-noun-soft: #302d4c;
+    --drill-noun-ink: #b0a9fa;
+    --drill-verb-soft: #1e3429;
+    --drill-verb-ink: #67bd91;
+    --drill-adjective-soft: #3b3020;
+    --drill-adjective-ink: #e3b25a;
+    --drill-adverb-soft: #1d3439;
+    --drill-adverb-ink: #72bac6;
+    --drill-phrase-soft: #422821;
+    --drill-phrase-ink: #f09a7e;
+    --drill-gray-soft: #26262b;
+    --drill-gray-ink: #a6a3ad;
+  }
+}
+
+/* Rating tones shared by the rating buttons and the summary chips. */
+
+[class*='drill-'][data-tone='again'] {
+  --tone-soft: var(--red-soft);
+  --tone-ink: var(--red-ink);
+}
+
+[class*='drill-'][data-tone='good'] {
+  --tone-soft: var(--indigo-soft);
+  --tone-ink: var(--indigo-strong);
+}
+
+[class*='drill-'][data-tone='easy'] {
+  --tone-soft: var(--green-soft);
+  --tone-ink: var(--drill-green-ink);
+}
+
+/* Part-of-speech chip colors. */
+
+.drill-card__category {
+  --cat-soft: var(--drill-gray-soft);
+  --cat-ink: var(--drill-gray-ink);
+}
+
+.drill-card__category[data-category='Sustantivo'] {
+  --cat-soft: var(--drill-noun-soft);
+  --cat-ink: var(--drill-noun-ink);
+}
+
+.drill-card__category[data-category='Verbo'] {
+  --cat-soft: var(--drill-verb-soft);
+  --cat-ink: var(--drill-verb-ink);
+}
+
+.drill-card__category[data-category='Adjetivo'] {
+  --cat-soft: var(--drill-adjective-soft);
+  --cat-ink: var(--drill-adjective-ink);
+}
+
+.drill-card__category[data-category='Adverbio'] {
+  --cat-soft: var(--drill-adverb-soft);
+  --cat-ink: var(--drill-adverb-ink);
+}
+
+.drill-card__category[data-category='Expresión'] {
+  --cat-soft: var(--drill-phrase-soft);
+  --cat-ink: var(--drill-phrase-ink);
+}
+
+/* Page */
+
+.drill-page {
+  @apply flex min-h-dvh flex-col gap-6 bg-(--ground) px-6 pt-6 pb-8 text-(--ink);
+
+  line-height: normal;
+}
+
+.drill-loading {
+  @apply m-0 text-[13px] text-(--ink-soft);
+}
+
+.drill-icon {
+  @apply shrink-0 fill-none stroke-current;
+
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.drill-main {
+  @apply flex min-h-0 flex-1 flex-col gap-6;
+}
+
+/* Header */
+
+.drill-header {
+  @apply flex items-center gap-3;
+}
+
+.drill-header__close {
+  @apply inline-flex size-[46px] shrink-0 items-center justify-center rounded-[14px] border border-(--line) bg-(--surface) text-(--ink);
+}
+
+.drill-header__exit {
+  @apply hidden;
+}
+
+.drill-header__progress {
+  @apply flex min-w-0 flex-1 items-center gap-3;
+}
+
+.drill-header__track {
+  @apply h-2 flex-1 overflow-hidden rounded-full bg-(--line);
+}
+
+.drill-header__fill {
+  @apply h-full rounded-full bg-(--amber);
+}
+
+.drill-header__count {
+  @apply min-w-11 text-right text-sm font-bold;
+}
+
+.drill-header__offline {
+  @apply hidden;
+}
+
+/* Card */
+
+.drill-card {
+  @apply flex min-h-0 flex-1 flex-col gap-[18px] rounded-[28px] border border-(--line) bg-(--surface) p-6;
+}
+
+.drill-card__meta {
+  @apply flex items-center justify-between;
+}
+
+.drill-card__category {
+  @apply rounded-full bg-(--cat-soft) px-3 py-1.5 text-[13px] font-semibold text-(--cat-ink);
+}
+
+.drill-card__tag {
+  @apply text-[13px] text-(--ink-soft);
+}
+
+.drill-card__term {
+  @apply mt-5 flex flex-col gap-2;
+}
+
+.drill-card__word {
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[42px] leading-[1.05] font-semibold tracking-[-0.5px];
+}
+
+.drill-card__pronunciation {
+  @apply flex items-center gap-2.5;
+}
+
+.drill-card__ipa {
+  @apply font-[family-name:var(--drill-font-ipa)] text-lg text-(--ink-soft);
+}
+
+.drill-card__listen {
+  @apply flex size-11 items-center justify-center rounded-full border-0 bg-(--indigo-soft) p-0 text-(--indigo) disabled:cursor-not-allowed;
+}
+
+.drill-card__answer {
+  @apply flex flex-col gap-4 border-t border-t-(--rule) pt-[18px];
+}
+
+.drill-card__block {
+  @apply flex flex-col gap-1;
+}
+
+.drill-card__label {
+  @apply text-xs tracking-[1.5px] text-(--ink-soft) uppercase;
+}
+
+.drill-card__meaning {
+  @apply text-lg leading-[1.4] font-semibold;
+}
+
+.drill-card__example {
+  @apply flex flex-col gap-1 rounded-2xl bg-(--ground) px-4 py-3.5;
+}
+
+.drill-card__sentence {
+  @apply text-base leading-normal italic;
+}
+
+.drill-card__sentence strong {
+  @apply font-bold text-(--indigo) not-italic;
+}
+
+.drill-card__hint {
+  @apply flex min-h-[120px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-[20px] border-[1.5px] border-dashed border-(--drill-edge) bg-(--ground) p-0 text-[15px] font-medium text-(--ink-soft);
+}
+
+/* Reveal action */
+
+.drill-reveal {
+  @apply flex flex-col items-stretch gap-3;
+}
+
+.drill-reveal__action {
+  @apply h-14 rounded-2xl border-0 bg-(--indigo) px-6 text-base font-bold text-(--drill-on-indigo);
+}
+
+.drill-reveal__shortcut {
+  @apply hidden;
+}
+
+/* Ratings */
+
+.drill-ratings {
+  @apply flex flex-col gap-2;
+}
+
+.drill-ratings__prompt {
+  @apply text-center text-[13px] text-(--ink-soft);
+}
+
+.drill-ratings__grid {
+  @apply grid grid-cols-3 gap-2.5;
+}
+
+.drill-rating {
+  @apply flex h-16 flex-col items-center justify-center gap-0.5 rounded-2xl border-0 bg-(--tone-soft) p-0 text-(--tone-ink);
+}
+
+.drill-rating__label {
+  @apply text-base font-bold;
+}
+
+.drill-rating__hint {
+  @apply text-xs;
+}
+
+.drill-rating__key {
+  @apply hidden;
+}
+
+/* Session summary and empty state */
+
+.drill-done {
+  @apply flex flex-1 flex-col gap-6;
+}
+
+.drill-done__body {
+  @apply flex flex-1 flex-col items-center justify-center gap-4 px-3 text-center;
+}
+
+.drill-done__icon {
+  @apply flex size-22 items-center justify-center rounded-[28px] bg-(--green-soft) text-(--drill-green-ink);
+}
+
+.drill-done__icon svg {
+  @apply size-11;
+}
+
+.drill-done__title {
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[32px] font-semibold;
+}
+
+.drill-done__text {
+  @apply m-0 text-[15px] leading-normal text-(--ink-soft);
+}
+
+.drill-done__text strong {
+  @apply font-bold text-(--ink);
+}
+
+.drill-done__chips {
+  @apply mt-2 flex gap-2;
+}
+
+.drill-done__chip {
+  @apply rounded-full bg-(--tone-soft) px-3 py-1.5 text-[13px] font-semibold text-(--tone-ink);
+}
+
+.drill-done__actions {
+  @apply flex flex-col-reverse gap-3 pt-2;
+}
+
+.drill-done__primary {
+  @apply flex h-[52px] items-center justify-center rounded-[14px] bg-(--indigo) px-6 text-base font-bold text-(--drill-on-indigo);
+}
+
+.drill-done__repeat {
+  @apply h-12 cursor-pointer rounded-[14px] border-[1.5px] border-(--drill-edge) bg-transparent px-5 text-[15px] font-semibold text-(--ink);
+}
+
+.drill-done__note {
+  @apply hidden;
+}
+
+/* Desktop and tablet */
+
+@media (min-width: 761px) {
+  .drill-page {
+    @apply gap-0 p-0;
+  }
+
+  .drill-header {
+    @apply flex-wrap gap-5 border-b border-b-(--line) bg-(--surface) px-[clamp(20px,4vw,56px)] py-6;
+  }
+
+  .drill-header__close {
+    @apply h-[46px] w-auto gap-2 rounded-xl border-[1.5px] px-4 text-sm font-semibold;
+  }
+
+  .drill-header__exit {
+    @apply inline;
+  }
+
+  .drill-header__progress {
+    @apply flex-[1_1_240px] gap-4;
+  }
+
+  .drill-header__track {
+    @apply h-2.5 bg-(--rule);
+  }
+
+  .drill-header__count {
+    @apply min-w-0 text-[15px] whitespace-nowrap;
+  }
+
+  .drill-header__offline {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-(--surface-muted) px-3 py-1.5 text-[13px] font-medium text-(--ink-soft);
+  }
+
+  .drill-main {
+    @apply mx-auto w-full max-w-[760px] gap-7 px-5 pt-12 pb-16;
+  }
+
+  .drill-card {
+    @apply min-h-[380px] flex-none gap-7 rounded-[32px] p-[clamp(28px,5vw,48px)];
+  }
+
+  .drill-card__tag {
+    @apply text-sm;
+  }
+
+  .drill-card__category {
+    @apply px-3.5 py-[7px];
+  }
+
+  .drill-card__term {
+    @apply mt-0 items-center gap-3 py-2 text-center;
+  }
+
+  .drill-card__word {
+    @apply text-[clamp(40px,6vw,60px)] tracking-[-1px];
+  }
+
+  .drill-card__pronunciation {
+    @apply gap-3;
+  }
+
+  .drill-card__ipa {
+    @apply text-xl;
+  }
+
+  .drill-card__listen {
+    @apply size-12;
+  }
+
+  .drill-card__listen svg {
+    @apply size-[22px];
+  }
+
+  .drill-card__answer {
+    @apply gap-[18px] pt-6;
+  }
+
+  .drill-card__block {
+    @apply gap-1.5;
+  }
+
+  .drill-card__meaning {
+    @apply text-[21px];
+  }
+
+  .drill-card__example {
+    @apply gap-1.5 rounded-[18px] px-5 py-[18px];
+  }
+
+  .drill-card__sentence {
+    @apply text-lg;
+  }
+
+  .drill-card__hint {
+    @apply hidden;
+  }
+
+  .drill-reveal {
+    @apply items-center;
+  }
+
+  .drill-reveal__action {
+    @apply h-[58px] w-full max-w-[420px];
+  }
+
+  .drill-reveal__shortcut {
+    @apply block text-[13px] text-(--ink-soft);
+  }
+
+  .drill-reveal__shortcut kbd {
+    @apply rounded-md border border-(--drill-edge) bg-(--surface) px-2 py-0.5 font-[inherit] text-xs;
+  }
+
+  .drill-ratings {
+    @apply gap-3.5;
+  }
+
+  .drill-ratings__prompt {
+    @apply text-[15px];
+  }
+
+  .drill-ratings__grid {
+    @apply gap-3.5;
+  }
+
+  .drill-rating {
+    @apply h-[84px] gap-1 rounded-[18px] px-3;
+  }
+
+  .drill-rating__label {
+    @apply text-[17px];
+  }
+
+  .drill-rating__hint {
+    @apply text-[13px];
+  }
+
+  .drill-rating__key {
+    @apply inline;
+  }
+
+  .drill-done {
+    @apply flex-none items-center gap-5 rounded-[32px] border border-(--line) bg-(--surface) p-[clamp(28px,5vw,56px)] text-center;
+  }
+
+  .drill-done__body {
+    @apply contents;
+  }
+
+  .drill-done__icon {
+    @apply size-24 rounded-[30px];
+  }
+
+  .drill-done__icon svg {
+    @apply size-12;
+  }
+
+  .drill-done__title {
+    @apply text-[40px];
+  }
+
+  .drill-done__text {
+    @apply max-w-[440px] text-[17px];
+  }
+
+  .drill-done__chips {
+    @apply mt-0 flex-wrap justify-center gap-2.5;
+  }
+
+  .drill-done__chip {
+    @apply px-3.5 py-2 text-sm;
+  }
+
+  .drill-done__actions {
+    @apply mt-2 flex-row flex-wrap justify-center pt-0;
+  }
+
+  .drill-done__primary {
+    @apply inline-flex px-7 text-[15px];
+  }
+
+  .drill-done__repeat {
+    @apply h-[52px] bg-(--surface) px-6;
+  }
+
+  .drill-done__repeat-suffix {
+    @apply hidden;
+  }
+
+  .drill-done__note {
+    @apply m-0 block text-[13px] text-(--ink-soft);
+  }
+}
