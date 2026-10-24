@@ -18,11 +18,13 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     'system',
     isAppTheme
   );
-  const [language, setLanguage] = useTrackedSetting(
+  const [language, setLanguage, isLanguageLoaded] = useTrackedSetting(
     'settings/language',
     'Español',
     isAppLanguage
   );
+  const [draftLanguage, setDraftLanguage] = useState<AppLanguage>('Español');
+  const hasInitializedLanguageDraft = useRef(false);
   const [level, setLevel] = useTrackedSetting(
     'settings/level',
     'B1',
@@ -125,6 +127,12 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     else document.documentElement.dataset.theme = theme;
   }, [isThemeLoaded, theme]);
 
+  useEffect(() => {
+    if (!isLanguageLoaded || hasInitializedLanguageDraft.current) return;
+    hasInitializedLanguageDraft.current = true;
+    setDraftLanguage(language);
+  }, [isLanguageLoaded, language]);
+
   function markDirty<T>(setter: (value: SetStateAction<T>) => void) {
     return (value: T) => {
       setter(value);
@@ -142,7 +150,8 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
   }
 
   function saveChanges() {
-    // Setting hooks persist immediately; this button confirms the current local state.
+    setLanguage(draftLanguage);
+    setAppLanguage(draftLanguage);
     setIsSaved(true);
   }
 
@@ -207,7 +216,7 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     activeTab,
     setActiveTab,
     theme,
-    language,
+    language: draftLanguage,
     level,
     dailyGoal,
     displayName,
@@ -224,8 +233,8 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     providerOptions,
     changeTheme: markDirty(setTheme),
     changeLanguage: (nextLanguage: AppLanguage) => {
-      markDirty(setLanguage)(nextLanguage);
-      setAppLanguage(nextLanguage);
+      setDraftLanguage(nextLanguage);
+      setIsSaved(false);
     },
     changeLevel: markDirty(setLevel),
     changeDailyGoal: markDirty(setDailyGoal),
