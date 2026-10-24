@@ -50,4 +50,4 @@ Implemented the reusable locale proxy and global provider. Existing message cata
 - `pnpm exec tsc --noEmit` — passed.
 - `pnpm lint` — passed.
 - `pnpm build` — passed.
-- Work-unit commit: `0727349 feat(i18n): add app-wide English localization`.
+- Work-unit commit: `6840165 feat(i18n): add app-wide English localization`.
