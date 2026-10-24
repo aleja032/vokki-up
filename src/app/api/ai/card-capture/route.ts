@@ -1,4 +1,4 @@
-import { getAiCapabilityProvider } from '@/domains/ai/server';
+import { getCardCaptureProvider } from '@/domains/ai/server';
 import { AiBoundaryError, type AiErrorResponse } from '@/domains/ai/types';
 import { validateCardCaptureRequest } from '@/domains/ai/validation';
 
@@ -6,7 +6,7 @@ export async function POST(request: Request): Promise<Response> {
   try {
     const body: unknown = await request.json();
     const input = validateCardCaptureRequest(body);
-    const provider = getAiCapabilityProvider();
+    const provider = getCardCaptureProvider(input.selection);
     const result = await provider.captureCards(input.input);
     return Response.json(result, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {

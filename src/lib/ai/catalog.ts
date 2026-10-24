@@ -3,7 +3,7 @@ export const AI_PROVIDER_CATALOG = [
     id: 'gemini',
     label: 'Gemini',
     description: 'Modelos Gemini',
-    models: ['gemini-2.5-flash', 'gemini-2.5-pro']
+    models: ['gemini-3.5-flash-lite', 'gemini-2.5-flash', 'gemini-2.5-pro']
   },
   {
     id: 'openai',

@@ -69,7 +69,15 @@ export function validateCardCaptureRequest(value: unknown): CardCaptureRequest {
 
   if (value.input.kind === 'text') {
     const text = value.input.text;
-    if (typeof text !== 'string' || !text.trim() || text.length > 5000)
+    if (
+      typeof text !== 'string' ||
+      !text.trim() ||
+      text.length > 5000 ||
+      text
+        .trim()
+        .split(/[,;\n]+/)
+        .filter(term => term.trim().length > 0).length > 20
+    )
       throw invalidRequest();
     return { selection, input: { kind: 'text', text: text.trim() } };
   }
@@ -80,7 +88,8 @@ export function validateCardCaptureRequest(value: unknown): CardCaptureRequest {
       (mimeType !== 'image/jpeg' && mimeType !== 'image/png') ||
       typeof base64 !== 'string' ||
       !base64.trim() ||
-      base64.length > 2_800_000
+      !/^[A-Za-z0-9+/]+={0,2}$/.test(base64) ||
+      base64.length > 14_000_000
     ) {
       throw invalidRequest();
     }

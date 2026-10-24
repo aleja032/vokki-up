@@ -13,18 +13,33 @@ export type CardCaptureRequest = {
 
 export type CardCandidate = {
   word: string;
+  original?: string;
   meaning: string;
   phonetics: string;
   example: string;
   partOfSpeech: string;
-  relatedWords: [string, string];
-  fieldNotes: Partial<Record<keyof Omit<CardCandidate, 'fieldNotes'>, string>>;
+  relatedWords: string[];
 };
 
 export type CardCaptureResult = {
-  mock: true;
+  mock?: true;
   candidates: CardCandidate[];
-  notice: string;
+  notice?: string;
+};
+
+export const CAPTURE_PROPOSAL_STATUSES = [
+  'pending',
+  'accepted',
+  'rejected'
+] as const;
+export type CaptureProposalStatus = (typeof CAPTURE_PROPOSAL_STATUSES)[number];
+
+export type CaptureProposal = CardCandidate & {
+  id: string;
+  source: 'typed' | 'image';
+  original: string;
+  groupId: string;
+  status: CaptureProposalStatus;
 };
 
 export type WritingFeedbackRequest = {

@@ -1,11 +1,15 @@
 import { DEFAULT_AI_SELECTION, type AiSelection } from '@/lib/ai/catalog';
-import { mockAiProvider } from './mock-provider';
 import { AiBoundaryError, type AiCapabilityProvider } from './types';
+import { mockAiProvider } from './mock-provider';
 import { validateAiSelection } from './validation';
+import {
+  createGeminiCardCaptureProvider,
+  resolveGeminiSelection
+} from './gemini-card-capture-provider';
 
-// Server entry point: do not import this module from client components.
 export function resolveAiSelection(value: unknown): AiSelection {
-  return validateAiSelection(value ?? DEFAULT_AI_SELECTION);
+  if (!value) return DEFAULT_AI_SELECTION;
+  return validateAiSelection(value);
 }
 
 export function getAiCapabilityProvider(): AiCapabilityProvider {
@@ -17,4 +21,22 @@ export function getAiCapabilityProvider(): AiCapabilityProvider {
     );
   }
   return mockAiProvider;
+}
+
+export function getCardCaptureProvider(
+  requestedSelection: AiSelection
+): ReturnType<typeof createGeminiCardCaptureProvider> {
+  const selection = resolveGeminiSelection(requestedSelection);
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
+  if (!apiKey) {
+    throw new AiBoundaryError(
+      'CAPABILITY_UNAVAILABLE',
+      'Card capture is not configured. Add GEMINI_API_KEY on the server, then try again.',
+      503
+    );
+  }
+  return createGeminiCardCaptureProvider({
+    apiKey,
+    model: selection.model
+  });
 }

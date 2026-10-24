@@ -27,17 +27,7 @@ export const mockAiProvider: AiCapabilityProvider = {
           phonetics: '[phonetics not generated]',
           example: '[Mock example — replace with a natural sentence]',
           partOfSpeech: '[select a part of speech]',
-          relatedWords: ['[related word 1]', '[related word 2]'],
-          fieldNotes: {
-            meaning: 'No AI provider is connected; verify this field manually.',
-            phonetics:
-              'No AI provider is connected; enter pronunciation manually.',
-            example: 'No AI provider is connected; write an example manually.',
-            partOfSpeech:
-              'No AI provider is connected; select a part of speech.',
-            relatedWords:
-              'No AI provider is connected; choose related words manually.'
-          }
+          relatedWords: ['[related word 1]', '[related word 2]']
         }
       ],
       notice: 'Mock preview only. Review every field before creating a card.'
