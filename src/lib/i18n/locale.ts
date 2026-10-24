@@ -310,7 +310,130 @@ const translations: Record<string, string> = {
   'Revisar notas': 'Review notes',
   'disponible offline': 'available offline',
   'reto de conversación': 'conversation challenge',
-  'favoritas sin leer': 'unread favorites'
+  'favoritas sin leer': 'unread favorites',
+  '1 · Tu entrada': '1 · Your input',
+  '2 · Revisa las propuestas': '2 · Review suggestions',
+  '3 · Guardar': '3 · Save',
+  '1 día': '1 day',
+  '1 imagen': '1 image',
+  '1 reto de conversación': '1 conversation challenge',
+  '2 favoritas sin leer': '2 unread favorites',
+  '¿Descartar todas las propuestas?': 'Discard all suggestions?',
+  'Acepta al menos una': 'Accept at least one',
+  'Acerca la cámara hasta que el texto ocupe la pantalla.':
+    'Move the camera closer until the text fills the screen.',
+  'Agrega una API key para activar las funciones con IA.':
+    'Add an API key to enable AI features.',
+  Ámbar: 'Amber',
+  'Análisis de claridad, vocabulario y gramática':
+    'Clarity, vocabulary, and grammar analysis',
+  'Borrar todos mis datos': 'Delete all my data',
+  'Cancelar generación automática': 'Cancel automatic generation',
+  'Cerrar sesión de repaso': 'Close review session',
+  'Claridad, vocabulario y gramática': 'Clarity, vocabulary, and grammar',
+  'Corrección, significados y ejemplos': 'Corrections, meanings, and examples',
+  'Corrige los campos marcados en rojo para guardar la tarjeta.':
+    'Fix the fields marked in red to save the card.',
+  'Crear grupo': 'Create group',
+  'Crear manualmente': 'Create manually',
+  Descripción: 'Description',
+  'Ej. Laboral, Tecnología…': 'E.g. Work, Technology…',
+  'El ejemplo supera los 160 caracteres.':
+    'The example exceeds 160 characters.',
+  'El servicio de IA tardó demasiado en responder. No es un problema de tu conexión y tus palabras siguen guardadas.':
+    'The AI service took too long to respond. It is not a connection problem, and your words are still saved.',
+  'Elige un color válido.': 'Choose a valid color.',
+  'Elige una categoría válida.': 'Choose a valid category.',
+  'Email todavía no está configurado para enviar recordatorios.':
+    'Email is not configured to send reminders yet.',
+  'En espera · 3 palabras y 1 imagen': 'Queued · 3 words and 1 image',
+  'Escribe palabras, sube una imagen o ambas.':
+    'Write words, upload an image, or both.',
+  'Escribe tu contraseña.': 'Enter your password.',
+  'Escribe tu correo electrónico.': 'Enter your email.',
+  'Escribe un nombre para el grupo.': 'Enter a name for the group.',
+  'Escribe el significado en español.': 'Enter the meaning in Spanish.',
+  'Escribe la palabra o frase en inglés.': 'Enter the English word or phrase.',
+  'JPG o PNG · máximo 10 MB': 'JPG or PNG · maximum 10 MB',
+  'La API key no es válida (401).': 'The API key is invalid (401).',
+  'La foto está borrosa o el texto es muy pequeño. Tus 3 palabras escritas siguen intactas.':
+    'The photo is blurry or the text is too small. Your 3 typed words are still intact.',
+  'La IA corrige la ortografía y prepara significado, pronunciación, categoría, un ejemplo y 2 palabras relacionadas. ':
+    'AI corrects spelling and prepares meaning, pronunciation, category, an example, and 2 related words. ',
+  'La última prueba falló. Las funciones con IA están en pausa.':
+    'The last test failed. AI features are paused.',
+  'Listo. Generaremos las propuestas al reconectar y te avisaremos para que las revises.':
+    'Ready. We will generate suggestions when you reconnect and let you know when they are ready to review.',
+  'Mantén el teléfono quieto y paralelo a la hoja.':
+    'Keep the phone still and parallel to the page.',
+  'No encontramos palabras en esta imagen':
+    'We did not find words in this image',
+  'No pudimos generar el ejemplo ni las palabras relacionadas.':
+    'We could not generate the example or related words.',
+  'No pudimos generar el ejemplo ni las relacionadas.':
+    'We could not generate the example or related words.',
+  'No se creará ninguna tarjeta.': 'No card will be created.',
+  'No se creará ninguna tarjeta. Tus palabras originales siguen en el paso 1.':
+    'No card will be created. Your original words remain in step 1.',
+  'No se creó ninguna tarjeta.': 'No card was created.',
+  'No se pudieron guardar los ajustes del recordatorio. Inténtalo de nuevo.':
+    'Reminder settings could not be saved. Try again.',
+  'No se pudo completar la prueba. Inténtalo de nuevo.':
+    'The test could not be completed. Try again.',
+  'No se pudo probar la conexión.': 'The connection could not be tested.',
+  'Otros avisos al subir una imagen': 'Other notices when uploading an image',
+  'Para qué usarás este grupo': 'What you will use this group for',
+  'Para una mejor lectura': 'For better reading',
+  'pendiente no se guardará': 'pending will not be saved',
+  'pendientes no se guardarán': 'pending will not be saved',
+  Palabras: 'Words',
+  'Palabras dominadas': 'Mastered words',
+  'palabras vistas': 'words seen',
+  'Prueba la conexión antes de guardar.': 'Test the connection before saving.',
+  'Pronunciación escrita; audio no disponible en esta versión':
+    'Written pronunciation; audio is not available in this version',
+  'Puedes cambiar de proveedor cuando quieras.':
+    'You can change providers whenever you want.',
+  'Recomendado para empezar': 'Recommended to start',
+  'Revisa 2 detalles de gramática.': 'Review 2 grammar details.',
+  'Revisa 3 detalles de gramática.': 'Review 3 grammar details.',
+  'Revísalas antes de guardar. Nada se ha creado todavía.':
+    'Review them before saving. Nothing has been created yet.',
+  'Separa con comas · máximo 20': 'Separate with commas · maximum 20',
+  'Series y películas': 'Movies and series',
+  'Sin conexión con la IA': 'AI disconnected',
+  'Sin conexión, el repaso y las notas siguen funcionando.':
+    'Without a connection, reviews and notes still work.',
+  'Sin iniciar sesión, la API key solo se conserva temporalmente en esta pestaña y no se guarda.':
+    'When signed out, the API key is kept temporarily in this tab and is not saved.',
+  'Solo para este dispositivo; inicia sesión para recibir emails.':
+    'Only for this device; sign in to receive emails.',
+  'Solo se guarda en este dispositivo; no se envían emails.':
+    'Saved only on this device; no emails are sent.',
+  Sáb: 'Sat',
+  Mié: 'Wed',
+  'Toma la foto con buena luz y sin sombras.':
+    'Take the photo in good light without shadows.',
+  'Tu contraseña': 'Your password',
+  'Tu contraseña debe tener al menos 8 caracteres.':
+    'Your password must be at least 8 characters.',
+  'Tu progreso': 'Your progress',
+  'Usa como máximo 30 caracteres.': 'Use at most 30 characters.',
+  'Usas tu propia API key: el costo lo cobra tu proveedor.':
+    'You use your own API key: your provider charges the cost.',
+  'Ver la tarjeta existente': 'View existing card',
+  Volver: 'Back',
+  'Volver a agregar palabras': 'Back to add words',
+  'Volver a generar': 'Generate again',
+  'Todos los días cerca de las 20:00 UTC.': 'Every day around 20:00 UTC.',
+  'Tarjetas repasadas por día': 'Cards reviewed per day',
+  'días seguidos': 'consecutive days',
+  'Nombre del grupo': 'Group name',
+  'Ideas:': 'Ideas:',
+  Índigo: 'Indigo',
+  Verde: 'Green',
+  Turquesa: 'Teal',
+  Gris: 'Gray'
 };
 
 export function getAppLanguage(): AppLanguage {
