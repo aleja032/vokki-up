@@ -8,6 +8,7 @@ import { mapCapturedCandidatesToCards } from '@/domains/cards/persistence/captur
 import { collectionChangeBuilder } from '@/lib/sync/change-builders';
 import { useTrackedBrowserState } from '@/lib/sync/use-tracked-browser-state';
 import { requestCardCapture } from '../client';
+import { deduplicateCaptureCandidates } from '../capture-candidates';
 import type { CardCandidate, CaptureProposal } from '../types';
 
 const cardChanges = collectionChangeBuilder<VocabularyCard>('card');
@@ -90,16 +91,19 @@ export function useCardCaptureFlow() {
           result: await entry.promise
         }))
       );
-      const nextProposals = results.flatMap(({ source, result }) =>
-        result.candidates.map(candidate => ({
-          ...candidate,
-          id: crypto.randomUUID(),
-          source,
-          original: candidate.original ?? '',
-          groupId: selectedGroupId || groups[0]?.id || '',
-          status: 'pending' as const
-        }))
+      const uniqueCandidates = deduplicateCaptureCandidates(
+        results.flatMap(({ source, result }) =>
+          result.candidates.map(candidate => ({ source, candidate }))
+        )
       );
+      const nextProposals = uniqueCandidates.map(({ source, candidate }) => ({
+        ...candidate,
+        id: crypto.randomUUID(),
+        source,
+        original: candidate.original ?? '',
+        groupId: selectedGroupId || groups[0]?.id || '',
+        status: 'pending' as const
+      }));
       if (!nextProposals.length) {
         setError(
           'No clear vocabulary was found. Try clearer text or a sharper image, or create a card manually.'
