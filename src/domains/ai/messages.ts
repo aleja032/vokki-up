@@ -1,5 +1,6 @@
+import { createLocalizedMessages } from '@/lib/i18n/locale';
 // Static UI text for the AI card-capture flow (mockup screens).
-export const aiMessages = {
+export const aiMessages = createLocalizedMessages({
   frame: {
     mobileTitle: 'Nueva tarjeta',
     mobileAiTitle: 'Nueva tarjeta con IA',
@@ -161,4 +162,4 @@ export const aiMessages = {
     retry: 'Reintentar',
     createManually: 'Crear manualmente'
   }
-} as const;
+});

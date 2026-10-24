@@ -7,13 +7,15 @@ import { useAuthSession } from '@/domains/auth/use-auth-session';
 import type { AiProvider, AppTheme, SettingsTab } from '../types';
 import type { JsonValue } from '@/lib/sync/types';
 import { scalarChangeBuilder } from '@/lib/sync/change-builders';
+import { THEME_STORAGE_KEY } from '@/lib/theme/theme-init-script';
 import { useTrackedBrowserState } from '@/lib/sync/use-tracked-browser-state';
+import { setAppLanguage, type AppLanguage } from '@/lib/i18n/locale';
 
 export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
   const [activeTab, setActiveTab] = useState<SettingsTab>(initialTab);
   const [theme, setTheme, isThemeLoaded] = useTrackedSetting<AppTheme>(
-    'settings/theme',
-    'light',
+    THEME_STORAGE_KEY,
+    'system',
     isAppTheme
   );
   const [language, setLanguage] = useTrackedSetting(
@@ -221,7 +223,10 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     isSaved,
     providerOptions,
     changeTheme: markDirty(setTheme),
-    changeLanguage: markDirty(setLanguage),
+    changeLanguage: (nextLanguage: AppLanguage) => {
+      markDirty(setLanguage)(nextLanguage);
+      setAppLanguage(nextLanguage);
+    },
     changeLevel: markDirty(setLevel),
     changeDailyGoal: markDirty(setDailyGoal),
     changeDisplayName: markDirty(setDisplayName),

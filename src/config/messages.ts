@@ -1,4 +1,5 @@
-export const shellMessages = {
+import { createLocalizedMessages } from '@/lib/i18n/locale';
+export const shellMessages = createLocalizedMessages({
   profileName: 'Kiev',
   profileLevel: 'Nivel B1',
   connection: {
@@ -7,9 +8,9 @@ export const shellMessages = {
     upToDate: 'Al día',
     offline: 'Sin conexión'
   }
-} as const;
+});
 
-export const statusPageMessages = {
+export const statusPageMessages = createLocalizedMessages({
   notFound: {
     eyebrow: 'Error 404',
     title: 'Esta página no existe',
@@ -38,4 +39,4 @@ export const statusPageMessages = {
   loading: {
     label: 'Cargando…'
   }
-} as const;
+});

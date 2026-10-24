@@ -1,4 +1,5 @@
-export const notesMessages = {
+import { createLocalizedMessages } from '@/lib/i18n/locale';
+export const notesMessages = createLocalizedMessages({
   page: {
     title: 'Notas',
     mobileSubtitle: 'Tus apuntes, sin tarjetas',
@@ -56,4 +57,4 @@ export const notesMessages = {
     footerHint: 'Un espacio solo tuyo para pensar en voz alta.',
     submit: 'Guardar nota'
   }
-} as const;
+});

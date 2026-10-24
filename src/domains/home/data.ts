@@ -1,6 +1,7 @@
+import { createLocalizedMessages } from '@/lib/i18n/locale';
 import type { HomeDashboardData } from './types';
 
-export const homeDashboardData: HomeDashboardData = {
+export const homeDashboardData = createLocalizedMessages<HomeDashboardData>({
   copy: {
     greeting: '¡Hola de nuevo!',
     greetingDark: 'Buenas noches',
@@ -92,4 +93,4 @@ export const homeDashboardData: HomeDashboardData = {
       icon: 'notes'
     }
   ]
-};
+});

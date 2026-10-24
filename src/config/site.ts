@@ -1,4 +1,5 @@
-export const siteConfig = {
+import { createLocalizedMessages } from '@/lib/i18n/locale';
+export const siteConfig = createLocalizedMessages({
   name: 'Vokki Up',
   brandPrimary: 'Vokki',
   brandAccent: 'Up',
@@ -10,9 +11,9 @@ export const siteConfig = {
     { label: 'Escritura', href: '/writing', icon: 'writing' },
     { label: 'Notas', href: '/notes', icon: 'notes' }
   ] as const
-};
+});
 
-export const siteMessages = {
+export const siteMessages = createLocalizedMessages({
   navigationLabel: 'Navegación principal',
   sectionLabel: 'Principal',
   settings: 'Ajustes',
@@ -23,4 +24,4 @@ export const siteMessages = {
   logoHomeLabel: 'Vokki Up, inicio',
   mobileLogoLabel: 'Vokki Up, inicio',
   avatarInitial: 'K'
-} as const;
+});

@@ -1,4 +1,5 @@
-export const authMessages = {
+import { createLocalizedMessages } from '@/lib/i18n/locale';
+export const authMessages = createLocalizedMessages({
   login: {
     brandPrimary: 'Vokki',
     brandAccent: 'Up',
@@ -26,4 +27,4 @@ export const authMessages = {
   logout: {
     label: 'Cerrar sesión'
   }
-} as const;
+});

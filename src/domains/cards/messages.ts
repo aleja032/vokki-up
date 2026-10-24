@@ -1,8 +1,9 @@
+import { createLocalizedMessages } from '@/lib/i18n/locale';
 function pluralize(count: number, singular: string, plural: string) {
   return count === 1 ? singular : plural;
 }
 
-export const cardsMessages = {
+export const cardsMessages = createLocalizedMessages({
   overview: {
     title: 'Tarjetas',
     summaryCompact: (cards: number, groups: number, due: number) =>
@@ -188,4 +189,4 @@ export const cardsMessages = {
       action: 'Volver a mis tarjetas'
     }
   }
-} as const;
+});

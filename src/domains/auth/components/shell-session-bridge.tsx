@@ -8,6 +8,7 @@ import {
 import { useAuthSession } from '../use-auth-session';
 import { AccountAction } from './account-action';
 import { ProfileSummary } from './profile-summary';
+import { LocaleProvider } from '@/lib/i18n/locale-provider';
 
 export function ShellSessionBridge({ children }: { children: ReactNode }) {
   const { session, isLoading } = useAuthSession();
@@ -19,12 +20,14 @@ export function ShellSessionBridge({ children }: { children: ReactNode }) {
         : 'guest';
 
   return (
-    <ShellSlotsProvider
-      profileAction={<AccountAction />}
-      profileSummary={<ProfileSummary />}
-      sessionStatus={sessionStatus}
-    >
-      {children}
-    </ShellSlotsProvider>
+    <LocaleProvider>
+      <ShellSlotsProvider
+        profileAction={<AccountAction />}
+        profileSummary={<ProfileSummary />}
+        sessionStatus={sessionStatus}
+      >
+        {children}
+      </ShellSlotsProvider>
+    </LocaleProvider>
   );
 }

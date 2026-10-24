@@ -1,4 +1,5 @@
-export const cardsValidationMessages = {
+import { createLocalizedMessages } from '@/lib/i18n/locale';
+export const cardsValidationMessages = createLocalizedMessages({
   groupNameRequired: 'Escribe un nombre para el grupo.',
   groupNameTooLong: 'Usa como máximo 30 caracteres.',
   groupNameDuplicate: (name: string) => `Ya tienes un grupo llamado “${name}”.`,
@@ -8,4 +9,4 @@ export const cardsValidationMessages = {
   cardMeaningRequired: 'Escribe el significado en español.',
   cardExampleTooLong: 'El ejemplo supera los 160 caracteres.',
   cardCategoryInvalid: 'Elige una categoría válida.'
-} as const;
+});

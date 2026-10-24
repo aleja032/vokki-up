@@ -1,6 +1,7 @@
+import { createLocalizedMessages } from '@/lib/i18n/locale';
 import type { AiProvider, AppTheme } from './types';
 
-export const settingsMessages = {
+export const settingsMessages = createLocalizedMessages({
   title: 'Ajustes',
   backLabel: 'Volver al inicio',
   tabsLabel: 'Secciones de ajustes',
@@ -119,4 +120,4 @@ export const settingsMessages = {
     saved: 'Guardado en este dispositivo',
     unsaved: 'Cambios sin guardar'
   }
-} as const;
+});

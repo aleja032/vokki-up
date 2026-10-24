@@ -1,4 +1,5 @@
-export const writingMessages = {
+import { createLocalizedMessages } from '@/lib/i18n/locale';
+export const writingMessages = createLocalizedMessages({
   heading: {
     title: 'Escritura',
     subtitle: 'Elige un tema, escribe y recibe feedback cuando haya conexión.',
@@ -43,4 +44,4 @@ export const writingMessages = {
     openItem: (title: string, category: string, date: string) =>
       `Abrir ${title}, ${category}, ${date}`
   }
-} as const;
+});
