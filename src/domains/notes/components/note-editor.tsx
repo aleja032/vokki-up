@@ -1,6 +1,5 @@
 'use client';
 import { Check, FileText } from 'lucide-react';
-import { NOTE_CATEGORIES } from '../data';
 import { useNoteSubmit } from '../hooks/use-note-submit';
 import { notesMessages } from '../messages';
 import type { Note } from '../types';
@@ -9,11 +8,17 @@ import './notes.css';
 const messages = notesMessages.editor;
 
 type NoteEditorProps = {
+  categories: string[];
   note: Note;
   onChange: (note: Note) => void;
   onSave: () => void;
 };
-export function NoteEditor({ note, onChange, onSave }: NoteEditorProps) {
+export function NoteEditor({
+  categories,
+  note,
+  onChange,
+  onSave
+}: NoteEditorProps) {
   const { register, onSubmit, isSaved } = useNoteSubmit({
     note,
     onChange,
@@ -49,7 +54,7 @@ export function NoteEditor({ note, onChange, onSave }: NoteEditorProps) {
           id="note-category"
           {...register('category')}
         >
-          {NOTE_CATEGORIES.map(category => (
+          {categories.map(category => (
             <option key={category}>{category}</option>
           ))}
         </select>

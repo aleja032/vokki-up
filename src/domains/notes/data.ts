@@ -1,19 +1,40 @@
 import type { Note, NoteCategory, NoteFilter } from './types';
 
+export const DEFAULT_NOTE_CATEGORY = 'General';
+
 export const NOTE_CATEGORIES: NoteCategory[] = [
+  DEFAULT_NOTE_CATEGORY,
   'Expresiones',
   'Gramática',
   'Cultura',
   'Ideas'
 ];
 
-export const NOTE_FILTERS: NoteFilter[] = [
-  'Todas',
-  'Favoritas',
-  'Gramática',
-  'Expresiones',
-  'Cultura'
-];
+export const NOTE_FILTERS: NoteFilter[] = ['Todas', 'Favoritas'];
+
+export function renameNoteCategory(
+  notes: Note[],
+  previousCategory: string,
+  nextCategory: string
+): Note[] {
+  return notes.map(note =>
+    note.category === previousCategory
+      ? { ...note, category: nextCategory }
+      : note
+  );
+}
+
+export function reassignNoteCategory(
+  notes: Note[],
+  categoryToDelete: string,
+  fallbackCategory = DEFAULT_NOTE_CATEGORY
+): Note[] {
+  return notes.map(note =>
+    note.category === categoryToDelete
+      ? { ...note, category: fallbackCategory }
+      : note
+  );
+}
 
 export const INITIAL_NOTES: Note[] = [
   {

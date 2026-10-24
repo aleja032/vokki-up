@@ -8,7 +8,21 @@ export const notesMessages = {
     searchLabel: 'Buscar notas',
     searchPlaceholder: 'Buscar en tus notas…',
     filtersLabel: 'Filtrar notas',
-    backToList: 'Volver a Notas'
+    backToList: 'Volver a Notas',
+    categories: {
+      label: 'Administrar categorías',
+      manage: 'Administrar categorías',
+      hide: 'Ocultar categorías',
+      createLabel: 'Nueva categoría',
+      renameLabel: 'Cambiar nombre de categoría',
+      create: 'Crear',
+      save: 'Guardar',
+      cancel: 'Cancelar',
+      rename: 'Renombrar',
+      delete: 'Eliminar',
+      defaultLabel: 'Predeterminada',
+      deletionNote: 'Las notas se conservarán en General.'
+    }
   },
   list: {
     label: 'Tus notas',

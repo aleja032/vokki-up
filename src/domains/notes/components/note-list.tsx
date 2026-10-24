@@ -37,7 +37,9 @@ export function NoteList({
               onClick={() => onSelect(note.id)}
               type="button"
             >
-              <span className="note-card__title">{title}</span>
+              <span className="note-card__title" title={title}>
+                {title}
+              </span>
               <span className="note-card__preview">
                 {getNotePreview(note.body) || ' '}
               </span>
@@ -45,7 +47,9 @@ export function NoteList({
                 <span className="note-card__type" data-category={note.category}>
                   {note.category}
                 </span>
-                <time className="note-card__date">{note.updatedAt}</time>
+                <time className="note-card__date" title={note.updatedAt}>
+                  {note.updatedAt}
+                </time>
               </span>
             </button>
             <button

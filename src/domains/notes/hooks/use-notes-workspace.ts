@@ -1,12 +1,25 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { collectionChangeBuilder } from '@/lib/sync/change-builders';
+import {
+  collectionChangeBuilder,
+  scalarChangeBuilder
+} from '@/lib/sync/change-builders';
 import { useTrackedBrowserState } from '@/lib/sync/use-tracked-browser-state';
-import { INITIAL_NOTES, NOTE_CATEGORIES } from '../data';
+import {
+  DEFAULT_NOTE_CATEGORY,
+  INITIAL_NOTES,
+  NOTE_CATEGORIES,
+  reassignNoteCategory,
+  renameNoteCategory
+} from '../data';
 import type { Note, NoteFilter } from '../types';
 
 const noteChanges = collectionChangeBuilder<Note>('note');
+const categoryChanges = scalarChangeBuilder<string[]>(
+  'settings',
+  'notes/categories'
+);
 const MOBILE_QUERY = '(max-width: 760px)';
 
 export function useNotesWorkspace() {
@@ -15,6 +28,12 @@ export function useNotesWorkspace() {
     INITIAL_NOTES,
     isNoteList,
     noteChanges
+  );
+  const [categories, setCategories] = useTrackedBrowserState(
+    'notes/categories',
+    NOTE_CATEGORIES,
+    isCategoryList,
+    categoryChanges
   );
   const [selectedNoteId, setSelectedNoteId] = useState(
     INITIAL_NOTES[0]?.id ?? null
@@ -43,10 +62,13 @@ export function useNotesWorkspace() {
   }, [activeFilter, notes, searchText]);
 
   function handleCreateNote() {
+    const defaultCategory = categories.includes('Ideas')
+      ? 'Ideas'
+      : (categories[0] ?? DEFAULT_NOTE_CATEGORY);
     const note: Note = {
       id: `note-${Date.now()}`,
       title: '',
-      category: 'Ideas',
+      category: defaultCategory,
       body: '',
       updatedAt: 'Ahora'
     };
@@ -81,6 +103,32 @@ export function useNotesWorkspace() {
     );
   }
 
+  function handleCreateCategory(category: string) {
+    setCategories(current => [...current, category]);
+  }
+
+  function handleRenameCategory(
+    previousCategory: string,
+    nextCategory: string
+  ) {
+    setCategories(current =>
+      current.map(category =>
+        category === previousCategory ? nextCategory : category
+      )
+    );
+    setNotes(current =>
+      renameNoteCategory(current, previousCategory, nextCategory)
+    );
+    if (activeFilter === previousCategory) setActiveFilter(nextCategory);
+  }
+
+  function handleDeleteCategory(category: string) {
+    if (category === DEFAULT_NOTE_CATEGORY) return;
+    setCategories(current => current.filter(item => item !== category));
+    setNotes(current => reassignNoteCategory(current, category));
+    if (activeFilter === category) setActiveFilter('Todas');
+  }
+
   function handleSelectNote(noteId: string) {
     setSelectedNoteId(noteId);
     if (window.matchMedia(MOBILE_QUERY).matches) {
@@ -90,15 +138,19 @@ export function useNotesWorkspace() {
 
   return {
     activeFilter,
+    categories,
     editingNote,
     searchText,
     selectedNote,
     visibleNotes,
     handleChange,
     handleCreateNote,
+    handleCreateCategory,
+    handleDeleteCategory,
     handleSave,
     handleSelectNote,
     handleToggleFavorite,
+    handleRenameCategory,
     setActiveFilter,
     setEditingNoteId,
     setSearchText
@@ -106,7 +158,6 @@ export function useNotesWorkspace() {
 }
 
 function isNoteList(value: unknown): value is Note[] {
-  const categories = [...NOTE_CATEGORIES];
   return (
     Array.isArray(value) &&
     value.every(
@@ -118,12 +169,20 @@ function isNoteList(value: unknown): value is Note[] {
         'title' in note &&
         typeof note.title === 'string' &&
         'category' in note &&
-        categories.includes(note.category as Note['category']) &&
+        typeof note.category === 'string' &&
         'body' in note &&
         typeof note.body === 'string' &&
         'updatedAt' in note &&
         typeof note.updatedAt === 'string' &&
         (!('favorite' in note) || typeof note.favorite === 'boolean')
     )
+  );
+}
+
+function isCategoryList(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) &&
+    value.includes(DEFAULT_NOTE_CATEGORY) &&
+    value.every(category => typeof category === 'string')
   );
 }

@@ -41,7 +41,7 @@
 /* Page */
 
 .notes-page {
-  @apply relative flex w-full min-w-0 flex-col gap-5 leading-[normal] text-(--ink);
+  @apply relative flex w-full min-w-0 flex-col gap-5 pb-14 leading-[normal] text-(--ink);
 }
 
 .notes-page__header {
@@ -49,7 +49,7 @@
 }
 
 .notes-page__heading {
-  @apply flex flex-col gap-1.5;
+  @apply flex min-w-0 flex-col gap-1.5;
 }
 
 .notes-page__title {
@@ -134,6 +134,76 @@
   @apply outline-2 outline-offset-2 outline-(--indigo);
 }
 
+.notes-category-manager {
+  @apply flex flex-col gap-2;
+}
+
+.notes-category-manager__toggle,
+.notes-category-manager__link,
+.notes-category-manager__cancel {
+  @apply w-fit cursor-pointer border-0 bg-transparent p-0 text-xs font-semibold text-(--indigo);
+}
+
+.notes-category-manager__toggle {
+  @apply text-sm;
+}
+
+.notes-category-manager__toggle:focus-visible,
+.notes-category-manager__link:focus-visible,
+.notes-category-manager__cancel:focus-visible {
+  @apply rounded-sm outline-2 outline-offset-2 outline-(--indigo);
+}
+
+.notes-category-manager__panel {
+  @apply flex flex-col gap-3 rounded-[14px] border border-solid border-(--line) bg-(--surface) p-3.5;
+}
+
+.notes-category-manager__form {
+  @apply flex flex-col gap-2 text-xs font-semibold text-(--ink-soft);
+}
+
+.notes-category-manager__field {
+  @apply flex flex-wrap items-center gap-2;
+}
+
+.notes-category-manager__field input {
+  @apply h-10 min-w-0 flex-1 rounded-[10px] border border-solid border-(--line) bg-(--ground) px-3 text-sm text-(--ink);
+}
+
+.notes-category-manager__field input:focus-visible {
+  @apply outline-2 outline-offset-1 outline-(--indigo);
+}
+
+.notes-category-manager__action {
+  @apply h-10 cursor-pointer rounded-[10px] border-0 bg-(--indigo) px-3.5 text-sm font-semibold text-(--surface);
+}
+
+.notes-category-manager__hint,
+.notes-category-manager__error {
+  @apply m-0 text-xs text-(--ink-soft);
+}
+
+.notes-category-manager__error {
+  @apply font-semibold text-red-700;
+}
+
+.notes-category-manager__list {
+  @apply m-0 flex list-none flex-col gap-2 border-t border-solid border-(--line) pt-3 text-sm text-(--ink);
+}
+
+.notes-category-manager__list li,
+.notes-category-manager__actions {
+  @apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.notes-category-manager__actions {
+  @apply justify-end;
+}
+
+.notes-category-manager__default {
+  @apply text-xs text-(--ink-soft);
+}
+
 /* Note list and cards */
 
 .notes-cards {
@@ -141,11 +211,11 @@
 }
 
 .note-card {
-  @apply relative rounded-[18px] border border-solid border-(--line) bg-(--surface) text-(--ink);
+  @apply relative min-w-0 rounded-[18px] border border-solid border-(--line) bg-(--surface) text-(--ink);
 }
 
 .note-card__open {
-  @apply flex w-full cursor-pointer flex-col gap-2.5 rounded-[inherit] border-0 bg-transparent p-4.5 text-left text-(--ink);
+  @apply flex w-full min-w-0 cursor-pointer flex-col gap-2.5 rounded-[inherit] border-0 bg-transparent p-4.5 text-left text-(--ink);
 }
 
 .note-card__open:focus-visible {
@@ -153,7 +223,7 @@
 }
 
 .note-card__title {
-  @apply text-base leading-[1.3] font-bold;
+  @apply line-clamp-2 text-base leading-[1.3] font-bold wrap-anywhere;
 }
 
 .note-card[data-favorite='true'] .note-card__title {
@@ -161,15 +231,15 @@
 }
 
 .note-card__preview {
-  @apply line-clamp-2 text-sm leading-[1.45] text-(--ink-soft);
+  @apply line-clamp-2 text-sm wrap-anywhere leading-[1.45] text-(--ink-soft);
 }
 
 .note-card__meta {
-  @apply flex items-center justify-between gap-2.5;
+  @apply flex min-w-0 items-center justify-between gap-2.5;
 }
 
 .note-card__type {
-  @apply rounded-full bg-(--indigo-soft) px-3 py-1.25 text-xs font-semibold text-(--indigo-strong);
+  @apply max-w-[60%] shrink-0 truncate rounded-full bg-(--indigo-soft) px-3 py-1.25 text-xs font-semibold text-(--indigo-strong);
 }
 
 .note-card__type[data-category='Expresiones'] {
@@ -185,7 +255,7 @@
 }
 
 .note-card__date {
-  @apply text-xs whitespace-nowrap text-(--ink-soft);
+  @apply min-w-0 truncate text-xs whitespace-nowrap text-(--ink-soft);
 }
 
 .note-card__favorite {
@@ -237,11 +307,11 @@
 }
 
 .notes-form {
-  @apply flex min-h-full flex-col gap-4 rounded-[18px] border border-solid border-(--line) bg-(--surface) p-5 text-(--ink);
+  @apply flex min-h-full min-w-0 flex-col gap-4 rounded-[18px] border border-solid border-(--line) bg-(--surface) p-5 text-(--ink);
 }
 
 .notes-form__top {
-  @apply flex items-center justify-between;
+  @apply flex items-center justify-between gap-3;
 }
 
 .notes-form__icon {
@@ -257,7 +327,7 @@
 }
 
 .notes-form__title {
-  @apply w-full border-0 bg-transparent py-1.75 font-[family-name:var(--font-display),Georgia,serif] font-semibold text-(--ink);
+  @apply w-full min-w-0 border-0 bg-transparent py-1.75 font-[family-name:var(--font-display),Georgia,serif] font-semibold text-(--ink);
   font-size: clamp(24px, 3vw, 34px);
   letter-spacing: -0.6px;
   outline: 0;
@@ -269,11 +339,11 @@
 }
 
 .notes-form__meta {
-  @apply flex items-center gap-2.5 text-xs text-(--ink-soft);
+  @apply flex min-w-0 flex-wrap items-center gap-2.5 text-xs text-(--ink-soft);
 }
 
 .notes-form__category {
-  @apply h-10 cursor-pointer rounded-full border-[1.5px] border-solid border-(--line) bg-(--surface) px-3.5 text-[13px] font-semibold text-(--ink-soft);
+  @apply h-10 max-w-full min-w-0 cursor-pointer rounded-full border-[1.5px] border-solid border-(--line) bg-(--surface) pl-4 pr-10 text-[13px] font-semibold text-(--ink-soft);
 }
 
 .notes-form__body {
@@ -289,7 +359,7 @@
 }
 
 .notes-form__hint {
-  @apply text-xs text-(--ink-soft);
+  @apply min-w-0 text-xs wrap-anywhere text-(--ink-soft);
 }
 
 .notes-form__submit {
@@ -304,7 +374,7 @@
 
 @media (min-width: 761px) {
   .notes-page {
-    @apply gap-8;
+    @apply gap-8 pb-0;
   }
 
   .notes-page__header {
@@ -397,15 +467,15 @@
   }
 
   .note-detail__heading {
-    @apply flex flex-col gap-2;
+    @apply flex max-w-full min-w-0 flex-col gap-2;
   }
 
   .note-detail__title {
-    @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-[1.15] font-semibold;
+    @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-[1.15] font-semibold;
   }
 
   .note-detail__meta {
-    @apply text-sm text-(--ink-soft);
+    @apply text-sm wrap-anywhere text-(--ink-soft);
   }
 
   .note-detail__favorite {
@@ -437,11 +507,11 @@
   }
 
   .note-detail__body {
-    @apply flex max-w-170 flex-col gap-6;
+    @apply flex max-w-170 min-w-0 flex-col gap-6 wrap-anywhere;
   }
 
   .note-detail__section {
-    @apply flex flex-col gap-2.5;
+    @apply flex min-w-0 flex-col gap-2.5;
   }
 
   .note-detail__section-title {

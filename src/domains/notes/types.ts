@@ -1,4 +1,4 @@
-export type NoteCategory = 'Expresiones' | 'Gramática' | 'Cultura' | 'Ideas';
+export type NoteCategory = string;
 
 export type Note = {
   id: string;
@@ -9,4 +9,4 @@ export type Note = {
   favorite?: boolean;
 };
 
-export type NoteFilter = 'Todas' | 'Favoritas' | Exclude<NoteCategory, 'Ideas'>;
+export type NoteFilter = 'Todas' | 'Favoritas' | NoteCategory;

@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { noteSchema } from './note.schema';
+import { createNoteCategorySchema } from './note.schema';
+import { reassignNoteCategory, renameNoteCategory } from './data';
+import type { Note } from './types';
 import { notesValidationMessages } from './validation-messages';
 
 describe('noteSchema', () => {
@@ -21,18 +24,17 @@ describe('noteSchema', () => {
     if (result.success) expect(result.data).toEqual(input);
   });
 
-  it('accepts every note category', () => {
-    for (const category of ['Expresiones', 'Gramática', 'Cultura', 'Ideas']) {
-      expect(
-        noteSchema.safeParse({ title: 't', category, body: 'b' }).success
-      ).toBe(true);
-    }
+  it('accepts custom category names', () => {
+    expect(
+      noteSchema.safeParse({ title: 't', category: 'Mis ideas', body: 'b' })
+        .success
+    ).toBe(true);
   });
 
-  it('rejects an unknown category', () => {
+  it('rejects an empty category', () => {
     const result = noteSchema.safeParse({
       title: 't',
-      category: 'Otra',
+      category: '  ',
       body: 'b'
     });
 
@@ -42,5 +44,50 @@ describe('noteSchema', () => {
         notesValidationMessages.categoryInvalid
       );
     }
+  });
+
+  it('rejects blank, duplicate, and overlong category names', () => {
+    const categories = ['General', 'Ideas'];
+    expect(
+      createNoteCategorySchema(categories).safeParse({ name: ' ' }).success
+    ).toBe(false);
+    expect(
+      createNoteCategorySchema(categories).safeParse({ name: 'ideas' }).success
+    ).toBe(false);
+    expect(
+      createNoteCategorySchema(categories).safeParse({ name: 'x'.repeat(41) })
+        .success
+    ).toBe(false);
+  });
+
+  it('allows the current category name while editing', () => {
+    expect(
+      createNoteCategorySchema(['General', 'Ideas'], 'Ideas').safeParse({
+        name: 'Ideas'
+      }).success
+    ).toBe(true);
+  });
+});
+
+describe('note category updates', () => {
+  const note: Note = {
+    id: 'n1',
+    title: 'Favorite note',
+    category: 'Ideas',
+    body: 'Content',
+    updatedAt: 'Today',
+    favorite: true
+  };
+
+  it('renames a category without changing note data or favorite state', () => {
+    expect(renameNoteCategory([note], 'Ideas', 'Writing')).toEqual([
+      { ...note, category: 'Writing' }
+    ]);
+  });
+
+  it('reassigns notes to General instead of deleting them', () => {
+    expect(reassignNoteCategory([note], 'Ideas')).toEqual([
+      { ...note, category: 'General' }
+    ]);
   });
 });
