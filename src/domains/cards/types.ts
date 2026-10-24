@@ -14,6 +14,7 @@ export type VocabularyCard = {
   partOfSpeech: string;
   groupId: string;
   tags: string[];
+  relatedWords?: string[];
 };
 
 export type CardRating = 'again' | 'hard' | 'good' | 'easy';
