@@ -137,7 +137,9 @@ function AddStep({ flow }: { flow: CaptureFlow }) {
                 <AiCaptureIcon name="image" size={20} />
               </div>
               <span className="aicap-file__copy">
-                <span className="aicap-file__name">{selectedFile.name}</span>
+                <span className="aicap-file__name" title={selectedFile.name}>
+                  {selectedFile.name}
+                </span>
                 <span className="aicap-file__detail">
                   {Math.ceil(selectedFile.size / 1024)} KB · lista para analizar
                 </span>
@@ -371,7 +373,9 @@ function DynamicProposal({
               aria-label="Palabra"
             />
           ) : (
-            <span className="aicap-proposal__term">{proposal.word}</span>
+            <span className="aicap-proposal__term" title={proposal.word}>
+              {proposal.word}
+            </span>
           )}
           <span className="aicap-proposal__ipa">
             {proposal.phonetics || 'Sin fonética'}
@@ -380,6 +384,7 @@ function DynamicProposal({
         <span
           className="aicap-proposal__category"
           data-category={proposal.partOfSpeech}
+          title={proposal.partOfSpeech}
         >
           {proposal.partOfSpeech}
         </span>
@@ -425,8 +430,12 @@ function DynamicProposal({
         </>
       ) : (
         <>
-          <span className="aicap-proposal__meaning">{proposal.meaning}</span>
-          <span className="aicap-proposal__example">{proposal.example}</span>
+          <span className="aicap-proposal__meaning" title={proposal.meaning}>
+            {proposal.meaning}
+          </span>
+          <span className="aicap-proposal__example" title={proposal.example}>
+            {proposal.example}
+          </span>
           <div className="aicap-proposal__related">
             <span className="aicap-proposal__related-label">Relacionadas</span>
             {proposal.relatedWords.map(word => (
@@ -507,12 +516,17 @@ function CreatedStep({
         {cards.map(card => (
           <div className="aicap-list__row" key={card.id}>
             <span className="aicap-list__copy">
-              <span className="aicap-list__word">{card.term}</span>
-              <span className="aicap-list__meaning">{card.meaning}</span>
+              <span className="aicap-list__word" title={card.term}>
+                {card.term}
+              </span>
+              <span className="aicap-list__meaning" title={card.meaning}>
+                {card.meaning}
+              </span>
             </span>
             <span
               className="aicap-list__category"
               data-category={card.partOfSpeech}
+              title={card.partOfSpeech}
             >
               {card.partOfSpeech}
             </span>

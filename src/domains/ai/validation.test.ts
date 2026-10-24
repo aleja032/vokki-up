@@ -8,6 +8,14 @@ describe('validateAiSelection', () => {
     ).toEqual({ provider: 'gemini', model: 'gemini-2.5-flash' });
   });
 
+  it('rejects Gemini models removed from the supported catalog', () => {
+    expect(() =>
+      validateAiSelection({
+        provider: 'gemini',
+        model: 'gemini-3.5-flash-lite'
+      })
+    ).toThrow('not available for provider');
+  });
   it('rejects a model that belongs to a different provider', () => {
     expect(() =>
       validateAiSelection({ provider: 'gemini', model: 'gpt-4o-mini' })
@@ -35,7 +43,7 @@ describe('validateCardCaptureRequest guest credential handling', () => {
   it('accepts a transient key only as an optional in-memory request field', () => {
     expect(
       validateCardCaptureRequest({
-        selection: { provider: 'gemini', model: 'gemini-3.5-flash-lite' },
+        selection: { provider: 'gemini', model: 'gemini-3.1-flash-lite' },
         apiKey: 'AIzaSyVerySecret1234567890',
         input: { kind: 'text', text: 'reliable' }
       }).apiKey
@@ -44,7 +52,7 @@ describe('validateCardCaptureRequest guest credential handling', () => {
   it('rejects empty or malformed transient keys', () => {
     expect(() =>
       validateCardCaptureRequest({
-        selection: { provider: 'gemini', model: 'gemini-3.5-flash-lite' },
+        selection: { provider: 'gemini', model: 'gemini-3.1-flash-lite' },
         apiKey: 'short',
         input: { kind: 'text', text: 'reliable' }
       })

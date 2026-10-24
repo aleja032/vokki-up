@@ -49,6 +49,7 @@ Delegated direct: one read-only explorer mapped the current flow; one bounded wr
 ## Follow-up scope: authenticated provider credentials
 
 ### Objective
+
 Use the provider abstraction for Cards AI while allowing authenticated users to save their own provider API key encrypted on the server. Anonymous users may use only temporary/local AI state and must not persist credentials or cloud content.
 
 ### Constraints
@@ -58,6 +59,7 @@ Use the provider abstraction for Cards AI while allowing authenticated users to 
 - Keep anonymous Cards local-only and authenticated Cards sync-ready across devices.
 
 ### Tasks
+
 - [x] AI-05 Define provider credential schema, encryption boundary, and auth policy.
 - [x] AI-06 Add authenticated server endpoints for validate/save/delete provider credentials.
 - [x] AI-07 Make Cards AI resolve the selected user provider and model server-side; reject unauthenticated persistent requests.
@@ -75,7 +77,38 @@ Use the provider abstraction for Cards AI while allowing authenticated users to 
 Delegated direct: read-only exploration completed; one writer must implement the multi-file server/auth/persistence slice. Parent owns verification and delivery.
 
 ### Progress
+
 - Status: implementation complete locally; Supabase migration and server encryption key configuration remain pending deployment.
 - Verification: Vitest 4 files/15 tests, typecheck, lint, and production build passed.
 - Work-unit commit: aca1b9a
 - Next step: apply `supabase/migrations/20261024110000_ai_provider_credentials.sql`, configure `AI_CREDENTIAL_ENCRYPTION_KEY` in the server environment, then run an authenticated end-to-end Cards capture.
+
+## Follow-up scope: Gemini model catalog correction
+
+### Objective
+
+Replace the unavailable Gemini 3.5 Flash Lite catalog entry with Gemini 3.1 Flash Lite and make the supported 3.1 model the default while retaining both Gemini 2.5 models.
+
+### Tasks
+
+- [x] AI-10 Update the selectable Gemini catalog/default and cover supported and removed models with focused tests.
+
+### Progress
+
+- Status: implemented locally; commit and pull request are intentionally deferred.
+- Verification: the focused catalog, credential, and AI-selection tests passed (3 files, 12 tests); `pnpm exec tsc --noEmit` passed; `pnpm run lint` passed. The focused tests first failed against the old catalog as expected.
+
+## Follow-up scope: Gemini 3.1 credentials allowlist
+
+### Objective
+
+Keep the Supabase credential model constraint aligned with the corrected Gemini catalog while retaining the existing OpenAI model allowlist.
+
+### Tasks
+
+- [x] AI-11 Add a forward migration that replaces the credential model constraint with Gemini 3.1/2.5 and existing OpenAI models.
+
+### Progress
+
+- Status: migration created locally; deployment remains pending.
+- Verification: structurally checked that the migration drops the named constraint if present, recreates it with the approved Gemini and OpenAI model IDs, and does not alter other schema objects. `git diff --check` passed for the authorized paths. No remote SQL was applied.

@@ -33,10 +33,10 @@ describe('AI credential protection', () => {
     expect(
       validateCredentialInput({
         provider: 'gemini',
-        model: 'gemini-3.5-flash-lite',
+        model: 'gemini-3.1-flash-lite',
         apiKey: 'AIzaSyVerySecret1234567890'
       })
-    ).toMatchObject({ provider: 'gemini', model: 'gemini-3.5-flash-lite' });
+    ).toMatchObject({ provider: 'gemini', model: 'gemini-3.1-flash-lite' });
     expect(() =>
       validateCredentialInput({
         provider: 'gemini',
@@ -47,7 +47,7 @@ describe('AI credential protection', () => {
     expect(() =>
       validateCredentialInput({
         provider: 'gemini',
-        model: 'gemini-3.5-flash-lite',
+        model: 'gemini-3.1-flash-lite',
         apiKey: 'short'
       })
     ).toThrow();

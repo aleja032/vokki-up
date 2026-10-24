@@ -77,6 +77,59 @@ type GeminiCardCaptureProviderOptions = {
   fetchImplementation?: typeof fetch;
 };
 
+export async function testGeminiConnection({
+  apiKey,
+  model,
+  fetchImplementation = fetch
+}: GeminiCardCaptureProviderOptions): Promise<void> {
+  let response: Response;
+  try {
+    response = await fetchImplementation(
+      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey
+        },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: 'Reply with OK.' }] }],
+          generationConfig: { maxOutputTokens: 1 }
+        }),
+        cache: 'no-store',
+        signal: AbortSignal.timeout(10_000)
+      }
+    );
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'TimeoutError') {
+      throw new AiBoundaryError(
+        'CAPABILITY_UNAVAILABLE',
+        'Gemini did not respond in time. Check your connection and try again.',
+        504
+      );
+    }
+    throw new AiBoundaryError(
+      'CAPABILITY_UNAVAILABLE',
+      'Gemini could not be reached. Check your connection and try again.',
+      502
+    );
+  }
+
+  if (!response.ok) {
+    const message =
+      response.status === 401 || response.status === 403
+        ? 'Gemini rejected the API key. Check that it is valid and enabled for the selected model.'
+        : response.status === 429
+          ? 'Gemini rate limit or quota reached. Check the project quota and try again later.'
+          : `Gemini could not verify this connection (HTTP ${response.status}). Check the selected model and try again.`;
+    throw new AiBoundaryError(
+      'CAPABILITY_UNAVAILABLE',
+      message,
+      response.status === 429 ? 429 : 502
+    );
+  }
+}
+
 export function createGeminiCardCaptureProvider({
   apiKey,
   model,
