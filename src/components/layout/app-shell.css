@@ -5,7 +5,8 @@
  * - up to 760px: header with brand, connection pill and avatar + bottom navigation.
  *   The proposal sets height 76px + 1px top border (content-box) = 77px.
  * - 761px and up: sidebar rail (92px). Tablet always uses the rail.
- * - 1101px and up: expanded 240px sidebar unless the user collapsed it.
+ * - 1101px and up: expanded 272px sidebar unless the user collapsed it
+ *   (the proposal uses 240px; widened on request so it does not feel cramped).
  */
 
 .app-shell {
@@ -236,7 +237,7 @@
 /* Expanded sidebar: wide screens when not collapsed by the user. */
 @media (min-width: 1101px) {
   .app-shell {
-    @apply grid-cols-[240px_minmax(0,1fr)];
+    @apply grid-cols-[272px_minmax(0,1fr)];
   }
 
   .app-shell:has(> .app-sidebar[data-collapsed='true']) {
