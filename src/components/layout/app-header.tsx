@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { VokkiLogo } from '@/components/brand/vokki-logo';
 import { siteConfig, siteMessages } from '@/config/site';
 import { ConnectionStatus } from './connection-status';
 import { AuthenticatedOnly, ProfileActionSlot } from './shell-slots';
@@ -8,11 +9,14 @@ export function AppHeader() {
     <header className="app-header">
       <Link
         aria-label={siteMessages.mobileLogoLabel}
-        className="brand"
+        className="brand app-header__brand"
         href="/"
       >
-        <span>{siteConfig.brandPrimary}</span>{' '}
-        <span className="brand__accent">{siteConfig.brandAccent}</span>
+        <VokkiLogo className="brand__mark" size={28} />
+        <span className="brand__wordmark">
+          <span>{siteConfig.brandPrimary}</span>{' '}
+          <span className="brand__accent">{siteConfig.brandAccent}</span>
+        </span>
       </Link>
       <div className="app-header__actions">
         <AuthenticatedOnly>

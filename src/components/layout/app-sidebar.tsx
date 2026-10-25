@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { VokkiLogo } from '@/components/brand/vokki-logo';
 import { siteConfig, siteMessages } from '@/config/site';
 import { ConnectionStatus } from './connection-status';
 import { isCurrentRoute } from './is-current-route.util';
@@ -34,8 +35,11 @@ export function AppSidebar() {
           className="brand app-sidebar__brand"
           href="/"
         >
-          <span>{siteConfig.brandPrimary}</span>{' '}
-          <span className="brand__accent">{siteConfig.brandAccent}</span>
+          <VokkiLogo className="brand__mark" size={30} />
+          <span className="brand__wordmark">
+            <span>{siteConfig.brandPrimary}</span>{' '}
+            <span className="brand__accent">{siteConfig.brandAccent}</span>
+          </span>
         </Link>
         <button
           aria-expanded={!isCollapsed}

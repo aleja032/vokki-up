@@ -19,7 +19,11 @@
 /* Brand */
 
 .brand {
-  @apply font-[family-name:var(--font-display),Georgia,serif] text-[28px] leading-[normal] font-semibold tracking-[-0.5px] whitespace-nowrap text-(--ink);
+  @apply inline-flex items-center gap-2 font-[family-name:var(--font-display),Georgia,serif] text-[28px] leading-[normal] font-semibold tracking-[-0.5px] whitespace-nowrap text-(--ink);
+}
+
+.brand__mark {
+  @apply block shrink-0;
 }
 
 .brand__accent {
@@ -60,6 +64,10 @@
   @apply text-[26px];
 }
 
+.app-header__brand {
+  @apply min-w-0 gap-1.5;
+}
+
 /* 320px phones: brand + connection pill + avatar + logout only fit without truncating the pill if the actions tighten a little. */
 @media (max-width: 340px) {
   .app-header__actions {
@@ -71,7 +79,12 @@
   }
 
   .app-header .brand {
-    @apply text-[23px];
+    @apply gap-1 text-[21px];
+  }
+
+  .app-header__brand .brand__mark {
+    width: 22px;
+    height: 22px;
   }
 }
 
@@ -145,7 +158,11 @@
   }
 
   .app-sidebar__brand {
-    @apply hidden px-3;
+    @apply flex size-11 items-center justify-center p-0;
+  }
+
+  .app-sidebar__brand .brand__wordmark {
+    @apply sr-only;
   }
 
   .sidebar-toggle {
@@ -239,7 +256,28 @@
   }
 
   .app-sidebar[data-collapsed='false'] .app-sidebar__brand {
-    @apply block;
+    @apply flex h-11 w-auto justify-start gap-2 px-3;
+  }
+
+  .app-sidebar[data-collapsed='false'] .app-sidebar__brand .brand__wordmark {
+    @apply not-sr-only;
+  }
+
+  .app-sidebar[data-collapsed='true'] .app-sidebar__header {
+    @apply justify-center gap-1;
+  }
+
+  .app-sidebar[data-collapsed='true'] .app-sidebar__brand {
+    @apply size-6;
+  }
+
+  .app-sidebar[data-collapsed='true'] .app-sidebar__brand .brand__mark {
+    width: 24px;
+    height: 24px;
+  }
+
+  .app-sidebar[data-collapsed='true'] .sidebar-toggle {
+    @apply size-8;
   }
 
   .app-sidebar[data-collapsed='false'] .sidebar-nav__item {
@@ -271,20 +309,27 @@
     @apply ml-auto;
   }
 
-  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-action:has(> .signin-login-cta) {
+  .app-sidebar[data-collapsed='false']
+    .app-sidebar__profile-action:has(> .signin-login-cta) {
     @apply ml-0 flex-1;
   }
 
-  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-action .signin-login-cta {
+  .app-sidebar[data-collapsed='false']
+    .app-sidebar__profile-action
+    .signin-login-cta {
     @apply h-9 w-full flex-row gap-1.5 rounded-full px-3 py-0 text-[13px] leading-[normal] whitespace-nowrap;
   }
 
-  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-action .signin-login-cta__label {
+  .app-sidebar[data-collapsed='false']
+    .app-sidebar__profile-action
+    .signin-login-cta__label {
     @apply truncate;
   }
 
   /* Reserve the guest button width while the session loads (no layout shift). */
-  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-action .signin-logout[aria-hidden='true'] {
+  .app-sidebar[data-collapsed='false']
+    .app-sidebar__profile-action
+    .signin-logout[aria-hidden='true'] {
     @apply h-9 w-32;
   }
 }
@@ -296,5 +341,5 @@
 .bottom-navigation__item:focus-visible,
 .user-avatar:focus-visible,
 .brand:focus-visible {
-  @apply outline-3 outline-offset-3 outline-solid outline-(--focus-ring);
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
 }

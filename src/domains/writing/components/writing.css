@@ -67,7 +67,7 @@
 }
 
 .essay-heading h1 {
-  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[30px] font-semibold tracking-[-0.5px] text-(--ink);
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[30px] font-semibold tracking-[-0.5px] wrap-anywhere text-(--ink);
 }
 
 .essay-heading p {
@@ -138,11 +138,11 @@
 }
 
 .essay-prompt__change {
-  @apply inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl whitespace-nowrap border-0 bg-(--essay-prompt-button) px-4 text-[13px] font-semibold text-(--essay-prompt-ink);
+  @apply inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl border-0 bg-(--essay-prompt-button) px-4 text-[13px] font-semibold whitespace-nowrap text-(--essay-prompt-ink);
 }
 
 .essay-prompt__text {
-  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[21px] leading-[1.3] font-medium;
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[21px] leading-[1.3] font-medium wrap-anywhere;
 }
 
 .essay-prompt__emphasis {
@@ -200,6 +200,15 @@
   filter: brightness(0.96);
 }
 
+.essay-submit:disabled {
+  @apply cursor-not-allowed opacity-60;
+  filter: none;
+}
+
+.essay-submit:disabled:hover {
+  filter: none;
+}
+
 .essay-local-feedback {
   @apply m-0 text-[13px] text-(--ink-soft);
 }
@@ -208,6 +217,22 @@
 
 .essay-feedback {
   @apply flex flex-col gap-6 rounded-[22px] border border-(--line) bg-(--surface) p-6;
+}
+
+.essay-feedback--unavailable {
+  @apply min-h-64 justify-center;
+}
+
+.essay-feedback__placeholder {
+  @apply flex max-w-140 flex-col gap-2;
+}
+
+.essay-feedback__placeholder h2 {
+  @apply m-0 text-[18px] font-bold text-(--ink);
+}
+
+.essay-feedback__placeholder p {
+  @apply m-0 text-[14px] leading-[1.5] text-(--ink-soft);
 }
 
 .essay-feedback__score-row {
@@ -325,7 +350,7 @@
 }
 
 .essay-correction {
-  @apply flex min-w-0 flex-col gap-1.5 wrap-anywhere rounded-[14px] bg-(--ground) px-4 py-3.5 text-[14px];
+  @apply flex min-w-0 flex-col gap-1.5 rounded-[14px] bg-(--ground) px-4 py-3.5 text-[14px] wrap-anywhere;
 }
 
 .essay-correction p {
