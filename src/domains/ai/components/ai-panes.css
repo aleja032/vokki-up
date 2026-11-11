@@ -1,0 +1,257 @@
+@reference 'tailwindcss';
+
+/*
+ * AI input panes of the Cards add hub (image and word list) plus the
+ * created confirmation. Prefix: aipane. They fill the height the hub gives
+ * them so switching modes does not change the panel size.
+ */
+
+/* Top aligned: the action stays near the fold even when the manual panel sets a taller card. */
+.aipane {
+  @apply relative flex min-h-[420px] min-w-0 flex-col gap-5 leading-[normal];
+}
+
+.aipane__heading {
+  @apply flex min-w-0 flex-col gap-1;
+}
+
+.aipane__heading h3 {
+  @apply m-0 text-[18px] font-bold wrap-anywhere;
+}
+
+.aipane__heading p {
+  @apply m-0 text-[14px] leading-[1.45] text-(--ink-soft) wrap-anywhere;
+}
+
+.aipane__body {
+  @apply flex min-w-0 flex-col gap-2;
+}
+
+.aipane__label {
+  @apply text-[14px] font-semibold;
+}
+
+.aipane__textarea {
+  @apply h-[220px] w-full min-w-0 resize-none rounded-[14px] border-[1.5px] border-solid border-(--line) bg-(--ground) p-4 text-[15px] leading-[1.5] text-(--ink) wrap-anywhere outline-none placeholder:text-(--ink-faint) focus:border-(--indigo);
+}
+
+.aipane__meta {
+  @apply flex min-w-0 flex-wrap items-start justify-between gap-x-4 gap-y-1;
+}
+
+.aipane__note {
+  @apply min-w-0 text-[13px] leading-[1.4] text-(--ink-soft) wrap-anywhere;
+}
+
+.aipane__counter {
+  @apply shrink-0 text-[13px] font-semibold text-(--ink-soft);
+}
+
+.aipane__counter[data-invalid='true'] {
+  @apply text-(--red-ink);
+}
+
+/* Image */
+
+.aipane__dropzone {
+  @apply flex h-[240px] min-w-0 flex-col items-center justify-center gap-3 rounded-[18px] border-[1.5px] border-dashed border-(--line) bg-(--ground) p-6 text-center transition-colors;
+}
+
+.aipane__dropzone[data-dragging='true'] {
+  @apply border-(--indigo) bg-(--indigo-soft);
+}
+
+.aipane__dropzone-icon {
+  @apply flex size-14 items-center justify-center rounded-[18px] bg-(--indigo-soft) text-(--indigo);
+}
+
+.aipane__dropzone-text {
+  @apply max-w-[32ch] text-[15px] leading-[1.45] font-medium wrap-anywhere;
+}
+
+.aipane__pick {
+  @apply inline-flex h-11 cursor-pointer items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
+}
+
+.aipane__pick:focus-within,
+.aipane__pick:hover {
+  @apply border-(--indigo);
+}
+
+.aipane__file {
+  @apply flex min-w-0 items-center gap-3 rounded-[16px] border border-solid border-(--line) bg-(--ground) p-4;
+}
+
+.aipane__file-icon {
+  @apply flex size-11 shrink-0 items-center justify-center rounded-[12px] bg-(--indigo-soft) text-(--indigo);
+}
+
+.aipane__file-copy {
+  @apply flex min-w-0 flex-1 flex-col gap-0.5;
+}
+
+.aipane__file-name {
+  @apply truncate text-[15px] font-semibold;
+}
+
+.aipane__file-detail {
+  @apply text-[13px] text-(--ink-soft);
+}
+
+.aipane__file-remove {
+  @apply flex size-10 shrink-0 items-center justify-center rounded-[12px] text-(--ink-soft) hover:bg-(--surface-muted);
+}
+
+/* Groups */
+
+.aipane-groups {
+  @apply m-0 flex min-w-0 flex-col gap-2.5 border-0 p-0;
+}
+
+.aipane-groups legend {
+  @apply mb-2.5 p-0 text-[14px] font-semibold;
+}
+
+.aipane-groups__options {
+  @apply flex min-w-0 flex-wrap gap-2;
+}
+
+.aipane-groups__hint {
+  @apply text-[13px] text-(--ink-soft);
+}
+
+.aipane-chip {
+  @apply inline-flex h-10 max-w-full min-w-0 items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
+  --aipane-tone: var(--indigo);
+  --aipane-tone-soft: var(--indigo-soft);
+}
+
+.aipane-chip[data-tone='green'] {
+  --aipane-tone: var(--deck-green-strong, var(--green));
+  --aipane-tone-soft: var(--deck-green-soft, var(--green-soft));
+}
+
+.aipane-chip[data-tone='amber'] {
+  --aipane-tone: var(--deck-amber-strong, var(--indigo));
+  --aipane-tone-soft: var(--deck-amber-soft, var(--indigo-soft));
+}
+
+.aipane-chip[data-tone='teal'],
+.aipane-chip[data-tone='blue'] {
+  --aipane-tone: var(--deck-teal-strong, var(--indigo));
+  --aipane-tone-soft: var(--deck-teal-soft, var(--indigo-soft));
+}
+
+.aipane-chip[data-tone='coral'] {
+  --aipane-tone: var(--deck-coral-strong, var(--red-ink));
+  --aipane-tone-soft: var(--deck-coral-soft, var(--red-soft));
+}
+
+.aipane-chip > span:first-child {
+  @apply size-2.5 shrink-0 rounded-full bg-(--aipane-tone);
+}
+
+.aipane-chip[aria-pressed='true'] {
+  @apply border-(--aipane-tone) bg-(--aipane-tone-soft);
+}
+
+.aipane-chip__label {
+  @apply min-w-0 truncate;
+}
+
+/* Footer, alert and processing */
+
+.aipane__alert {
+  @apply m-0 rounded-[14px] bg-(--red-soft) px-4 py-3 text-[14px] leading-[1.45] text-(--red-ink) wrap-anywhere;
+}
+
+.aipane__footer {
+  @apply flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2;
+}
+
+.aipane__submit {
+  @apply inline-flex h-[52px] items-center justify-center gap-2 rounded-[14px] bg-(--indigo) px-6 text-[15px] font-bold text-(--surface) disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.aipane__processing {
+  @apply absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 rounded-[18px] bg-(--surface)/90 p-6 text-center backdrop-blur-[2px];
+}
+
+.aipane__processing strong {
+  @apply text-[16px];
+}
+
+.aipane__processing span:not(.aipane__spinner) {
+  @apply text-[14px] text-(--ink-soft);
+}
+
+.aipane__spinner {
+  @apply size-8 rounded-full border-[3px] border-solid border-(--indigo-soft) border-t-(--indigo);
+  animation: aipane-spin 0.9s linear infinite;
+}
+
+@keyframes aipane-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aipane__spinner {
+    animation-duration: 3s;
+  }
+
+  .aipane__dropzone {
+    @apply transition-none;
+  }
+}
+
+/* Created */
+
+.aipane-created {
+  @apply flex min-w-0 flex-col items-center gap-3 py-2 text-center leading-[normal];
+}
+
+.aipane-created__icon {
+  @apply flex size-16 items-center justify-center rounded-full bg-(--green-soft) text-(--green);
+}
+
+.aipane-created h3 {
+  @apply m-0 text-[22px] font-bold;
+}
+
+.aipane-created p {
+  @apply m-0 text-[14px] text-(--ink-soft);
+}
+
+.aipane-created__list {
+  @apply m-0 flex w-full max-w-[640px] list-none flex-col gap-2 p-0 text-left;
+}
+
+.aipane-created__list li {
+  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 rounded-[14px] border border-solid border-(--line) bg-(--ground) px-4 py-3;
+}
+
+.aipane-created__term {
+  @apply truncate text-[15px] font-bold;
+}
+
+.aipane-created__meaning {
+  @apply col-start-1 truncate text-[13px] text-(--ink-soft);
+}
+
+.aipane-created__category {
+  @apply col-start-2 row-span-2 row-start-1 max-w-[120px] truncate rounded-full bg-(--indigo-soft) px-3 py-1 text-[12px] font-semibold text-(--indigo-strong);
+}
+
+.aipane-created__actions {
+  @apply flex flex-wrap justify-center gap-3 pt-2;
+}
+
+.aipane-created__primary {
+  @apply inline-flex h-12 items-center rounded-[14px] bg-(--indigo) px-6 text-[15px] font-bold text-(--surface);
+}
+
+.aipane-created__secondary {
+  @apply inline-flex h-12 items-center rounded-[14px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-6 text-[15px] font-semibold text-(--ink);
+}
