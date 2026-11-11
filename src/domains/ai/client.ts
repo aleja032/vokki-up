@@ -11,6 +11,7 @@ import type {
 } from './types';
 import { validateAiSelection } from './validation';
 import { readBrowserValue } from '@/lib/storage/browser-storage';
+import { getTransientAiApiKey } from '@/lib/ai/transient-api-key';
 
 /** Error from the AI boundary that keeps the machine code next to the message. */
 export class AiRequestError extends Error {
@@ -21,13 +22,6 @@ export class AiRequestError extends Error {
     super(message);
     this.name = 'AiRequestError';
   }
-}
-
-let transientApiKey: string | null = null;
-
-/** Keeps guest credentials in this tab's memory only; never writes them to browser storage. */
-export function setTransientAiApiKey(value: string | null) {
-  transientApiKey = value?.trim() || null;
 }
 
 export function readSavedAiSelection(): AiSelection {
@@ -45,6 +39,7 @@ export function readSavedAiSelection(): AiSelection {
 export async function requestCardCapture(
   input: CardCaptureInput
 ): Promise<CardCaptureResult> {
+  const transientApiKey = getTransientAiApiKey();
   return requestCapability<CardCaptureResult>('/api/ai/card-capture', {
     selection: readSavedAiSelection(),
     ...(transientApiKey ? { apiKey: transientApiKey } : {}),

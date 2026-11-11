@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { LogIn } from 'lucide-react';
 import { getAuthSessionBoundary } from '@/lib/auth/session';
 import { authMessages } from '../messages';
-import { useAuthSession } from '../use-auth-session';
+import { useAuthSession } from '@/lib/auth/use-auth-session';
 import { LogoutButton } from './logout-button';
 import './login.css';
 

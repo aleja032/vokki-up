@@ -5,7 +5,7 @@ import {
   ShellSlotsProvider,
   type ShellSessionStatus
 } from '@/components/layout/shell-slots';
-import { useAuthSession } from '../use-auth-session';
+import { useAuthSession } from '@/lib/auth/use-auth-session';
 import { AccountAction } from './account-action';
 import { ProfileSummary } from './profile-summary';
 import { LocaleProvider } from '@/lib/i18n/locale-provider';

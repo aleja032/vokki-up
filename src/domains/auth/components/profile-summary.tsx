@@ -1,7 +1,7 @@
 'use client';
 
 import { shellMessages } from '@/config/messages';
-import { useAuthSession } from '../use-auth-session';
+import { useAuthSession } from '@/lib/auth/use-auth-session';
 
 export function ProfileSummary() {
   const { session } = useAuthSession();

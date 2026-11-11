@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAuthSessionBoundary } from '@/lib/auth/session';
-import { useAuthSession } from '../use-auth-session';
+import { useAuthSession } from '@/lib/auth/use-auth-session';
 import type { LoginInput } from '../login.schema';
 import { authMessages } from '../messages';
 import { AuthBrand } from './auth-brand';
