@@ -28,7 +28,6 @@ export const importExportMessages = createLocalizedMessages({
       phonetics: 'Pronunciación',
       example: 'Ejemplo',
       // CSV column name is part of the file format.
-      // eslint-disable-next-line camelcase
       part_of_speech: 'Tipo de palabra',
       group: 'Grupo',
       tags: 'Etiquetas'
