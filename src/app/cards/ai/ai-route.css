@@ -1,0 +1,8 @@
+@reference 'tailwindcss';
+
+/* Desktop shows nothing here: it is redirected to the Cards add hub. */
+@media (min-width: 761px) {
+  .cards-ai-route {
+    @apply hidden;
+  }
+}
