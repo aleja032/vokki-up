@@ -3,8 +3,8 @@
 import {
   useCallback,
   useEffect,
+  useReducer,
   useRef,
-  useState,
   useSyncExternalStore
 } from 'react';
 import { cardsMessages } from '../messages';
@@ -28,6 +28,31 @@ type ReviewCardScreenProps = {
   onReveal: () => void;
   onRate: (rating: CardRating) => void;
 };
+
+type SpeechAttemptState = {
+  activeAttemptId: number | null;
+  failedAttemptId: number | null;
+};
+
+type SpeechAttemptAction =
+  | { type: 'started'; attemptId: number }
+  | { type: 'failed'; attemptId: number };
+
+export const initialSpeechAttemptState: SpeechAttemptState = {
+  activeAttemptId: null,
+  failedAttemptId: null
+};
+
+export function speechAttemptReducer(
+  state: SpeechAttemptState,
+  action: SpeechAttemptAction
+): SpeechAttemptState {
+  if (action.type === 'started') {
+    return { activeAttemptId: action.attemptId, failedAttemptId: null };
+  }
+  if (state.activeAttemptId !== action.attemptId) return state;
+  return { ...state, failedAttemptId: action.attemptId };
+}
 
 function hasSpeechSynthesis(): boolean {
   try {
@@ -92,31 +117,31 @@ export function ReviewCardScreen({
     hasSpeechSynthesis,
     () => false
   );
-  const [speechFailureCardId, setSpeechFailureCardId] = useState<string | null>(
-    null
+  const [speechAttempt, dispatchSpeechAttempt] = useReducer(
+    speechAttemptReducer,
+    initialSpeechAttemptState
   );
+  const speechAttemptSequence = useRef(0);
   const lastAutoPlayCardId = useRef<string | null>(null);
   const example = card.example ? splitExample(card.example, card.term) : null;
 
-  const handleSpeechFailure = useCallback(() => {
-    setSpeechFailureCardId(card.id);
-  }, [card.id]);
+  const startSpeechAttempt = useCallback(
+    (isSpeechSupported: boolean) => {
+      const attemptId = ++speechAttemptSequence.current;
+      dispatchSpeechAttempt({ type: 'started', attemptId });
+      if (!isSpeechSupported) return;
+      speakPronunciation(card.term, card.pronunciationLocale, () =>
+        dispatchSpeechAttempt({ type: 'failed', attemptId })
+      );
+    },
+    [card.term, card.pronunciationLocale]
+  );
 
   useEffect(() => {
-    if (!isSpeechSupported || lastAutoPlayCardId.current === card.id) return;
-    lastAutoPlayCardId.current = card.id;
-    speakPronunciation(
-      card.term,
-      card.pronunciationLocale,
-      handleSpeechFailure
-    );
-  }, [
-    card.id,
-    card.term,
-    card.pronunciationLocale,
-    isSpeechSupported,
-    handleSpeechFailure
-  ]);
+    if (isSpeechSupported && lastAutoPlayCardId.current === card.id) return;
+    if (isSpeechSupported) lastAutoPlayCardId.current = card.id;
+    startSpeechAttempt(isSpeechSupported);
+  }, [card.id, isSpeechSupported, startSpeechAttempt]);
 
   return (
     <>
@@ -157,14 +182,7 @@ export function ReviewCardScreen({
                   : messages.speechUnavailable
               }
               disabled={!isSpeechSupported}
-              onClick={() => {
-                setSpeechFailureCardId(null);
-                speakPronunciation(
-                  card.term,
-                  card.pronunciationLocale,
-                  handleSpeechFailure
-                );
-              }}
+              onClick={() => startSpeechAttempt(isSpeechSupported)}
             >
               <ReviewIcon name="speaker" size={20} />
             </button>
@@ -174,11 +192,13 @@ export function ReviewCardScreen({
               {messages.speechUnavailable}
             </p>
           )}
-          {speechFailureCardId === card.id && isSpeechSupported && (
-            <p className="drill-card__speech-status" role="status">
-              {messages.speechFailed}
-            </p>
-          )}
+          {speechAttempt.failedAttemptId === speechAttempt.activeAttemptId &&
+            speechAttempt.failedAttemptId !== null &&
+            isSpeechSupported && (
+              <p className="drill-card__speech-status" role="status">
+                {messages.speechFailed}
+              </p>
+            )}
         </div>
         {isRevealed ? (
           <div className="drill-card__answer" aria-live="polite">
