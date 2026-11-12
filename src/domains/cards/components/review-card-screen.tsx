@@ -71,9 +71,10 @@ function subscribeToSpeechSupport(): () => void {
   return () => undefined;
 }
 
-function speakPronunciation(
+export function speakPronunciation(
   term: string,
   pronunciationLocale: string | undefined,
+  example: string | undefined,
   onFailure: () => void
 ): void {
   if (!term.trim() || !hasSpeechSynthesis()) {
@@ -84,6 +85,21 @@ function speakPronunciation(
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(term);
     utterance.lang = normalizePronunciationLocale(pronunciationLocale);
+    utterance.onend = () => {
+      if (!example?.trim()) return;
+      try {
+        const exampleUtterance = new SpeechSynthesisUtterance(example);
+        exampleUtterance.lang =
+          normalizePronunciationLocale(pronunciationLocale);
+        exampleUtterance.onerror = event => {
+          if (event.error !== 'canceled' && event.error !== 'interrupted')
+            onFailure();
+        };
+        window.speechSynthesis.speak(exampleUtterance);
+      } catch {
+        onFailure();
+      }
+    };
     utterance.onerror = event => {
       if (event.error !== 'canceled' && event.error !== 'interrupted')
         onFailure();
@@ -130,11 +146,14 @@ export function ReviewCardScreen({
       const attemptId = ++speechAttemptSequence.current;
       dispatchSpeechAttempt({ type: 'started', attemptId });
       if (!isSpeechSupported) return;
-      speakPronunciation(card.term, card.pronunciationLocale, () =>
-        dispatchSpeechAttempt({ type: 'failed', attemptId })
+      speakPronunciation(
+        card.term,
+        card.pronunciationLocale,
+        card.example,
+        () => dispatchSpeechAttempt({ type: 'failed', attemptId })
       );
     },
-    [card.term, card.pronunciationLocale]
+    [card.term, card.pronunciationLocale, card.example]
   );
 
   useEffect(() => {
