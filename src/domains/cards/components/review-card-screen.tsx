@@ -142,6 +142,7 @@ export function ReviewCardScreen({
   const speechAttemptSequence = useRef(0);
   const activeSpeechAttemptId = useRef<number | null>(null);
   const lastAutoPlayCardId = useRef<string | null>(null);
+  const previousRevealState = useRef({ cardId: card.id, isRevealed });
   const example = card.example ? splitExample(card.example, card.term) : null;
 
   useLayoutEffect(() => {
@@ -152,27 +153,51 @@ export function ReviewCardScreen({
   }, [card.id]);
 
   const startSpeechAttempt = useCallback(
-    (isSpeechSupported: boolean) => {
+    (
+      isSpeechSupported: boolean,
+      phrase = card.term,
+      followWithExample?: string
+    ) => {
       const attemptId = ++speechAttemptSequence.current;
       activeSpeechAttemptId.current = attemptId;
       dispatchSpeechAttempt({ type: 'started', attemptId });
       if (!isSpeechSupported) return;
       speakPronunciation(
-        card.term,
+        phrase,
         card.pronunciationLocale,
-        card.example,
+        followWithExample,
         () => dispatchSpeechAttempt({ type: 'failed', attemptId }),
         () => activeSpeechAttemptId.current === attemptId
       );
     },
-    [card.term, card.pronunciationLocale, card.example]
+    [card.term, card.pronunciationLocale]
   );
 
   useEffect(() => {
     if (isSpeechSupported && lastAutoPlayCardId.current === card.id) return;
     if (isSpeechSupported) lastAutoPlayCardId.current = card.id;
-    startSpeechAttempt(isSpeechSupported);
-  }, [card.id, isSpeechSupported, startSpeechAttempt]);
+    startSpeechAttempt(isSpeechSupported, card.term);
+  }, [card.id, card.term, isSpeechSupported, startSpeechAttempt]);
+
+  useEffect(() => {
+    const previous = previousRevealState.current;
+    previousRevealState.current = { cardId: card.id, isRevealed };
+    if (
+      previous.cardId !== card.id ||
+      previous.isRevealed ||
+      !isRevealed ||
+      !card.example?.trim()
+    ) {
+      return;
+    }
+    startSpeechAttempt(isSpeechSupported, card.example);
+  }, [
+    card.example,
+    card.id,
+    isRevealed,
+    isSpeechSupported,
+    startSpeechAttempt
+  ]);
 
   return (
     <>
@@ -213,7 +238,9 @@ export function ReviewCardScreen({
                   : messages.speechUnavailable
               }
               disabled={!isSpeechSupported}
-              onClick={() => startSpeechAttempt(isSpeechSupported)}
+              onClick={() =>
+                startSpeechAttempt(isSpeechSupported, card.term, card.example)
+              }
             >
               <ReviewIcon name="speaker" size={20} />
             </button>

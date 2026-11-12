@@ -74,6 +74,17 @@ describe('review pronunciation speech', () => {
     expect((speak.mock.calls[0][0] as MockUtterance).text).toBe('serendipity');
   });
 
+  it('can speak the example alone after the meaning is revealed', () => {
+    const { speak } = setupSpeechSynthesis();
+
+    speakPronunciation('A fortunate accident.', 'en-US', undefined, vi.fn());
+
+    expect(speak).toHaveBeenCalledOnce();
+    expect((speak.mock.calls[0][0] as MockUtterance).text).toBe(
+      'A fortunate accident.'
+    );
+  });
+
   it('reports an example speech error through the current attempt callback', () => {
     const { speak } = setupSpeechSynthesis();
     const onFailure = vi.fn();
