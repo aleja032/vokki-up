@@ -21,8 +21,9 @@ The review screen exposes a disabled audio control and cards only store IPA. Lea
 - Strategy: ask-on-risk; expected slice remains below the review budget.
 
 ## Tasks
-- [x] AP-01 — Implement browser speech synthesis, per-card locale, review controls, and opt-in auto-play. **Route:** delegated. **Trigger:** multiple non-trivial files and code reading required. **Acceptance:** learner can replay pronunciation; auto-play only runs when enabled and safely falls back; locale is validated and persisted; focused tests pass. **Checks:** `pnpm --manage-package-manager-versions=false test -- src/domains/cards/library-validators.test.ts src/domains/cards/scheduling/validators.test.ts src/domains/cards/card-create.schema.test.ts` — 3 files / 13 tests passed; `pnpm --manage-package-manager-versions=false lint` — passed; `prettier --check` on all changed source files — passed. **Commit:** `bd284fe`.
+- [x] AP-01 — Implement browser speech synthesis, per-card locale, review controls, and opt-in auto-play. **Route:** delegated. **Trigger:** multiple non-trivial files and code reading required. **Acceptance:** learner can replay pronunciation; auto-play only runs when enabled and safely falls back; locale is validated and persisted; focused tests pass. **Checks:** `pnpm --manage-package-manager-versions=false test -- src/domains/cards/library-validators.test.ts src/domains/cards/scheduling/validators.test.ts src/domains/cards/card-create.schema.test.ts` — 3 files / 13 tests passed; `pnpm --manage-package-manager-versions=false lint` — passed; `prettier --check` on all changed source files — passed. **Commit:** `be8e81a`.
 
 ## Progress
 - Created on 2026-11-12 before source changes.
-- AP-01 complete in commit `bd284fe`.
+- AP-01 complete in commit `be8e81a`.
+
