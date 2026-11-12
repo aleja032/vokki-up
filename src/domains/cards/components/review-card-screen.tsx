@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { cardsMessages } from '../messages';
 import type { CardRating, VocabularyCard } from '../types';
 import { REVIEW_RATINGS, type ReviewRating } from '../hooks/use-card-review';
 import { ReviewIcon } from './review-icon';
-import { translateText } from '@/lib/i18n/locale';
+import { normalizePronunciationLocale, translateText } from '@/lib/i18n/locale';
 import { useSettingsPreferences } from '@/domains/settings/hooks/use-settings-preferences';
 
 const messages = cardsMessages.review;
@@ -24,21 +24,39 @@ type ReviewCardScreenProps = {
   onRate: (rating: CardRating) => void;
 };
 
-function speakPronunciation(card: VocabularyCard): void {
-  if (
-    !card.term.trim() ||
-    typeof window === 'undefined' ||
-    !('speechSynthesis' in window) ||
-    typeof SpeechSynthesisUtterance === 'undefined'
-  )
+function hasSpeechSynthesis(): boolean {
+  try {
+    return (
+      typeof window !== 'undefined' &&
+      'speechSynthesis' in window &&
+      typeof window.speechSynthesis?.speak === 'function' &&
+      typeof SpeechSynthesisUtterance !== 'undefined'
+    );
+  } catch {
+    return false;
+  }
+}
+
+function subscribeToSpeechSupport(): () => void {
+  return () => undefined;
+}
+
+function speakPronunciation(card: VocabularyCard, onFailure: () => void): void {
+  if (!card.term.trim() || !hasSpeechSynthesis()) {
+    onFailure();
     return;
+  }
   try {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(card.term);
-    utterance.lang = card.pronunciationLocale ?? 'en-US';
+    utterance.lang = normalizePronunciationLocale(card.pronunciationLocale);
+    utterance.onerror = event => {
+      if (event.error !== 'canceled' && event.error !== 'interrupted')
+        onFailure();
+    };
     window.speechSynthesis.speak(utterance);
   } catch {
-    // Speech synthesis can be unavailable or blocked by browser policy.
+    onFailure();
   }
 }
 
@@ -61,12 +79,34 @@ export function ReviewCardScreen({
   onRate
 }: ReviewCardScreenProps) {
   const settings = useSettingsPreferences();
-  const shouldAutoPlayPronunciation = settings.shouldAutoPlayPronunciation;
+  const { shouldAutoPlayPronunciation, changeAutoPlayPronunciation } = settings;
+  const isSpeechSupported = useSyncExternalStore(
+    subscribeToSpeechSupport,
+    hasSpeechSynthesis,
+    () => false
+  );
+  const [speechFailureCardId, setSpeechFailureCardId] = useState<string | null>(
+    null
+  );
   const example = card.example ? splitExample(card.example, card.term) : null;
 
+  const handleSpeechFailure = useCallback(() => {
+    setSpeechFailureCardId(card.id);
+    changeAutoPlayPronunciation(false);
+  }, [card.id, changeAutoPlayPronunciation]);
+
   useEffect(() => {
-    if (shouldAutoPlayPronunciation) speakPronunciation(card);
-  }, [card, shouldAutoPlayPronunciation]);
+    if (shouldAutoPlayPronunciation && isSpeechSupported)
+      speakPronunciation(card, handleSpeechFailure);
+  }, [
+    card,
+    card.id,
+    card.term,
+    card.pronunciationLocale,
+    isSpeechSupported,
+    handleSpeechFailure,
+    shouldAutoPlayPronunciation
+  ]);
 
   return (
     <>
@@ -96,9 +136,21 @@ export function ReviewCardScreen({
             <button
               className="drill-card__listen"
               type="button"
-              aria-label={messages.listenLabel}
-              title={messages.listenLabel}
-              onClick={() => speakPronunciation(card)}
+              aria-label={
+                isSpeechSupported
+                  ? messages.listenLabel
+                  : messages.speechUnavailable
+              }
+              title={
+                isSpeechSupported
+                  ? messages.listenLabel
+                  : messages.speechUnavailable
+              }
+              disabled={!isSpeechSupported}
+              onClick={() => {
+                setSpeechFailureCardId(null);
+                speakPronunciation(card, handleSpeechFailure);
+              }}
             >
               <ReviewIcon name="speaker" size={20} />
             </button>
@@ -107,12 +159,23 @@ export function ReviewCardScreen({
             <input
               type="checkbox"
               checked={shouldAutoPlayPronunciation}
+              disabled={!isSpeechSupported}
               onChange={event =>
                 settings.changeAutoPlayPronunciation(event.target.checked)
               }
             />
             {messages.autoPlayLabel}
           </label>
+          {!isSpeechSupported && (
+            <p className="drill-card__speech-status" role="status">
+              {messages.speechUnavailable}
+            </p>
+          )}
+          {speechFailureCardId === card.id && isSpeechSupported && (
+            <p className="drill-card__speech-status" role="status">
+              {messages.speechFailed}
+            </p>
+          )}
         </div>
         {isRevealed ? (
           <div className="drill-card__answer" aria-live="polite">

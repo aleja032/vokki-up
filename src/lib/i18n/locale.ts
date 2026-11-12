@@ -159,6 +159,16 @@ const baseTranslations: Record<string, string> = {
   Opcional: 'Optional',
   'Ejemplo natural': 'Natural example',
   Pronunciación: 'Pronunciation',
+  'Escuchar pronunciación': 'Listen to pronunciation',
+  'Idioma de pronunciación (BCP 47)': 'Pronunciation language (BCP 47)',
+  'Reproducir pronunciación automáticamente':
+    'Play pronunciation automatically',
+  'Usa una etiqueta de idioma BCP 47 válida de hasta 35 caracteres.':
+    'Enter a valid BCP 47 language tag up to 35 characters.',
+  'La síntesis de voz no está disponible en este navegador.':
+    'Speech synthesis is unavailable in this browser.',
+  'No se pudo reproducir el audio. Puedes volver a intentarlo.':
+    'Audio could not be played. You can try again.',
   'Etiquetas por tema': 'Topic tags',
   'Nueva etiqueta': 'New tag',
   'Etiquetas separadas por comas': 'Tags separated by commas',
@@ -463,6 +473,24 @@ const translations: Record<string, string> = {
 // text assembled outside a localized messages object.
 export function translateText(value: string): string {
   return translateString(value);
+}
+
+export function isPronunciationLocale(value: unknown): value is string {
+  if (typeof value !== 'string' || value.length > 35) return false;
+  try {
+    return Intl.getCanonicalLocales(value).length === 1;
+  } catch {
+    return false;
+  }
+}
+
+export function normalizePronunciationLocale(value: unknown): string {
+  if (!isPronunciationLocale(value)) return 'en-US';
+  try {
+    return Intl.getCanonicalLocales(value)[0] ?? 'en-US';
+  } catch {
+    return 'en-US';
+  }
 }
 
 function translateString(value: string): string {

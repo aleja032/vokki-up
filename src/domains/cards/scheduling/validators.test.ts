@@ -23,5 +23,13 @@ describe('review card pronunciation locale validation', () => {
         { ...legacyCard, pronunciationLocale: 'invalid_tag' }
       ])
     ).toBe(false);
+    expect(
+      isVocabularyCardList([
+        {
+          ...legacyCard,
+          pronunciationLocale: 'en-u-ca-gregory-co-phonebk-hc-h23-kf-upper'
+        }
+      ])
+    ).toBe(false);
   });
 });

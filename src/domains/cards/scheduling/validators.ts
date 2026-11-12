@@ -5,6 +5,7 @@ import type {
   ReviewEvent,
   ReviewSession
 } from './types';
+import { isPronunciationLocale } from '@/lib/i18n/locale';
 
 export function isVocabularyCardList(
   value: unknown
@@ -27,15 +28,6 @@ export function isVocabularyCardList(
         card.tags.every(tag => typeof tag === 'string')
     )
   );
-}
-
-function isPronunciationLocale(value: unknown): value is string {
-  if (typeof value !== 'string' || value.length > 35) return false;
-  try {
-    return Intl.getCanonicalLocales(value).length === 1;
-  } catch {
-    return false;
-  }
 }
 
 export function isCardGroupList(value: unknown): value is CardGroup[] {

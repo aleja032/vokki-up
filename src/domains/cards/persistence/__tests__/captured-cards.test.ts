@@ -24,6 +24,7 @@ describe('mapCapturedCandidatesToCards', () => {
         term: 'reliable',
         meaning: 'Confiable',
         phonetics: '/rɪˈlaɪəbəl/',
+        pronunciationLocale: 'en-US',
         example: 'She is reliable.',
         partOfSpeech: 'Adjetivo',
         groupId: 'user-group',
