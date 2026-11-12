@@ -4,9 +4,7 @@ import type { HomeDashboardData } from './types';
 export const homeDashboardData = createLocalizedMessages<HomeDashboardData>({
   copy: {
     greeting: '¡Hola de nuevo!',
-    greetingDark: 'Buenas noches',
     greetingSupport: 'Cinco minutos hoy mantienen tu racha.',
-    greetingSupportDark: 'Un repaso corto antes de dormir fija mejor.',
     greetingSupportWide: streakDays =>
       `Cinco minutos hoy mantienen tu racha de ${streakDays} días.`,
     newCard: 'Nueva tarjeta',

@@ -15,9 +15,7 @@ export type WeeklyActivity = {
 export type HomeDashboardData = {
   copy: {
     greeting: string;
-    greetingDark: string;
     greetingSupport: string;
-    greetingSupportDark: string;
     greetingSupportWide: (streakDays: number) => string;
     newCard: string;
     nextSessionDescription: string;

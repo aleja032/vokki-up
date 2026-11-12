@@ -51,37 +51,9 @@
   @apply m-0 wrap-anywhere text-[15px] text-(--ink-soft);
 }
 
-.home-intro__greeting--dark,
-.home-intro__support--dark,
 .home-intro__support--wide,
 .home-intro__action {
   @apply hidden;
-}
-
-:root[data-theme='dark'] .home-intro__greeting--light,
-:root[data-theme='dark'] .home-intro__support--light,
-:root.dark .home-intro__greeting--light,
-:root.dark .home-intro__support--light {
-  @apply hidden;
-}
-
-:root[data-theme='dark'] .home-intro__greeting--dark,
-:root[data-theme='dark'] .home-intro__support--dark,
-:root.dark .home-intro__greeting--dark,
-:root.dark .home-intro__support--dark {
-  @apply inline;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .home-intro__greeting--light,
-  :root:not([data-theme='light']) .home-intro__support--light {
-    @apply hidden;
-  }
-
-  :root:not([data-theme='light']) .home-intro__greeting--dark,
-  :root:not([data-theme='light']) .home-intro__support--dark {
-    @apply inline;
-  }
 }
 
 /* Featured row: next session (+ goal on wide screens) */

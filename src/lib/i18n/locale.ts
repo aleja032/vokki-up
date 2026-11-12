@@ -300,11 +300,8 @@ const baseTranslations: Record<string, string> = {
   'Aprende vocabulario en contexto, cinco minutos a la vez.':
     'Learn vocabulary in context, five minutes at a time.',
   '¡Hola de nuevo!': 'Welcome back!',
-  'Buenas noches': 'Good evening',
   'Cinco minutos hoy mantienen tu racha.':
     'Five minutes today keep your streak going.',
-  'Un repaso corto antes de dormir fija mejor.':
-    'A short review before bed helps it stick.',
   'Tu próxima sesión': 'Your next session',
   'Meta de hoy': 'Today’s goal',
   'Tu semana': 'Your week',

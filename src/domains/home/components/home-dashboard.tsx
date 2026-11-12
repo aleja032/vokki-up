@@ -26,12 +26,7 @@ export function HomeDashboard({ summary }: HomeDashboardProps) {
     <div className="home-dashboard">
       <header className="home-intro">
         <div className="home-intro__copy">
-          <h1>
-            <span className="home-intro__greeting--light">{copy.greeting}</span>
-            <span className="home-intro__greeting--dark">
-              {copy.greetingDark}
-            </span>
-          </h1>
+          <h1>{copy.greeting}</h1>
           <p>
             <span className="home-intro__support--light">
               {copy.greetingSupport}
@@ -41,9 +36,6 @@ export function HomeDashboard({ summary }: HomeDashboardProps) {
                 {copy.greetingSupportWide(streakDays)}
               </span>
             ) : null}
-            <span className="home-intro__support--dark">
-              {copy.greetingSupportDark}
-            </span>
           </p>
         </div>
         <Link className="home-intro__action" href="/cards">
