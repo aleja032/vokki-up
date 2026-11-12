@@ -478,7 +478,8 @@ export function translateText(value: string): string {
 export function isPronunciationLocale(value: unknown): value is string {
   if (typeof value !== 'string' || value.length > 35) return false;
   try {
-    return Intl.getCanonicalLocales(value).length === 1;
+    const canonicalLocales = Intl.getCanonicalLocales(value);
+    return canonicalLocales.length === 1 && canonicalLocales[0].length <= 35;
   } catch {
     return false;
   }

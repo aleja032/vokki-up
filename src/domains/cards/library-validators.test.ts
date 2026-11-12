@@ -40,6 +40,19 @@ describe('card pronunciation locale validation', () => {
     expect(normalizePronunciationLocale(longLocale)).toBe('en-US');
   });
 
+  it('rejects locales that expand beyond the storage limit when canonicalized', () => {
+    const expandingLocale = 'sh-u-ca-gregory-co-phonebk-hc-h23';
+    expect(expandingLocale.length).toBeLessThanOrEqual(35);
+    expect(Intl.getCanonicalLocales(expandingLocale)[0].length).toBeGreaterThan(
+      35
+    );
+    expect(isPronunciationLocale(expandingLocale)).toBe(false);
+    expect(
+      isCardList([{ ...legacyCard, pronunciationLocale: expandingLocale }])
+    ).toBe(false);
+    expect(normalizePronunciationLocale(expandingLocale)).toBe('en-US');
+  });
+
   it('canonicalizes valid locale values and defaults legacy values safely', () => {
     expect(normalizePronunciationLocale('en-us')).toBe('en-US');
     expect(normalizePronunciationLocale(undefined)).toBe('en-US');
