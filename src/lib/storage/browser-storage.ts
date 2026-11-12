@@ -6,17 +6,28 @@ type StorageEnvelope = {
   value: unknown;
 };
 
+export type BrowserValueReadResult =
+  | { status: 'missing' }
+  | { status: 'valid'; value: unknown }
+  | { status: 'invalid' }
+  | { status: 'unavailable' };
+
 function storageKey(key: string): string {
   return `${STORAGE_PREFIX}:${key}`;
 }
 
-export function readBrowserValue(key: string): unknown {
-  if (typeof window === 'undefined') return undefined;
+export function readBrowserValueResult(key: string): BrowserValueReadResult {
+  if (typeof window === 'undefined') return { status: 'unavailable' };
+
+  let raw: string | null;
+  try {
+    raw = window.localStorage.getItem(storageKey(key));
+  } catch {
+    return { status: 'unavailable' };
+  }
+  if (raw === null) return { status: 'missing' };
 
   try {
-    const raw = window.localStorage.getItem(storageKey(key));
-    if (!raw) return undefined;
-
     const envelope: unknown = JSON.parse(raw);
     if (
       !envelope ||
@@ -24,14 +35,21 @@ export function readBrowserValue(key: string): unknown {
       !('version' in envelope) ||
       !('value' in envelope)
     ) {
-      return undefined;
+      return { status: 'invalid' };
     }
 
     const stored = envelope as StorageEnvelope;
-    return stored.version === STORAGE_VERSION ? stored.value : undefined;
+    return stored.version === STORAGE_VERSION
+      ? { status: 'valid', value: stored.value }
+      : { status: 'invalid' };
   } catch {
-    return undefined;
+    return { status: 'invalid' };
   }
+}
+
+export function readBrowserValue(key: string): unknown {
+  const result = readBrowserValueResult(key);
+  return result.status === 'valid' ? result.value : undefined;
 }
 
 export function writeBrowserValue(key: string, value: unknown): void {

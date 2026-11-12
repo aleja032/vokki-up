@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { INITIAL_CARDS, INITIAL_GROUPS } from '../data';
 import { CARD_PARTS_OF_SPEECH } from '../card-create.schema';
 import { isCardList, isGroupList } from '../library-validators';
 import { cardsMessages } from '../messages';
@@ -26,13 +25,13 @@ export type GroupView = 'overview' | 'new' | 'detail';
 export function useCardsDashboard() {
   const [cards, setCards, areCardsLoaded] = useTrackedBrowserState(
     'cards/library',
-    INITIAL_CARDS,
+    [],
     isCardList,
     cardChanges
   );
   const [groups, setGroups, areGroupsLoaded] = useTrackedBrowserState(
     'cards/groups',
-    INITIAL_GROUPS,
+    [],
     isGroupList,
     groupChanges
   );
