@@ -78,8 +78,6 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     true,
     isAiForCardsValue
   );
-  const [shouldAutoPlayPronunciation, setShouldAutoPlayPronunciation] =
-    useTrackedSetting('settings/auto-play-pronunciation', false, isBoolean);
   const isLanguageDirty = isLanguageLoaded && draftLanguage !== language;
   const providerOptions =
     PROVIDER_OPTIONS.find(option => option.id === provider) ??
@@ -204,7 +202,6 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     provider,
     model,
     shouldUseAiForCards,
-    shouldAutoPlayPronunciation,
     isSaved: !isLanguageDirty,
     isLanguageDirty,
     providerOptions,
@@ -215,7 +212,6 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     changeReminder,
     changeModel: setModel,
     changeUseAiForCards: setShouldUseAiForCards,
-    changeAutoPlayPronunciation: setShouldAutoPlayPronunciation,
     changeProvider,
     saveChanges
   };

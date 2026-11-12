@@ -172,7 +172,6 @@ export const cardsMessages = createLocalizedMessages({
     count: (position: number, total: number) => `${position} / ${total}`,
     offlineNotice: 'Funciona sin conexión',
     listenLabel: 'Escuchar pronunciación',
-    autoPlayLabel: 'Reproducir pronunciación automáticamente',
     speechUnavailable:
       'La síntesis de voz no está disponible en este navegador.',
     speechFailed: 'No se pudo reproducir el audio. Puedes volver a intentarlo.',
