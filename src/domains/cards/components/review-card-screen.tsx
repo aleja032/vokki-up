@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useReducer,
   useRef,
   useSyncExternalStore
@@ -75,7 +76,8 @@ export function speakPronunciation(
   term: string,
   pronunciationLocale: string | undefined,
   example: string | undefined,
-  onFailure: () => void
+  onFailure: () => void,
+  isAttemptCurrent: () => boolean = () => true
 ): void {
   if (!term.trim() || !hasSpeechSynthesis()) {
     onFailure();
@@ -86,7 +88,7 @@ export function speakPronunciation(
     const utterance = new SpeechSynthesisUtterance(term);
     utterance.lang = normalizePronunciationLocale(pronunciationLocale);
     utterance.onend = () => {
-      if (!example?.trim()) return;
+      if (!example?.trim() || !isAttemptCurrent()) return;
       try {
         const exampleUtterance = new SpeechSynthesisUtterance(example);
         exampleUtterance.lang =
@@ -138,19 +140,29 @@ export function ReviewCardScreen({
     initialSpeechAttemptState
   );
   const speechAttemptSequence = useRef(0);
+  const activeSpeechAttemptId = useRef<number | null>(null);
   const lastAutoPlayCardId = useRef<string | null>(null);
   const example = card.example ? splitExample(card.example, card.term) : null;
+
+  useLayoutEffect(() => {
+    return () => {
+      activeSpeechAttemptId.current = null;
+      if (hasSpeechSynthesis()) window.speechSynthesis.cancel();
+    };
+  }, [card.id]);
 
   const startSpeechAttempt = useCallback(
     (isSpeechSupported: boolean) => {
       const attemptId = ++speechAttemptSequence.current;
+      activeSpeechAttemptId.current = attemptId;
       dispatchSpeechAttempt({ type: 'started', attemptId });
       if (!isSpeechSupported) return;
       speakPronunciation(
         card.term,
         card.pronunciationLocale,
         card.example,
-        () => dispatchSpeechAttempt({ type: 'failed', attemptId })
+        () => dispatchSpeechAttempt({ type: 'failed', attemptId }),
+        () => activeSpeechAttemptId.current === attemptId
       );
     },
     [card.term, card.pronunciationLocale, card.example]

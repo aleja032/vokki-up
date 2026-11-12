@@ -47,6 +47,24 @@ describe('review pronunciation speech', () => {
     );
   });
 
+  it('does not continue to the example after its attempt becomes obsolete', () => {
+    const { speak } = setupSpeechSynthesis();
+    let isAttemptCurrent = true;
+
+    speakPronunciation(
+      'serendipity',
+      'en-US',
+      'A fortunate accident.',
+      vi.fn(),
+      () => isAttemptCurrent
+    );
+
+    isAttemptCurrent = false;
+    (speak.mock.calls[0][0] as MockUtterance).onend?.();
+
+    expect(speak).toHaveBeenCalledOnce();
+  });
+
   it('speaks only the term when no example is present', () => {
     const { speak } = setupSpeechSynthesis();
 
