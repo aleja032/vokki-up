@@ -3,7 +3,8 @@ import {
   decryptCredential,
   encryptCredential,
   maskApiKey,
-  validateCredentialInput
+  validateCredentialInput,
+  validateSelectionInput
 } from './ai-credentials';
 
 afterEach(() => {
@@ -28,6 +29,23 @@ describe('AI credential protection', () => {
   });
   it('masks keys to provider-independent last-four metadata', () => {
     expect(maskApiKey('AIzaSyVerySecret1234567890')).toBe('••••7890');
+  });
+  it('validates provider/model selections without an API key', () => {
+    expect(
+      validateSelectionInput({ provider: 'openai', model: 'gpt-4o' })
+    ).toEqual({ provider: 'openai', model: 'gpt-4o' });
+    expect(() =>
+      validateSelectionInput({ provider: 'openai', model: 'gemini-2.5-pro' })
+    ).toThrow();
+    expect(() => validateSelectionInput({ provider: 'openai' })).toThrow();
+    expect(() => validateSelectionInput(null)).toThrow();
+    expect(() =>
+      validateSelectionInput({
+        provider: 'openai',
+        model: 'gpt-4o',
+        apiKey: 'x'.repeat(30)
+      })
+    ).toThrow();
   });
   it('validates allowlisted provider/model pairs and rejects malformed keys', () => {
     expect(

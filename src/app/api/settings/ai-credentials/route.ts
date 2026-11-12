@@ -2,8 +2,10 @@ import { NextResponse } from 'next/server';
 import {
   encryptCredential,
   maskApiKey,
-  validateCredentialInput
+  validateCredentialInput,
+  validateSelectionInput
 } from '@/lib/security/ai-credentials';
+import { isMissingSessionError } from '@/lib/supabase/auth-session.util';
 import {
   createSupabaseServerClient,
   SupabaseConfigurationError
@@ -88,6 +90,52 @@ export async function POST(request: Request) {
   );
 }
 
+export async function PATCH(request: Request) {
+  const auth = await getAuthenticatedClient();
+  if (auth.response)
+    return json({ error: auth.response.error }, auth.response.status);
+  if (!auth.user) return json({ error: 'authentication_required' }, 401);
+
+  let input: ReturnType<typeof validateSelectionInput>;
+  try {
+    input = validateSelectionInput(await request.json());
+  } catch {
+    return json({ error: 'invalid_selection' }, 400);
+  }
+
+  const { data, error } = await auth.supabase
+    .from('ai_provider_credentials')
+    .select('provider,model,key_last_four,updated_at')
+    .eq('user_id', auth.user.id)
+    .maybeSingle();
+  if (error) return json({ error: 'credentials_unavailable' }, 503);
+  if (!data) return json({ error: 'no_credential' }, 404);
+  if (data.provider !== input.provider)
+    return json({ error: 'provider_mismatch' }, 409);
+
+  const { error: updateError } = await auth.supabase
+    .from('ai_provider_credentials')
+    .update({
+      provider: input.provider,
+      model: input.model,
+      ['updated_at']: new Date().toISOString()
+    })
+    .eq('user_id', auth.user.id);
+  if (updateError) return json({ error: 'credential_save_failed' }, 503);
+  return json(
+    {
+      authenticated: true,
+      hasCredential: true,
+      provider: input.provider,
+      model: input.model,
+      maskedKey: maskApiKey(
+        data.key_last_four ? `********${data.key_last_four}` : '********'
+      )
+    },
+    200
+  );
+}
+
 export async function DELETE() {
   const auth = await getAuthenticatedClient();
   if (auth.response)
@@ -105,6 +153,7 @@ async function getAuthenticatedClient() {
   try {
     const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase.auth.getUser();
+    if (error && isMissingSessionError(error)) return { supabase, user: null };
     if (error)
       return {
         response: { error: 'authentication_unavailable', status: 503 } as const

@@ -42,6 +42,31 @@ export function validateCredentialInput(
   return { provider: provider.id, model: value.model, apiKey };
 }
 
+export type ValidatedSelectionInput = {
+  provider: AiProviderId;
+  model: string;
+};
+
+export function validateSelectionInput(
+  value: unknown
+): ValidatedSelectionInput {
+  if (
+    !isRecord(value) ||
+    !hasOnlyKeys(value, ['provider', 'model']) ||
+    typeof value.provider !== 'string' ||
+    typeof value.model !== 'string'
+  ) {
+    throw new Error('Choose a supported provider and model.');
+  }
+  const provider = AI_PROVIDER_CATALOG.find(
+    option => option.id === value.provider
+  );
+  if (!provider || !provider.models.includes(value.model as never)) {
+    throw new Error('Choose a supported provider and model.');
+  }
+  return { provider: provider.id, model: value.model };
+}
+
 export function encryptCredential(plaintext: string): EncryptedCredential {
   if (!plaintext) throw new Error('Credential cannot be empty.');
   const iv = randomBytes(12);

@@ -8,6 +8,7 @@ import {
   validateAiSelection
 } from '@/domains/ai/validation';
 import { decryptCredential } from '@/lib/security/ai-credentials';
+import { isMissingSessionError } from '@/lib/supabase/auth-session.util';
 import {
   createSupabaseServerClient,
   SupabaseConfigurationError
@@ -24,7 +25,7 @@ export async function POST(request: Request): Promise<Response> {
     try {
       const supabase = await createSupabaseServerClient();
       const { data, error } = await supabase.auth.getUser();
-      if (error)
+      if (error && !isMissingSessionError(error))
         throw new AiBoundaryError(
           'CAPABILITY_UNAVAILABLE',
           'Authentication could not be verified. Try again.',

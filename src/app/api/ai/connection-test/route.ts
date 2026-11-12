@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { testGeminiConnection } from '../../../../domains/ai/gemini-card-capture-provider';
+import { testOpenAiConnection } from '../../../../domains/ai/openai-connection-test';
 import { AiBoundaryError } from '../../../../domains/ai/types';
+import { isMissingSessionError } from '../../../../lib/supabase/auth-session.util';
 import { validateAiSelection } from '../../../../domains/ai/validation';
 import { decryptCredential } from '../../../../lib/security/ai-credentials';
 import {
@@ -16,13 +18,6 @@ export async function POST(request: Request): Promise<Response> {
       throw invalidRequest();
     }
     const selection = validateAiSelection(body.selection);
-    if (selection.provider !== 'gemini') {
-      throw new AiBoundaryError(
-        'CAPABILITY_UNAVAILABLE',
-        `Connection testing for ${selection.provider} is not available yet. Choose Gemini to test a provider connection.`,
-        501
-      );
-    }
     if (
       body.apiKey !== undefined &&
       (typeof body.apiKey !== 'string' ||
@@ -39,10 +34,11 @@ export async function POST(request: Request): Promise<Response> {
         typeof body.apiKey === 'string' ? body.apiKey.trim() : undefined
     });
 
-    await testGeminiConnection({
-      apiKey: credential.apiKey,
-      model: selection.model
-    });
+    const test =
+      selection.provider === 'gemini'
+        ? testGeminiConnection
+        : testOpenAiConnection;
+    await test({ apiKey: credential.apiKey, model: selection.model });
     return json(
       {
         success: true,
@@ -65,7 +61,7 @@ async function resolveConnectionCredential(input: {
   try {
     const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase.auth.getUser();
-    if (error) {
+    if (error && !isMissingSessionError(error)) {
       throw new AiBoundaryError(
         'CAPABILITY_UNAVAILABLE',
         'Authentication could not be verified. Try again.',
