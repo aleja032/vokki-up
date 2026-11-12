@@ -84,7 +84,7 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
             {messages.summaryWide(cards.length, dueCount)}
           </p>
         </div>
-        <Link className="deck-page__review-button" href="/review">
+        <Link className="deck-page__review-button" href="/review?from=cards">
           <DeckIcon name="stack" size={18} />
           {messages.reviewWide(dueCount)}
         </Link>
@@ -104,7 +104,7 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
             <span>{messages.newCardHint}</span>
           </span>
         </button>
-        <Link className="deck-action deck-action--review" href="/review">
+        <Link className="deck-action deck-action--review" href="/review?from=cards">
           <span className="deck-action__icon">
             <DeckIcon name="stack" size={22} />
           </span>

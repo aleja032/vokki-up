@@ -11,6 +11,8 @@ type ReviewCompleteScreenProps = {
   easy: number;
   streakDays: number;
   onRestart: () => void;
+  exitHref: string;
+  exitTarget: 'cards' | 'home';
 };
 
 export function ReviewCompleteScreen({
@@ -19,7 +21,9 @@ export function ReviewCompleteScreen({
   good,
   easy,
   streakDays,
-  onRestart
+  onRestart,
+  exitHref,
+  exitTarget
 }: ReviewCompleteScreenProps) {
   return (
     <section className="drill-done" aria-labelledby="review-done-title">
@@ -65,8 +69,10 @@ export function ReviewCompleteScreen({
             {messages.done.repeatSuffix}
           </span>
         </button>
-        <Link className="drill-done__primary" href="/">
-          {messages.done.backHome}
+        <Link className="drill-done__primary" href={exitHref}>
+          {exitTarget === 'cards'
+            ? messages.done.backCards
+            : messages.done.backHome}
         </Link>
       </div>
       <p className="drill-done__note">{messages.done.repeatNote}</p>

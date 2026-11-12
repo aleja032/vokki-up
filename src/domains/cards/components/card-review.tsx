@@ -27,6 +27,7 @@ export function CardReview() {
         position={review.position}
         total={review.total}
         progress={review.status === 'reviewing' ? review.progress : 100}
+        exitHref={review.reviewExit.href}
       />
       <main className="drill-main">
         {review.status === 'empty' && <ReviewEmptyScreen />}
@@ -38,6 +39,8 @@ export function CardReview() {
             easy={review.results.easy}
             streakDays={review.streakDays}
             onRestart={review.restart}
+            exitHref={review.reviewExit.href}
+            exitTarget={review.reviewExit.target}
           />
         )}
         {review.status === 'reviewing' && review.card && (

@@ -140,7 +140,7 @@ export function GroupDetail({
           </div>
           <Link
             className="deck-hero__review"
-            href={`/review?groupId=${encodeURIComponent(group.id)}`}
+            href={`/review?groupId=${encodeURIComponent(group.id)}&from=cards`}
           >
             {messages.review(dueCount)}
             <DeckIcon name="arrowRight" size={18} />

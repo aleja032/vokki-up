@@ -197,6 +197,7 @@ export const cardsMessages = createLocalizedMessages({
       easyChip: (count: number) =>
         `${count} ${pluralize(count, 'fácil', 'fáciles')}`,
       backHome: 'Volver al inicio',
+      backCards: 'Volver a tarjetas',
       repeat: 'Repasar otra vez',
       repeatSuffix: '(no cuenta para la meta)',
       repeatNote: 'Repasar otra vez no cuenta para la meta diaria.'

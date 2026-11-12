@@ -8,14 +8,20 @@ type ReviewHeaderProps = {
   position: number;
   total: number;
   progress: number;
+  exitHref: string;
 };
 
-export function ReviewHeader({ position, total, progress }: ReviewHeaderProps) {
+export function ReviewHeader({
+  position,
+  total,
+  progress,
+  exitHref
+}: ReviewHeaderProps) {
   return (
     <header className="drill-header">
       <Link
         className="drill-header__close"
-        href="/"
+        href={exitHref}
         aria-label={messages.closeLabel}
       >
         <ReviewIcon name="close" size={20} />

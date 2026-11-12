@@ -28,6 +28,7 @@ import { enqueueLocalSyncOperation } from '@/lib/sync/local-queue';
 import { serializeSyncPayload } from '@/lib/sync/change-builders';
 import { writeBrowserValue } from '@/lib/storage/browser-storage';
 import { cardsMessages } from '../messages';
+import { resolveReviewExit } from '../review-exit';
 
 export type ReviewRating = Exclude<CardRating, 'hard'>;
 
@@ -86,6 +87,13 @@ export function useCardReview() {
     typeof window === 'undefined'
       ? null
       : new URLSearchParams(window.location.search).get('groupId')
+  );
+  const [reviewExit] = useState(() =>
+    resolveReviewExit(
+      typeof window === 'undefined'
+        ? null
+        : new URLSearchParams(window.location.search).get('from')
+    )
   );
   const repeatedCardIds = useRef(new Set<string>());
   const reviewSessionsRef = useRef(reviewSessions);
@@ -288,6 +296,7 @@ export function useCardReview() {
 
   return {
     status,
+    reviewExit,
     card,
     position,
     total,
