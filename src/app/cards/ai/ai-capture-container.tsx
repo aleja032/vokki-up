@@ -2,6 +2,8 @@
 
 import { AiCaptureWorkflow } from '@/domains/ai/components/ai-capture-workflow';
 import { useCardsLibraryState } from '@/domains/cards/hooks/use-cards-library-state';
+import { useAiForCardsEnabled } from '@/lib/settings/use-ai-for-cards-enabled';
+import { AiDisabledNotice } from '../ai-disabled-notice';
 import { AiDesktopRedirect } from './ai-desktop-redirect';
 import './ai-route.css';
 
@@ -11,10 +13,15 @@ import './ai-route.css';
  */
 export function AiCaptureContainer() {
   const library = useCardsLibraryState();
+  const { isEnabled } = useAiForCardsEnabled();
   return (
     <div className="cards-ai-route">
       <AiDesktopRedirect />
-      <AiCaptureWorkflow library={library} />
+      {isEnabled ? (
+        <AiCaptureWorkflow library={library} />
+      ) : (
+        <AiDisabledNotice title />
+      )}
     </div>
   );
 }

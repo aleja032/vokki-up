@@ -57,7 +57,6 @@ export function SettingsWorkspace({
 
       <ProfilePanel
         dailyGoal={preferences.dailyGoal}
-        displayName={preferences.displayName}
         isActive={activeTab === 'profile'}
         isReminderEnabled={preferences.isReminderEnabled}
         isAuthenticated={preferences.isAuthenticated}
@@ -67,7 +66,6 @@ export function SettingsWorkspace({
         language={preferences.language}
         level={preferences.level}
         onDailyGoalChange={preferences.changeDailyGoal}
-        onDisplayNameChange={preferences.changeDisplayName}
         onLanguageChange={preferences.changeLanguage}
         onLevelChange={preferences.changeLevel}
         onReminderChange={preferences.changeReminder}

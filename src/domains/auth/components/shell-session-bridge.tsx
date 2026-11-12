@@ -5,6 +5,7 @@ import {
   ShellSlotsProvider,
   type ShellSessionStatus
 } from '@/components/layout/shell-slots';
+import { getAvatarInitial } from '@/lib/auth/avatar-initial.util';
 import { useAuthSession } from '@/lib/auth/use-auth-session';
 import { AccountAction } from './account-action';
 import { ProfileSummary } from './profile-summary';
@@ -18,6 +19,10 @@ export function ShellSessionBridge({ children }: { children: ReactNode }) {
       : session.status === 'authenticated'
         ? 'authenticated'
         : 'guest';
+  const avatarInitial =
+    session?.status === 'authenticated'
+      ? getAvatarInitial(session.user)
+      : undefined;
 
   return (
     <LocaleProvider>
@@ -25,6 +30,7 @@ export function ShellSessionBridge({ children }: { children: ReactNode }) {
         profileAction={<AccountAction />}
         profileSummary={<ProfileSummary />}
         sessionStatus={sessionStatus}
+        avatarInitial={avatarInitial}
       >
         {children}
       </ShellSlotsProvider>

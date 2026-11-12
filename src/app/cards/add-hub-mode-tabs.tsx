@@ -2,7 +2,11 @@
 
 import { ImageUp, ListChecks, PencilLine } from 'lucide-react';
 import type { KeyboardEvent } from 'react';
-import { ADD_HUB_MODES, type AddHubMode } from './add-hub-modes';
+import {
+  ADD_HUB_MODES,
+  getSelectableHubModes,
+  type AddHubMode
+} from './add-hub-modes';
 import { addHubMessages } from './add-hub-messages';
 
 const messages = addHubMessages;
@@ -18,11 +22,18 @@ export const addHubPanelId = (mode: AddHubMode) => `addhub-panel-${mode}`;
 
 type AddHubModeTabsProps = {
   mode: AddHubMode;
+  isAiEnabled: boolean;
   onSelect: (mode: AddHubMode) => void;
 };
 
 /** Three-option selector: tabs with icon, short label and one-line description. */
-export function AddHubModeTabs({ mode, onSelect }: AddHubModeTabsProps) {
+export function AddHubModeTabs({
+  mode,
+  isAiEnabled,
+  onSelect
+}: AddHubModeTabsProps) {
+  const selectable = getSelectableHubModes(isAiEnabled);
+
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     const step =
       event.key === 'ArrowRight' || event.key === 'ArrowDown'
@@ -32,11 +43,9 @@ export function AddHubModeTabs({ mode, onSelect }: AddHubModeTabsProps) {
           : 0;
     if (!step) return;
     event.preventDefault();
-    const index = ADD_HUB_MODES.indexOf(mode);
+    const index = selectable.indexOf(mode);
     const next =
-      ADD_HUB_MODES[
-        (index + step + ADD_HUB_MODES.length) % ADD_HUB_MODES.length
-      ];
+      selectable[(index + step + selectable.length) % selectable.length];
     onSelect(next);
     document.getElementById(addHubTabId(next))?.focus();
   }
@@ -51,6 +60,7 @@ export function AddHubModeTabs({ mode, onSelect }: AddHubModeTabsProps) {
       {ADD_HUB_MODES.map(item => {
         const Icon = MODE_ICONS[item];
         const isSelected = item === mode;
+        const isDisabled = !selectable.includes(item);
         return (
           <button
             className="addhub__mode"
@@ -61,6 +71,8 @@ export function AddHubModeTabs({ mode, onSelect }: AddHubModeTabsProps) {
             aria-selected={isSelected}
             aria-controls={addHubPanelId(item)}
             tabIndex={isSelected ? 0 : -1}
+            disabled={isDisabled}
+            title={isDisabled ? messages.aiDisabled.tabHint : undefined}
             onClick={() => onSelect(item)}
           >
             <span className="addhub__mode-icon" aria-hidden="true">

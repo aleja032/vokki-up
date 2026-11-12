@@ -8,6 +8,7 @@ type ShellSlots = {
   profileAction?: ReactNode;
   profileSummary?: ReactNode;
   sessionStatus?: ShellSessionStatus;
+  avatarInitial?: string;
 };
 
 const ShellSlotsContext = createContext<ShellSlots>({
@@ -22,11 +23,12 @@ export function ShellSlotsProvider({
   children,
   profileAction,
   profileSummary,
-  sessionStatus = 'loading'
+  sessionStatus = 'loading',
+  avatarInitial
 }: ShellSlotsProviderProps) {
   return (
     <ShellSlotsContext.Provider
-      value={{ profileAction, profileSummary, sessionStatus }}
+      value={{ profileAction, profileSummary, sessionStatus, avatarInitial }}
     >
       {children}
     </ShellSlotsContext.Provider>
@@ -47,6 +49,12 @@ export function ProfileSummarySlot() {
   const { profileSummary } = useShellSlots();
 
   return profileSummary ?? null;
+}
+
+export function AvatarInitialSlot() {
+  const { avatarInitial } = useShellSlots();
+
+  return avatarInitial ?? null;
 }
 
 export function AuthenticatedOnly({ children }: { children: ReactNode }) {

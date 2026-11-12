@@ -5,6 +5,10 @@ import { APP_LANGUAGES, LEARNING_LEVELS, PROVIDER_OPTIONS } from '../data';
 import { settingsMessages } from '../messages';
 import { FEATURES } from '@/config/features';
 import { useAuthSession } from '@/lib/auth/use-auth-session';
+import {
+  AI_USE_CARDS_STORAGE_KEY,
+  isAiForCardsValue
+} from '@/lib/settings/ai-for-cards.util';
 import type { AiProvider, AppTheme, SettingsTab } from '../types';
 import type { JsonValue } from '@/lib/sync/types';
 import { THEME_STORAGE_KEY } from '@/lib/theme/theme-init-script';
@@ -35,11 +39,6 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     'settings/daily-goal',
     20,
     isDailyGoal
-  );
-  const [displayName, setDisplayName] = useTrackedSetting(
-    'settings/display-name',
-    settingsMessages.profile.fallbackName,
-    isString
   );
   const [isReminderEnabled, setIsReminderEnabled] = useTrackedSetting(
     'settings/reminder-enabled',
@@ -75,9 +74,9 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     isModel
   );
   const [shouldUseAiForCards, setShouldUseAiForCards] = useTrackedSetting(
-    'settings/ai-use-cards',
+    AI_USE_CARDS_STORAGE_KEY,
     true,
-    isBoolean
+    isAiForCardsValue
   );
   const isLanguageDirty = isLanguageLoaded && draftLanguage !== language;
   const providerOptions =
@@ -195,7 +194,6 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     language: draftLanguage,
     level,
     dailyGoal,
-    displayName,
     isReminderEnabled,
     hasReminderConsent,
     reminderDeliveryConfigured,
@@ -211,7 +209,6 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     changeLanguage: setDraftLanguage,
     changeLevel: setLevel,
     changeDailyGoal: setDailyGoal,
-    changeDisplayName: setDisplayName,
     changeReminder,
     changeModel: setModel,
     changeUseAiForCards: setShouldUseAiForCards,
@@ -253,9 +250,6 @@ function isDailyGoal(value: unknown): value is number {
 }
 function isBoolean(value: unknown): value is boolean {
   return typeof value === 'boolean';
-}
-function isString(value: unknown): value is string {
-  return typeof value === 'string';
 }
 function isModel(value: unknown): value is string {
   return PROVIDER_OPTIONS.some(option =>

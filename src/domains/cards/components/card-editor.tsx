@@ -19,6 +19,7 @@ import { CardEditorPreview } from './card-editor-preview';
 import { DeckFieldError } from './deck-field-error';
 import { DeckIcon } from './deck-icon';
 import { translateText } from '@/lib/i18n/locale';
+import { useAiForCardsEnabled } from '@/lib/settings/use-ai-for-cards-enabled';
 
 const messages = cardsMessages.cardEditor;
 // Entry to the (static mockup) AI capture flow.
@@ -70,8 +71,9 @@ export function CardEditor({
     applyAutofillValues,
     readAutofillSnapshot
   } = useCardCreateSubmit({ groups, existingTerms, initialGroupId, onSave });
+  const { isEnabled: isAiEnabled } = useAiForCardsEnabled();
   const editorAutofill = useCardEditorAutofill({
-    autofill,
+    autofill: isAiEnabled ? autofill : undefined,
     term: values.term,
     readSnapshot: readAutofillSnapshot,
     applyValues: applyAutofillValues
@@ -112,15 +114,33 @@ export function CardEditor({
             role="tablist"
             aria-label={messages.modesLabel}
           >
-            <Link
-              className="deck-modes__tab"
-              href={AI_CAPTURE_HREF}
-              role="tab"
-              aria-selected={false}
-            >
-              <span className="deck-modes__badge">{messages.modeAiBadge}</span>
-              {messages.modeAi}
-            </Link>
+            {isAiEnabled ? (
+              <Link
+                className="deck-modes__tab"
+                href={AI_CAPTURE_HREF}
+                role="tab"
+                aria-selected={false}
+              >
+                <span className="deck-modes__badge">
+                  {messages.modeAiBadge}
+                </span>
+                {messages.modeAi}
+              </Link>
+            ) : (
+              <button
+                className="deck-modes__tab"
+                type="button"
+                role="tab"
+                aria-selected={false}
+                disabled
+                title={messages.aiDisabledHint}
+              >
+                <span className="deck-modes__badge">
+                  {messages.modeAiBadge}
+                </span>
+                {messages.modeAi}
+              </button>
+            )}
             <button
               className="deck-modes__tab"
               type="button"
@@ -130,6 +150,14 @@ export function CardEditor({
               {messages.modeManual}
             </button>
           </div>
+          {!isAiEnabled && (
+            <p className="deck-autofill__message">
+              {messages.aiDisabledHint}{' '}
+              <Link className="deck-field__link" href="/settings">
+                {messages.aiSettingsLink}
+              </Link>
+            </p>
+          )}
 
           {errorCount > 0 && (
             <div className="deck-summary" role="alert">
@@ -212,18 +240,20 @@ export function CardEditor({
                   {fieldErrors.meaning}
                 </DeckFieldError>
               )}
-              <CardEditorAutofillPanel
-                isAvailable={editorAutofill.isAvailable}
-                canRequest={editorAutofill.canRequest}
-                isLoading={editorAutofill.isLoading}
-                hasTerm={Boolean(values.term.trim())}
-                status={editorAutofill.status}
-                errorMessage={editorAutofill.errorMessage}
-                conflictCount={editorAutofill.conflictCount}
-                onRequest={editorAutofill.requestSuggestion}
-                onReplace={editorAutofill.replaceTypedFields}
-                onKeep={editorAutofill.keepTypedFields}
-              />
+              {isAiEnabled && (
+                <CardEditorAutofillPanel
+                  isAvailable={editorAutofill.isAvailable}
+                  canRequest={editorAutofill.canRequest}
+                  isLoading={editorAutofill.isLoading}
+                  hasTerm={Boolean(values.term.trim())}
+                  status={editorAutofill.status}
+                  errorMessage={editorAutofill.errorMessage}
+                  conflictCount={editorAutofill.conflictCount}
+                  onRequest={editorAutofill.requestSuggestion}
+                  onReplace={editorAutofill.replaceTypedFields}
+                  onKeep={editorAutofill.keepTypedFields}
+                />
+              )}
             </div>
           </section>
 

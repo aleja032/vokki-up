@@ -8,7 +8,6 @@ export interface VisibleProfileSections {
   language: boolean;
   theme: boolean;
   account: boolean;
-  displayName: boolean;
   level: boolean;
   dailyGoal: boolean;
   reminder: boolean;
@@ -27,7 +26,6 @@ export function getVisibleProfileSections(
     language: true,
     theme: true,
     account: isAuthenticated,
-    displayName: isAuthenticated,
     level: hasExtras,
     dailyGoal: hasExtras,
     reminder: hasExtras,

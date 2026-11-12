@@ -2,7 +2,11 @@ import Link from 'next/link';
 import { VokkiLogo } from '@/components/brand/vokki-logo';
 import { siteConfig, siteMessages } from '@/config/site';
 import { ConnectionStatus } from './connection-status';
-import { AuthenticatedOnly, ProfileActionSlot } from './shell-slots';
+import {
+  AuthenticatedOnly,
+  AvatarInitialSlot,
+  ProfileActionSlot
+} from './shell-slots';
 
 export function AppHeader() {
   return (
@@ -26,7 +30,7 @@ export function AppHeader() {
             className="user-avatar"
             href="/settings"
           >
-            {siteMessages.avatarInitial}
+            <AvatarInitialSlot />
           </Link>
         </AuthenticatedOnly>
         <ProfileActionSlot />

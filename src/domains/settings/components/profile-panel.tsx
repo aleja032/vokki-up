@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { APP_LANGUAGES, LEARNING_LEVELS } from '../data';
 import { settingsMessages } from '../messages';
 import { FEATURES } from '@/config/features';
+import { getAvatarInitial } from '@/lib/auth/avatar-initial.util';
 import { useAuthSession } from '@/lib/auth/use-auth-session';
 import { getVisibleProfileSections } from '../profile-visibility.util';
 import type { AppTheme } from '../types';
@@ -17,7 +18,6 @@ type LearningLevel = (typeof LEARNING_LEVELS)[number];
 
 interface ProfilePanelProps {
   dailyGoal: number;
-  displayName: string;
   isActive: boolean;
   isReminderEnabled: boolean;
   isAuthenticated: boolean;
@@ -27,7 +27,6 @@ interface ProfilePanelProps {
   language: AppLanguage;
   level: LearningLevel;
   onDailyGoalChange: (value: number) => void;
-  onDisplayNameChange: (value: string) => void;
   onLanguageChange: (value: AppLanguage) => void;
   onLevelChange: (value: LearningLevel) => void;
   onReminderChange: (value: boolean) => void;
@@ -46,9 +45,11 @@ export function ProfilePanel(props: ProfilePanelProps) {
   );
   const identityName = isAuthenticated
     ? session.user.displayName || session.user.email
-    : props.displayName;
-  const initial =
-    identityName.charAt(0).toLocaleUpperCase() || copy.fallbackName.charAt(0);
+    : '';
+  const initial = getAvatarInitial({
+    displayName: isAuthenticated ? session.user.displayName : undefined,
+    email: isAuthenticated ? session.user.email : undefined
+  });
 
   return (
     <section
@@ -81,22 +82,6 @@ export function ProfilePanel(props: ProfilePanelProps) {
         ) : null}
 
         <div className="prefs-fields">
-          {visible.displayName ? (
-            <div className="prefs-field">
-              <label className="prefs-label" htmlFor="settings-display-name">
-                {copy.nameLabel}
-              </label>
-              <input
-                className="prefs-input"
-                id="settings-display-name"
-                onChange={event =>
-                  props.onDisplayNameChange(event.target.value)
-                }
-                type="text"
-                value={props.displayName}
-              />
-            </div>
-          ) : null}
           <div className="prefs-field">
             <label className="prefs-label" htmlFor="settings-language">
               {copy.languageLabel}

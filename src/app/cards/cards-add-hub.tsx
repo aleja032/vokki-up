@@ -13,11 +13,13 @@ import {
   useCardCaptureFlow,
   type CaptureSourceKind
 } from '@/domains/ai/hooks/use-card-capture-flow';
+import { useAiForCardsEnabled } from '@/lib/settings/use-ai-for-cards-enabled';
 import { CardEditor } from '@/domains/cards/components/card-editor';
 import type { CardsAddPanelApi } from '@/domains/cards/components/cards-add-panel.types';
 import { createCapturedCardsLibrary } from '@/domains/cards/persistence/captured-cards';
 import { addHubMessages } from './add-hub-messages';
-import type { AddHubMode } from './add-hub-modes';
+import { resolveHubMode, type AddHubMode } from './add-hub-modes';
+import { AiDisabledNotice } from './ai-disabled-notice';
 import {
   addHubPanelId,
   addHubTabId,
@@ -43,7 +45,10 @@ type CardsAddHubProps = {
  * share one panel. The route layer composes the cards and ai domains here.
  */
 export function CardsAddHub({ panel, initialMode }: CardsAddHubProps) {
-  const [mode, setMode] = useState<AddHubMode>(initialMode);
+  const [requestedMode, setMode] = useState<AddHubMode>(initialMode);
+  const { isEnabled: isAiEnabled } = useAiForCardsEnabled();
+  // Without AI the image and word-list modes fall back to manual entry.
+  const mode = resolveHubMode(requestedMode, isAiEnabled);
   // UI-only: the review/created step is shown in the expanded hub.
   const [isResultOpen, setIsResultOpen] = useState(false);
   const [isInitialOpen, setIsInitialOpen] = useState(initialMode !== 'manual');
@@ -156,7 +161,12 @@ export function CardsAddHub({ panel, initialMode }: CardsAddHubProps) {
         <h2 id="addhub-title">{messages.title}</h2>
         <p>{messages.subtitle}</p>
       </header>
-      <AddHubModeTabs mode={mode} onSelect={handleSelectMode} />
+      <AddHubModeTabs
+        mode={mode}
+        isAiEnabled={isAiEnabled}
+        onSelect={handleSelectMode}
+      />
+      {!isAiEnabled && <AiDisabledNotice />}
       {mode !== 'manual' && (
         <div className="addhub__progress">
           <AiCaptureSteps active={activeStep} />

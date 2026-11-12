@@ -13,7 +13,6 @@ export const settingsMessages = createLocalizedMessages({
     fallbackName: 'Kiev',
     noAccount: 'Sin cuenta · tus datos viven solo en este dispositivo',
     signIn: 'Iniciar sesión para sincronizar',
-    nameLabel: 'Nombre',
     languageLabel: 'Idioma de la app',
     levelLabel: 'Nivel de inglés',
     dailyGoalTitle: 'Meta diaria',

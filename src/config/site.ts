@@ -25,6 +25,5 @@ export const siteMessages = createLocalizedMessages({
   toggleExpanded: 'Expandir menú',
   connectionStatus: 'Sin conexión',
   logoHomeLabel: 'Vokki Up, inicio',
-  mobileLogoLabel: 'Vokki Up, inicio',
-  avatarInitial: 'K'
+  mobileLogoLabel: 'Vokki Up, inicio'
 });

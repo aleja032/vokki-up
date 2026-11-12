@@ -11,6 +11,12 @@ export const addHubMessages = createLocalizedMessages({
     manual: { label: 'Manual', hint: 'Escribe y completa con IA' }
   },
   badge: 'IA',
+  aiDisabled: {
+    title: 'La IA para tarjetas está desactivada',
+    body: 'Actívala en Ajustes para agregar vocabulario desde una imagen o una lista de palabras. Agregar a mano sigue disponible.',
+    settingsLink: 'Abrir Ajustes',
+    tabHint: 'Actívala en Ajustes'
+  },
   review: {
     title: 'Revisar propuestas',
     subtitle: 'Acepta, edita o descarta antes de crear las tarjetas.',

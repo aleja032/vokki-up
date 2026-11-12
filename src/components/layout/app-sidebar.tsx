@@ -14,6 +14,7 @@ import {
 } from './navigation-icons';
 import {
   AuthenticatedOnly,
+  AvatarInitialSlot,
   ProfileActionSlot,
   ProfileSummarySlot
 } from './shell-slots';
@@ -90,7 +91,7 @@ export function AppSidebar() {
         <div className="app-sidebar__profile">
           <AuthenticatedOnly>
             <span aria-hidden="true" className="user-avatar">
-              {siteMessages.avatarInitial}
+              <AvatarInitialSlot />
             </span>
           </AuthenticatedOnly>
           <ProfileSummarySlot />

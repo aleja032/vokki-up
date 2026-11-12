@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useAiForCardsEnabled } from '@/lib/settings/use-ai-for-cards-enabled';
 import { AiRequestError, requestCardCapture } from '../client';
 import { aiMessages } from '../messages';
 import type { CardCandidate } from '../types';
@@ -14,12 +15,13 @@ export type CardAutofillStatus = 'idle' | 'loading' | 'error' | 'unconfigured';
  * returns its candidate. Callers decide how to apply it.
  */
 export function useCardAutofill() {
+  const { isEnabled: isAiEnabled } = useAiForCardsEnabled();
   const [status, setStatus] = useState<CardAutofillStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
   async function suggest(term: string): Promise<CardCandidate | null> {
     const trimmed = term.trim();
-    if (!trimmed) return null;
+    if (!trimmed || !isAiEnabled) return null;
     setErrorMessage('');
     if (!navigator.onLine) {
       setStatus('error');

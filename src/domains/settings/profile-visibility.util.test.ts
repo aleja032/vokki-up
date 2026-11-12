@@ -10,7 +10,6 @@ describe('getVisibleProfileSections', () => {
       language: true,
       theme: true,
       account: false,
-      displayName: false,
       level: false,
       dailyGoal: false,
       reminder: false,
@@ -23,13 +22,11 @@ describe('getVisibleProfileSections', () => {
     expect(sections.language).toBe(true);
     expect(sections.theme).toBe(true);
     expect(sections.account).toBe(false);
-    expect(sections.displayName).toBe(false);
   });
 
-  it('adds account and name field for authenticated users', () => {
+  it('adds the account summary for authenticated users', () => {
     const sections = getVisibleProfileSections('authenticated', flagsOff);
     expect(sections.account).toBe(true);
-    expect(sections.displayName).toBe(true);
     expect(sections.level).toBe(false);
     expect(sections.dailyGoal).toBe(false);
     expect(sections.reminder).toBe(false);

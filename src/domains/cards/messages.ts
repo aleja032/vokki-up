@@ -119,6 +119,7 @@ export const cardsMessages = createLocalizedMessages({
     previewTermFallback: 'Tu palabra',
     previewMeaningFallback: 'Su significado aparecerá aquí',
     aiHint: 'La sugerencia por IA requiere una conexión disponible',
+    aiDisabledHint: 'La IA para tarjetas está desactivada en Ajustes.',
     aiSuggest: 'Sugerir significado y ejemplo',
     aiSuggestOffline: ' · requiere conexión',
     aiSuggestNeedsTerm: 'Escribe primero la palabra o frase en inglés',

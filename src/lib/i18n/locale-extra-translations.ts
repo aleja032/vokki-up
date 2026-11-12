@@ -104,6 +104,13 @@ export const extraTranslations: Record<string, string> = {
   'Las tarjetas aceptadas se guardarán en este grupo.':
     'Accepted cards will be saved to this group.',
   'Revisar propuestas': 'Review suggestions',
+  'La IA para tarjetas está desactivada': 'AI for cards is turned off',
+  'Actívala en Ajustes para agregar vocabulario desde una imagen o una lista de palabras. Agregar a mano sigue disponible.':
+    'Turn it on in Settings to add vocabulary from an image or a word list. Adding by hand is still available.',
+  'Actívala en Ajustes': 'Turn it on in Settings',
+  'La IA para tarjetas está desactivada en Ajustes.':
+    'AI for cards is turned off in Settings.',
+  'Abrir Ajustes': 'Open Settings',
   'Volver a capturar': 'Back to capture',
   'Tarjetas creadas': 'Cards created',
   'Volver a tarjetas': 'Back to cards',
