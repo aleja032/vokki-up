@@ -2,12 +2,7 @@ import Link from 'next/link';
 import { VokkiLogo } from '@/components/brand/vokki-logo';
 import { siteConfig, siteMessages } from '@/config/site';
 import { ConnectionStatus } from './connection-status';
-import { SettingsIcon } from './navigation-icons';
-import {
-  AuthenticatedOnly,
-  ProfileActionSlot,
-  UnauthenticatedOnly
-} from './shell-slots';
+import { AuthenticatedOnly, ProfileActionSlot } from './shell-slots';
 
 export function AppHeader() {
   return (
@@ -26,17 +21,14 @@ export function AppHeader() {
       <div className="app-header__actions">
         <AuthenticatedOnly>
           <ConnectionStatus variant="header" />
+          <Link
+            aria-label={siteMessages.settingsLinkLabel}
+            className="user-avatar"
+            href="/settings"
+          >
+            {siteMessages.avatarInitial}
+          </Link>
         </AuthenticatedOnly>
-        <Link
-          aria-label={siteMessages.settingsLinkLabel}
-          className="user-avatar"
-          href="/settings"
-        >
-          <AuthenticatedOnly>{siteMessages.avatarInitial}</AuthenticatedOnly>
-          <UnauthenticatedOnly>
-            <SettingsIcon size={20} />
-          </UnauthenticatedOnly>
-        </Link>
         <ProfileActionSlot />
       </div>
     </header>

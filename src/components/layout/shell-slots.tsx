@@ -54,9 +54,3 @@ export function AuthenticatedOnly({ children }: { children: ReactNode }) {
 
   return sessionStatus === 'authenticated' ? children : null;
 }
-
-export function UnauthenticatedOnly({ children }: { children: ReactNode }) {
-  const { sessionStatus } = useShellSlots();
-
-  return sessionStatus !== 'authenticated' ? children : null;
-}

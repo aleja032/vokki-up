@@ -4,7 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { siteConfig, siteMessages } from '@/config/site';
 import { isCurrentRoute } from './is-current-route.util';
-import { navigationIcons } from './navigation-icons';
+import { navigationIcons, SettingsIcon } from './navigation-icons';
+
+const settingsHref = '/settings';
 
 export function BottomNavigation() {
   const pathname = usePathname();
@@ -33,6 +35,18 @@ export function BottomNavigation() {
           </Link>
         );
       })}
+      <Link
+        aria-current={
+          isCurrentRoute(pathname, settingsHref) ? 'page' : undefined
+        }
+        className="bottom-navigation__item"
+        href={settingsHref}
+      >
+        <span className="bottom-navigation__pill">
+          <SettingsIcon size={20} />
+        </span>
+        <span>{siteMessages.settings}</span>
+      </Link>
     </nav>
   );
 }
