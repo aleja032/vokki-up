@@ -1,8 +1,12 @@
+'use client';
+
+import { useEffect } from 'react';
 import { cardsMessages } from '../messages';
 import type { CardRating, VocabularyCard } from '../types';
 import { REVIEW_RATINGS, type ReviewRating } from '../hooks/use-card-review';
 import { ReviewIcon } from './review-icon';
 import { translateText } from '@/lib/i18n/locale';
+import { useSettingsPreferences } from '@/domains/settings/hooks/use-settings-preferences';
 
 const messages = cardsMessages.review;
 
@@ -19,6 +23,24 @@ type ReviewCardScreenProps = {
   onReveal: () => void;
   onRate: (rating: CardRating) => void;
 };
+
+function speakPronunciation(card: VocabularyCard): void {
+  if (
+    !card.term.trim() ||
+    typeof window === 'undefined' ||
+    !('speechSynthesis' in window) ||
+    typeof SpeechSynthesisUtterance === 'undefined'
+  )
+    return;
+  try {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(card.term);
+    utterance.lang = card.pronunciationLocale ?? 'en-US';
+    window.speechSynthesis.speak(utterance);
+  } catch {
+    // Speech synthesis can be unavailable or blocked by browser policy.
+  }
+}
 
 function splitExample(example: string, term: string) {
   const start = example.toLowerCase().indexOf(term.toLowerCase());
@@ -38,7 +60,13 @@ export function ReviewCardScreen({
   onReveal,
   onRate
 }: ReviewCardScreenProps) {
+  const settings = useSettingsPreferences();
+  const shouldAutoPlayPronunciation = settings.shouldAutoPlayPronunciation;
   const example = card.example ? splitExample(card.example, card.term) : null;
+
+  useEffect(() => {
+    if (shouldAutoPlayPronunciation) speakPronunciation(card);
+  }, [card, shouldAutoPlayPronunciation]);
 
   return (
     <>
@@ -61,20 +89,30 @@ export function ReviewCardScreen({
           <h1 className="drill-card__word" id="review-term">
             {card.term}
           </h1>
-          {card.phonetics && (
-            <div className="drill-card__pronunciation">
+          <div className="drill-card__pronunciation">
+            {card.phonetics && (
               <span className="drill-card__ipa">{card.phonetics}</span>
-              <button
-                className="drill-card__listen"
-                type="button"
-                aria-label={messages.listenLabel}
-                title={messages.listenLabel}
-                disabled
-              >
-                <ReviewIcon name="speaker" size={20} />
-              </button>
-            </div>
-          )}
+            )}
+            <button
+              className="drill-card__listen"
+              type="button"
+              aria-label={messages.listenLabel}
+              title={messages.listenLabel}
+              onClick={() => speakPronunciation(card)}
+            >
+              <ReviewIcon name="speaker" size={20} />
+            </button>
+          </div>
+          <label className="drill-card__autoplay">
+            <input
+              type="checkbox"
+              checked={shouldAutoPlayPronunciation}
+              onChange={event =>
+                settings.changeAutoPlayPronunciation(event.target.checked)
+              }
+            />
+            {messages.autoPlayLabel}
+          </label>
         </div>
         {isRevealed ? (
           <div className="drill-card__answer" aria-live="polite">

@@ -10,6 +10,7 @@ export type VocabularyCard = {
   term: string;
   meaning: string;
   phonetics: string;
+  pronunciationLocale: string;
   example: string;
   partOfSpeech: string;
   groupId: string;

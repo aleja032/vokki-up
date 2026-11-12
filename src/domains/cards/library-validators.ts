@@ -24,6 +24,8 @@ export function isCardList(value: unknown): value is VocabularyCard[] {
         typeof card.term === 'string' &&
         typeof card.meaning === 'string' &&
         typeof card.phonetics === 'string' &&
+        (card.pronunciationLocale === undefined ||
+          isPronunciationLocale(card.pronunciationLocale)) &&
         typeof card.example === 'string' &&
         typeof card.partOfSpeech === 'string' &&
         typeof card.groupId === 'string' &&
@@ -31,6 +33,15 @@ export function isCardList(value: unknown): value is VocabularyCard[] {
         card.tags.every(tag => typeof tag === 'string')
     )
   );
+}
+
+export function isPronunciationLocale(value: unknown): value is string {
+  if (typeof value !== 'string' || value.length > 35) return false;
+  try {
+    return Intl.getCanonicalLocales(value).length === 1;
+  } catch {
+    return false;
+  }
 }
 
 export function isGroupList(value: unknown): value is CardGroup[] {

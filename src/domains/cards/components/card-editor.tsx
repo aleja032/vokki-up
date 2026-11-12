@@ -54,6 +54,7 @@ export function CardEditor({
 }: CardEditorProps) {
   // UI-only: the tag input visibility is not card data.
   const [isTagInputVisible, setIsTagInputVisible] = useState(false);
+  const [pronunciationLocale, setPronunciationLocale] = useState('en-US');
   const {
     register,
     onSubmit,
@@ -70,7 +71,18 @@ export function CardEditor({
     clearFields,
     applyAutofillValues,
     readAutofillSnapshot
-  } = useCardCreateSubmit({ groups, existingTerms, initialGroupId, onSave });
+  } = useCardCreateSubmit({
+    groups,
+    existingTerms,
+    initialGroupId,
+    onSave: card =>
+      onSave({
+        ...card,
+        pronunciationLocale: isValidPronunciationLocale(pronunciationLocale)
+          ? pronunciationLocale
+          : 'en-US'
+      })
+  });
   const { isEnabled: isAiEnabled } = useAiForCardsEnabled();
   const editorAutofill = useCardEditorAutofill({
     autofill: isAiEnabled ? autofill : undefined,
@@ -301,6 +313,21 @@ export function CardEditor({
                 {...register('phonetics')}
               />
             </div>
+            <div className="deck-field">
+              <label htmlFor="card-pronunciation-locale">
+                {messages.pronunciationLocaleLabel}
+              </label>
+              <input
+                id="card-pronunciation-locale"
+                className="deck-field__input"
+                type="text"
+                autoComplete="off"
+                placeholder="en-US"
+                value={pronunciationLocale}
+                aria-invalid={!isValidPronunciationLocale(pronunciationLocale)}
+                onChange={event => setPronunciationLocale(event.target.value)}
+              />
+            </div>
 
             <fieldset className="deck-choice">
               <legend>{messages.groupLegend}</legend>
@@ -425,4 +452,12 @@ export function CardEditor({
       </form>
     </section>
   );
+}
+
+function isValidPronunciationLocale(value: string): boolean {
+  try {
+    return Intl.getCanonicalLocales(value).length === 1;
+  } catch {
+    return false;
+  }
 }
