@@ -1,15 +1,14 @@
 'use client';
 
-import { useEffect, useRef, useState, type SetStateAction } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { APP_LANGUAGES, LEARNING_LEVELS, PROVIDER_OPTIONS } from '../data';
 import { settingsMessages } from '../messages';
 import { FEATURES } from '@/config/features';
 import { useAuthSession } from '@/lib/auth/use-auth-session';
 import type { AiProvider, AppTheme, SettingsTab } from '../types';
 import type { JsonValue } from '@/lib/sync/types';
-import { scalarChangeBuilder } from '@/lib/sync/change-builders';
 import { THEME_STORAGE_KEY } from '@/lib/theme/theme-init-script';
-import { useTrackedBrowserState } from '@/lib/sync/use-tracked-browser-state';
+import { useBrowserState } from '@/lib/storage/use-browser-state';
 import { setAppLanguage, type AppLanguage } from '@/lib/i18n/locale';
 import { languageToLocale, writeLocaleCookie } from '@/lib/i18n/locale-cookie';
 
@@ -80,7 +79,7 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     true,
     isBoolean
   );
-  const [isSaved, setIsSaved] = useState(true);
+  const isLanguageDirty = isLanguageLoaded && draftLanguage !== language;
   const providerOptions =
     PROVIDER_OPTIONS.find(option => option.id === provider) ??
     PROVIDER_OPTIONS[0];
@@ -131,27 +130,21 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     setDraftLanguage(language);
   }, [isLanguageLoaded, language]);
 
-  function markDirty<T>(setter: (value: SetStateAction<T>) => void) {
-    return (value: T) => {
-      setter(value);
-      setIsSaved(false);
-    };
-  }
-
   function changeProvider(nextProvider: AiProvider) {
     setProvider(nextProvider);
     const nextOptions =
       PROVIDER_OPTIONS.find(option => option.id === nextProvider) ??
       PROVIDER_OPTIONS[0];
     setModel(nextOptions.models[0]);
-    setIsSaved(false);
   }
 
+  // Theme, toggles and the other controls persist on change; the only draft
+  // committed by Save is the app language.
   function saveChanges() {
+    if (!isLanguageDirty) return;
     setLanguage(draftLanguage);
     writeLocaleCookie(languageToLocale(draftLanguage));
     setAppLanguage(draftLanguage);
-    setIsSaved(true);
   }
 
   async function saveReminderPreferences(enabled: boolean, consent: boolean) {
@@ -176,7 +169,7 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
 
   function changeReminder(enabled: boolean) {
     if (!isAuthenticated) {
-      markDirty(setIsReminderEnabled)(enabled);
+      setIsReminderEnabled(enabled);
       return;
     }
     if (enabled && !reminderDeliveryConfigured) {
@@ -211,19 +204,17 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
     provider,
     model,
     shouldUseAiForCards,
-    isSaved,
+    isSaved: !isLanguageDirty,
+    isLanguageDirty,
     providerOptions,
-    changeTheme: markDirty(setTheme),
-    changeLanguage: (nextLanguage: AppLanguage) => {
-      setDraftLanguage(nextLanguage);
-      setIsSaved(false);
-    },
-    changeLevel: markDirty(setLevel),
-    changeDailyGoal: markDirty(setDailyGoal),
-    changeDisplayName: markDirty(setDisplayName),
+    changeTheme: setTheme,
+    changeLanguage: setDraftLanguage,
+    changeLevel: setLevel,
+    changeDailyGoal: setDailyGoal,
+    changeDisplayName: setDisplayName,
     changeReminder,
-    changeModel: markDirty(setModel),
-    changeUseAiForCards: markDirty(setShouldUseAiForCards),
+    changeModel: setModel,
+    changeUseAiForCards: setShouldUseAiForCards,
     changeProvider,
     saveChanges
   };
@@ -276,10 +267,7 @@ function useTrackedSetting<T extends JsonValue>(
   fallback: T,
   isValid: (value: unknown) => value is T
 ) {
-  return useTrackedBrowserState(
-    key,
-    fallback,
-    isValid,
-    scalarChangeBuilder('settings', key)
-  );
+  // Settings are local-only: the sync route and drain only handle cards, so
+  // no sync operations are enqueued for them.
+  return useBrowserState(key, fallback, isValid);
 }

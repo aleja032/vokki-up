@@ -3,8 +3,19 @@
 import { useEffect, useState } from 'react';
 import { setTransientAiApiKey } from '@/lib/ai/transient-api-key';
 import { getSupabaseBrowserClient } from '@/lib/supabase/browser-client';
+import { requestCredentials, type CredentialStatus } from '../credential-api';
+import {
+  extractErrorCode,
+  getCredentialErrorKey,
+  type CredentialErrorKey
+} from '../credential-error-message.util';
 import { PROVIDER_OPTIONS } from '../data';
+import {
+  resolveProviderSaveAction,
+  type SavedCredentialSelection
+} from '../ai-provider-save.util';
 import { settingsMessages } from '../messages';
+import { hasPendingChanges } from '../pending-changes.util';
 import type { AiProvider, ConnectionStatus, ConnectionTest } from '../types';
 import { ApiKeyField } from './api-key-field';
 import {
@@ -19,7 +30,7 @@ interface AiProviderPanelProps {
   connectionStatus: ConnectionStatus;
   connectionTest: ConnectionTest;
   isActive: boolean;
-  isSaved: boolean;
+  isLanguageDirty: boolean;
   model: string;
   models: readonly string[];
   onModelChange: (value: string) => void;
@@ -30,15 +41,36 @@ interface AiProviderPanelProps {
   shouldUseForCards: boolean;
 }
 
+function toSavedCredential(
+  status: CredentialStatus
+): SavedCredentialSelection | null {
+  return status.authenticated &&
+    status.hasCredential &&
+    status.provider &&
+    status.model
+    ? { provider: status.provider, model: status.model }
+    : null;
+}
+
+function readLatency(value: unknown): number | undefined {
+  return typeof value === 'object' &&
+    value !== null &&
+    'latencyMs' in value &&
+    typeof value.latencyMs === 'number'
+    ? value.latencyMs
+    : undefined;
+}
+
 export function AiProviderPanel(props: AiProviderPanelProps) {
   const copy = settingsMessages.provider;
   const providerName = settingsMessages.providers[props.provider].name;
   const [apiKey, setApiKey] = useState('');
+  const [appliedGuestKey, setAppliedGuestKey] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [hasSavedCredential, setHasSavedCredential] = useState(false);
+  const [savedCredential, setSavedCredential] =
+    useState<SavedCredentialSelection | null>(null);
   const [maskedKey, setMaskedKey] = useState<string | null>(null);
-  const [savedSelection, setSavedSelection] = useState<string | null>(null);
-  const [credentialError, setCredentialError] = useState('');
+  const [errorKey, setErrorKey] = useState<CredentialErrorKey | null>(null);
   const [isSavingCredential, setIsSavingCredential] = useState(false);
   const [isTestingConnection, setIsTestingConnection] = useState(false);
   const [connectionResult, setConnectionResult] = useState<{
@@ -46,7 +78,22 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
     latencyMs?: number;
     error?: string;
   } | null>(null);
-  const hasCredential = hasSavedCredential || Boolean(apiKey.trim());
+  const hasSavedForProvider = savedCredential?.provider === props.provider;
+  const hasOtherProviderCredential =
+    savedCredential !== null && !hasSavedForProvider;
+  const hasCredential = hasSavedForProvider || Boolean(apiKey.trim());
+  const typedKey =
+    apiKey.trim() && (isAuthenticated || apiKey.trim() !== appliedGuestKey)
+      ? apiKey
+      : '';
+  const isPending = hasPendingChanges({
+    isLanguageDirty: props.isLanguageDirty,
+    typedKey,
+    isAuthenticated,
+    savedCredential,
+    selectedProvider: props.provider,
+    selectedModel: props.model
+  });
   const hasPreviewResult =
     props.connectionStatus === 'ok' ||
     props.connectionStatus === 'error' ||
@@ -74,44 +121,17 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
   useEffect(() => {
     let active = true;
     const refreshCredentialStatus = async () => {
-      try {
-        const response = await fetch('/api/settings/ai-credentials', {
-          cache: 'no-store'
-        });
-        const value: unknown = await response.json();
-        if (
-          !active ||
-          !response.ok ||
-          typeof value !== 'object' ||
-          value === null
-        )
-          return;
-        const status = value as {
-          authenticated?: boolean;
-          hasCredential?: boolean;
-          maskedKey?: string;
-          provider?: string;
-          model?: string;
-        };
-        const authenticated = status.authenticated === true;
-        setIsAuthenticated(authenticated);
-        setHasSavedCredential(authenticated && status.hasCredential === true);
-        setMaskedKey(
-          typeof status.maskedKey === 'string' ? status.maskedKey : null
-        );
-        setSavedSelection(
-          authenticated &&
-            status.hasCredential &&
-            status.provider &&
-            status.model
-            ? `${status.provider} · ${status.model}`
-            : null
-        );
-        if (authenticated) setTransientAiApiKey(null);
-      } catch {
-        if (active)
-          setCredentialError('No se pudo cargar el estado de la API key.');
+      const result = await requestCredentials('GET', 'loadFailed');
+      if (!active) return;
+      if (!result.ok) {
+        setErrorKey(result.errorKey);
+        return;
       }
+      const saved = toSavedCredential(result.status);
+      setIsAuthenticated(result.status.authenticated);
+      setSavedCredential(saved);
+      setMaskedKey(saved ? result.status.maskedKey : null);
+      if (result.status.authenticated) setTransientAiApiKey(null);
     };
     void refreshCredentialStatus();
     window.addEventListener('focus', refreshCredentialStatus);
@@ -126,65 +146,95 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
     };
   }, []);
 
+  function clearTypedKey() {
+    setApiKey('');
+    setAppliedGuestKey('');
+    setTransientAiApiKey(null);
+  }
+
   async function saveProviderSettings() {
-    setCredentialError('');
-    if (apiKey.trim()) {
-      if (isAuthenticated) {
-        setIsSavingCredential(true);
-        try {
-          const response = await fetch('/api/settings/ai-credentials', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              provider: props.provider,
-              model: props.model,
-              apiKey: apiKey.trim()
-            }),
-            cache: 'no-store'
-          });
-          const value = await response.json();
-          if (!response.ok) throw new Error('No se pudo guardar la API key.');
-          setHasSavedCredential(value.hasCredential === true);
-          setMaskedKey(
-            typeof value.maskedKey === 'string' ? value.maskedKey : null
-          );
-          setSavedSelection(`${props.provider} · ${props.model}`);
-          setApiKey('');
-          setTransientAiApiKey(null);
-        } catch (error) {
-          setCredentialError(
-            error instanceof Error
-              ? error.message
-              : 'No se pudo guardar la API key.'
-          );
-          setIsSavingCredential(false);
-          return;
-        }
-        setIsSavingCredential(false);
-      } else {
-        setTransientAiApiKey(apiKey);
+    setErrorKey(null);
+    const action = resolveProviderSaveAction({
+      isAuthenticated,
+      typedKey: apiKey,
+      savedCredential,
+      selectedProvider: props.provider,
+      selectedModel: props.model
+    });
+    if (action.kind === 'needs-key-for-provider') {
+      setErrorKey('needsKeyForProvider');
+      return;
+    }
+    if (action.kind === 'post' || action.kind === 'patch') {
+      setIsSavingCredential(true);
+      const selection = { provider: action.provider, model: action.model };
+      const result =
+        action.kind === 'post'
+          ? await requestCredentials('POST', 'saveFailed', {
+              ...selection,
+              apiKey: action.apiKey
+            })
+          : await requestCredentials('PATCH', 'saveFailed', selection);
+      setIsSavingCredential(false);
+      if (!result.ok) {
+        setErrorKey(result.errorKey);
+        return;
       }
+      setSavedCredential(selection);
+      setMaskedKey(result.status.maskedKey ?? maskedKey);
+      clearTypedKey();
+    } else if (action.kind === 'transient') {
+      setTransientAiApiKey(action.apiKey);
+      setAppliedGuestKey(action.apiKey);
     }
     props.onSave();
   }
 
   async function deleteProviderCredential() {
-    setCredentialError('');
-    if (isAuthenticated && hasSavedCredential) {
-      const response = await fetch('/api/settings/ai-credentials', {
-        method: 'DELETE',
-        cache: 'no-store'
-      });
-      if (!response.ok) {
-        setCredentialError('No se pudo eliminar la API key guardada.');
+    setErrorKey(null);
+    if (isAuthenticated && hasSavedForProvider) {
+      const result = await requestCredentials('DELETE', 'deleteFailed');
+      if (!result.ok) {
+        setErrorKey(result.errorKey);
         return;
       }
     }
-    setApiKey('');
-    setTransientAiApiKey(null);
-    setHasSavedCredential(false);
+    clearTypedKey();
+    setSavedCredential(null);
     setMaskedKey(null);
-    setSavedSelection(null);
+  }
+
+  async function testConnection() {
+    setConnectionResult(null);
+    setErrorKey(null);
+    setIsTestingConnection(true);
+    try {
+      const response = await fetch('/api/ai/connection-test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          selection: { provider: props.provider, model: props.model },
+          ...(!isAuthenticated && apiKey.trim()
+            ? { apiKey: apiKey.trim() }
+            : {})
+        }),
+        cache: 'no-store'
+      });
+      const value: unknown = await response.json();
+      if (!response.ok) {
+        setConnectionResult({
+          success: false,
+          error: copy.errors[getCredentialErrorKey(extractErrorCode(value))],
+          latencyMs: readLatency(value)
+        });
+        return;
+      }
+      setConnectionResult({ success: true, latencyMs: readLatency(value) });
+    } catch {
+      setConnectionResult({ success: false, error: copy.genericError });
+    } finally {
+      setIsTestingConnection(false);
+    }
   }
 
   return (
@@ -217,6 +267,8 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
                 key={option.id}
                 onClick={() => {
                   setConnectionResult(null);
+                  setErrorKey(null);
+                  if (option.id !== props.provider) clearTypedKey();
                   props.onProviderChange(option.id);
                 }}
                 role="radio"
@@ -262,24 +314,28 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
         </div>
         <ApiKeyField
           apiKey={apiKey}
-          hasError={visibleConnectionTest === 'error' || !!credentialError}
-          hasSavedCredential={hasSavedCredential}
+          hasError={visibleConnectionTest === 'error' || errorKey !== null}
+          hasSavedCredential={hasSavedForProvider}
           isAuthenticated={isAuthenticated}
-          maskedKey={maskedKey}
+          maskedKey={hasSavedForProvider ? maskedKey : null}
           onApiKeyChange={value => {
             setApiKey(value);
             setTransientAiApiKey(isAuthenticated ? null : value);
           }}
           providerName={providerName}
         />
-        {savedSelection && (
+        {hasSavedForProvider && savedCredential && (
           <span className="prefs-hint">
-            {copy.savedApiKey}: {savedSelection}
+            {copy.savedApiKey}: {savedCredential.provider} ·{' '}
+            {savedCredential.model}
           </span>
         )}
-        {credentialError && (
+        {hasOtherProviderCredential && (
+          <span className="prefs-hint">{copy.keyNeededForProvider}</span>
+        )}
+        {errorKey && (
           <span className="prefs-hint" role="alert">
-            {credentialError}
+            {copy.errors[errorKey]}
           </span>
         )}
         <ConnectionTestResult
@@ -292,20 +348,20 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
           <button
             className="prefs-remove prefs-remove--wide"
             type="button"
-            disabled={!hasSavedCredential && !apiKey}
+            disabled={!hasSavedForProvider && !apiKey}
             onClick={deleteProviderCredential}
           >
             <SettingsIcon name="trash" size={16} />
             {copy.removeApiKey}
           </button>
           <div className="prefs-footer__actions">
-            <SettingsSaveState isSaved={props.isSaved} />
+            <SettingsSaveState isSaved={!isPending} />
             <button
               className="prefs-button prefs-button--outline"
               type="button"
               disabled={
                 isTestingConnection ||
-                (isAuthenticated ? !hasSavedCredential : !apiKey.trim())
+                (isAuthenticated ? !hasSavedForProvider : !apiKey.trim())
               }
               onClick={testConnection}
             >
@@ -317,7 +373,7 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
               className="prefs-button prefs-button--primary"
               onClick={saveProviderSettings}
               type="button"
-              disabled={isSavingCredential}
+              disabled={isSavingCredential || !isPending}
             >
               {copy.save}
             </button>
@@ -344,7 +400,7 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
         <button
           className="prefs-remove prefs-remove--narrow"
           type="button"
-          disabled={!hasSavedCredential && !apiKey}
+          disabled={!hasSavedForProvider && !apiKey}
           onClick={deleteProviderCredential}
         >
           <SettingsIcon name="trash" size={16} />
@@ -363,57 +419,4 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
       </aside>
     </section>
   );
-
-  async function testConnection() {
-    setConnectionResult(null);
-    setCredentialError('');
-    setIsTestingConnection(true);
-    try {
-      const response = await fetch('/api/ai/connection-test', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          selection: { provider: props.provider, model: props.model },
-          ...(!isAuthenticated && apiKey.trim()
-            ? { apiKey: apiKey.trim() }
-            : {})
-        }),
-        cache: 'no-store'
-      });
-      const value: unknown = await response.json();
-      if (!response.ok) {
-        const errorMessage =
-          typeof value === 'object' &&
-          value !== null &&
-          'error' in value &&
-          typeof value.error === 'object' &&
-          value.error !== null &&
-          'message' in value.error &&
-          typeof value.error.message === 'string'
-            ? value.error.message
-            : copy.genericError;
-        const latencyMs =
-          typeof value === 'object' &&
-          value !== null &&
-          'latencyMs' in value &&
-          typeof value.latencyMs === 'number'
-            ? value.latencyMs
-            : undefined;
-        setConnectionResult({ success: false, error: errorMessage, latencyMs });
-        return;
-      }
-      const latencyMs =
-        typeof value === 'object' &&
-        value !== null &&
-        'latencyMs' in value &&
-        typeof value.latencyMs === 'number'
-          ? value.latencyMs
-          : undefined;
-      setConnectionResult({ success: true, latencyMs });
-    } catch {
-      setConnectionResult({ success: false, error: copy.genericError });
-    } finally {
-      setIsTestingConnection(false);
-    }
-  }
 }

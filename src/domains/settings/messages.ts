@@ -1,4 +1,5 @@
 import { createLocalizedMessages } from '@/lib/i18n/locale';
+import type { CredentialErrorKey } from './credential-error-message.util';
 import type { AiProvider, AppTheme } from './types';
 
 export const settingsMessages = createLocalizedMessages({
@@ -67,6 +68,29 @@ export const settingsMessages = createLocalizedMessages({
     testConnection: 'Probar conexión',
     testingConnection: 'Probando…',
     genericError: 'No se pudo completar la prueba. Inténtalo de nuevo.',
+    keyNeededForProvider: 'Este proveedor necesita su propia API key.',
+    errors: {
+      invalidCredential:
+        'La API key no tiene un formato válido. Revísala e inténtalo de nuevo.',
+      invalidSelection:
+        'El proveedor o el modelo elegido no es válido. Elige otro e inténtalo de nuevo.',
+      signInRequired: 'Inicia sesión para guardar la API key en tu cuenta.',
+      keyRequired:
+        'Escribe o guarda una API key de este proveedor antes de probar la conexión.',
+      providerMismatch:
+        'La API key guardada es de otro proveedor. Escribe una API key para este proveedor.',
+      noCredential:
+        'Todavía no hay una API key guardada. Escribe una para continuar.',
+      serviceUnavailable:
+        'El servicio no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.',
+      saveFailed: 'No se pudo guardar la configuración. Inténtalo de nuevo.',
+      deleteFailed:
+        'No se pudo eliminar la API key guardada. Inténtalo de nuevo.',
+      loadFailed: 'No se pudo cargar el estado de la API key.',
+      needsKeyForProvider:
+        'Escribe una API key para el proveedor elegido antes de guardar.',
+      genericFailure: 'Algo salió mal. Inténtalo de nuevo.'
+    } satisfies Record<CredentialErrorKey, string>,
     save: 'Guardar',
     howTitle: 'Cómo funciona',
     howItems: [

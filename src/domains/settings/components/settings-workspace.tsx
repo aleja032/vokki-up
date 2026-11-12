@@ -80,7 +80,7 @@ export function SettingsWorkspace({
         connectionStatus={connectionStatus}
         connectionTest={connectionTest}
         isActive={activeTab === 'provider'}
-        isSaved={preferences.isSaved}
+        isLanguageDirty={preferences.isLanguageDirty}
         model={preferences.model}
         models={
           (

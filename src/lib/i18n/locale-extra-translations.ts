@@ -208,6 +208,33 @@ export const extraTranslations: Record<string, string> = {
   'Elige cómo quieres cargar tus palabras.':
     'Choose how you want to load your words.',
 
+  // Settings: credential errors
+  'Este proveedor necesita su propia API key.':
+    'This provider needs its own API key.',
+  'La API key no tiene un formato válido. Revísala e inténtalo de nuevo.':
+    'The API key does not have a valid format. Check it and try again.',
+  'El proveedor o el modelo elegido no es válido. Elige otro e inténtalo de nuevo.':
+    'The selected provider or model is not valid. Choose another and try again.',
+  'Inicia sesión para guardar la API key en tu cuenta.':
+    'Sign in to save the API key to your account.',
+  'Escribe o guarda una API key de este proveedor antes de probar la conexión.':
+    'Enter or save an API key for this provider before testing the connection.',
+  'La API key guardada es de otro proveedor. Escribe una API key para este proveedor.':
+    'The saved API key belongs to another provider. Enter an API key for this provider.',
+  'Todavía no hay una API key guardada. Escribe una para continuar.':
+    'There is no saved API key yet. Enter one to continue.',
+  'El servicio no está disponible ahora mismo. Inténtalo de nuevo en unos minutos.':
+    'The service is not available right now. Try again in a few minutes.',
+  'No se pudo guardar la configuración. Inténtalo de nuevo.':
+    'The settings could not be saved. Try again.',
+  'No se pudo eliminar la API key guardada. Inténtalo de nuevo.':
+    'The saved API key could not be deleted. Try again.',
+  'No se pudo cargar el estado de la API key.':
+    'The API key status could not be loaded.',
+  'Escribe una API key para el proveedor elegido antes de guardar.':
+    'Enter an API key for the selected provider before saving.',
+  'Algo salió mal. Inténtalo de nuevo.': 'Something went wrong. Try again.',
+
   // Add hub
   'Forma de agregar vocabulario': 'Way to add vocabulary',
   'La IA lee tu foto': 'AI reads your photo',

@@ -202,6 +202,7 @@ export function ProfilePanel(props: ProfilePanelProps) {
             <SettingsSaveState isSaved={props.isSaved} />
             <button
               className="prefs-button prefs-button--primary"
+              disabled={props.isSaved}
               onClick={props.onSave}
               type="button"
             >

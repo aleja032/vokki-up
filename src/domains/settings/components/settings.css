@@ -284,6 +284,11 @@
   @apply bg-(--indigo) text-(--prefs-on-indigo);
 }
 
+.prefs-button:disabled,
+.prefs-remove:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
 .prefs-button--outline {
   @apply border-[1.5px] border-(--prefs-line-strong) bg-(--surface) font-semibold text-(--ink);
 }
