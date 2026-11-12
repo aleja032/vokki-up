@@ -1,5 +1,4 @@
 type SettingsIconName =
-  | 'back'
   | 'eye'
   | 'lock'
   | 'check'
@@ -31,7 +30,6 @@ export function SettingsIcon({
       viewBox="0 0 24 24"
       width={size}
     >
-      {name === 'back' && <path d="M15 6l-6 6 6 6" />}
       {name === 'eye' && (
         <>
           <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />

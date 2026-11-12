@@ -3,7 +3,6 @@ import type { AiProvider, AppTheme } from './types';
 
 export const settingsMessages = createLocalizedMessages({
   title: 'Ajustes',
-  backLabel: 'Volver al inicio',
   tabsLabel: 'Secciones de ajustes',
   tabs: {
     profile: 'Perfil',

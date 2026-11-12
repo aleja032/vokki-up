@@ -1,13 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { PROVIDER_OPTIONS } from '../data';
 import { useSettingsPreferences } from '../hooks/use-settings-preferences';
 import { settingsMessages } from '../messages';
 import type { ConnectionStatus, ConnectionTest, SettingsTab } from '../types';
 import { AiProviderPanel } from './ai-provider-panel';
 import { ProfilePanel } from './profile-panel';
-import { SettingsIcon } from './settings-icon';
 import './settings.css';
 
 const TABS: SettingsTab[] = ['profile', 'provider'];
@@ -32,13 +30,6 @@ export function SettingsWorkspace({
     <div className="prefs">
       <header className="prefs__header">
         <div className="prefs__heading">
-          <Link
-            aria-label={settingsMessages.backLabel}
-            className="prefs__back"
-            href="/"
-          >
-            <SettingsIcon name="back" />
-          </Link>
           <h1 className="prefs__title">{settingsMessages.title}</h1>
         </div>
         <div
