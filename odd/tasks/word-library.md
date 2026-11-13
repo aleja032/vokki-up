@@ -29,7 +29,7 @@ Users currently have to create vocabulary cards themselves. A separate local cat
 
 ## Tasks
 
-- [ ] WL-01 — Implement local catalog model, browse/search UI, and duplicate-safe add flow. Route: delegated direct. Added `/cards/word-library`, a typed static catalog, category/search browsing, preview, group selection, and normalized duplicate-safe add. Verification passed: focused Vitest (3 tests), ESLint, TypeScript, and Prettier checks. Work-unit commit pending.
+- [x] WL-01 — Implement local catalog model, browse/search UI, and duplicate-safe add flow. Route: delegated direct. Added `/cards/word-library`, a typed static catalog, category/search browsing, preview, group selection, and normalized duplicate-safe add. Verification passed: focused Vitest (3 tests), ESLint, TypeScript, and Prettier checks. Work-unit commit: `35c9dea` (`feat(cards): add searchable word library`).
 - [ ] WL-02 — Add 200 curated entries for each of the four categories. Route: delegated. Acceptance: 800 entries are available and associated with the intended categories.
 
 ## Next step
