@@ -12,13 +12,14 @@ import {
   isReviewSessionList,
   isVocabularyCardList
 } from '@/domains/cards/scheduling/validators';
+import { INITIAL_CARDS } from '@/domains/cards/data';
 import { HomeDashboard } from '@/domains/home/components/home-dashboard';
 import { useBrowserState } from '@/lib/storage/use-browser-state';
 
 export function HomeDashboardContainer() {
   const [cards, , cardsLoaded] = useBrowserState(
     'cards/library',
-    [],
+    INITIAL_CARDS,
     isVocabularyCardList
   );
   const [schedules, , schedulesLoaded] = useBrowserState<CardScheduleMap>(

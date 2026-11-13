@@ -80,5 +80,19 @@ export const INITIAL_NOTES: Note[] = [
     category: 'Gramática',
     body: '## Make\n- make a decision, make a mistake\n\n## Do\n- do homework, do business',
     updatedAt: '11 oct'
+  },
+  {
+    id: '6',
+    title: 'Verbo to be: am, is, are',
+    category: 'Gramática',
+    body: '## Formas\n- **I am** a student.\n- **You / we / they are** friends.\n- **He / she / it is** tired.\n\n## Negativo y pregunta\n- Negativo: I am not, she is not (isn’t), they are not (aren’t).\n- Pregunta: Are you ready? Is she at home?',
+    updatedAt: '9 oct'
+  },
+  {
+    id: '7',
+    title: 'Presente simple',
+    category: 'Gramática',
+    body: '## Cuándo usarlo\n- Rutinas y hábitos: I **work** every day.\n- Hechos generales: Water **boils** at 100 °C.\n\n## Reglas clave\n- Con he / she / it se agrega **-s**: she works.\n- Negativo y pregunta usan **do / does**: I don’t like it. Does he play?',
+    updatedAt: '8 oct'
   }
 ];
