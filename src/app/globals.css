@@ -14,6 +14,7 @@
   --indigo: #4a3ac9;
   --indigo-strong: #3a2cb0;
   --indigo-soft: #e9e6fb;
+  --on-indigo: #ffffff;
   --amber: #f2b53a;
   --amber-soft: #fcebc4;
   --amber-ink: #7a4f00;
@@ -58,6 +59,7 @@
   --indigo: #9a91f5;
   --indigo-strong: #b0a9fa;
   --indigo-soft: #302d4c;
+  --on-indigo: #141416;
   --amber: #e3b25a;
   --amber-soft: #3b3020;
   --amber-ink: #e3b25a;
@@ -66,7 +68,7 @@
   --blue: #72bac6;
   --blue-soft: #1d3439;
   --red-soft: #422821;
-  --red-ink: #7d280c;
+  --red-ink: #f09a7e;
   --focus-ring: #b0a9fa;
   --hover-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
 }
@@ -85,6 +87,7 @@
     --indigo: #9a91f5;
     --indigo-strong: #b0a9fa;
     --indigo-soft: #302d4c;
+    --on-indigo: #141416;
     --amber: #e3b25a;
     --amber-soft: #3b3020;
     --amber-ink: #e3b25a;
@@ -164,7 +167,7 @@ a:focus-visible {
   padding: 0 24px;
   border-radius: var(--control-radius);
   background: var(--indigo);
-  color: #ffffff;
+  color: var(--on-indigo);
   font-size: 15px;
   font-weight: 700;
   transition: var(--hover-transition);
@@ -174,7 +177,7 @@ a:focus-visible {
   .primary-action:hover {
     background: var(--indigo-strong);
     box-shadow: var(--hover-shadow);
-    color: #ffffff;
+    color: var(--on-indigo);
     transform: translateY(var(--lift-1));
   }
 
