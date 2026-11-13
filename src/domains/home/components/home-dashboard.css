@@ -91,10 +91,6 @@
   @apply mt-2 min-h-13 w-full gap-2 self-stretch rounded-[14px] bg-(--indigo) text-[16px] text-(--home-on-indigo);
 }
 
-.next-session .primary-action:hover {
-  @apply bg-(--indigo-strong) text-(--home-on-indigo);
-}
-
 .today-goal {
   @apply hidden;
 }
@@ -517,5 +513,35 @@
 @media (prefers-reduced-motion: reduce) {
   .activity-item {
     transition: none;
+  }
+}
+
+/* Hover feedback: actions */
+
+.next-session .primary-action {
+  transition: var(--hover-transition);
+}
+
+.home-intro__action {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .next-session .primary-action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--indigo-strong);
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+    color: var(--home-on-indigo);
+  }
+
+  .home-intro__action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    border-color: var(--indigo);
+    background-color: var(--indigo-soft);
+    color: var(--indigo);
+  }
+
+  .next-session .primary-action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
   }
 }

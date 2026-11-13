@@ -1546,3 +1546,104 @@
     @apply hidden;
   }
 }
+
+/* Hover feedback: buttons, links, tabs and chips */
+
+.deck-hero__review,
+.deck-editor__submit,
+.deck-screen__submit {
+  transition: var(--hover-transition);
+}
+
+.deck-groups__add,
+.deck-screen__list-heading button,
+.deck-pagination__button,
+.deck-editor__cancel,
+.deck-editor__clear,
+.deck-screen__cancel,
+.deck-confirm__actions button:not(.deck-confirm__danger),
+.deck-field__link,
+.deck-editor__back,
+.deck-screen__back,
+.deck-screen__icon-button,
+.deck-choice__add,
+.deck-editor__ai,
+.deck-page__review-button,
+.deck-modes__tab,
+.deck-filter,
+.deck-choice__category,
+.deck-choice__tag,
+.deck-choice__group {
+  transition: var(--hover-transition);
+}
+
+.deck-confirm__danger {
+  transition: var(--hover-transition);
+}
+
+.deck-menu__danger {
+  transition: var(--hover-transition);
+}
+
+.deck-colors__option {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .deck-hero__review:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-editor__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-screen__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--indigo-strong);
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .deck-groups__add:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-screen__list-heading button:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-pagination__button:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-editor__cancel:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-editor__clear:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-screen__cancel:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-confirm__actions button:not(.deck-confirm__danger):not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-field__link:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-editor__back:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-screen__back:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-screen__icon-button:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-choice__add:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-editor__ai:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-page__review-button:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-modes__tab:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-filter:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-choice__category:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-choice__tag:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .deck-choice__group:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    border-color: var(--indigo);
+    background-color: var(--indigo-soft);
+    color: var(--indigo);
+  }
+
+  .deck-confirm__danger:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .deck-menu__danger:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--red-soft);
+  }
+
+  .deck-colors__option:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    border-color: color-mix(in srgb, var(--tone-strong) 45%, transparent);
+  }
+
+  .deck-hero__review:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
+  .deck-editor__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
+  .deck-screen__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
+  }
+
+  .deck-confirm__danger:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
+  }
+}

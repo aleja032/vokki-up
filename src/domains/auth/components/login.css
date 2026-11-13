@@ -91,7 +91,7 @@
 }
 
 .signin-field__toggle {
-  @apply absolute top-1/2 right-1.5 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[10px] border-0 bg-transparent text-(--ink-soft) hover:text-(--ink) focus-visible:outline-2 focus-visible:outline-(--indigo);
+  @apply absolute top-1/2 right-1.5 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[10px] border-0 bg-transparent text-(--ink-soft) focus-visible:outline-2 focus-visible:outline-(--indigo);
 }
 
 .signin-field__error {
@@ -135,7 +135,7 @@
 /* Logout button */
 
 .signin-logout {
-  @apply flex h-12 cursor-pointer items-center justify-center gap-2 rounded-(--control-radius) border-[1.5px] border-solid border-(--line) bg-transparent px-4 text-[15px] font-semibold text-(--ink) hover:bg-(--surface-muted) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--indigo);
+  @apply flex h-12 cursor-pointer items-center justify-center gap-2 rounded-(--control-radius) border-[1.5px] border-solid border-(--line) bg-transparent px-4 text-[15px] font-semibold text-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--indigo);
 }
 
 .signin-logout[data-variant='full'] {
@@ -150,10 +150,6 @@
 
 .signin-login-cta {
   @apply inline-flex h-9 max-w-full min-w-0 items-center justify-center gap-1.5 rounded-full bg-(--indigo) px-3 text-[13px] leading-[normal] font-semibold whitespace-nowrap text-(--signin-on-indigo) focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-(--focus-ring) focus-visible:outline-solid;
-}
-
-.signin-login-cta:hover {
-  @apply bg-(--indigo-strong);
 }
 
 .signin-login-cta svg {
@@ -171,5 +167,41 @@
 
   .signin-card {
     @apply px-8 py-9;
+  }
+}
+
+/* Hover feedback: buttons and links */
+
+.signin-login-cta,
+.signin-form__submit {
+  transition: var(--hover-transition);
+}
+
+.signin-form__guest,
+.signin-logout,
+.signin-field__toggle {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .signin-login-cta:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .signin-form__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--indigo-strong);
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .signin-form__guest:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .signin-logout:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .signin-field__toggle:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    border-color: var(--indigo);
+    background-color: var(--indigo-soft);
+    color: var(--indigo);
+  }
+
+  .signin-login-cta:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
+  .signin-form__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
   }
 }

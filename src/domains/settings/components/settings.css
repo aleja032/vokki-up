@@ -424,7 +424,7 @@
 }
 
 .prefs-key__help {
-  @apply min-w-0 truncate text-[13px] font-semibold text-(--indigo) hover:text-(--indigo-strong);
+  @apply min-w-0 truncate text-[13px] font-semibold text-(--indigo);
 }
 
 .prefs-key__field {
@@ -772,5 +772,65 @@
 
   .prefs-how__list {
     @apply m-0 flex list-disc flex-col gap-2 pl-5 text-[14px] leading-normal;
+  }
+}
+
+/* Hover feedback: buttons, tabs and chips */
+
+.prefs-button--primary {
+  transition: var(--hover-transition);
+}
+
+.prefs-button--outline,
+.prefs-stepper__button,
+.prefs-tab,
+.prefs-theme,
+.prefs-level,
+.prefs-key__toggle {
+  transition: var(--hover-transition);
+}
+
+.prefs-remove {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .prefs-button--primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--indigo-strong);
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .prefs-button--outline:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .prefs-stepper__button:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .prefs-tab:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .prefs-theme:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .prefs-level:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .prefs-key__toggle:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    border-color: var(--indigo);
+    background-color: var(--indigo-soft);
+    color: var(--indigo);
+  }
+
+  .prefs-remove:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--red-soft);
+  }
+
+  .prefs-button--primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+.prefs-key__help {
+  text-decoration: underline transparent;
+  text-underline-offset: 3px;
+  transition: var(--hover-transition), text-decoration-color var(--hover-duration) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .prefs-key__help:hover {
+    color: var(--indigo-strong);
+    text-decoration-color: currentColor;
   }
 }

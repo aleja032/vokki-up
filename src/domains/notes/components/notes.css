@@ -65,10 +65,6 @@
   font-size: 15px;
 }
 
-.notes-page__new-note:hover {
-  @apply bg-(--indigo-strong);
-}
-
 .notes-page__subtitle--desktop,
 .notes-page__new-note--desktop {
   @apply hidden;
@@ -308,10 +304,6 @@
   @apply inline-flex h-11 cursor-pointer items-center gap-2 self-start rounded-[10px] border-0 bg-transparent px-2.5 font-semibold text-(--indigo-strong);
 }
 
-.notes-editor-view__back:hover {
-  @apply bg-(--indigo-soft);
-}
-
 .notes-form {
   @apply flex min-h-full min-w-0 flex-col gap-4 rounded-[18px] border border-solid border-(--line) bg-(--surface) p-5 text-(--ink);
 }
@@ -370,10 +362,6 @@
 
 .notes-form__submit {
   @apply inline-flex shrink-0 whitespace-nowrap h-11 cursor-pointer items-center gap-2 rounded-[14px] border-0 bg-(--indigo) px-4 text-[15px] font-bold text-(--surface);
-}
-
-.notes-form__submit:hover {
-  @apply bg-(--indigo-strong);
 }
 
 /* Desktop and tablet: list column + open note panel */
@@ -536,10 +524,6 @@
     @apply h-11 cursor-pointer self-start rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-sm font-semibold text-(--indigo-strong);
   }
 
-  .note-detail__edit:hover {
-    @apply bg-(--indigo-soft);
-  }
-
   .note-detail__tool:focus-visible,
   .note-detail__create-card:focus-visible,
   .note-detail__favorite:focus-visible,
@@ -550,5 +534,63 @@
   .notes-form {
     @apply rounded-[26px];
     padding: clamp(24px, 3vw, 40px);
+  }
+}
+
+/* Hover feedback: buttons, chips and links */
+
+.notes-page__new-note,
+.notes-form__submit,
+.notes-category-manager__action {
+  transition: var(--hover-transition);
+}
+
+.notes-filter,
+.note-detail__edit,
+.note-detail__create-card,
+.note-detail__tool,
+.note-detail__favorite,
+.notes-editor-view__back {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .notes-page__new-note:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .notes-form__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .notes-category-manager__action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--indigo-strong);
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .notes-filter:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .note-detail__edit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .note-detail__create-card:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .note-detail__tool:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .note-detail__favorite:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .notes-editor-view__back:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    border-color: var(--indigo);
+    background-color: var(--indigo-soft);
+    color: var(--indigo);
+  }
+
+  .notes-page__new-note:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
+  .notes-form__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
+  .notes-category-manager__action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+.notes-category-manager__cancel {
+  text-decoration: underline transparent;
+  text-underline-offset: 3px;
+  transition: var(--hover-transition), text-decoration-color var(--hover-duration) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .notes-category-manager__cancel:hover {
+    color: var(--indigo-strong);
+    text-decoration-color: currentColor;
   }
 }

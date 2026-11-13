@@ -20,9 +20,9 @@ Every interactive element responds to hover with a small, consistent, tasteful s
 - Dark theme must stay legible (tokens already flip per theme).
 
 ## Tasks
-- [ ] T1 Shared hover tokens and base behavior in `globals.css` (+ `vokki-logo.css` logo rise).
-- [ ] T2 Shell: sidebar nav items, bottom navigation, header actions, brand link (`app-shell.css`).
-- [ ] T3 Buttons and links across domains: primary, secondary, icon buttons, tabs, chips.
+- [x] T1 (20e10ce) Shared hover tokens and base behavior in `globals.css` (+ `vokki-logo.css` logo rise).
+- [x] T2 (6dc4d92) Shell: sidebar nav items, bottom navigation, header actions, brand link (`app-shell.css`).
+- [x] T3 Buttons and links across domains: primary, secondary, icon buttons, tabs, chips.
 - [ ] T4 Surfaces: home dashboard cards, cards/groups list rows, notes list, settings rows, AI panes, login.
 - [ ] T5 Verify: tsc, lint, tests, build; browser check desktop 1280 + mobile 390, light + dark.
 
@@ -33,4 +33,6 @@ CSS files under `src/` and the odd task doc. No TSX changes unless a class hook 
 `npx tsc --noEmit`, `pnpm lint`, `npx vitest run`, `pnpm build`; browser: hover each target group, confirm no layout shift and no hover on touch emulation.
 
 ## Progress
-- Created. Nothing implemented yet.
+- T1 done (20e10ce): tokens --ease-out, --hover-duration, --hover-shadow, --lift-1/2 (zeroed under reduced motion), --hover-transition; logo rise.
+- T2 done (6dc4d92): sidebar items, toggle, bottom nav, header avatar. Route: inline (CSS only, single writer).
+- T3 done: buttons/links/tabs/chips across globals + domain CSS. Existing unguarded hover rules were removed and re-expressed inside @media (hover: hover). Tests RED/GREEN not applicable (CSS).

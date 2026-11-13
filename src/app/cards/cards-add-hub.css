@@ -49,10 +49,6 @@
     @apply inline-flex w-fit items-center gap-1.5 rounded-[10px] px-2 py-1 text-[13px] font-semibold text-(--ink-soft) transition-colors;
   }
 
-  .addhub__exit:hover {
-    @apply bg-(--surface-muted) text-(--ink);
-  }
-
   .addhub__header h2 {
     @apply m-0 text-[20px] font-bold wrap-anywhere;
   }
@@ -73,10 +69,6 @@
 
   .addhub__mode {
     @apply flex min-w-0 items-center gap-2.5 rounded-[14px] border border-solid border-transparent px-3 py-2.5 text-left text-(--ink-soft) transition-colors;
-  }
-
-  .addhub__mode:hover {
-    @apply text-(--ink);
   }
 
   .addhub__mode[aria-selected='true'] {
@@ -225,5 +217,20 @@
 
   .addhub__result {
     animation: none;
+  }
+}
+
+/* Hover feedback: exit and mode tabs */
+
+.addhub__exit,
+.addhub__mode {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .addhub__exit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .addhub__mode:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--indigo-soft);
+    color: var(--indigo);
   }
 }

@@ -32,6 +32,12 @@
   --hover-shadow: 0 6px 18px rgb(27 26 46 / 0.1);
   --lift-1: -1px;
   --lift-2: -2px;
+  --hover-transition:
+    background-color var(--hover-duration) var(--ease-out),
+    border-color var(--hover-duration) var(--ease-out),
+    color var(--hover-duration) var(--ease-out),
+    box-shadow var(--hover-duration) var(--ease-out),
+    transform var(--hover-duration) var(--ease-out);
   font-family: var(--font-ui), sans-serif;
 }
 
@@ -158,15 +164,21 @@ a:focus-visible {
   color: #ffffff;
   font-size: 15px;
   font-weight: 700;
-  transition:
-    background-color 160ms ease,
-    transform 160ms ease;
+  transition: var(--hover-transition);
 }
 
-.primary-action:hover {
-  background: var(--indigo-strong);
-  color: #ffffff;
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .primary-action:hover {
+    background: var(--indigo-strong);
+    box-shadow: var(--hover-shadow);
+    color: #ffffff;
+    transform: translateY(var(--lift-1));
+  }
+
+  .primary-action:active {
+    box-shadow: none;
+    transform: none;
+  }
 }
 
 .section-heading {
@@ -192,9 +204,18 @@ a:focus-visible {
   font-weight: 600;
 }
 
-.section-heading a:hover {
-  color: var(--indigo-strong);
-  text-decoration: underline;
+.section-heading a {
+  text-decoration: underline transparent;
+  transition:
+    var(--hover-transition),
+    text-decoration-color var(--hover-duration) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .section-heading a:hover {
+    color: var(--indigo-strong);
+    text-decoration-color: currentColor;
+  }
 }
 
 .progress-ring {
@@ -289,13 +310,14 @@ a:focus-visible {
   color: var(--ink);
   font-size: 14px;
   font-weight: 600;
-  transition:
-    border-color 160ms ease,
-    background-color 160ms ease;
+  transition: var(--hover-transition);
 }
-.secondary-action:hover {
-  border-color: var(--indigo);
-  background: var(--indigo-soft);
+@media (hover: hover) {
+  .secondary-action:hover {
+    border-color: var(--indigo);
+    background: var(--indigo-soft);
+    color: var(--indigo);
+  }
 }
 
 .cards-back {
@@ -307,8 +329,13 @@ a:focus-visible {
   font-size: 13px;
   font-weight: 600;
 }
-.cards-back:hover {
-  color: var(--indigo);
+.cards-back {
+  transition: var(--hover-transition);
+}
+@media (hover: hover) {
+  .cards-back:hover {
+    color: var(--indigo);
+  }
 }
 
 .portability-workspace {
@@ -533,8 +560,15 @@ a:focus-visible {
   font-size: 12px;
   font-weight: 650;
 }
-.csv-file-button:hover {
-  background: var(--surface-muted);
+.csv-file-button {
+  transition: var(--hover-transition);
+}
+@media (hover: hover) {
+  .csv-file-button:hover {
+    background: var(--indigo-soft);
+    box-shadow: var(--hover-shadow);
+    color: var(--indigo-strong);
+  }
 }
 .csv-file-name {
   display: flex;

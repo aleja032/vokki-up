@@ -178,3 +178,32 @@
     animation: none;
   }
 }
+
+/* Hover feedback: actions */
+
+.status-screen__action--primary {
+  transition: var(--hover-transition);
+}
+
+.status-screen__action:not(.status-screen__action--primary) {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .status-screen__action--primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--indigo-strong);
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .status-screen__action:not(.status-screen__action--primary):not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    border-color: var(--indigo);
+    background-color: var(--indigo-soft);
+    color: var(--indigo);
+  }
+
+  .status-screen__action--primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
+  }
+}
