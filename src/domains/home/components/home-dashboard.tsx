@@ -26,25 +26,6 @@ export function HomeDashboard({ summary }: HomeDashboardProps) {
     );
   }
 
-  const hasLearningProgress =
-    summary.totalDue > 0 || summary.wordsSeen > 0 || summary.masteredWords > 0;
-  if (!hasLearningProgress) {
-    return (
-      <div className="home-dashboard">
-        <header className="home-intro">
-          <div className="home-intro__copy">
-            <h1>Tu espacio de aprendizaje</h1>
-            <p>Creá una tarjeta para empezar a registrar tu progreso.</p>
-          </div>
-          <Link className="home-intro__action" href="/cards">
-            <Plus aria-hidden="true" size={18} strokeWidth={1.8} />
-            {copy.newCard}
-          </Link>
-        </header>
-      </div>
-    );
-  }
-
   const data = deriveHomeDashboardData(summary);
   const { nextSession, activities, stats } = data;
   const streakDays = stats.streakDays;
