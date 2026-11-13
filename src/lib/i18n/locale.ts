@@ -115,7 +115,6 @@ const baseTranslations: Record<string, string> = {
   'Grupos de tarjetas': 'Card groups',
   Todas: 'All',
   'Nuevo grupo': 'New group',
-  'Abrir grupo': 'Open group',
   'Todas mis tarjetas': 'All my cards',
   'Mis tarjetas': 'My cards',
   'Buscar tarjetas': 'Search cards',

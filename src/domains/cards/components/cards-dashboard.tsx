@@ -31,7 +31,8 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
     groupTiles,
     activeGroup,
     activeGroupId,
-    activeGroupCards
+    openGroup,
+    openGroupCards
   } = dashboard;
 
   if (dashboard.groupView === 'new')
@@ -43,14 +44,14 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
       />
     );
 
-  if (dashboard.groupView === 'detail' && activeGroup)
+  if (dashboard.groupView === 'detail' && openGroup)
     return (
       <GroupDetail
-        group={activeGroup}
-        cards={activeGroupCards}
+        group={openGroup}
+        cards={openGroupCards}
         schedules={schedules}
-        dueCount={dashboard.activeGroupStats.dueCount}
-        masteredPercent={dashboard.activeGroupStats.masteredPercent}
+        dueCount={dashboard.openGroupStats.dueCount}
+        masteredPercent={dashboard.openGroupStats.masteredPercent}
         onBack={() => dashboard.setGroupView('overview')}
         onAddCard={dashboard.openEditor}
       />
@@ -120,10 +121,8 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
         totalCards={cards.length}
         totalDue={dueCount}
         activeGroupId={activeGroupId}
-        activeGroup={activeGroup}
-        activeGroupCardCount={activeGroupCards.length}
-        onSelect={dashboard.setActiveGroupId}
-        onOpenGroup={() => dashboard.setGroupView('detail')}
+        onSelectAll={() => dashboard.setActiveGroupId(ALL_GROUPS_ID)}
+        onOpenGroup={dashboard.openGroupById}
         onAddGroup={dashboard.startGroupCreation}
       />
 

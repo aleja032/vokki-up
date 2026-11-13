@@ -18,10 +18,8 @@ type CardGroupListProps = {
   totalCards: number;
   totalDue: number;
   activeGroupId: string;
-  activeGroup?: CardGroup;
-  activeGroupCardCount: number;
-  onSelect: (groupId: string) => void;
-  onOpenGroup: () => void;
+  onSelectAll: () => void;
+  onOpenGroup: (groupId: string) => void;
   onAddGroup: () => void;
 };
 
@@ -30,9 +28,7 @@ export function CardGroupList({
   totalCards,
   totalDue,
   activeGroupId,
-  activeGroup,
-  activeGroupCardCount,
-  onSelect,
+  onSelectAll,
   onOpenGroup,
   onAddGroup
 }: CardGroupListProps) {
@@ -59,7 +55,7 @@ export function CardGroupList({
           data-tone="neutral"
           type="button"
           aria-pressed={activeGroupId === ALL_GROUPS_ID}
-          onClick={() => onSelect(ALL_GROUPS_ID)}
+          onClick={onSelectAll}
         >
           <span className="deck-group__icon">
             <span className="deck-group__icon-folder">
@@ -81,8 +77,7 @@ export function CardGroupList({
             type="button"
             key={group.id}
             title={group.name}
-            aria-pressed={activeGroupId === group.id}
-            onClick={() => onSelect(group.id)}
+            onClick={() => onOpenGroup(group.id)}
           >
             <span className="deck-group__icon">
               <DeckIcon name="folder" size={18} />
@@ -102,23 +97,6 @@ export function CardGroupList({
           {messages.newGroup}
         </button>
       </div>
-      {activeGroup && (
-        <button
-          className="deck-groups__open"
-          data-tone={activeGroup.tone}
-          type="button"
-          onClick={onOpenGroup}
-        >
-          <span>
-            <strong>{activeGroup.name}</strong> ·{' '}
-            {messages.groupCount(activeGroupCardCount)}
-          </span>
-          <span className="deck-groups__open-label">
-            {messages.openGroup}
-            <DeckIcon name="forward" size={16} />
-          </span>
-        </button>
-      )}
     </section>
   );
 }

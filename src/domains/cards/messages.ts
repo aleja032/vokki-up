@@ -23,9 +23,6 @@ export const cardsMessages = createLocalizedMessages({
     newGroup: 'Nuevo grupo',
     groupMeta: (cards: number, due: number) =>
       `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} · ${due} hoy`,
-    openGroup: 'Abrir grupo',
-    groupCount: (cards: number) =>
-      `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')}`,
     libraryTitleAll: 'Todas mis tarjetas',
     libraryTitleGroup: (name: string) => `Tarjetas de ${name}`,
     libraryTitleWide: 'Mis tarjetas',

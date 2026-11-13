@@ -44,6 +44,8 @@ export function useCardsDashboard() {
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORIES);
   const [searchText, setSearchText] = useState('');
   const [groupView, setGroupView] = useState<GroupView>('overview');
+  // The open group detail is independent from the library filter above.
+  const [openGroupId, setOpenGroupId] = useState<string | undefined>();
   // Editor UI state: it only overlays the page on narrow screens.
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editorKey, setEditorKey] = useState(0);
@@ -53,6 +55,7 @@ export function useCardsDashboard() {
 
   const now = new Date();
   const activeGroup = groups.find(group => group.id === activeGroupId);
+  const openGroup = groups.find(group => group.id === openGroupId);
   const dueCount = buildDueQueue(cards, schedules, now).length;
   const existingTerms = useMemo(() => cards.map(card => card.term), [cards]);
 
@@ -79,16 +82,16 @@ export function useCardsDashboard() {
     return belongsToGroup && belongsToCategory && matchesSearch;
   });
 
-  const activeGroupCards = activeGroup
-    ? cards.filter(card => card.groupId === activeGroup.id)
+  const openGroupCards = openGroup
+    ? cards.filter(card => card.groupId === openGroup.id)
     : [];
-  const activeGroupStats = {
-    dueCount: buildDueQueue(activeGroupCards, schedules, now, Infinity).length,
-    masteredPercent: activeGroupCards.length
+  const openGroupStats = {
+    dueCount: buildDueQueue(openGroupCards, schedules, now, Infinity).length,
+    masteredPercent: openGroupCards.length
       ? Math.round(
-          (activeGroupCards.filter(card => isMastered(schedules[card.id]))
+          (openGroupCards.filter(card => isMastered(schedules[card.id]))
             .length /
-            activeGroupCards.length) *
+            openGroupCards.length) *
             100
         )
       : 0
@@ -96,7 +99,7 @@ export function useCardsDashboard() {
 
   function openEditor() {
     setEditorReturnView(groupView);
-    setEditorGroupId(activeGroup?.id);
+    setEditorGroupId(groupView === 'detail' ? openGroup?.id : undefined);
     setEditorKey(key => key + 1);
     setIsEditorOpen(true);
     if (groupView === 'detail') setGroupView('overview');
@@ -130,7 +133,12 @@ export function useCardsDashboard() {
 
   function createGroup(newGroup: CardGroup) {
     setGroups(currentGroups => [...currentGroups, newGroup]);
-    setActiveGroupId(newGroup.id);
+    setOpenGroupId(newGroup.id);
+    setGroupView('detail');
+  }
+
+  function openGroupById(groupId: string) {
+    setOpenGroupId(groupId);
     setGroupView('detail');
   }
 
@@ -160,8 +168,9 @@ export function useCardsDashboard() {
     filteredCards,
     activeGroup,
     activeGroupId,
-    activeGroupCards,
-    activeGroupStats,
+    openGroup,
+    openGroupCards,
+    openGroupStats,
     activeCategory,
     searchText,
     groupView,
@@ -178,6 +187,7 @@ export function useCardsDashboard() {
     addCards,
     isLibraryReady: areCardsLoaded && areGroupsLoaded,
     createGroup,
+    openGroupById,
     startGroupCreation,
     viewExistingCard
   };
