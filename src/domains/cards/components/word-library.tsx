@@ -10,6 +10,8 @@ import {
   WORD_LIBRARY_CATEGORIES,
   wordLibraryCatalog
 } from '../word-library/catalog';
+import type { WordLibraryCategory } from '../word-library/catalog';
+import type { CardGroup } from '../types';
 import { useCardsDashboard } from '../hooks/use-cards-dashboard';
 import { createLocalizedMessages } from '@/lib/i18n/locale';
 import './word-library.css';
@@ -18,23 +20,21 @@ const messages = createLocalizedMessages({
   back: 'Volver a mis tarjetas',
   title: 'Biblioteca de palabras',
   summary:
-    'Explora vocabulario en inglés y elige qué palabras guardar en tus grupos.',
+    'Explora vocabulario en inglés y guarda cada palabra en su colección.',
   searchLabel: 'Buscar en la biblioteca',
   searchPlaceholder: 'Buscar palabra, significado o ejemplo…',
   categoriesLabel: 'Categorías de vocabulario',
   allCategories: ALL_WORD_LIBRARY_CATEGORIES,
   resultCount: (count: number) =>
     `${count} ${count === 1 ? 'palabra disponible' : 'palabras disponibles'}`,
-  selectCollection: 'Añadir a grupo',
-  collectionPlaceholder: 'Elige un grupo',
   selectWords: (count: number) =>
     `${count} ${count === 1 ? 'seleccionada' : 'seleccionadas'}`,
-  addSelected: 'Añadir selección',
-  addResult: (added: number, duplicates: number, groupName: string) => {
+  addSelected: 'Agregar seleccionadas',
+  addResult: (added: number, duplicates: number) => {
     const parts = [];
     if (added > 0)
       parts.push(
-        `${added} ${added === 1 ? 'palabra añadida' : 'palabras añadidas'} a “${groupName}”`
+        `${added} ${added === 1 ? 'palabra agregada' : 'palabras agregadas'} a sus colecciones`
       );
     if (duplicates > 0)
       parts.push(
@@ -53,15 +53,29 @@ const messages = createLocalizedMessages({
   pronunciation: 'Pronunciación',
   example: 'Ejemplo',
   alreadyInLibrary: 'Ya está en tus tarjetas',
-  chooseGroupFirst: 'Selecciona un grupo y al menos una palabra.'
+  chooseWordsFirst: 'Selecciona al menos una palabra.'
 });
+
+const DEFAULT_GROUP_IDS: Record<WordLibraryCategory, string> = {
+  Trabajo: 'work',
+  Viajes: 'travel',
+  'Día a día': 'daily',
+  'Frases útiles': 'phrases'
+};
+
+export function getDefaultGroupId(
+  category: WordLibraryCategory,
+  groups: readonly CardGroup[]
+) {
+  const id = DEFAULT_GROUP_IDS[category];
+  return groups.some(group => group.id === id) ? id : undefined;
+}
 
 export function WordLibrary() {
   const dashboard = useCardsDashboard();
   const [category, setCategory] = useState(ALL_WORD_LIBRARY_CATEGORIES);
   const [searchText, setSearchText] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [groupId, setGroupId] = useState('');
   const [announcement, setAnnouncement] = useState('');
 
   const filteredEntries = useMemo(
@@ -74,7 +88,9 @@ export function WordLibrary() {
   const existingTerms = new Set(
     dashboard.cards.map(card => normalizeCatalogTerm(card.term))
   );
-  const activeGroup = dashboard.groups.find(group => group.id === groupId);
+  const hasSelectedGroup = selectedEntries.every(entry =>
+    getDefaultGroupId(entry.category, dashboard.groups)
+  );
 
   function toggleEntry(entryId: string) {
     setSelectedIds(current =>
@@ -86,19 +102,29 @@ export function WordLibrary() {
   }
 
   function addSelectedEntries() {
-    if (!activeGroup || selectedEntries.length === 0) {
-      setAnnouncement(messages.chooseGroupFirst);
+    if (selectedEntries.length === 0) {
+      setAnnouncement(messages.chooseWordsFirst);
       return;
     }
 
-    const result = dashboard.addWordLibraryEntries(selectedEntries, groupId);
-    setAnnouncement(
-      messages.addResult(
-        result.added.length,
-        result.duplicates.length,
-        activeGroup.name
-      )
-    );
+    const entriesByGroup = new Map<string, typeof selectedEntries>();
+    for (const entry of selectedEntries) {
+      const groupId = getDefaultGroupId(entry.category, dashboard.groups);
+      if (!groupId) continue;
+      entriesByGroup.set(groupId, [
+        ...(entriesByGroup.get(groupId) ?? []),
+        entry
+      ]);
+    }
+
+    let added = 0;
+    let duplicates = 0;
+    for (const [groupId, entries] of entriesByGroup) {
+      const result = dashboard.addWordLibraryEntries(entries, groupId);
+      added += result.added.length;
+      duplicates += result.duplicates.length;
+    }
+    setAnnouncement(messages.addResult(added, duplicates));
     setSelectedIds([]);
   }
 
@@ -186,43 +212,47 @@ export function WordLibrary() {
             );
 
             return (
-              <article
+              <label
                 className="word-library__entry"
                 key={entry.id}
                 data-selected={isSelected}
               >
-                <label className="word-library__selection">
-                  <input
-                    type="checkbox"
-                    checked={isSelected}
-                    onChange={() => toggleEntry(entry.id)}
-                    aria-label={`${entry.term}: ${entry.meaning}`}
-                  />
-                  <span className="word-library__check" aria-hidden="true">
-                    <Check size={15} />
-                  </span>
-                </label>
-                <div className="word-library__entry-content">
-                  <div className="word-library__entry-heading">
-                    <h2>{entry.term}</h2>
+                <input
+                  type="checkbox"
+                  checked={isSelected}
+                  onChange={() => toggleEntry(entry.id)}
+                  aria-label={`${entry.term}: ${entry.meaning}`}
+                />
+                <span className="word-library__check" aria-hidden="true">
+                  <Check size={15} />
+                </span>
+                <span className="word-library__entry-content">
+                  <span className="word-library__entry-heading">
+                    <span
+                      className="word-library__entry-term"
+                      role="heading"
+                      aria-level={2}
+                    >
+                      {entry.term}
+                    </span>
                     <span className="word-library__category">
                       {entry.category}
                     </span>
-                  </div>
-                  <p className="word-library__meaning">{entry.meaning}</p>
-                  <p className="word-library__phonetics">
+                  </span>
+                  <span className="word-library__meaning">{entry.meaning}</span>
+                  <span className="word-library__phonetics">
                     <span>{messages.pronunciation}</span> {entry.phonetics}
-                  </p>
-                  <p className="word-library__example">
+                  </span>
+                  <span className="word-library__example">
                     <span>{messages.example}</span> “{entry.example}”
-                  </p>
+                  </span>
                   {isAlreadyAdded && (
-                    <p className="word-library__existing">
+                    <span className="word-library__existing">
                       {messages.alreadyInLibrary}
-                    </p>
+                    </span>
                   )}
-                </div>
-              </article>
+                </span>
+              </label>
             );
           })}
           {filteredEntries.length === 0 && (
@@ -235,26 +265,12 @@ export function WordLibrary() {
         className="word-library__add-bar"
         aria-label={messages.addSelected}
       >
-        <label className="word-library__group-select">
-          <span>{messages.selectCollection}</span>
-          <select
-            value={groupId}
-            onChange={event => setGroupId(event.target.value)}
-          >
-            <option value="">{messages.collectionPlaceholder}</option>
-            {dashboard.groups.map(group => (
-              <option key={group.id} value={group.id}>
-                {group.name}
-              </option>
-            ))}
-          </select>
-        </label>
         <div className="word-library__add-actions">
           <span>{messages.selectWords(selectedIds.length)}</span>
           <button
             type="button"
             onClick={addSelectedEntries}
-            disabled={!groupId || selectedIds.length === 0}
+            disabled={selectedIds.length === 0 || !hasSelectedGroup}
           >
             {messages.addSelected}
           </button>

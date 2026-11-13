@@ -25,8 +25,8 @@
 .word-library__back:focus-visible,
 .word-library__create-group:focus-visible,
 .word-library__categories button:focus-visible,
-.word-library__add-actions button:focus-visible,
-.word-library__group-select select:focus-visible {
+.word-library__entry:focus-within,
+.word-library__add-actions button:focus-visible {
   outline: 2px solid var(--indigo);
   outline-offset: 3px;
 }
@@ -153,6 +153,7 @@
 }
 
 .word-library__entry {
+  position: relative;
   display: grid;
   grid-template-columns: 28px minmax(0, 1fr);
   align-items: start;
@@ -161,6 +162,7 @@
   border-radius: 16px;
   background: var(--surface);
   padding: 17px;
+  cursor: pointer;
 }
 
 .word-library__entry[data-selected='true'] {
@@ -168,20 +170,14 @@
   background: color-mix(in srgb, var(--indigo-soft) 38%, var(--surface));
 }
 
-.word-library__selection {
-  position: relative;
-  display: grid;
-  width: 24px;
-  height: 24px;
-  place-items: center;
-  margin-top: 1px;
-  cursor: pointer;
-}
-
-.word-library__selection input {
+.word-library__entry > input {
   position: absolute;
   width: 1px;
   height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   opacity: 0;
 }
 
@@ -190,23 +186,33 @@
   width: 22px;
   height: 22px;
   place-items: center;
+  margin-top: 1px;
   border: 1.5px solid var(--line);
   border-radius: 6px;
   color: transparent;
 }
 
-.word-library__selection input:checked + .word-library__check {
+.word-library__entry > input:checked + .word-library__check {
   border-color: var(--indigo-strong);
   background: var(--indigo-strong);
   color: var(--ground);
 }
 
-.word-library__selection input:focus-visible + .word-library__check {
+.word-library__entry > input:focus-visible + .word-library__check {
   outline: 2px solid var(--indigo);
   outline-offset: 3px;
 }
 
+.word-library__entry:focus-within {
+  outline-offset: 3px;
+}
+
+.word-library__check svg {
+  pointer-events: none;
+}
+
 .word-library__entry-content {
+  display: block;
   min-width: 0;
 }
 
@@ -217,8 +223,7 @@
   gap: 8px 12px;
 }
 
-.word-library__entry-heading h2 {
-  margin: 0;
+.word-library__entry-term {
   font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -234,6 +239,7 @@
 }
 
 .word-library__meaning {
+  display: block;
   margin: 6px 0 0;
   font-size: 15px;
   font-weight: 600;
@@ -241,6 +247,7 @@
 
 .word-library__phonetics,
 .word-library__example {
+  display: block;
   margin: 7px 0 0;
   color: var(--ink-soft);
   font-size: 13px;
@@ -254,6 +261,7 @@
 }
 
 .word-library__existing {
+  display: block;
   margin: 8px 0 0;
   color: var(--indigo-strong);
   font-size: 12px;
@@ -271,34 +279,22 @@
 }
 
 .word-library__add-bar {
-  display: grid;
-  gap: 12px;
+  position: sticky;
+  z-index: 5;
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--surface);
-  padding: 16px;
-}
-
-.word-library__group-select {
-  display: grid;
-  gap: 7px;
-  color: var(--ink-soft);
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.word-library__group-select select {
-  min-height: 44px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--ground);
-  padding: 0 12px;
-  color: var(--ink);
-  font: inherit;
+  padding: 9px 10px;
 }
 
 .word-library__add-actions {
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
@@ -309,17 +305,18 @@
 .word-library__add-actions button,
 .word-library__create-group {
   display: inline-flex;
-  min-height: 44px;
+  min-height: 42px;
   align-items: center;
   justify-content: center;
   border: 0;
   border-radius: 12px;
   background: var(--indigo-strong);
-  padding: 0 17px;
+  padding: 0 15px;
   color: var(--ground);
   font: inherit;
   font-weight: 700;
   text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -329,11 +326,12 @@
 }
 
 .word-library__announcement {
-  min-height: 20px;
-  margin: 0;
-  color: var(--indigo-strong);
-  font-size: 13px;
-  line-height: 1.45;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
 .word-library__create-group {
@@ -351,11 +349,22 @@
   }
 
   .word-library__add-bar {
-    grid-template-columns: minmax(200px, 1fr) auto minmax(180px, 1.2fr);
-    align-items: end;
+    position: static;
+    align-self: end;
+    width: fit-content;
+    min-width: min(100%, 340px);
+    margin-inline-start: auto;
+    padding: 10px 12px;
   }
 
   .word-library__announcement {
-    grid-column: 1 / -1;
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    color: var(--indigo-strong);
+    font-size: 13px;
+    line-height: 1.45;
+    white-space: normal;
   }
 }
