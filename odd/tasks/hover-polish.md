@@ -31,10 +31,10 @@ Intensity split chosen by the user: SUBTLE on utility surfaces, MEDIUM on Home a
 - Subtle (nav, buttons, lists, Notes, Settings, forms): press feedback (`:active` scale ~0.98), sliding tab indicator, smooth state transitions. No entrances.
 - Medium (Home + review): short capped stagger-in of dashboard cards on first paint, progress ring fill, count-up numbers, 3D flip of the review card on reveal, a brief completion moment at review end.
 - One authored moment per surface, no identical entrance everywhere. All motion has a `prefers-reduced-motion` path (no movement, keep state change/opacity).
-- [ ] T6 Subtle layer: press feedback, tab indicator slide, small state transitions (CSS).
-- [ ] T7 Home medium: stagger-in, ring fill, count-up (CSS + minimal TSX).
-- [ ] T8 Review medium: card flip on reveal and completion moment (CSS + minimal TSX).
-- [ ] T9 Verify: tsc, lint, vitest, build; browser pass at 1280/390 light + dark, reduced-motion emulation.
+- [x] T6 (386b1c0) Subtle layer: press feedback, tab indicator slide, small state transitions (CSS).
+- [x] T7 (59973c9) Home medium: stagger-in, ring fill, count-up (CSS + minimal TSX).
+- [x] T8 (12dc2b0) Review medium: card flip on reveal and completion moment (CSS + minimal TSX).
+- [x] T9 Verify: tsc, lint, vitest, build; browser pass at 1280/390 light + dark, reduced-motion emulation.
 
 ## Authorized scope
 CSS files under `src/` and the odd task doc. Phase 2 also authorizes minimal TSX changes in Home dashboard and review components only (class hooks, a count-up hook, state for flip/completion). No new dependencies.
@@ -48,3 +48,8 @@ CSS files under `src/` and the odd task doc. Phase 2 also authorizes minimal TSX
 - T3 done: buttons/links/tabs/chips across globals + domain CSS. Existing unguarded hover rules were removed and re-expressed inside @media (hover: hover). Tests RED/GREEN not applicable (CSS).
 - T5 done: tsc, lint, vitest (218 pass), build OK; Playwright 1280/390 x light/dark: hover effects confirmed, no size shift, no transform under (hover: none).
 - T4 done (9520ed0): clickable surfaces lift 2px (deck-group, group/open rows, deck-action, note-card, prefs-action/provider, activity rows on wide screens). Non-clickable (stat cards, deck-card, prefs-row, next-session card) intentionally static.
+
+- T6 done (386b1c0): press feedback via the individual `scale` property (composes with hover `transform` lifts; token --press-scale 0.98, 0.99 on large surfaces, 1 under reduced motion; `scale` added to --hover-transition), input/textarea/select focus border + color transitions, settings switch knob now translates instead of flipping justify. Tab indicator: tabs/nav already cross-fade background/color; a true sliding indicator needs JS or item-count-specific selectors, so the cross-fade fallback was kept. Tests RED/GREEN not applicable (CSS).
+- T7 done (59973c9): Home stagger-in (home-rise, delays 0-400ms, once per mount), ring fill via keyframe from stroke-dasharray 0 (700ms, 250ms delay), count-up via src/lib/motion/use-count-up.ts. computeCountUpValue test written first: RED observed (module missing), then GREEN (6 tests).
+- T8 done (12dc2b0): review card reveal swings in with perspective rotateY (450ms, from edge-on; the front face is not rendered separately because reveal logic and tests are unchanged, so it is a half-flip), completion badge pop + soft ring pulse (600/800ms). Reduced motion: opacity fade only.
+- T9 done: tsc OK, lint OK, vitest 224 pass (218 + 6 new), build OK. Browser (Playwright, dev server, guest mode with localStorage-seeded cards): keyframes sampled by pausing animations and setting currentTime (headless rAF/frame clock starves live sampling): ring 0px -> 12px@300ms -> 32px final, stat cards opacity 0 -> 1 staggered, flip matrix3d rotateY -> none, completion pop scale 0.6 -> 1.08 -> 1 and ring pulse opacity 0.55 -> 0. Reduced motion: only home-fade / drill-card-fade animations, card transform none, press scale 1. Press scale 0.98 confirmed once the transition finished. No horizontal overflow at 390 or 1280, light and dark. Not verified live: intermediate count-up frames (rAF starved in headless; only start 0 and final value observed), settings switch knob (not rendered in this build/guest state), visual screenshots.
