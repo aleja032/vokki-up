@@ -24,7 +24,7 @@ Every interactive element responds to hover with a small, consistent, tasteful s
 - [x] T2 (6dc4d92) Shell: sidebar nav items, bottom navigation, header actions, brand link (`app-shell.css`).
 - [x] T3 (afb47c8) Buttons and links across domains: primary, secondary, icon buttons, tabs, chips.
 - [x] T4 Surfaces: home dashboard cards, cards/groups list rows, notes list, settings rows, AI panes, login.
-- [ ] T5 Verify: tsc, lint, tests, build; browser check desktop 1280 + mobile 390, light + dark.
+- [x] T5 Verify: tsc, lint, tests, build; browser check desktop 1280 + mobile 390, light + dark.
 
 ## Authorized scope
 CSS files under `src/` and the odd task doc. No TSX changes unless a class hook is truly missing (then report it first).
@@ -36,4 +36,5 @@ CSS files under `src/` and the odd task doc. No TSX changes unless a class hook 
 - T1 done (20e10ce): tokens --ease-out, --hover-duration, --hover-shadow, --lift-1/2 (zeroed under reduced motion), --hover-transition; logo rise.
 - T2 done (6dc4d92): sidebar items, toggle, bottom nav, header avatar. Route: inline (CSS only, single writer).
 - T3 done: buttons/links/tabs/chips across globals + domain CSS. Existing unguarded hover rules were removed and re-expressed inside @media (hover: hover). Tests RED/GREEN not applicable (CSS).
-- T4 done: clickable surfaces lift 2px (deck-group, group/open rows, deck-action, note-card, prefs-action/provider, activity rows on wide screens). Non-clickable (stat cards, deck-card, prefs-row, next-session card) intentionally static.
+- T5 done: tsc, lint, vitest (218 pass), build OK; Playwright 1280/390 x light/dark: hover effects confirmed, no size shift, no transform under (hover: none).
+- T4 done (9520ed0): clickable surfaces lift 2px (deck-group, group/open rows, deck-action, note-card, prefs-action/provider, activity rows on wide screens). Non-clickable (stat cards, deck-card, prefs-row, next-session card) intentionally static.
