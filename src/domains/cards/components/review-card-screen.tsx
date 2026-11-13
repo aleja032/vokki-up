@@ -201,7 +201,11 @@ export function ReviewCardScreen({
 
   return (
     <>
-      <section className="drill-card" aria-labelledby="review-term">
+      <section
+        className="drill-card"
+        aria-labelledby="review-term"
+        data-revealed={isRevealed || undefined}
+      >
         <div className="drill-card__meta">
           <span
             className="drill-card__category"

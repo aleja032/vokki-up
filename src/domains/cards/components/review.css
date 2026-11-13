@@ -302,7 +302,7 @@
 }
 
 .drill-done__icon {
-  @apply flex size-22 items-center justify-center rounded-[28px] bg-(--green-soft) text-(--drill-green-ink);
+  @apply relative flex size-22 items-center justify-center rounded-[28px] bg-(--green-soft) text-(--drill-green-ink);
 }
 
 .drill-done__icon svg {
@@ -597,5 +597,84 @@
   .drill-rating:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
     box-shadow: none;
     transform: none;
+  }
+}
+
+/* Reveal: the answer side swings in from edge-on (rotateY) around the stable card; no rotation under reduced motion. */
+
+@keyframes drill-card-flip {
+  from {
+    opacity: 0;
+    transform: perspective(1100px) rotateY(-90deg);
+  }
+
+  40% {
+    opacity: 1;
+  }
+}
+
+@keyframes drill-card-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.drill-card[data-revealed] {
+  backface-visibility: hidden;
+  animation: drill-card-flip 450ms var(--ease-out) backwards;
+}
+
+/* Completion: the badge pops in once and a soft ring pulses outward (the single focal moment). */
+
+@keyframes drill-done-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes drill-done-ring {
+  from {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+.drill-done__icon {
+  animation: drill-done-pop 600ms var(--ease-out) backwards;
+}
+
+.drill-done__icon::after {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--green);
+  border-radius: inherit;
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+  animation: drill-done-ring 800ms var(--ease-out) 350ms backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drill-card[data-revealed] {
+    animation: drill-card-fade 150ms linear backwards;
+  }
+
+  .drill-done__icon {
+    animation: drill-card-fade 200ms linear backwards;
+  }
+
+  .drill-done__icon::after {
+    animation: none;
   }
 }
