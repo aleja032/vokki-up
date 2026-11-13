@@ -53,3 +53,15 @@ CSS files under `src/` and the odd task doc. Phase 2 also authorizes minimal TSX
 - T7 done (59973c9): Home stagger-in (home-rise, delays 0-400ms, once per mount), ring fill via keyframe from stroke-dasharray 0 (700ms, 250ms delay), count-up via src/lib/motion/use-count-up.ts. computeCountUpValue test written first: RED observed (module missing), then GREEN (6 tests).
 - T8 done (12dc2b0): review card reveal swings in with perspective rotateY (450ms, from edge-on; the front face is not rendered separately because reveal logic and tests are unchanged, so it is a half-flip), completion badge pop + soft ring pulse (600/800ms). Reduced motion: opacity fade only.
 - T9 done: tsc OK, lint OK, vitest 224 pass (218 + 6 new), build OK. Browser (Playwright, dev server, guest mode with localStorage-seeded cards): keyframes sampled by pausing animations and setting currentTime (headless rAF/frame clock starves live sampling): ring 0px -> 12px@300ms -> 32px final, stat cards opacity 0 -> 1 staggered, flip matrix3d rotateY -> none, completion pop scale 0.6 -> 1.08 -> 1 and ring pulse opacity 0.55 -> 0. Reduced motion: only home-fade / drill-card-fade animations, card transform none, press scale 1. Press scale 0.98 confirmed once the transition finished. No horizontal overflow at 390 or 1280, light and dark. Not verified live: intermediate count-up frames (rAF starved in headless; only start 0 and final value observed), settings switch knob (not rendered in this build/guest state), visual screenshots.
+
+## Contrast audit
+
+Method: every :hover rule in the shipped stylesheets was matched against live elements (guest mode, routes /, /cards, /cards/add, /notes, /settings, /login, /review, /import-export), :hover and :hover+:active forced via CDP, 2 rAF + 250ms settle, text/icon colors composited over the ancestor background, WCAG ratio computed. Viewports 1280x800 and 390x844, light and dark. Elements not rendered in guest mode were checked statically from tokens.
+
+Failures found and fixed (globals.css):
+- .primary-action (base and :hover) hardcoded #ffffff: dark 2.12:1 on --indigo-strong (and ~2.7:1 on --indigo) -> new theme-aware --on-indigo token (#fff light, #141416 dark): 9.69 light, 8.68 dark.
+- --red-ink in the forced dark theme block was #7d280c (the prefers-color-scheme block had #f09a7e): 1.40:1 on --red-soft, hit every red-soft hover (prefs-remove, aicap reject/discard, deck menu danger, note type chip) -> #f09a7e: 6.18:1.
+
+Minimum ratios after the fix (hover and hover+active, both themes): text >= 4.82 (indigo on indigo-soft, dark) and >= 5.30 elsewhere; on-indigo on indigo-strong 8.68 dark / 9.69 light; red-ink on red-soft 5.30 light / 6.18 dark; aicap danger button 5.02 light / 5.81 dark (no color change on hover).
+Known, not hover-related and not changed: amber favorite star icon 2.95:1 on white (light, base state equals hover; threshold 3:1 for icons).
+Not rendered in guest mode (static computation only): aicap-*, aipane-*, deck editor/confirm/menu, prefs-* rows, drill rating/done.
