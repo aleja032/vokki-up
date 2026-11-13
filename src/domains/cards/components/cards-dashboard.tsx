@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { BookOpen } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { ALL_GROUPS_ID, useCardsDashboard } from '../hooks/use-cards-dashboard';
 import { cardsMessages } from '../messages';
@@ -104,13 +105,28 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
             <span>{messages.newCardHint}</span>
           </span>
         </button>
-        <Link className="deck-action deck-action--review" href="/review?from=cards">
+        <Link
+          className="deck-action deck-action--review"
+          href="/review?from=cards"
+        >
           <span className="deck-action__icon">
             <DeckIcon name="stack" size={22} />
           </span>
           <span className="deck-action__copy">
             <strong>{messages.reviewTitle}</strong>
             <span>{messages.reviewPending(dueCount)}</span>
+          </span>
+        </Link>
+        <Link
+          className="deck-action deck-action--review"
+          href="/cards/word-library"
+        >
+          <span className="deck-action__icon">
+            <BookOpen size={22} aria-hidden="true" />
+          </span>
+          <span className="deck-action__copy">
+            <strong>Biblioteca de palabras</strong>
+            <span>Explora vocabulario y guárdalo en tus grupos</span>
           </span>
         </Link>
       </div>
