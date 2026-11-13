@@ -30,6 +30,8 @@ const messages = createLocalizedMessages({
   selectWords: (count: number) =>
     `${count} ${count === 1 ? 'seleccionada' : 'seleccionadas'}`,
   addSelected: 'Agregar seleccionadas',
+  clearSelection: 'Deseleccionar todo',
+  selectionCleared: 'Se deseleccionaron todas las palabras.',
   addResult: (added: number, duplicates: number) => {
     const parts = [];
     if (added > 0)
@@ -232,6 +234,50 @@ export function WordLibrary() {
               </button>
             </aside>
           </div>
+          {selectedIds.length > 0 && (
+            <div className="word-library__selection-actions">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedIds([]);
+                  setAnnouncement(messages.selectionCleared);
+                }}
+              >
+                {messages.clearSelection}
+              </button>
+            </div>
+          )}
+          <div className="word-library__controls-row">
+            <p className="word-library__count" aria-live="polite">
+              {messages.resultCount(filteredEntries.length)}
+            </p>
+            {filteredEntries.length > 0 && (
+              <nav
+                className="word-library__pagination"
+                aria-label={messages.paginationLabel}
+              >
+                <button
+                  type="button"
+                  onClick={() => setPage(current => Math.max(1, current - 1))}
+                  disabled={currentPage === 1}
+                >
+                  {messages.previousPage}
+                </button>
+                <span aria-live="polite">
+                  {messages.pageStatus(currentPage, pageCount)}
+                </span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setPage(current => Math.min(pageCount, current + 1))
+                  }
+                  disabled={currentPage === pageCount}
+                >
+                  {messages.nextPage}
+                </button>
+              </nav>
+            )}
+          </div>
           <p
             className="word-library__announcement"
             role="status"
@@ -258,9 +304,6 @@ export function WordLibrary() {
               </button>
             ))}
           </div>
-          <p className="word-library__count" aria-live="polite">
-            {messages.resultCount(filteredEntries.length)}
-          </p>
         </div>
 
         <div className="word-library__list">
@@ -320,32 +363,6 @@ export function WordLibrary() {
             <p className="word-library__empty">{messages.empty}</p>
           )}
         </div>
-        {filteredEntries.length > 0 && (
-          <nav
-            className="word-library__pagination"
-            aria-label={messages.paginationLabel}
-          >
-            <button
-              type="button"
-              onClick={() => setPage(current => Math.max(1, current - 1))}
-              disabled={currentPage === 1}
-            >
-              {messages.previousPage}
-            </button>
-            <span aria-live="polite">
-              {messages.pageStatus(currentPage, pageCount)}
-            </span>
-            <button
-              type="button"
-              onClick={() =>
-                setPage(current => Math.min(pageCount, current + 1))
-              }
-              disabled={currentPage === pageCount}
-            >
-              {messages.nextPage}
-            </button>
-          </nav>
-        )}
       </section>
     </div>
   );
