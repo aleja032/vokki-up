@@ -91,10 +91,6 @@
   @apply mt-2 min-h-13 w-full gap-2 self-stretch rounded-[14px] bg-(--indigo) text-[16px] text-(--home-on-indigo);
 }
 
-.next-session .primary-action:hover {
-  @apply bg-(--indigo-strong) text-(--home-on-indigo);
-}
-
 .today-goal {
   @apply hidden;
 }
@@ -233,6 +229,7 @@
 
 .activity-item {
   @apply flex items-center gap-3.5 px-4.5 py-4 text-(--ink);
+  --press-scale: 0.99;
 }
 
 .activity-item + .activity-item {
@@ -435,15 +432,11 @@
   }
 
   .activity-item {
-    @apply gap-4 rounded-[16px] bg-(--ground) px-4.5 py-4 transition-[background-color] duration-160 ease-[ease];
+    @apply gap-4 rounded-[16px] bg-(--ground) px-4.5 py-4;
   }
 
   .activity-item + .activity-item {
     border-top: 0;
-  }
-
-  .activity-item:hover {
-    @apply bg-(--surface-muted);
   }
 
   .activity-item__icon {
@@ -517,5 +510,151 @@
 @media (prefers-reduced-motion: reduce) {
   .activity-item {
     transition: none;
+  }
+}
+
+/* Hover feedback: actions */
+
+.next-session .primary-action {
+  transition: var(--hover-transition);
+}
+
+.home-intro__action {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .next-session .primary-action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--indigo-strong);
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+    color: var(--home-on-indigo);
+  }
+
+  .home-intro__action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    border-color: var(--indigo);
+    background-color: var(--indigo-soft);
+    color: var(--indigo);
+  }
+
+  .next-session .primary-action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+/* Hover feedback: activity rows. Rows clip inside the mobile list, so only tint there; on wide screens they lift. */
+
+.activity-item {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .activity-item:hover {
+    background-color: var(--surface-muted);
+  }
+}
+
+@media (min-width: 761px) and (hover: hover) {
+  .activity-item:hover {
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--line) 40%, var(--indigo)),
+      var(--hover-shadow);
+    transform: translateY(var(--lift-2));
+  }
+
+  .activity-item:active {
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+/* Entrance: one short capped stagger per mount (delays <= 400ms), then the ring fill is the focal moment. */
+
+@keyframes home-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes home-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Only the dash length animates; the end value is the element's own stroke-dasharray. */
+@keyframes home-ring-fill {
+  from {
+    stroke-dasharray: 0 214;
+  }
+}
+
+.home-intro,
+.next-session,
+.today-goal,
+.stat-card,
+.week-overview,
+.today-activity,
+.weekly-progress {
+  animation: home-rise 400ms var(--ease-out) var(--rise-delay, 0ms) backwards;
+}
+
+.next-session {
+  --rise-delay: 60ms;
+}
+
+.today-goal {
+  --rise-delay: 120ms;
+}
+
+.stat-card:nth-child(1) {
+  --rise-delay: 180ms;
+}
+
+.stat-card:nth-child(2) {
+  --rise-delay: 220ms;
+}
+
+.stat-card:nth-child(3) {
+  --rise-delay: 260ms;
+}
+
+.stat-card:nth-child(4) {
+  --rise-delay: 300ms;
+}
+
+.week-overview {
+  --rise-delay: 180ms;
+}
+
+.today-activity {
+  --rise-delay: 340ms;
+}
+
+.weekly-progress {
+  --rise-delay: 400ms;
+}
+
+.home-ring .progress-ring__value {
+  animation: home-ring-fill 700ms var(--ease-out) 250ms backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-intro,
+  .next-session,
+  .today-goal,
+  .stat-card,
+  .week-overview,
+  .today-activity,
+  .weekly-progress {
+    animation-name: home-fade;
+    animation-duration: 200ms;
+    animation-delay: 0ms;
+  }
+
+  .home-ring .progress-ring__value {
+    animation: none;
   }
 }

@@ -3,8 +3,8 @@
 /*
  * Cards add hub (prefix: addhub). Mobile keeps the full-screen manual editor,
  * so every wrapper is transparent below 761px. From 761px the hub is one card
- * whose mode panels are stacked in the same grid cell: the card keeps its
- * size while the content cross-fades in place.
+ * whose container fits the ACTIVE mode only (inactive panels stay mounted but
+ * are not rendered), and the active panel fades in when the mode changes.
  */
 
 .addhub,
@@ -20,6 +20,11 @@
 .addhub__progress,
 .addhub__capture-summary,
 .addhub__panel:not(.addhub__panel--manual) {
+  @apply hidden;
+}
+
+/* While the library loads the skeleton replaces the panels (any width). */
+.addhub[data-loading='true'] .addhub__stage {
   @apply hidden;
 }
 
@@ -49,10 +54,6 @@
     @apply inline-flex w-fit items-center gap-1.5 rounded-[10px] px-2 py-1 text-[13px] font-semibold text-(--ink-soft) transition-colors;
   }
 
-  .addhub__exit:hover {
-    @apply bg-(--surface-muted) text-(--ink);
-  }
-
   .addhub__header h2 {
     @apply m-0 text-[20px] font-bold wrap-anywhere;
   }
@@ -73,10 +74,6 @@
 
   .addhub__mode {
     @apply flex min-w-0 items-center gap-2.5 rounded-[14px] border border-solid border-transparent px-3 py-2.5 text-left text-(--ink-soft) transition-colors;
-  }
-
-  .addhub__mode:hover {
-    @apply text-(--ink);
   }
 
   .addhub__mode[aria-selected='true'] {
@@ -123,9 +120,9 @@
     @apply hidden;
   }
 
-  /* Stage: every panel shares one grid cell, so the tallest one sets the height. */
+  /* Stage: only the active panel is rendered, so the card fits its content. */
   .addhub__stage {
-    @apply grid min-w-0;
+    @apply block min-w-0;
   }
 
   .addhub[data-view='review'] .addhub__stage,
@@ -134,20 +131,12 @@
   }
 
   .addhub .addhub__panel {
-    @apply col-start-1 row-start-1 block min-w-0 opacity-0 invisible;
-    pointer-events: none;
-    transform: translateY(4px);
-    transition:
-      opacity 0.2s ease,
-      transform 0.2s ease,
-      visibility 0s linear 0.2s;
+    @apply hidden min-w-0;
   }
 
   .addhub .addhub__panel[data-active='true'] {
-    @apply visible opacity-100;
-    pointer-events: auto;
-    transform: none;
-    transition-delay: 0s;
+    @apply block;
+    animation: addhub-panel-in 0.22s ease both;
   }
 
   .addhub__result {
@@ -204,6 +193,19 @@
   }
 }
 
+@keyframes addhub-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes addhub-panel-fade {
+  from {
+    opacity: 0;
+  }
+}
+
 @keyframes addhub-enter {
   from {
     opacity: 0;
@@ -218,12 +220,26 @@
     transition: none !important;
   }
 
-  .addhub__panel,
-  .addhub__panel--manual {
-    transform: none !important;
+  .addhub .addhub__panel[data-active='true'] {
+    animation: addhub-panel-fade 0.15s ease both;
   }
 
   .addhub__result {
     animation: none;
+  }
+}
+
+/* Hover feedback: exit and mode tabs */
+
+.addhub__exit,
+.addhub__mode {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .addhub__exit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .addhub__mode:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--indigo-soft);
+    color: var(--indigo);
   }
 }

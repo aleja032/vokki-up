@@ -73,8 +73,7 @@
   @apply inline-flex h-11 cursor-pointer items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
 }
 
-.aipane__pick:focus-within,
-.aipane__pick:hover {
+.aipane__pick:focus-within {
   @apply border-(--indigo);
 }
 
@@ -99,7 +98,7 @@
 }
 
 .aipane__file-remove {
-  @apply flex size-10 shrink-0 items-center justify-center rounded-[12px] text-(--ink-soft) hover:bg-(--surface-muted);
+  @apply flex size-10 shrink-0 items-center justify-center rounded-[12px] text-(--ink-soft);
 }
 
 /* Groups */
@@ -254,4 +253,42 @@
 
 .aipane-created__secondary {
   @apply inline-flex h-12 items-center rounded-[14px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-6 text-[15px] font-semibold text-(--ink);
+}
+
+/* Hover feedback: buttons, chips and options */
+
+.aipane__submit,
+.aipane-created__primary {
+  transition: var(--hover-transition);
+}
+
+.aipane-created__secondary,
+.aipane__pick,
+.aipane-chip,
+.aipane__file-remove {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .aipane__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aipane-created__primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--indigo-strong);
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .aipane-created__secondary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aipane__pick:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aipane-chip:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aipane__file-remove:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    border-color: var(--indigo);
+    background-color: var(--indigo-soft);
+    color: var(--indigo);
+  }
+
+  .aipane__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
+  .aipane-created__primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
+  }
 }

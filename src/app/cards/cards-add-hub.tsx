@@ -13,6 +13,7 @@ import {
   useCardCaptureFlow,
   type CaptureSourceKind
 } from '@/domains/ai/hooks/use-card-capture-flow';
+import { statusPageMessages } from '@/config/messages';
 import { useAiForCardsEnabled } from '@/lib/settings/use-ai-for-cards-enabled';
 import { CardEditor } from '@/domains/cards/components/card-editor';
 import type { CardsAddPanelApi } from '@/domains/cards/components/cards-add-panel.types';
@@ -64,6 +65,7 @@ export function CardsAddHub({ panel, initialMode }: CardsAddHubProps) {
   const autofill = useCardAutofill();
   const view = isResultOpen && flow.step !== 'add' ? flow.step : 'modes';
   const isOpen = panel.isOpen || isResultOpen || isInitialOpen;
+  const isLoading = isOpen && !panel.isLibraryReady;
   const hubRef = useRef<HTMLElement>(null);
   const pendingReviewCount = flow.step === 'review' ? flow.proposals.length : 0;
   const activeStep = view === 'review' ? 2 : view === 'created' ? 3 : 1;
@@ -146,6 +148,7 @@ export function CardsAddHub({ panel, initialMode }: CardsAddHubProps) {
       data-view={view}
       data-open={isOpen}
       data-mode={mode}
+      data-loading={isLoading}
       aria-labelledby="addhub-title"
     >
       <header className="addhub__header">
@@ -179,6 +182,25 @@ export function CardsAddHub({ panel, initialMode }: CardsAddHubProps) {
           <button type="button" onClick={() => setIsResultOpen(true)}>
             {messages.review.resumeAction}
           </button>
+        </div>
+      )}
+
+      {isLoading && (
+        <div
+          aria-busy="true"
+          className="status-skeleton status-skeleton--shimmer addhub__skeleton"
+          role="status"
+        >
+          <span className="sr-only">{statusPageMessages.loading.label}</span>
+          <span
+            aria-hidden="true"
+            className="status-skeleton__bar status-skeleton__bar--subtitle"
+          />
+          <span aria-hidden="true" className="status-skeleton__panel" />
+          <span
+            aria-hidden="true"
+            className="status-skeleton__bar status-skeleton__bar--title"
+          />
         </div>
       )}
 

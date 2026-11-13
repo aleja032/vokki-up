@@ -1382,3 +1382,86 @@ a.aicap-button--outline {
     max-width: 1240px;
   }
 }
+
+/* Hover feedback: buttons, links and tabs */
+
+.aicap-button--primary,
+.aicap-action--accept {
+  transition: var(--hover-transition);
+}
+
+.aicap-button--danger {
+  transition: var(--hover-transition);
+}
+
+.aicap-button--outline,
+.aicap-bulk__accept,
+.aicap-action:not(.aicap-action--accept):not(.aicap-action--reject),
+.aicap-rejected__undo,
+.aicap__back,
+.aicap-file__remove,
+.aicap-modes__tab {
+  transition: var(--hover-transition);
+}
+
+.aicap-button--danger-outline,
+.aicap-action--reject,
+.aicap-bulk__discard {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .aicap-button--primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aicap-action--accept:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--indigo-strong);
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .aicap-button--danger:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .aicap-button--outline:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aicap-bulk__accept:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aicap-action:not(.aicap-action--accept):not(.aicap-action--reject):not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aicap-rejected__undo:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aicap__back:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aicap-file__remove:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aicap-modes__tab:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    border-color: var(--indigo);
+    background-color: var(--indigo-soft);
+    color: var(--indigo);
+  }
+
+  .aicap-button--danger-outline:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aicap-action--reject:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .aicap-bulk__discard:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    background-color: var(--red-soft);
+  }
+
+  .aicap-button--primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
+  .aicap-action--accept:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
+  }
+
+  .aicap-button--danger:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+.aicap__crumb {
+  text-decoration: underline transparent;
+  text-underline-offset: 3px;
+  transition: var(--hover-transition), text-decoration-color var(--hover-duration) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .aicap__crumb:hover {
+    color: var(--indigo-strong);
+    text-decoration-color: currentColor;
+  }
+}

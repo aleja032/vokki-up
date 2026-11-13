@@ -1,5 +1,8 @@
+'use client';
+
 import { BookOpenCheck, Clock3, Eye, Flame } from 'lucide-react';
 import type { HomeDashboardData } from '../types';
+import { useCountUp } from '@/lib/motion/use-count-up';
 import { homeDashboardData } from '../data';
 
 const statistics = [
@@ -33,6 +36,24 @@ const statistics = [
   }
 ] as const;
 
+function StatValue({ value, unit }: { value: number | null; unit: string }) {
+  const animated = useCountUp(value ?? 0);
+
+  return (
+    <strong className="stat-card__value">
+      <span className="sr-only">
+        {value === null
+          ? 'Dato no disponible'
+          : `${value}${unit ? ` ${unit}` : ''}`}
+      </span>
+      <span aria-hidden="true">
+        {value === null ? '—' : animated}
+        {value !== null && unit && <span> {unit}</span>}
+      </span>
+    </strong>
+  );
+}
+
 export function StatisticsStrip({
   stats
 }: {
@@ -60,17 +81,7 @@ export function StatisticsStrip({
             >
               <Icon size={21} strokeWidth={1.8} />
             </span>
-            <strong className="stat-card__value">
-              <span className="sr-only">
-                {value === null
-                  ? 'Dato no disponible'
-                  : `${value}${unit ? ` ${unit}` : ''}`}
-              </span>
-              <span aria-hidden="true">
-                {value === null ? '—' : value}
-                {value !== null && unit && <span> {unit}</span>}
-              </span>
-            </strong>
+            <StatValue unit={unit} value={value} />
             <span className="stat-card__label">
               {homeDashboardData.copy.statisticsLabels[stat.labelKey]}
             </span>

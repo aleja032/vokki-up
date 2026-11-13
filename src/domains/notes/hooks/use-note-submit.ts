@@ -18,7 +18,7 @@ export function useNoteSubmit({
   onSave
 }: UseNoteSubmitOptions) {
   const [isSaved, setIsSaved] = useState(true);
-  const { register, handleSubmit, subscribe } = useForm<NoteInput>({
+  const { register, handleSubmit, subscribe, getValues, setValue } = useForm<NoteInput>({
     resolver: zodResolver(noteSchema),
     defaultValues: {
       title: note.title,
@@ -56,5 +56,5 @@ export function useNoteSubmit({
     setIsSaved(true);
   });
 
-  return { register, onSubmit, isSaved };
+  return { register, onSubmit, isSaved, getValues, setValue };
 }

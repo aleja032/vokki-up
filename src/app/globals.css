@@ -14,6 +14,7 @@
   --indigo: #4a3ac9;
   --indigo-strong: #3a2cb0;
   --indigo-soft: #e9e6fb;
+  --on-indigo: #ffffff;
   --amber: #f2b53a;
   --amber-soft: #fcebc4;
   --amber-ink: #7a4f00;
@@ -27,6 +28,20 @@
   --control-radius: 14px;
   --page-max: 1480px;
   --focus-ring: #4a3ac9;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --hover-duration: 150ms;
+  --hover-shadow: 0 6px 18px rgb(27 26 46 / 0.1);
+  --lift-1: -1px;
+  --lift-2: -2px;
+  --press-scale: 0.98;
+  --press-duration: 100ms;
+  --hover-transition:
+    background-color var(--hover-duration) var(--ease-out),
+    border-color var(--hover-duration) var(--ease-out),
+    color var(--hover-duration) var(--ease-out),
+    box-shadow var(--hover-duration) var(--ease-out),
+    transform var(--hover-duration) var(--ease-out),
+    scale var(--press-duration) var(--ease-out);
   font-family: var(--font-ui), sans-serif;
 }
 
@@ -44,6 +59,7 @@
   --indigo: #9a91f5;
   --indigo-strong: #b0a9fa;
   --indigo-soft: #302d4c;
+  --on-indigo: #141416;
   --amber: #e3b25a;
   --amber-soft: #3b3020;
   --amber-ink: #e3b25a;
@@ -52,8 +68,9 @@
   --blue: #72bac6;
   --blue-soft: #1d3439;
   --red-soft: #422821;
-  --red-ink: #7d280c;
+  --red-ink: #f09a7e;
   --focus-ring: #b0a9fa;
+  --hover-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -70,6 +87,7 @@
     --indigo: #9a91f5;
     --indigo-strong: #b0a9fa;
     --indigo-soft: #302d4c;
+    --on-indigo: #141416;
     --amber: #e3b25a;
     --amber-soft: #3b3020;
     --amber-ink: #e3b25a;
@@ -80,6 +98,7 @@
     --red-soft: #422821;
     --red-ink: #f09a7e;
     --focus-ring: #b0a9fa;
+    --hover-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
   }
 }
 
@@ -148,18 +167,24 @@ a:focus-visible {
   padding: 0 24px;
   border-radius: var(--control-radius);
   background: var(--indigo);
-  color: #ffffff;
+  color: var(--on-indigo);
   font-size: 15px;
   font-weight: 700;
-  transition:
-    background-color 160ms ease,
-    transform 160ms ease;
+  transition: var(--hover-transition);
 }
 
-.primary-action:hover {
-  background: var(--indigo-strong);
-  color: #ffffff;
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .primary-action:hover {
+    background: var(--indigo-strong);
+    box-shadow: var(--hover-shadow);
+    color: var(--on-indigo);
+    transform: translateY(var(--lift-1));
+  }
+
+  .primary-action:active {
+    box-shadow: none;
+    transform: none;
+  }
 }
 
 .section-heading {
@@ -185,9 +210,18 @@ a:focus-visible {
   font-weight: 600;
 }
 
-.section-heading a:hover {
-  color: var(--indigo-strong);
-  text-decoration: underline;
+.section-heading a {
+  text-decoration: underline transparent;
+  transition:
+    var(--hover-transition),
+    text-decoration-color var(--hover-duration) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .section-heading a:hover {
+    color: var(--indigo-strong);
+    text-decoration-color: currentColor;
+  }
 }
 
 .progress-ring {
@@ -254,6 +288,13 @@ a:focus-visible {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+
+  /* Hover feedback keeps color/border/shadow changes but drops movement. */
+  :root {
+    --lift-1: 0px;
+    --lift-2: 0px;
+    --press-scale: 1;
+  }
 }
 
 .eyebrow {
@@ -276,13 +317,14 @@ a:focus-visible {
   color: var(--ink);
   font-size: 14px;
   font-weight: 600;
-  transition:
-    border-color 160ms ease,
-    background-color 160ms ease;
+  transition: var(--hover-transition);
 }
-.secondary-action:hover {
-  border-color: var(--indigo);
-  background: var(--indigo-soft);
+@media (hover: hover) {
+  .secondary-action:hover {
+    border-color: var(--indigo);
+    background: var(--indigo-soft);
+    color: var(--indigo);
+  }
 }
 
 .cards-back {
@@ -294,8 +336,13 @@ a:focus-visible {
   font-size: 13px;
   font-weight: 600;
 }
-.cards-back:hover {
-  color: var(--indigo);
+.cards-back {
+  transition: var(--hover-transition);
+}
+@media (hover: hover) {
+  .cards-back:hover {
+    color: var(--indigo);
+  }
 }
 
 .portability-workspace {
@@ -520,8 +567,15 @@ a:focus-visible {
   font-size: 12px;
   font-weight: 650;
 }
-.csv-file-button:hover {
-  background: var(--surface-muted);
+.csv-file-button {
+  transition: var(--hover-transition);
+}
+@media (hover: hover) {
+  .csv-file-button:hover {
+    background: var(--indigo-soft);
+    box-shadow: var(--hover-shadow);
+    color: var(--indigo-strong);
+  }
 }
 .csv-file-name {
   display: flex;
@@ -741,4 +795,26 @@ textarea:focus-visible,
 select:focus-visible {
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+input:not([type='checkbox'], [aria-invalid='true']):focus-visible,
+textarea:not([aria-invalid='true']):focus-visible,
+select:not([aria-invalid='true']):focus-visible {
+  border-color: var(--indigo);
+}
+
+/* Press feedback: the individual `scale` property composes with hover lifts that use `transform`. */
+:where(button, [role='button'], [role='tab'], a[class], summary):not(
+    :disabled,
+    [aria-disabled='true']
+  ):active {
+  scale: var(--press-scale);
+}
+
+/* Smooth focus/validation changes on form fields. */
+:where(input:not([type='checkbox'], [type='radio']), textarea, select) {
+  transition:
+    border-color var(--hover-duration) var(--ease-out),
+    background-color var(--hover-duration) var(--ease-out),
+    box-shadow var(--hover-duration) var(--ease-out);
 }
