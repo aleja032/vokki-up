@@ -1,5 +1,6 @@
 import { CARD_PARTS_OF_SPEECH } from '../card-create.schema';
 import type { CardGroup, VocabularyCard } from '../types';
+import { normalizePronunciationLocale } from '@/lib/i18n/locale';
 
 export type CapturedCardCandidate = {
   word: string;
@@ -21,6 +22,7 @@ export function mapCapturedCandidatesToCards(
     term: candidate.word.trim(),
     meaning: candidate.meaning.trim(),
     phonetics: candidate.phonetics.trim(),
+    pronunciationLocale: normalizePronunciationLocale('en-US'),
     example: candidate.example.trim(),
     partOfSpeech: candidate.partOfSpeech,
     groupId,

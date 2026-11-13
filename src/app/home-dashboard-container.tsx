@@ -1,6 +1,5 @@
 'use client';
 
-import { INITIAL_CARDS } from '@/domains/cards/data';
 import { deriveCardsHomeSummary } from '@/domains/cards/home-summary';
 import type {
   CardScheduleMap,
@@ -19,7 +18,7 @@ import { useBrowserState } from '@/lib/storage/use-browser-state';
 export function HomeDashboardContainer() {
   const [cards, , cardsLoaded] = useBrowserState(
     'cards/library',
-    INITIAL_CARDS,
+    [],
     isVocabularyCardList
   );
   const [schedules, , schedulesLoaded] = useBrowserState<CardScheduleMap>(

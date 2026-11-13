@@ -144,6 +144,9 @@ export const cardsMessages = createLocalizedMessages({
     exampleCounter: (count: number) => `${count} / 160`,
     phoneticsLabel: 'Pronunciación',
     phoneticsPlaceholder: '/ɪɡˈzɑːm.pəl/',
+    pronunciationLocaleLabel: 'Idioma de pronunciación (BCP 47)',
+    invalidPronunciationLocale:
+      'Usa una etiqueta de idioma BCP 47 válida de hasta 35 caracteres.',
     groupLegend: 'Grupo',
     noGroup: 'Sin grupo',
     newGroup: 'Nuevo grupo',
@@ -168,7 +171,10 @@ export const cardsMessages = createLocalizedMessages({
     progressLabel: 'Avance de la sesión',
     count: (position: number, total: number) => `${position} / ${total}`,
     offlineNotice: 'Funciona sin conexión',
-    listenLabel: 'Pronunciación escrita; audio no disponible en esta versión',
+    listenLabel: 'Escuchar pronunciación',
+    speechUnavailable:
+      'La síntesis de voz no está disponible en este navegador.',
+    speechFailed: 'No se pudo reproducir el audio. Puedes volver a intentarlo.',
     meaningLabel: 'Significado',
     exampleLabel: 'Ejemplo',
     revealHint: 'Intenta recordarla, luego toca para ver',

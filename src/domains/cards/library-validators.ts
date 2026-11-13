@@ -1,4 +1,5 @@
 import type { CardGroup, VocabularyCard } from './types';
+import { isPronunciationLocale } from '@/lib/i18n/locale';
 
 const GROUP_TONE_VALUES = [
   'indigo',
@@ -24,6 +25,8 @@ export function isCardList(value: unknown): value is VocabularyCard[] {
         typeof card.term === 'string' &&
         typeof card.meaning === 'string' &&
         typeof card.phonetics === 'string' &&
+        (card.pronunciationLocale === undefined ||
+          isPronunciationLocale(card.pronunciationLocale)) &&
         typeof card.example === 'string' &&
         typeof card.partOfSpeech === 'string' &&
         typeof card.groupId === 'string' &&

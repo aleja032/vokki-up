@@ -24,7 +24,6 @@ import {
 } from './connection-feedback';
 import { SettingsIcon } from './settings-icon';
 import { SettingsSaveState } from './settings-save-state';
-import { SettingsSwitch } from './settings-switch';
 
 interface AiProviderPanelProps {
   connectionStatus: ConnectionStatus;
@@ -381,22 +380,6 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
         </footer>
       </div>
       <aside className="prefs-aside">
-        <section aria-labelledby="settings-uses-title" className="prefs-uses">
-          <h2 className="prefs-uses__title" id="settings-uses-title">
-            {copy.usesTitle}
-          </h2>
-          <div className="prefs-use">
-            <span className="prefs-use__copy">
-              <span className="prefs-use__label">{copy.useCards}</span>
-              <span className="prefs-hint">{copy.useCardsHint}</span>
-            </span>
-            <SettingsSwitch
-              isChecked={props.shouldUseForCards}
-              label={copy.useCards}
-              onChange={props.onUseForCardsChange}
-            />
-          </div>
-        </section>
         <button
           className="prefs-remove prefs-remove--narrow"
           type="button"

@@ -18,8 +18,12 @@ import { CardEditorAutofill as CardEditorAutofillPanel } from './card-editor-aut
 import { CardEditorPreview } from './card-editor-preview';
 import { DeckFieldError } from './deck-field-error';
 import { DeckIcon } from './deck-icon';
-import { translateText } from '@/lib/i18n/locale';
 import { useAiForCardsEnabled } from '@/lib/settings/use-ai-for-cards-enabled';
+import {
+  isPronunciationLocale,
+  normalizePronunciationLocale,
+  translateText
+} from '@/lib/i18n/locale';
 
 const messages = cardsMessages.cardEditor;
 // Entry to the (static mockup) AI capture flow.
@@ -54,6 +58,7 @@ export function CardEditor({
 }: CardEditorProps) {
   // UI-only: the tag input visibility is not card data.
   const [isTagInputVisible, setIsTagInputVisible] = useState(false);
+  const [pronunciationLocale, setPronunciationLocale] = useState('en-US');
   const {
     register,
     onSubmit,
@@ -70,7 +75,16 @@ export function CardEditor({
     clearFields,
     applyAutofillValues,
     readAutofillSnapshot
-  } = useCardCreateSubmit({ groups, existingTerms, initialGroupId, onSave });
+  } = useCardCreateSubmit({
+    groups,
+    existingTerms,
+    initialGroupId,
+    onSave: card =>
+      onSave({
+        ...card,
+        pronunciationLocale: normalizePronunciationLocale(pronunciationLocale)
+      })
+  });
   const { isEnabled: isAiEnabled } = useAiForCardsEnabled();
   const editorAutofill = useCardEditorAutofill({
     autofill: isAiEnabled ? autofill : undefined,
@@ -80,6 +94,7 @@ export function CardEditor({
   });
   const exampleLength = values.example.length;
   const isExampleTooLong = exampleLength > CARD_EXAMPLE_MAX_LENGTH;
+  const isPronunciationLocaleValid = isPronunciationLocale(pronunciationLocale);
 
   return (
     <section
@@ -301,6 +316,35 @@ export function CardEditor({
                 {...register('phonetics')}
               />
             </div>
+            <div className="deck-field">
+              <label htmlFor="card-pronunciation-locale">
+                {messages.pronunciationLocaleLabel}
+              </label>
+              <input
+                id="card-pronunciation-locale"
+                className="deck-field__input"
+                type="text"
+                autoComplete="off"
+                placeholder="en-US"
+                value={pronunciationLocale}
+                aria-invalid={!isPronunciationLocaleValid}
+                aria-describedby={
+                  isPronunciationLocaleValid
+                    ? undefined
+                    : 'card-pronunciation-locale-error'
+                }
+                onChange={event => setPronunciationLocale(event.target.value)}
+              />
+              {!isPronunciationLocaleValid && (
+                <span
+                  className="deck-field__error"
+                  id="card-pronunciation-locale-error"
+                  role="alert"
+                >
+                  {messages.invalidPronunciationLocale}
+                </span>
+              )}
+            </div>
 
             <fieldset className="deck-choice">
               <legend>{messages.groupLegend}</legend>
@@ -415,8 +459,8 @@ export function CardEditor({
           <button
             className="deck-editor__submit"
             type="submit"
-            disabled={!isValid}
-            aria-disabled={!isValid}
+            disabled={!isValid || !isPronunciationLocaleValid}
+            aria-disabled={!isValid || !isPronunciationLocaleValid}
           >
             <DeckIcon name="check" size={18} />
             {messages.submit}
