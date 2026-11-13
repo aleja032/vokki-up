@@ -834,3 +834,19 @@
     text-decoration-color: currentColor;
   }
 }
+
+/* Hover feedback: clickable rows */
+
+.prefs-action,
+.prefs-provider {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .prefs-action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .prefs-provider:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+    border-color: color-mix(in srgb, var(--line) 40%, var(--indigo));
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-2));
+  }
+}

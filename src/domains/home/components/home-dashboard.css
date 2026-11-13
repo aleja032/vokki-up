@@ -431,15 +431,11 @@
   }
 
   .activity-item {
-    @apply gap-4 rounded-[16px] bg-(--ground) px-4.5 py-4 transition-[background-color] duration-160 ease-[ease];
+    @apply gap-4 rounded-[16px] bg-(--ground) px-4.5 py-4;
   }
 
   .activity-item + .activity-item {
     border-top: 0;
-  }
-
-  .activity-item:hover {
-    @apply bg-(--surface-muted);
   }
 
   .activity-item__icon {
@@ -541,6 +537,32 @@
   }
 
   .next-session .primary-action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+/* Hover feedback: activity rows. Rows clip inside the mobile list, so only tint there; on wide screens they lift. */
+
+.activity-item {
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .activity-item:hover {
+    background-color: var(--surface-muted);
+  }
+}
+
+@media (min-width: 761px) and (hover: hover) {
+  .activity-item:hover {
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--line) 40%, var(--indigo)),
+      var(--hover-shadow);
+    transform: translateY(var(--lift-2));
+  }
+
+  .activity-item:active {
     box-shadow: none;
     transform: none;
   }
