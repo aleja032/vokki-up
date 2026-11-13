@@ -27,6 +27,11 @@
   --control-radius: 14px;
   --page-max: 1480px;
   --focus-ring: #4a3ac9;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --hover-duration: 150ms;
+  --hover-shadow: 0 6px 18px rgb(27 26 46 / 0.1);
+  --lift-1: -1px;
+  --lift-2: -2px;
   font-family: var(--font-ui), sans-serif;
 }
 
@@ -54,6 +59,7 @@
   --red-soft: #422821;
   --red-ink: #7d280c;
   --focus-ring: #b0a9fa;
+  --hover-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -80,6 +86,7 @@
     --red-soft: #422821;
     --red-ink: #f09a7e;
     --focus-ring: #b0a9fa;
+    --hover-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
   }
 }
 
@@ -253,6 +260,12 @@ a:focus-visible {
   *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* Hover feedback keeps color/border/shadow changes but drops movement. */
+  :root {
+    --lift-1: 0px;
+    --lift-2: 0px;
   }
 }
 

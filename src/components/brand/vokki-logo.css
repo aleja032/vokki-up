@@ -15,3 +15,16 @@
 .vokki-logo__tip {
   fill: color-mix(in srgb, var(--indigo) 75%, white);
 }
+
+/* Focal moment: the whole mark rises on brand hover. */
+
+.brand__mark {
+  transition: transform var(--hover-duration, 150ms)
+    var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+@media (hover: hover) {
+  .brand:hover .brand__mark {
+    transform: translateY(var(--lift-2));
+  }
+}
