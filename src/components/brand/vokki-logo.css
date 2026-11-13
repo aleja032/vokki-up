@@ -1,0 +1,17 @@
+/* Logo shades derive from the interface indigo so the mark follows the theme. */
+
+.vokki-logo__shade {
+  fill: color-mix(in srgb, var(--indigo) 65%, black);
+}
+
+.vokki-logo__main {
+  fill: var(--indigo);
+}
+
+.vokki-logo__fold {
+  fill: color-mix(in srgb, var(--indigo) 85%, black);
+}
+
+.vokki-logo__tip {
+  fill: color-mix(in srgb, var(--indigo) 75%, white);
+}
