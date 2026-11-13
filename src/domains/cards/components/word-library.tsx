@@ -173,16 +173,44 @@ export function WordLibrary() {
 
       <section className="word-library__browser" aria-label={messages.title}>
         <div className="word-library__tools">
-          <label className="word-library__search">
-            <Search size={19} aria-hidden="true" />
-            <span className="sr-only">{messages.searchLabel}</span>
-            <input
-              type="search"
-              value={searchText}
-              onChange={event => setSearchText(event.target.value)}
-              placeholder={messages.searchPlaceholder}
-            />
-          </label>
+          <div className="word-library__search-row">
+            <label className="word-library__search">
+              <Search size={19} aria-hidden="true" />
+              <span className="sr-only">{messages.searchLabel}</span>
+              <input
+                type="search"
+                value={searchText}
+                onChange={event => setSearchText(event.target.value)}
+                placeholder={messages.searchPlaceholder}
+              />
+            </label>
+            <aside
+              className="word-library__add-bar"
+              aria-label={messages.addSelected}
+            >
+              <button
+                type="button"
+                onClick={addSelectedEntries}
+                disabled={selectedIds.length === 0 || !hasSelectedGroup}
+                aria-label={`${messages.addSelected}: ${messages.selectWords(selectedIds.length)}`}
+              >
+                {messages.addSelected}
+                <span
+                  className="word-library__selected-count"
+                  aria-hidden="true"
+                >
+                  {selectedIds.length}
+                </span>
+              </button>
+            </aside>
+          </div>
+          <p
+            className="word-library__announcement"
+            role="status"
+            aria-live="polite"
+          >
+            {announcement}
+          </p>
           <div
             className="word-library__categories"
             role="group"
@@ -260,29 +288,6 @@ export function WordLibrary() {
           )}
         </div>
       </section>
-
-      <aside
-        className="word-library__add-bar"
-        aria-label={messages.addSelected}
-      >
-        <div className="word-library__add-actions">
-          <span>{messages.selectWords(selectedIds.length)}</span>
-          <button
-            type="button"
-            onClick={addSelectedEntries}
-            disabled={selectedIds.length === 0 || !hasSelectedGroup}
-          >
-            {messages.addSelected}
-          </button>
-        </div>
-        <p
-          className="word-library__announcement"
-          role="status"
-          aria-live="polite"
-        >
-          {announcement}
-        </p>
-      </aside>
     </div>
   );
 }
