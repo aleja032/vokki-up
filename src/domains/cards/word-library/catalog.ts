@@ -686,7 +686,7 @@ const PHRASE_SEEDS: CatalogSeed[] = [
   'long time no see|tanto tiempo sin verte|/lɔːŋ taɪm noʊ siː/|Long time no see; how is your family?|Expresión',
   'what brings you here?|¿qué te trae por aquí?|/wʌt brɪŋz ju hɪr/|What brings you here this evening?|Expresión',
   'where are you from?|¿de dónde eres?|/wer ɑːr ju frʌm/|Where are you from originally?|Expresión',
-  'what do you do?|¿a qué te dedicas?|/wʌt duː ju duː/|What do you do when you are not working?|Expresión',
+  'what do you do?|¿a qué te dedicas?|/wʌt duː ju duː/|What do you do for a living?|Expresión',
   'how was your weekend?|¿cómo estuvo tu fin de semana?|/haʊ wəz jɚ ˈwiːk.end/|How was your weekend with the family?|Expresión',
   'it is good to see you|me alegra verte|/ɪt ɪz ɡʊd tə siː ju/|It is good to see you again.|Expresión',
   'please call me|por favor, llámame|/pliːz kɔːl miː/|Please call me when you get home.|Expresión',

@@ -53,7 +53,12 @@ const messages = createLocalizedMessages({
   pronunciation: 'Pronunciación',
   example: 'Ejemplo',
   alreadyInLibrary: 'Ya está en tus tarjetas',
-  chooseWordsFirst: 'Selecciona al menos una palabra.'
+  chooseWordsFirst: 'Selecciona al menos una palabra.',
+  previousPage: 'Anterior',
+  nextPage: 'Siguiente',
+  paginationLabel: 'Paginación de palabras',
+  pageStatus: (page: number, pageCount: number) =>
+    `Página ${page} de ${pageCount}`
 });
 
 const DEFAULT_GROUP_IDS: Record<WordLibraryCategory, string> = {
@@ -68,7 +73,20 @@ export function getDefaultGroupId(
   groups: readonly CardGroup[]
 ) {
   const id = DEFAULT_GROUP_IDS[category];
+  const matchingName = groups.find(group => group.name === category);
+  if (matchingName) return matchingName.id;
   return groups.some(group => group.id === id) ? id : undefined;
+}
+
+export const WORD_LIBRARY_PAGE_SIZE = 24;
+
+export function paginateWordLibraryEntries<T>(
+  entries: readonly T[],
+  page: number,
+  pageSize = WORD_LIBRARY_PAGE_SIZE
+) {
+  const start = (Math.max(1, page) - 1) * pageSize;
+  return entries.slice(start, start + pageSize);
 }
 
 export function WordLibrary() {
@@ -77,11 +95,18 @@ export function WordLibrary() {
   const [searchText, setSearchText] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [announcement, setAnnouncement] = useState('');
+  const [page, setPage] = useState(1);
 
   const filteredEntries = useMemo(
     () => filterCatalogEntries(wordLibraryCatalog, category, searchText),
     [category, searchText]
   );
+  const pageCount = Math.max(
+    1,
+    Math.ceil(filteredEntries.length / WORD_LIBRARY_PAGE_SIZE)
+  );
+  const currentPage = Math.min(page, pageCount);
+  const pageEntries = paginateWordLibraryEntries(filteredEntries, currentPage);
   const selectedEntries = wordLibraryCatalog.filter(entry =>
     selectedIds.includes(entry.id)
   );
@@ -180,7 +205,10 @@ export function WordLibrary() {
               <input
                 type="search"
                 value={searchText}
-                onChange={event => setSearchText(event.target.value)}
+                onChange={event => {
+                  setPage(1);
+                  setSearchText(event.target.value);
+                }}
                 placeholder={messages.searchPlaceholder}
               />
             </label>
@@ -221,7 +249,10 @@ export function WordLibrary() {
                 key={item}
                 type="button"
                 aria-pressed={category === item}
-                onClick={() => setCategory(item)}
+                onClick={() => {
+                  setPage(1);
+                  setCategory(item);
+                }}
               >
                 {item}
               </button>
@@ -233,7 +264,7 @@ export function WordLibrary() {
         </div>
 
         <div className="word-library__list">
-          {filteredEntries.map(entry => {
+          {pageEntries.map(entry => {
             const isSelected = selectedIds.includes(entry.id);
             const isAlreadyAdded = existingTerms.has(
               normalizeCatalogTerm(entry.term)
@@ -244,10 +275,12 @@ export function WordLibrary() {
                 className="word-library__entry"
                 key={entry.id}
                 data-selected={isSelected}
+                data-existing={isAlreadyAdded}
               >
                 <input
                   type="checkbox"
                   checked={isSelected}
+                  disabled={isAlreadyAdded}
                   onChange={() => toggleEntry(entry.id)}
                   aria-label={`${entry.term}: ${entry.meaning}`}
                 />
@@ -287,6 +320,32 @@ export function WordLibrary() {
             <p className="word-library__empty">{messages.empty}</p>
           )}
         </div>
+        {filteredEntries.length > 0 && (
+          <nav
+            className="word-library__pagination"
+            aria-label={messages.paginationLabel}
+          >
+            <button
+              type="button"
+              onClick={() => setPage(current => Math.max(1, current - 1))}
+              disabled={currentPage === 1}
+            >
+              {messages.previousPage}
+            </button>
+            <span aria-live="polite">
+              {messages.pageStatus(currentPage, pageCount)}
+            </span>
+            <button
+              type="button"
+              onClick={() =>
+                setPage(current => Math.min(pageCount, current + 1))
+              }
+              disabled={currentPage === pageCount}
+            >
+              {messages.nextPage}
+            </button>
+          </nav>
+        )}
       </section>
     </div>
   );
