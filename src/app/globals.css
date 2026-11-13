@@ -32,12 +32,15 @@
   --hover-shadow: 0 6px 18px rgb(27 26 46 / 0.1);
   --lift-1: -1px;
   --lift-2: -2px;
+  --press-scale: 0.98;
+  --press-duration: 100ms;
   --hover-transition:
     background-color var(--hover-duration) var(--ease-out),
     border-color var(--hover-duration) var(--ease-out),
     color var(--hover-duration) var(--ease-out),
     box-shadow var(--hover-duration) var(--ease-out),
-    transform var(--hover-duration) var(--ease-out);
+    transform var(--hover-duration) var(--ease-out),
+    scale var(--press-duration) var(--ease-out);
   font-family: var(--font-ui), sans-serif;
 }
 
@@ -287,6 +290,7 @@ a:focus-visible {
   :root {
     --lift-1: 0px;
     --lift-2: 0px;
+    --press-scale: 1;
   }
 }
 
@@ -788,4 +792,26 @@ textarea:focus-visible,
 select:focus-visible {
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+input:not([type='checkbox'], [aria-invalid='true']):focus-visible,
+textarea:not([aria-invalid='true']):focus-visible,
+select:not([aria-invalid='true']):focus-visible {
+  border-color: var(--indigo);
+}
+
+/* Press feedback: the individual `scale` property composes with hover lifts that use `transform`. */
+:where(button, [role='button'], [role='tab'], a[class], summary):not(
+    :disabled,
+    [aria-disabled='true']
+  ):active {
+  scale: var(--press-scale);
+}
+
+/* Smooth focus/validation changes on form fields. */
+:where(input:not([type='checkbox'], [type='radio']), textarea, select) {
+  transition:
+    border-color var(--hover-duration) var(--ease-out),
+    background-color var(--hover-duration) var(--ease-out),
+    box-shadow var(--hover-duration) var(--ease-out);
 }

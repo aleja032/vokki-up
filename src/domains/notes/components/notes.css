@@ -214,6 +214,7 @@
 
 .note-card {
   @apply relative min-w-0 rounded-[18px] border border-solid border-(--line) bg-(--surface) text-(--ink);
+  --press-scale: 0.99;
 }
 
 .note-card__open {

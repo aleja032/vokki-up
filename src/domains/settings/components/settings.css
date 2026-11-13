@@ -531,14 +531,21 @@
 
 .prefs-switch__track {
   @apply pointer-events-none box-border flex h-8 w-[52px] items-center justify-start rounded-full bg-(--prefs-switch-off) p-[3px];
+  transition: background-color 200ms var(--ease-out);
 }
 
 .prefs-switch__knob {
   @apply size-[26px] rounded-full bg-white shadow-[0_1px_3px_rgba(27,26,46,0.25)];
+  transition: transform 200ms var(--ease-out);
 }
 
 .prefs-switch__input:checked + .prefs-switch__track {
-  @apply justify-end bg-(--indigo);
+  @apply bg-(--indigo);
+}
+
+/* Travel = track 52 - padding 6 - knob 26; translating keeps the knob off the layout path. */
+.prefs-switch__input:checked + .prefs-switch__track .prefs-switch__knob {
+  transform: translateX(20px);
 }
 
 /* Copy that only exists in one of the two artboards. */

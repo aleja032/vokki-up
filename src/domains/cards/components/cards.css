@@ -450,6 +450,7 @@
 
 .deck-group {
   @apply flex min-w-0 flex-[0_0_148px] flex-col gap-3 rounded-[20px] border-2 border-solid border-(--line) bg-(--surface) p-4 text-left font-[family-name:var(--font-ui),sans-serif] text-(--ink);
+  --press-scale: 0.99;
 }
 
 .deck-group[aria-pressed='true'] {
