@@ -1,3 +1,5 @@
+import { stripInlineMarks } from './note-inline.util';
+
 export type NoteBlock =
   | { type: 'heading'; text: string }
   | { type: 'list'; items: string[] }
@@ -48,8 +50,8 @@ export function getNotePreview(body: string): string {
   return parseNoteBody(body)
     .flatMap(block => {
       if (block.type === 'heading') return [];
-      if (block.type === 'list') return block.items;
-      return [block.text.replace(/\s+/g, ' ')];
+      if (block.type === 'list') return block.items.map(stripInlineMarks);
+      return [stripInlineMarks(block.text).replace(/\s+/g, ' ')];
     })
     .join(' · ');
 }

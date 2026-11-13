@@ -1,8 +1,10 @@
 'use client';
 import { Check, FileText } from 'lucide-react';
+import { useNoteFormatting } from '../hooks/use-note-formatting';
 import { useNoteSubmit } from '../hooks/use-note-submit';
 import { notesMessages } from '../messages';
 import type { Note } from '../types';
+import { NoteFormatToolbar } from './note-format-toolbar';
 import './notes.css';
 
 const messages = notesMessages.editor;
@@ -19,10 +21,16 @@ export function NoteEditor({
   onChange,
   onSave
 }: NoteEditorProps) {
-  const { register, onSubmit, isSaved } = useNoteSubmit({
+  const { register, onSubmit, isSaved, getValues, setValue } = useNoteSubmit({
     note,
     onChange,
     onSave
+  });
+  const { ref: registerBodyRef, ...bodyField } = register('body');
+  const { bodyRef, toggleMark, toggleBullets } = useNoteFormatting({
+    getBody: () => getValues('body'),
+    setBody: value => setValue('body', value, { shouldDirty: true }),
+    registerRef: registerBodyRef
   });
   return (
     <form className="notes-form" onSubmit={onSubmit}>
@@ -62,11 +70,16 @@ export function NoteEditor({
       <label className="sr-only" htmlFor="note-body">
         {messages.bodyLabel}
       </label>
+      <NoteFormatToolbar
+        onToggleBullets={toggleBullets}
+        onToggleMark={toggleMark}
+      />
       <textarea
         className="notes-form__body"
         id="note-body"
         placeholder={messages.bodyPlaceholder}
-        {...register('body')}
+        ref={bodyRef}
+        {...bodyField}
       />
       <div className="notes-form__footer">
         <span className="notes-form__hint">{messages.footerHint}</span>

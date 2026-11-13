@@ -345,6 +345,32 @@
   @apply h-10 max-w-full min-w-0 cursor-pointer rounded-full border-[1.5px] border-solid border-(--line) bg-(--surface) pl-4 pr-10 text-[13px] font-semibold text-(--ink-soft);
 }
 
+/* Editor formatting toolbar (works on the textarea selection) */
+
+.note-format {
+  @apply flex flex-wrap gap-1.5 rounded-[14px] bg-(--ground) p-2;
+}
+
+.note-format__tool {
+  @apply flex size-10 cursor-pointer items-center justify-center rounded-[10px] border-0 bg-transparent text-base font-semibold text-(--ink);
+}
+
+.note-format__tool--bold {
+  @apply font-bold;
+}
+
+.note-format__tool--italic {
+  @apply font-[family-name:var(--font-display),Georgia,serif] italic;
+}
+
+.note-format__tool--underline {
+  @apply underline;
+}
+
+.note-format__tool:focus-visible {
+  @apply outline-2 outline-offset-2 outline-(--indigo);
+}
+
 .notes-form__body {
   @apply min-h-60 w-full flex-1 resize-y border-0 bg-transparent py-3.5 text-base leading-[1.65] text-(--ink);
   font: inherit;
@@ -477,30 +503,6 @@
     @apply flex size-11 cursor-pointer items-center justify-center rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) text-(--notes-star);
   }
 
-  .note-detail__toolbar {
-    @apply flex flex-wrap gap-1.5 rounded-[14px] bg-(--ground) p-2;
-  }
-
-  .note-detail__tool {
-    @apply flex size-10 cursor-pointer items-center justify-center rounded-[10px] border-0 bg-transparent text-base font-semibold text-(--ink);
-  }
-
-  .note-detail__tool:first-child {
-    @apply font-bold;
-  }
-
-  .note-detail__tool--italic {
-    @apply font-[family-name:var(--font-display),Georgia,serif] italic;
-  }
-
-  .note-detail__tool--underline {
-    @apply underline;
-  }
-
-  .note-detail__create-card {
-    @apply ml-auto inline-flex h-10 cursor-pointer items-center gap-1.5 rounded-[10px] border-0 bg-(--surface) px-3.5 text-[13px] font-semibold text-(--indigo);
-  }
-
   .note-detail__body {
     @apply flex max-w-170 min-w-0 flex-col gap-6 wrap-anywhere;
   }
@@ -525,8 +527,6 @@
     @apply h-11 cursor-pointer self-start rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-sm font-semibold text-(--indigo-strong);
   }
 
-  .note-detail__tool:focus-visible,
-  .note-detail__create-card:focus-visible,
   .note-detail__favorite:focus-visible,
   .note-detail__edit:focus-visible {
     @apply outline-2 outline-offset-2 outline-(--indigo);
@@ -548,8 +548,7 @@
 
 .notes-filter,
 .note-detail__edit,
-.note-detail__create-card,
-.note-detail__tool,
+.note-format__tool,
 .note-detail__favorite,
 .notes-editor-view__back {
   transition: var(--hover-transition);
@@ -566,8 +565,7 @@
 
   .notes-filter:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
   .note-detail__edit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .note-detail__create-card:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .note-detail__tool:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .note-format__tool:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
   .note-detail__favorite:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
   .notes-editor-view__back:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
     border-color: var(--indigo);

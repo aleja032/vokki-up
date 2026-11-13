@@ -72,7 +72,6 @@ const baseTranslations: Record<string, string> = {
   Cursiva: 'Italic',
   Subrayado: 'Underline',
   Lista: 'List',
-  'Crear tarjeta desde selección': 'Create card from selection',
   'Guardada localmente': 'Saved locally',
   'Cambios sin guardar': 'Unsaved changes',
   'Título de la nota': 'Note title',

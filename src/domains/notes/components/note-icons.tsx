@@ -57,12 +57,3 @@ export function BulletListIcon(props: NoteIconProps) {
     </IconFrame>
   );
 }
-
-export function CardsIcon(props: NoteIconProps) {
-  return (
-    <IconFrame {...props}>
-      <rect x="3" y="6" width="14" height="15" rx="2" />
-      <path d="M7 3h12a2 2 0 0 1 2 2v13" />
-    </IconFrame>
-  );
-}

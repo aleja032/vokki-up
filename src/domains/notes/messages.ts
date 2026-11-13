@@ -38,13 +38,7 @@ export const notesMessages = createLocalizedMessages({
       `${category} · editada el ${updatedAt}`,
     markFavorite: 'Marcar como favorita',
     unmarkFavorite: 'Quitar de favoritas',
-    edit: 'Editar nota',
-    toolbarLabel: 'Formato',
-    bold: 'Negrita',
-    italic: 'Cursiva',
-    underline: 'Subrayado',
-    bulletList: 'Lista',
-    createCard: 'Crear tarjeta desde selección'
+    edit: 'Editar nota'
   },
   editor: {
     statusSaved: 'Guardada localmente',
@@ -53,6 +47,11 @@ export const notesMessages = createLocalizedMessages({
     titlePlaceholder: 'Dale un título a tu nota',
     categoryLabel: 'Categoría',
     bodyLabel: 'Contenido de la nota',
+    toolbarLabel: 'Formato',
+    bold: 'Negrita',
+    italic: 'Cursiva',
+    underline: 'Subrayado',
+    bulletList: 'Lista',
     bodyPlaceholder: 'Anota una idea, una frase o algo que quieras recordar…',
     footerHint: 'Un espacio solo tuyo para pensar en voz alta.',
     submit: 'Guardar nota'
