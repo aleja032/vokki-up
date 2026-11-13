@@ -568,3 +568,93 @@
     transform: none;
   }
 }
+
+/* Entrance: one short capped stagger per mount (delays <= 400ms), then the ring fill is the focal moment. */
+
+@keyframes home-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes home-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Only the dash length animates; the end value is the element's own stroke-dasharray. */
+@keyframes home-ring-fill {
+  from {
+    stroke-dasharray: 0 214;
+  }
+}
+
+.home-intro,
+.next-session,
+.today-goal,
+.stat-card,
+.week-overview,
+.today-activity,
+.weekly-progress {
+  animation: home-rise 400ms var(--ease-out) var(--rise-delay, 0ms) backwards;
+}
+
+.next-session {
+  --rise-delay: 60ms;
+}
+
+.today-goal {
+  --rise-delay: 120ms;
+}
+
+.stat-card:nth-child(1) {
+  --rise-delay: 180ms;
+}
+
+.stat-card:nth-child(2) {
+  --rise-delay: 220ms;
+}
+
+.stat-card:nth-child(3) {
+  --rise-delay: 260ms;
+}
+
+.stat-card:nth-child(4) {
+  --rise-delay: 300ms;
+}
+
+.week-overview {
+  --rise-delay: 180ms;
+}
+
+.today-activity {
+  --rise-delay: 340ms;
+}
+
+.weekly-progress {
+  --rise-delay: 400ms;
+}
+
+.home-ring .progress-ring__value {
+  animation: home-ring-fill 700ms var(--ease-out) 250ms backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-intro,
+  .next-session,
+  .today-goal,
+  .stat-card,
+  .week-overview,
+  .today-activity,
+  .weekly-progress {
+    animation-name: home-fade;
+    animation-duration: 200ms;
+    animation-delay: 0ms;
+  }
+
+  .home-ring .progress-ring__value {
+    animation: none;
+  }
+}

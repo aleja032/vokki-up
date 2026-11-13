@@ -1,3 +1,7 @@
+'use client';
+
+import { useCountUp } from '@/lib/motion/use-count-up';
+
 interface ProgressRingProps {
   ariaLabel: string;
   caption: string;
@@ -13,6 +17,8 @@ export function ProgressRing({
   dashArray,
   variant
 }: ProgressRingProps) {
+  const displayedCompleted = useCountUp(completed, { durationMs: 700 });
+
   return (
     <div
       aria-label={ariaLabel}
@@ -34,7 +40,7 @@ export function ProgressRing({
         />
       </svg>
       <span className="progress-ring__label">
-        <strong>{completed}</strong>
+        <strong>{displayedCompleted}</strong>
         <span>{caption}</span>
       </span>
     </div>
