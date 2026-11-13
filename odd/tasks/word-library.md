@@ -31,12 +31,12 @@ Users currently have to create vocabulary cards themselves. A separate local cat
 ## Tasks
 
 - [x] WL-01 — Implement local catalog model, browse/search UI, and duplicate-safe add flow. Route: delegated direct. Added `/cards/word-library`, a typed static catalog, category/search browsing, preview, group selection, and normalized duplicate-safe add. Verification passed: focused Vitest (3 tests), ESLint, TypeScript, and Prettier checks. Work-unit commit: `35c9dea` (`feat(cards): add searchable word library`).
-- [ ] WL-02 — Add 200 curated entries for each of the four categories. Route: delegated. Acceptance: 800 entries are available and associated with the intended categories.
+- [ ] WL-02 — Add 200 curated entries for each of the four categories. Route: delegated direct. Authorized surfaces: `src/domains/cards/word-library/catalog.ts`, `src/domains/cards/word-library/catalog.test.ts`, and this task record. Acceptance: exactly 800 entries are available, with 200 in each intended category; each entry has distinct searchable vocabulary and a usable example, meaning, and pronunciation. Verification passed: focused catalog tests (3 tests), TypeScript, ESLint, Prettier, and `git diff --check`. Work-unit commit pending.
 - [x] WL-03 — Simplify Word Library selection and category-based collection routing. Route: delegated direct. The full word card toggles its checkbox; the group selector is removed; selected entries route to matching `work`, `travel`, `daily`, or `phrases` collections; the compact mobile action sits beside search at the top. Existing normalized duplicate-safe insertion remains in use. Verification passed: focused Vitest (5 tests), ESLint, TypeScript, Prettier, and `git diff --check`. Work-unit commits: `ed0936e` (`feat(cards): simplify word library add flow`), `d67f1d5` (`feat(cards): move word library add near search`).
 
 ## Next step
 
-Implement WL-02 by expanding the catalog fixture to 200 quality-checked entries per category. WL-03 provides the UX simplification without changing the catalog or user-card persistence model.
+WL-02 content and checks are complete; record the work-unit commit after creating it. All three Word Library tasks will then be complete.
 
 ## Relevant files
 

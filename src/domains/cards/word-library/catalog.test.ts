@@ -32,17 +32,59 @@ const entry: WordLibraryEntry = {
 };
 
 describe('word library catalog', () => {
-  it('starts with a small representative fixture across the four categories', () => {
+  it('contains 200 usable, distinct entries in each topic category', () => {
     expect(WORD_LIBRARY_CATEGORIES).toEqual([
       'Trabajo',
       'Viajes',
       'Día a día',
       'Frases útiles'
     ]);
-    expect(wordLibraryCatalog.length).toBeGreaterThanOrEqual(4);
-    expect(new Set(wordLibraryCatalog.map(item => item.category))).toEqual(
-      new Set(WORD_LIBRARY_CATEGORIES)
-    );
+    expect(wordLibraryCatalog).toHaveLength(800);
+    expect(
+      Object.fromEntries(
+        WORD_LIBRARY_CATEGORIES.map(category => [
+          category,
+          wordLibraryCatalog.filter(item => item.category === category).length
+        ])
+      )
+    ).toEqual({
+      Trabajo: 200,
+      Viajes: 200,
+      'Día a día': 200,
+      'Frases útiles': 200
+    });
+    expect(new Set(wordLibraryCatalog.map(item => item.id)).size).toBe(800);
+    expect(
+      new Set(wordLibraryCatalog.map(item => normalizeCatalogTerm(item.term)))
+        .size
+    ).toBe(800);
+    const supportedPartsOfSpeech = [
+      'Sustantivo',
+      'Verbo',
+      'Adjetivo',
+      'Adverbio',
+      'Expresión'
+    ];
+    const normalizePhrase = (value: string) =>
+      value
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^\p{L}\p{N}\s]/gu, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLocaleLowerCase();
+
+    for (const item of wordLibraryCatalog) {
+      expect(item.term.trim(), item.id).not.toBe('');
+      expect(item.meaning.trim(), item.id).not.toBe('');
+      expect(item.example.trim(), item.id).not.toBe('');
+      expect(item.phonetics, item.id).toMatch(/^\/.+\/$/);
+      expect(supportedPartsOfSpeech, item.id).toContain(item.partOfSpeech);
+      expect(item.tags.length, item.id).toBeGreaterThan(0);
+      expect(normalizePhrase(item.example), item.id).toContain(
+        normalizePhrase(item.term)
+      );
+    }
   });
 
   it('filters by category and searches term, meaning, example, and tags', () => {
