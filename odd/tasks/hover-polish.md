@@ -26,8 +26,18 @@ Every interactive element responds to hover with a small, consistent, tasteful s
 - [x] T4 Surfaces: home dashboard cards, cards/groups list rows, notes list, settings rows, AI panes, login.
 - [x] T5 Verify: tsc, lint, tests, build; browser check desktop 1280 + mobile 390, light + dark.
 
+## Phase 2: animations (user request: "less flat, more interactive")
+Intensity split chosen by the user: SUBTLE on utility surfaces, MEDIUM on Home and the card review flow.
+- Subtle (nav, buttons, lists, Notes, Settings, forms): press feedback (`:active` scale ~0.98), sliding tab indicator, smooth state transitions. No entrances.
+- Medium (Home + review): short capped stagger-in of dashboard cards on first paint, progress ring fill, count-up numbers, 3D flip of the review card on reveal, a brief completion moment at review end.
+- One authored moment per surface, no identical entrance everywhere. All motion has a `prefers-reduced-motion` path (no movement, keep state change/opacity).
+- [ ] T6 Subtle layer: press feedback, tab indicator slide, small state transitions (CSS).
+- [ ] T7 Home medium: stagger-in, ring fill, count-up (CSS + minimal TSX).
+- [ ] T8 Review medium: card flip on reveal and completion moment (CSS + minimal TSX).
+- [ ] T9 Verify: tsc, lint, vitest, build; browser pass at 1280/390 light + dark, reduced-motion emulation.
+
 ## Authorized scope
-CSS files under `src/` and the odd task doc. No TSX changes unless a class hook is truly missing (then report it first).
+CSS files under `src/` and the odd task doc. Phase 2 also authorizes minimal TSX changes in Home dashboard and review components only (class hooks, a count-up hook, state for flip/completion). No new dependencies.
 
 ## Checks
 `npx tsc --noEmit`, `pnpm lint`, `npx vitest run`, `pnpm build`; browser: hover each target group, confirm no layout shift and no hover on touch emulation.
