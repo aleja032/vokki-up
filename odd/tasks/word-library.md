@@ -18,7 +18,7 @@ Users currently have to create vocabulary cards themselves. A separate local cat
 ## Constraints
 
 - Keep all work on the user-selected `stage` branch; do not use `main` or push.
-- WL-01 adds only a small representative catalog fixture. WL-02 owns the 800 curated entries.
+- WL-01 introduced a small representative catalog fixture; WL-02 owns and now supplies the 800 curated entries.
 - Preserve existing cards, collection persistence, and part-of-speech categories; catalog topic categories are separate.
 
 ## Acceptance criteria
@@ -30,13 +30,13 @@ Users currently have to create vocabulary cards themselves. A separate local cat
 
 ## Tasks
 
-- [x] WL-01 — Implement local catalog model, browse/search UI, and duplicate-safe add flow. Route: delegated direct. Added `/cards/word-library`, a typed static catalog, category/search browsing, preview, group selection, and normalized duplicate-safe add. Verification passed: focused Vitest (3 tests), ESLint, TypeScript, and Prettier checks. Work-unit commit: `35c9dea` (`feat(cards): add searchable word library`).
-- [ ] WL-02 — Add 200 curated entries for each of the four categories. Route: delegated direct. Authorized surfaces: `src/domains/cards/word-library/catalog.ts`, `src/domains/cards/word-library/catalog.test.ts`, and this task record. Acceptance: exactly 800 entries are available, with 200 in each intended category; each entry has distinct searchable vocabulary and a usable example, meaning, and pronunciation. Verification passed: focused catalog tests (3 tests), TypeScript, ESLint, Prettier, and `git diff --check`. Work-unit commit pending.
+- [x] WL-01 — Implement local catalog model, browse/search UI, and duplicate-safe add flow. Route: delegated direct. Added `/cards/word-library`, a typed static catalog, category/search browsing, preview, and normalized duplicate-safe add. WL-03 later routed selected entries by category. Verification passed: focused Vitest (3 tests), ESLint, TypeScript, and Prettier checks. Work-unit commit: `35c9dea` (`feat(cards): add searchable word library`).
+- [x] WL-02 — Add 200 curated entries for each of the four categories. Route: delegated direct. Authorized surfaces: `src/domains/cards/word-library/catalog.ts`, `src/domains/cards/word-library/catalog.test.ts`, and this task record. Acceptance: exactly 800 entries are available, with 200 in each intended category; each entry has distinct searchable vocabulary and a usable example, meaning, and pronunciation. Verification passed: focused catalog tests (3 tests), TypeScript, ESLint, Prettier, and `git diff --check`. Work-unit commit: `ee7e281` (`feat(cards): curate word library vocabulary`).
 - [x] WL-03 — Simplify Word Library selection and category-based collection routing. Route: delegated direct. The full word card toggles its checkbox; the group selector is removed; selected entries route to matching `work`, `travel`, `daily`, or `phrases` collections; the compact mobile action sits beside search at the top. Existing normalized duplicate-safe insertion remains in use. Verification passed: focused Vitest (5 tests), ESLint, TypeScript, Prettier, and `git diff --check`. Work-unit commits: `ed0936e` (`feat(cards): simplify word library add flow`), `d67f1d5` (`feat(cards): move word library add near search`).
 
 ## Next step
 
-WL-02 content and checks are complete; record the work-unit commit after creating it. All three Word Library tasks will then be complete.
+All Word Library tasks are complete. The catalog is local static data and adds entries only after user selection; no API or backend source was introduced.
 
 ## Relevant files
 
