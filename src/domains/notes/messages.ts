@@ -38,7 +38,13 @@ export const notesMessages = createLocalizedMessages({
       `${category} · editada el ${updatedAt}`,
     markFavorite: 'Marcar como favorita',
     unmarkFavorite: 'Quitar de favoritas',
-    edit: 'Editar nota'
+    edit: 'Editar nota',
+    moreActions: 'Más opciones de la nota',
+    delete: 'Eliminar nota',
+    deleteTitle: (title: string) => `¿Eliminar “${title}”?`,
+    deleteBody: 'Esta nota se eliminará de tu biblioteca y no se puede recuperar.',
+    cancel: 'Cancelar',
+    confirmDelete: 'Eliminar nota'
   },
   editor: {
     statusSaved: 'Guardada localmente',

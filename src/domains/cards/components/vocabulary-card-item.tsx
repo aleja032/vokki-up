@@ -16,6 +16,9 @@ type VocabularyCardItemProps = {
   group?: CardGroup;
   schedule?: CardSchedule;
   now: Date;
+  isManaging: boolean;
+  isSelected: boolean;
+  onToggleSelect: (cardId: string) => void;
 };
 
 function formatDueLabel(schedule: CardSchedule | undefined, now: Date) {
@@ -29,7 +32,10 @@ export function VocabularyCardItem({
   card,
   group,
   schedule,
-  now
+  now,
+  isManaging,
+  isSelected,
+  onToggleSelect
 }: VocabularyCardItemProps) {
   const learningState = getCardLearningState(schedule);
   const progressStyle = {
@@ -37,7 +43,7 @@ export function VocabularyCardItem({
   } as CSSProperties;
 
   return (
-    <article className="deck-card">
+    <article className="deck-card" data-managing={isManaging} data-selected={isSelected}>
       <div className="deck-card__top">
         <div className="deck-card__title">
           <h3 title={card.term}>{card.term}</h3>
@@ -51,6 +57,16 @@ export function VocabularyCardItem({
           {translateText(card.partOfSpeech)}
         </span>
       </div>
+      {isManaging && (
+        <label className="deck-card__select">
+          <input
+            checked={isSelected}
+            onChange={() => onToggleSelect(card.id)}
+            type="checkbox"
+          />
+          <span className="sr-only">{overview.cardSelectLabel(card.term)}</span>
+        </label>
+      )}
       <p className="deck-card__meaning">{card.meaning}</p>
       {card.example && <p className="deck-card__example">{card.example}</p>}
       <div className="deck-card__footer">

@@ -6,12 +6,19 @@ import { isCardList, isGroupList } from '../library-validators';
 import { cardsMessages } from '../messages';
 import { isMastered } from '../scheduling/mastery';
 import { buildDueQueue } from '../scheduling/progress';
-import { isCardScheduleMap } from '../scheduling/validators';
-import type { CardScheduleMap } from '../scheduling/types';
+import { isCardScheduleMap, isReviewEventList } from '../scheduling/validators';
+import type { CardScheduleMap, ReviewEvent } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
+import {
+  addCatalogEntries,
+  createWordLibraryCardId,
+  type WordLibraryEntry
+} from '../word-library/catalog';
 import { collectionChangeBuilder } from '@/lib/sync/change-builders';
+import { enqueueLocalSyncOperation } from '@/lib/sync/local-queue';
 import { useTrackedBrowserState } from '@/lib/sync/use-tracked-browser-state';
 import { useBrowserState } from '@/lib/storage/use-browser-state';
+import { removePersonalCards } from '../personal-card-removal';
 
 const cardChanges = collectionChangeBuilder<VocabularyCard>('card');
 const groupChanges = collectionChangeBuilder<CardGroup>('card-group');
@@ -35,11 +42,14 @@ export function useCardsDashboard() {
     isGroupList,
     groupChanges
   );
-  const [schedules] = useBrowserState<CardScheduleMap>(
-    'cards/schedules',
-    {},
-    isCardScheduleMap
-  );
+  const [schedules, setSchedules, areSchedulesLoaded] =
+    useBrowserState<CardScheduleMap>('cards/schedules', {}, isCardScheduleMap);
+  const [reviewEvents, setReviewEvents, areReviewEventsLoaded] =
+    useBrowserState<ReviewEvent[]>(
+      'cards/review-events',
+      [],
+      isReviewEventList
+    );
   const [activeGroupId, setActiveGroupId] = useState(ALL_GROUPS_ID);
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORIES);
   const [searchText, setSearchText] = useState('');
@@ -131,6 +141,43 @@ export function useCardsDashboard() {
     setSearchText('');
   }
 
+  function deleteCards(cardIds: readonly string[]) {
+    if (!areCardsLoaded || !areSchedulesLoaded || !areReviewEventsLoaded)
+      return;
+
+    const currentData = { cards, schedules, reviewEvents };
+    const nextData = removePersonalCards(currentData, cardIds);
+    if (nextData === currentData) return;
+
+    for (const cardId of cardIds) {
+      if (!schedules[cardId]) continue;
+      enqueueLocalSyncOperation({
+        entityType: 'card-schedule',
+        operation: 'delete',
+        entityId: cardId
+      });
+    }
+    setSchedules(nextData.schedules);
+    setReviewEvents(nextData.reviewEvents);
+    setCards(nextData.cards);
+  }
+
+  function addWordLibraryEntries(
+    entries: readonly WordLibraryEntry[],
+    groupId: string
+  ) {
+    const idsByEntry = new Map(
+      entries.map(entry => [entry.id, createWordLibraryCardId()])
+    );
+    const createId = (entry: WordLibraryEntry) => idsByEntry.get(entry.id)!;
+    const result = addCatalogEntries(cards, entries, groupId, createId);
+    setCards(
+      currentCards =>
+        addCatalogEntries(currentCards, entries, groupId, createId).cards
+    );
+    return result;
+  }
+
   function createGroup(newGroup: CardGroup) {
     setGroups(currentGroups => [...currentGroups, newGroup]);
     setOpenGroupId(newGroup.id);
@@ -160,6 +207,8 @@ export function useCardsDashboard() {
     cards,
     groups,
     schedules,
+    canDeleteCards:
+      areCardsLoaded && areSchedulesLoaded && areReviewEventsLoaded,
     now,
     dueCount,
     existingTerms,
@@ -185,6 +234,8 @@ export function useCardsDashboard() {
     closeEditor,
     saveCard,
     addCards,
+    deleteCards,
+    addWordLibraryEntries,
     isLibraryReady: areCardsLoaded && areGroupsLoaded,
     createGroup,
     openGroupById,

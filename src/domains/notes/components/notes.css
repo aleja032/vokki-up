@@ -487,6 +487,50 @@
     @apply flex flex-wrap items-start justify-between gap-4;
   }
 
+  .note-detail__actions {
+    @apply flex shrink-0 items-center gap-2;
+  }
+
+  .note-detail__menu-wrap {
+    @apply relative;
+  }
+
+  .note-detail__menu-trigger {
+    @apply flex size-11 cursor-pointer items-center justify-center rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) text-(--ink-soft);
+  }
+
+  .note-detail__menu {
+    @apply absolute top-[calc(100%+8px)] right-0 z-10 flex w-48 flex-col rounded-[14px] border border-solid border-(--line) bg-(--surface) p-1.5 shadow-[0_12px_32px_rgba(27,26,46,0.16)];
+  }
+
+  .note-detail__menu button {
+    @apply flex h-10 items-center gap-2 rounded-[10px] border-0 bg-transparent px-3 text-left text-sm font-semibold text-(--red-ink);
+  }
+
+  .note-detail__confirmation {
+    @apply flex flex-col gap-4 rounded-[16px] border border-solid border-(--line) bg-(--surface-muted) p-4;
+  }
+
+  .note-detail__confirmation strong {
+    @apply text-base font-bold text-(--ink);
+  }
+
+  .note-detail__confirmation p {
+    @apply m-1.5 text-sm leading-[1.45] text-(--ink-soft);
+  }
+
+  .note-detail__confirmation-actions {
+    @apply flex flex-wrap justify-end gap-2;
+  }
+
+  .note-detail__confirmation-actions button {
+    @apply min-h-10 cursor-pointer rounded-[10px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-3.5 text-sm font-semibold text-(--ink);
+  }
+
+  .note-detail__confirmation-actions .note-detail__delete-confirm {
+    @apply border-0 bg-(--red-ink) text-white;
+  }
+
   .note-detail__heading {
     @apply flex max-w-full min-w-0 flex-col gap-2;
   }
@@ -528,6 +572,9 @@
   }
 
   .note-detail__favorite:focus-visible,
+  .note-detail__menu-trigger:focus-visible,
+  .note-detail__menu button:focus-visible,
+  .note-detail__confirmation-actions button:focus-visible,
   .note-detail__edit:focus-visible {
     @apply outline-2 outline-offset-2 outline-(--indigo);
   }
@@ -550,6 +597,9 @@
 .note-detail__edit,
 .note-format__tool,
 .note-detail__favorite,
+.note-detail__menu-trigger,
+.note-detail__menu button,
+.note-detail__confirmation-actions button,
 .notes-editor-view__back {
   transition: var(--hover-transition);
 }
@@ -567,10 +617,15 @@
   .note-detail__edit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
   .note-format__tool:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
   .note-detail__favorite:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
+  .note-detail__menu-trigger:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
   .notes-editor-view__back:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
     border-color: var(--indigo);
     background-color: var(--indigo-soft);
     color: var(--indigo);
+  }
+
+  .note-detail__menu button:hover {
+    background-color: var(--red-soft);
   }
 
   .notes-page__new-note:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,

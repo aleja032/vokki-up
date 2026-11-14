@@ -9,6 +9,7 @@ export const siteConfig = createLocalizedMessages({
   navigation: [
     { label: 'Inicio', href: '/', icon: 'home' },
     { label: 'Tarjetas', href: '/cards', icon: 'cards' },
+    { label: 'Biblioteca', href: '/cards/word-library', icon: 'library' },
     ...(FEATURES.writing
       ? ([{ label: 'Escritura', href: '/writing', icon: 'writing' }] as const)
       : []),

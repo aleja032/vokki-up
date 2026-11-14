@@ -287,7 +287,7 @@
 }
 
 .deck-page__title h1 {
-  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[32px] font-semibold tracking-[-0.5px];
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[32px] font-semibold tracking-[-0.5px] wrap-anywhere;
 }
 
 .deck-page__summary {
@@ -543,6 +543,60 @@
   @apply flex min-w-0 flex-col gap-4;
 }
 
+.deck-library__heading {
+  @apply flex items-center justify-between gap-3;
+}
+
+.deck-library__manage,
+.deck-library__delete-selected {
+  @apply inline-flex min-h-10 items-center justify-center rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-sm font-semibold text-(--ink);
+}
+
+.deck-library__manage[aria-pressed='true'] {
+  @apply border-(--indigo) text-(--indigo-strong);
+}
+
+.deck-library__manage:disabled,
+.deck-library__delete-selected:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+.deck-library__manage:focus-visible,
+.deck-library__delete-selected:focus-visible,
+.deck-card__select input:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 3px;
+}
+
+.deck-library__manage-bar {
+  @apply flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-solid border-(--line) bg-(--surface-muted) px-4 py-3 text-sm font-semibold text-(--ink-soft);
+}
+
+.deck-library__delete-selected {
+  @apply border-0 bg-(--deck-danger) text-white;
+}
+
+.deck-library__confirm {
+  @apply border border-solid border-(--deck-danger-edge);
+}
+
+.deck-card__select {
+  @apply absolute top-3 right-3 z-10 flex size-7 cursor-pointer items-center justify-center rounded-[8px] border border-solid border-(--line) bg-(--surface);
+}
+
+.deck-card__select input {
+  @apply size-4 accent-(--indigo);
+}
+
+.deck-card[data-managing='true'] {
+  @apply pr-12;
+}
+
+.deck-card[data-selected='true'] {
+  @apply border-(--indigo);
+  box-shadow: 0 0 0 1px var(--indigo);
+}
+
 .deck-library__title-wide {
   @apply hidden;
 }
@@ -600,7 +654,7 @@
 }
 
 .deck-pagination__status {
-  @apply text-sm tabular-nums text-(--ink-soft);
+  @apply text-sm text-(--ink-soft) tabular-nums;
 }
 
 @media (min-width: 761px) {
@@ -644,7 +698,7 @@
 /* Vocabulary card */
 
 .deck-card {
-  @apply flex min-w-0 flex-col gap-3 rounded-[20px] border border-solid border-(--line) bg-(--surface) p-5;
+  @apply relative flex min-w-0 flex-col gap-3 rounded-[20px] border border-solid border-(--line) bg-(--surface) p-5;
 }
 
 .deck-card__top {
@@ -656,7 +710,7 @@
 }
 
 .deck-card__title h3 {
-  @apply m-0 line-clamp-2 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[23px] leading-[1.15] font-semibold;
+  @apply m-0 line-clamp-2 font-[family-name:var(--font-display),Georgia,serif] text-[23px] leading-[1.15] font-semibold wrap-anywhere;
 }
 
 .deck-card__title span {
@@ -664,15 +718,16 @@
 }
 
 .deck-card__category {
-  @apply max-w-[45%] shrink-0 truncate rounded-full bg-(--cat-soft) px-3 py-1.5 text-[12px] font-semibold text-(--cat-ink);
+  @apply max-w-[45%] shrink-0 rounded-full bg-(--cat-soft) px-3 py-1.5 text-[12px] font-semibold text-(--cat-ink);
+  overflow-wrap: anywhere;
 }
 
 .deck-card__meaning {
-  @apply m-0 line-clamp-3 wrap-anywhere text-[15px] leading-[1.45];
+  @apply m-0 line-clamp-3 text-[15px] leading-[1.45] wrap-anywhere;
 }
 
 .deck-card__example {
-  @apply m-0 hidden wrap-anywhere rounded-[12px] bg-(--ground) px-3.5 py-2.5 text-[14px] leading-normal text-(--ink-soft) italic;
+  @apply m-0 hidden rounded-[12px] bg-(--ground) px-3.5 py-2.5 text-[14px] leading-normal wrap-anywhere text-(--ink-soft) italic;
 }
 
 .deck-card__footer {
@@ -999,7 +1054,7 @@
 }
 
 .deck-preview__card {
-  @apply flex min-w-0 wrap-anywhere flex-col gap-3.5 rounded-[24px] border border-solid border-(--line) bg-(--surface) p-6 shadow-[0_6px_18px_rgba(27,26,46,0.06)];
+  @apply flex min-w-0 flex-col gap-3.5 rounded-[24px] border border-solid border-(--line) bg-(--surface) p-6 wrap-anywhere shadow-[0_6px_18px_rgba(27,26,46,0.06)];
 }
 
 .deck-preview__top {
@@ -1357,7 +1412,7 @@
 }
 
 .deck-hero h1 {
-  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-[1.05] font-semibold;
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-[1.05] font-semibold wrap-anywhere;
 }
 
 .deck-hero__identity span:not(.deck-hero__icon) {
@@ -1409,7 +1464,7 @@
 }
 
 .deck-group-card__copy > span:first-child {
-  @apply line-clamp-2 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[20px] font-semibold;
+  @apply line-clamp-2 font-[family-name:var(--font-display),Georgia,serif] text-[20px] font-semibold wrap-anywhere;
 }
 
 .deck-group-card__copy > span:last-child {
@@ -1499,11 +1554,11 @@
 
 .deck-autofill__help,
 .deck-autofill__status {
-  @apply min-w-0 text-[13px] leading-[1.4] text-(--ink-soft) wrap-anywhere;
+  @apply min-w-0 text-[13px] leading-[1.4] wrap-anywhere text-(--ink-soft);
 }
 
 .deck-autofill__message {
-  @apply m-0 min-w-0 rounded-[12px] bg-(--red-soft) px-3.5 py-2.5 text-[13px] leading-[1.45] text-(--deck-danger-ink) wrap-anywhere;
+  @apply m-0 min-w-0 rounded-[12px] bg-(--red-soft) px-3.5 py-2.5 text-[13px] leading-[1.45] wrap-anywhere text-(--deck-danger-ink);
 }
 
 .deck-autofill__confirm {
@@ -1575,59 +1630,264 @@
 }
 
 @media (hover: hover) {
-  .deck-hero__review:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-editor__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-screen__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .deck-hero__review:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-editor__submit:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-screen__submit:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     background-color: var(--indigo-strong);
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-1));
   }
 
-  .deck-groups__add:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-screen__list-heading button:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-pagination__button:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-editor__cancel:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-editor__clear:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-screen__cancel:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-confirm__actions button:not(.deck-confirm__danger):not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-field__link:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-editor__back:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-screen__back:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-screen__icon-button:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-choice__add:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-editor__ai:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-page__review-button:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-modes__tab:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-filter:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-choice__category:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-choice__tag:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .deck-choice__group:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .deck-groups__add:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-screen__list-heading
+    button:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-pagination__button:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-editor__cancel:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-editor__clear:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-screen__cancel:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-confirm__actions
+    button:not(.deck-confirm__danger):not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-field__link:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-editor__back:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-screen__back:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-screen__icon-button:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-choice__add:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-editor__ai:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-page__review-button:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-modes__tab:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-filter:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-choice__category:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-choice__tag:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .deck-choice__group:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     border-color: var(--indigo);
     background-color: var(--indigo-soft);
     color: var(--indigo);
   }
 
-  .deck-confirm__danger:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .deck-confirm__danger:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-1));
   }
 
-  .deck-menu__danger:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .deck-menu__danger:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     background-color: var(--red-soft);
   }
 
-  .deck-colors__option:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .deck-colors__option:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     border-color: color-mix(in srgb, var(--tone-strong) 45%, transparent);
   }
 
-  .deck-hero__review:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
-  .deck-editor__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
-  .deck-screen__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+  .deck-hero__review:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):active,
+  .deck-editor__submit:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):active,
+  .deck-screen__submit:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):active {
     box-shadow: none;
     transform: none;
   }
 
-  .deck-confirm__danger:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+  .deck-confirm__danger:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):active {
     box-shadow: none;
     transform: none;
   }
@@ -1648,18 +1908,39 @@
 }
 
 @media (hover: hover) {
-  .deck-group:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .deck-group:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     border-color: color-mix(in srgb, var(--line) 40%, var(--indigo));
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-2));
   }
 
-  .deck-action--review:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .deck-action--review:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-2));
   }
 
-  .deck-action--primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .deck-action--primary:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     background-color: var(--indigo-strong);
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-2));
