@@ -6,9 +6,15 @@ import { isCardList, isGroupList } from '../library-validators';
 import { cardsMessages } from '../messages';
 import { isMastered } from '../scheduling/mastery';
 import { buildDueQueue } from '../scheduling/progress';
-import { isCardScheduleMap } from '../scheduling/validators';
+import { isCardScheduleMap, isReviewEventList } from '../scheduling/validators';
 import type { CardScheduleMap } from '../scheduling/types';
+import type { ReviewEvent } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
+import {
+  removeCardSchedulesById,
+  removePersonalCardsById,
+  removeReviewEventsByCardId
+} from '../personal-card-removal';
 import {
   addCatalogEntries,
   createWordLibraryCardId,
@@ -40,11 +46,11 @@ export function useCardsDashboard() {
     isGroupList,
     groupChanges
   );
-  const [schedules] = useBrowserState<CardScheduleMap>(
-    'cards/schedules',
-    {},
-    isCardScheduleMap
-  );
+  const [schedules, setSchedules, areSchedulesLoaded] =
+    useBrowserState<CardScheduleMap>('cards/schedules', {}, isCardScheduleMap);
+  const [, setReviewEvents, areReviewEventsLoaded] = useBrowserState<
+    ReviewEvent[]
+  >('cards/review-events', [], isReviewEventList);
   const [activeGroupId, setActiveGroupId] = useState(ALL_GROUPS_ID);
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORIES);
   const [searchText, setSearchText] = useState('');
@@ -152,6 +158,16 @@ export function useCardsDashboard() {
     return result;
   }
 
+  function removePersonalCards(cardIds: readonly string[]) {
+    setCards(currentCards => removePersonalCardsById(currentCards, cardIds));
+    setSchedules(currentSchedules =>
+      removeCardSchedulesById(currentSchedules, cardIds)
+    );
+    setReviewEvents(currentEvents =>
+      removeReviewEventsByCardId(currentEvents, cardIds)
+    );
+  }
+
   function createGroup(newGroup: CardGroup) {
     setGroups(currentGroups => [...currentGroups, newGroup]);
     setOpenGroupId(newGroup.id);
@@ -207,7 +223,9 @@ export function useCardsDashboard() {
     saveCard,
     addCards,
     addWordLibraryEntries,
+    removePersonalCards,
     isLibraryReady: areCardsLoaded && areGroupsLoaded,
+    isCardProgressReady: areSchedulesLoaded && areReviewEventsLoaded,
     createGroup,
     openGroupById,
     startGroupCreation,
