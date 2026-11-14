@@ -65,6 +65,15 @@ export function NotesIcon({ size }: ShellIconProps) {
   );
 }
 
+export function LibraryIcon({ size }: ShellIconProps) {
+  return (
+    <IconFrame size={size}>
+      <path d="M5 4h14v16H5z" />
+      <path d="M8 8h8M8 12h8M8 16h5" />
+    </IconFrame>
+  );
+}
+
 export function SettingsIcon({ size }: ShellIconProps) {
   return (
     <IconFrame size={size}>
@@ -105,6 +114,7 @@ export function PhoneIcon({ size }: ShellIconProps) {
 export const navigationIcons = {
   home: HomeIcon,
   cards: CardsIcon,
+  library: LibraryIcon,
   writing: WritingIcon,
   notes: NotesIcon
 } as const;

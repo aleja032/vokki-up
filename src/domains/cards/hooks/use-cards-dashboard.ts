@@ -9,6 +9,11 @@ import { buildDueQueue } from '../scheduling/progress';
 import { isCardScheduleMap } from '../scheduling/validators';
 import type { CardScheduleMap } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
+import {
+  addCatalogEntries,
+  createWordLibraryCardId,
+  type WordLibraryEntry
+} from '../word-library/catalog';
 import { collectionChangeBuilder } from '@/lib/sync/change-builders';
 import { useTrackedBrowserState } from '@/lib/sync/use-tracked-browser-state';
 import { useBrowserState } from '@/lib/storage/use-browser-state';
@@ -131,6 +136,22 @@ export function useCardsDashboard() {
     setSearchText('');
   }
 
+  function addWordLibraryEntries(
+    entries: readonly WordLibraryEntry[],
+    groupId: string
+  ) {
+    const idsByEntry = new Map(
+      entries.map(entry => [entry.id, createWordLibraryCardId()])
+    );
+    const createId = (entry: WordLibraryEntry) => idsByEntry.get(entry.id)!;
+    const result = addCatalogEntries(cards, entries, groupId, createId);
+    setCards(
+      currentCards =>
+        addCatalogEntries(currentCards, entries, groupId, createId).cards
+    );
+    return result;
+  }
+
   function createGroup(newGroup: CardGroup) {
     setGroups(currentGroups => [...currentGroups, newGroup]);
     setOpenGroupId(newGroup.id);
@@ -185,6 +206,7 @@ export function useCardsDashboard() {
     closeEditor,
     saveCard,
     addCards,
+    addWordLibraryEntries,
     isLibraryReady: areCardsLoaded && areGroupsLoaded,
     createGroup,
     openGroupById,
