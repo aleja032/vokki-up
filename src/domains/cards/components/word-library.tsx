@@ -12,7 +12,6 @@ import {
 } from '../word-library/catalog';
 import type { WordLibraryCategory } from '../word-library/catalog';
 import type { CardGroup } from '../types';
-import { getPersonalCardsForCatalogTerm } from '../personal-card-removal';
 import { useCardsDashboard } from '../hooks/use-cards-dashboard';
 import { createLocalizedMessages } from '@/lib/i18n/locale';
 import './word-library.css';
@@ -56,11 +55,6 @@ const messages = createLocalizedMessages({
   pronunciation: 'Pronunciación',
   example: 'Ejemplo',
   alreadyInLibrary: 'Ya está en tus tarjetas',
-  removeOwnedCard: 'Quitar de mis tarjetas',
-  removeOwnedCardConfirmation: (term: string, count: number) =>
-    `¿Quitar “${term}” de tus tarjetas? ${count > 1 ? `Se quitarán ${count} tarjetas. ` : ''}Se perderá el progreso de repaso. La biblioteca compartida seguirá intacta.`,
-  removeOwnedCardResult: (count: number) =>
-    `${count} ${count === 1 ? 'tarjeta quitada' : 'tarjetas quitadas'} de tus tarjetas.`,
   chooseWordsFirst: 'Selecciona al menos una palabra.',
   previousPage: 'Anterior',
   nextPage: 'Siguiente',
@@ -161,7 +155,7 @@ export function WordLibrary() {
     setSelectedIds([]);
   }
 
-  if (!dashboard.isLibraryReady || !dashboard.isCardProgressReady) {
+  if (!dashboard.isLibraryReady) {
     return (
       <section className="word-library" aria-live="polite">
         <p className="word-library__loading">{messages.loading}</p>
@@ -318,85 +312,51 @@ export function WordLibrary() {
             const isAlreadyAdded = existingTerms.has(
               normalizeCatalogTerm(entry.term)
             );
-            const ownedCards = getPersonalCardsForCatalogTerm(
-              dashboard.cards,
-              entry.term
-            );
 
             return (
-              <div className="word-library__entry-item" key={entry.id}>
-                <label
-                  className="word-library__entry"
-                  data-selected={isSelected}
-                  data-existing={isAlreadyAdded}
-                >
-                  <input
-                    type="checkbox"
-                    checked={isSelected}
-                    disabled={isAlreadyAdded}
-                    onChange={() => toggleEntry(entry.id)}
-                    aria-label={`${entry.term}: ${entry.meaning}`}
-                  />
-                  <span className="word-library__check" aria-hidden="true">
-                    <Check size={15} />
+              <label
+                className="word-library__entry"
+                key={entry.id}
+                data-selected={isSelected}
+                data-existing={isAlreadyAdded}
+              >
+                <input
+                  type="checkbox"
+                  checked={isSelected}
+                  disabled={isAlreadyAdded}
+                  onChange={() => toggleEntry(entry.id)}
+                  aria-label={`${entry.term}: ${entry.meaning}`}
+                />
+                <span className="word-library__check" aria-hidden="true">
+                  <Check size={15} />
+                </span>
+                <span className="word-library__entry-content">
+                  <span className="word-library__entry-heading">
+                    <span
+                      className="word-library__entry-term"
+                      role="heading"
+                      aria-level={2}
+                    >
+                      {entry.term}
+                    </span>
+                    <span className="word-library__category">
+                      {entry.category}
+                    </span>
                   </span>
-                  <span className="word-library__entry-content">
-                    <span className="word-library__entry-heading">
-                      <span
-                        className="word-library__entry-term"
-                        role="heading"
-                        aria-level={2}
-                      >
-                        {entry.term}
-                      </span>
-                      <span className="word-library__category">
-                        {entry.category}
-                      </span>
-                    </span>
-                    <span className="word-library__meaning">
-                      {entry.meaning}
-                    </span>
-                    <span className="word-library__phonetics">
-                      <span>{messages.pronunciation}</span> {entry.phonetics}
-                    </span>
-                    <span className="word-library__example">
-                      <span>{messages.example}</span> “{entry.example}”
-                    </span>
-                    {isAlreadyAdded && (
-                      <span className="word-library__existing">
-                        {messages.alreadyInLibrary}
-                      </span>
-                    )}
+                  <span className="word-library__meaning">{entry.meaning}</span>
+                  <span className="word-library__phonetics">
+                    <span>{messages.pronunciation}</span> {entry.phonetics}
                   </span>
-                </label>
-                {isAlreadyAdded && (
-                  <button
-                    className="word-library__remove-owned"
-                    type="button"
-                    aria-label={`${messages.removeOwnedCard}: ${entry.term}`}
-                    onClick={() => {
-                      if (
-                        !window.confirm(
-                          messages.removeOwnedCardConfirmation(
-                            entry.term,
-                            ownedCards.length
-                          )
-                        )
-                      ) {
-                        return;
-                      }
-                      dashboard.removePersonalCards(
-                        ownedCards.map(card => card.id)
-                      );
-                      setAnnouncement(
-                        messages.removeOwnedCardResult(ownedCards.length)
-                      );
-                    }}
-                  >
-                    {messages.removeOwnedCard}
-                  </button>
-                )}
-              </div>
+                  <span className="word-library__example">
+                    <span>{messages.example}</span> “{entry.example}”
+                  </span>
+                  {isAlreadyAdded && (
+                    <span className="word-library__existing">
+                      {messages.alreadyInLibrary}
+                    </span>
+                  )}
+                </span>
+              </label>
             );
           })}
           {filteredEntries.length === 0 && (
