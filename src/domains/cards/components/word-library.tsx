@@ -3,14 +3,23 @@
 import Link from 'next/link';
 import { ArrowLeft, BookOpen, Check, LockKeyhole, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { cn } from '@/lib/utils';
 import {
   ALL_WORD_LIBRARY_CATEGORIES,
+  ALL_WORD_LIBRARY_LEVELS,
+  countEntriesByCategory,
+  countEntriesByLevel,
   filterCatalogEntries,
   normalizeCatalogTerm,
   WORD_LIBRARY_CATEGORIES,
+  WORD_LIBRARY_LEVEL_LABELS,
+  WORD_LIBRARY_LEVELS,
   wordLibraryCatalog
 } from '../word-library/catalog';
-import type { WordLibraryCategory } from '../word-library/catalog';
+import type {
+  WordLibraryCategory,
+  WordLibraryLevelFilter
+} from '../word-library/catalog';
 import type { CardGroup } from '../types';
 import { useCardsDashboard } from '../hooks/use-cards-dashboard';
 import { createLocalizedMessages } from '@/lib/i18n/locale';
@@ -25,6 +34,11 @@ const messages = createLocalizedMessages({
   searchPlaceholder: 'Buscar palabra, significado o ejemplo…',
   categoriesLabel: 'Categorías de vocabulario',
   allCategories: ALL_WORD_LIBRARY_CATEGORIES,
+  levelsLabel: 'Nivel de inglés',
+  allLevels: 'Todos',
+  levelNames: WORD_LIBRARY_LEVEL_LABELS,
+  clearFilters: 'Quitar filtros',
+  emptyFiltered: 'No encontramos palabras con esos filtros.',
   resultCount: (count: number) =>
     `${count} ${count === 1 ? 'palabra disponible' : 'palabras disponibles'}`,
   selectWords: (count: number) =>
@@ -80,6 +94,18 @@ export function getDefaultGroupId(
   return groups.some(group => group.id === id) ? id : undefined;
 }
 
+const LEVEL_OPTIONS: readonly WordLibraryLevelFilter[] = [
+  ALL_WORD_LIBRARY_LEVELS,
+  ...WORD_LIBRARY_LEVELS
+];
+
+type CategoryFilter = WordLibraryCategory | typeof ALL_WORD_LIBRARY_CATEGORIES;
+
+const CATEGORY_OPTIONS: readonly CategoryFilter[] = [
+  ALL_WORD_LIBRARY_CATEGORIES,
+  ...WORD_LIBRARY_CATEGORIES
+];
+
 export const WORD_LIBRARY_PAGE_SIZE = 24;
 
 export function paginateWordLibraryEntries<T>(
@@ -104,27 +130,41 @@ export function sortWordLibraryEntries<T extends { term: string }>(
 
 export function WordLibrary() {
   const dashboard = useCardsDashboard();
-  const [category, setCategory] = useState(ALL_WORD_LIBRARY_CATEGORIES);
+  const [category, setCategory] = useState<CategoryFilter>(
+    ALL_WORD_LIBRARY_CATEGORIES
+  );
+  const [level, setLevel] = useState<WordLibraryLevelFilter>(
+    ALL_WORD_LIBRARY_LEVELS
+  );
   const [searchText, setSearchText] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [announcement, setAnnouncement] = useState('');
   const [page, setPage] = useState(1);
   const existingTerms = useMemo(
-    () =>
-      new Set(
-        dashboard.cards.map(card => normalizeCatalogTerm(card.term))
-      ),
+    () => new Set(dashboard.cards.map(card => normalizeCatalogTerm(card.term))),
     [dashboard.cards]
   );
 
   const filteredEntries = useMemo(
     () =>
       sortWordLibraryEntries(
-        filterCatalogEntries(wordLibraryCatalog, category, searchText),
+        filterCatalogEntries(wordLibraryCatalog, category, searchText, level),
         existingTerms
       ),
-    [category, existingTerms, searchText]
+    [category, existingTerms, level, searchText]
   );
+  const levelCounts = useMemo(
+    () => countEntriesByLevel(wordLibraryCatalog),
+    []
+  );
+  const categoryCounts = useMemo(
+    () => countEntriesByCategory(wordLibraryCatalog, level),
+    [level]
+  );
+  const hasActiveFilters =
+    level !== ALL_WORD_LIBRARY_LEVELS ||
+    category !== ALL_WORD_LIBRARY_CATEGORIES ||
+    searchText.trim() !== '';
   const pageCount = Math.max(
     1,
     Math.ceil(filteredEntries.length / WORD_LIBRARY_PAGE_SIZE)
@@ -137,6 +177,29 @@ export function WordLibrary() {
   const hasSelectedGroup = selectedEntries.every(entry =>
     getDefaultGroupId(entry.category, dashboard.groups)
   );
+
+  function resetSelection() {
+    setPage(1);
+    setSelectedIds([]);
+    setAnnouncement('');
+  }
+
+  function changeLevel(next: WordLibraryLevelFilter) {
+    resetSelection();
+    setLevel(next);
+  }
+
+  function changeCategory(next: CategoryFilter) {
+    resetSelection();
+    setCategory(next);
+  }
+
+  function clearFilters() {
+    resetSelection();
+    setLevel(ALL_WORD_LIBRARY_LEVELS);
+    setCategory(ALL_WORD_LIBRARY_CATEGORIES);
+    setSearchText('');
+  }
 
   function toggleEntry(entryId: string) {
     setSelectedIds(current =>
@@ -266,6 +329,62 @@ export function WordLibrary() {
               </button>
             </div>
           )}
+          <div className="word-library__filters">
+            <div
+              className="word-library__levels"
+              role="group"
+              aria-label={messages.levelsLabel}
+            >
+              {LEVEL_OPTIONS.map(item => (
+                <button
+                  key={item}
+                  type="button"
+                  className={cn(
+                    'word-library__level',
+                    item === ALL_WORD_LIBRARY_LEVELS &&
+                      'word-library__level--reset'
+                  )}
+                  aria-pressed={level === item}
+                  onClick={() => changeLevel(item)}
+                >
+                  <span>
+                    {item === ALL_WORD_LIBRARY_LEVELS
+                      ? messages.allLevels
+                      : messages.levelNames[item]}
+                  </span>
+                  <span className="word-library__tally">
+                    {levelCounts[item]}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <div
+              className="word-library__categories"
+              role="group"
+              aria-label={messages.categoriesLabel}
+            >
+              {CATEGORY_OPTIONS.map(item => (
+                <button
+                  key={item}
+                  type="button"
+                  className={cn(
+                    'word-library__chip',
+                    item === ALL_WORD_LIBRARY_CATEGORIES &&
+                      'word-library__chip--reset'
+                  )}
+                  aria-pressed={category === item}
+                  onClick={() => changeCategory(item)}
+                >
+                  {item === ALL_WORD_LIBRARY_CATEGORIES
+                    ? messages.allCategories
+                    : item}
+                  <span className="word-library__tally">
+                    {categoryCounts[item]}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="word-library__controls-row">
             <p className="word-library__count" aria-live="polite">
               {messages.resultCount(filteredEntries.length)}
@@ -304,25 +423,6 @@ export function WordLibrary() {
           >
             {announcement}
           </p>
-          <div
-            className="word-library__categories"
-            role="group"
-            aria-label={messages.categoriesLabel}
-          >
-            {[messages.allCategories, ...WORD_LIBRARY_CATEGORIES].map(item => (
-              <button
-                key={item}
-                type="button"
-                aria-pressed={category === item}
-                onClick={() => {
-                  setPage(1);
-                  setCategory(item);
-                }}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
         </div>
 
         <div className="word-library__list">
@@ -372,6 +472,11 @@ export function WordLibrary() {
                     <span className="word-library__category">
                       {entry.category}
                     </span>
+                    {level === ALL_WORD_LIBRARY_LEVELS && (
+                      <span className="word-library__level-tag">
+                        {messages.levelNames[entry.level]}
+                      </span>
+                    )}
                   </span>
                   <span className="word-library__meaning">{entry.meaning}</span>
                   <span className="word-library__phonetics">
@@ -390,7 +495,16 @@ export function WordLibrary() {
             );
           })}
           {filteredEntries.length === 0 && (
-            <p className="word-library__empty">{messages.empty}</p>
+            <div className="word-library__empty">
+              <p>
+                {hasActiveFilters ? messages.emptyFiltered : messages.empty}
+              </p>
+              {hasActiveFilters && (
+                <button type="button" onClick={clearFilters}>
+                  {messages.clearFilters}
+                </button>
+              )}
+            </div>
           )}
         </div>
       </section>

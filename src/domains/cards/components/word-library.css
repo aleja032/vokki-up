@@ -25,7 +25,9 @@
 
 .word-library__back:focus-visible,
 .word-library__create-group:focus-visible,
-.word-library__categories button:focus-visible,
+.word-library__level:focus-visible,
+.word-library__chip:focus-visible,
+.word-library__empty button:focus-visible,
 .word-library__entry:focus-within,
 .word-library__add-bar button:focus-visible,
 .word-library__selection-actions button:focus-visible {
@@ -126,16 +128,83 @@
   color: var(--ink-faint);
 }
 
-.word-library__categories {
+.word-library__filters {
   display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 2px 2px 5px;
+  min-width: 0;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.word-library__categories button {
-  min-height: 38px;
-  flex: 0 0 auto;
+.word-library__levels {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  padding: 4px;
+}
+
+.word-library__level {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 52px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  padding: 0 4px;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.word-library__level--reset::after {
+  position: absolute;
+  inset-block: 14px;
+  inset-inline-end: -3px;
+  width: 1px;
+  background: var(--line);
+  content: '';
+}
+
+.word-library__level[aria-pressed='true'] {
+  background: var(--indigo-strong);
+  color: var(--ground);
+}
+
+.word-library__level[aria-pressed='true']::after {
+  display: none;
+}
+
+.word-library__tally {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.word-library__categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.word-library__chip {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 7px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--surface);
@@ -145,12 +214,33 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
 }
 
-.word-library__categories button[aria-pressed='true'] {
-  border-color: var(--ink);
-  background: var(--ink);
-  color: var(--ground);
+.word-library__chip--reset {
+  border-style: dashed;
+}
+
+.word-library__chip[aria-pressed='true'] {
+  border-style: solid;
+  border-color: var(--indigo-strong);
+  background: var(--indigo-soft);
+  color: var(--indigo-strong);
+}
+
+@media (hover: hover) {
+  .word-library__level[aria-pressed='false']:hover {
+    background: var(--indigo-soft);
+    color: var(--indigo-strong);
+  }
+
+  .word-library__chip[aria-pressed='false']:hover {
+    border-color: var(--indigo-strong);
+    color: var(--ink);
+  }
 }
 
 .word-library__controls-row {
@@ -285,6 +375,15 @@
   font-weight: 700;
 }
 
+.word-library__level-tag {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 9px;
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 700;
+}
+
 .word-library__meaning {
   display: block;
   margin: 6px 0 0;
@@ -369,6 +468,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .word-library__level,
+  .word-library__chip {
+    transition: none;
+  }
+
   .word-library__entry,
   .word-library__entry > input:checked + .word-library__check {
     animation: none;
@@ -378,6 +482,29 @@
   .word-library__entry:hover:not([data-existing='true']) {
     transform: none;
   }
+}
+
+.word-library__empty p {
+  margin: 0;
+}
+
+.word-library__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.word-library__empty button {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 0 16px;
+  color: var(--indigo-strong);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .word-library__empty,
@@ -483,6 +610,10 @@
 }
 
 @media (max-width: 420px) {
+  .word-library__level {
+    font-size: 12px;
+  }
+
   .word-library__search-row {
     gap: 6px;
   }

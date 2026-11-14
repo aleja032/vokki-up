@@ -34,7 +34,7 @@ Make the cards and notes UI proportional and intuitive, replace inline delete co
 - [ ] U3 Small UI: remove shortcut hint copy, remove "Nueva tarjeta" from home, optional Spanish example with eyebrow (needs `exampleEs`).
 - [ ] U4 QA sweep: scrollbars, dead space, overflow at 390/1280 light+dark (browser-verified).
 - [ ] U5 Library: confirm deleted card re-enables its entry (test), clarify "Todas" scope.
-- [ ] U6 Leveled library + progression/engagement: needs domain decision and research first (levels basic/intermediate/advanced, categories inside, rewards, mascot, richer stats).
+- [ ] U6a (structure done, uncommitted; see Progress) / U6b (progress, level-up, stats: pending) Leveled library + progression/engagement: needs domain decision and research first (levels basic/intermediate/advanced, categories inside, rewards, mascot, richer stats).
 
 ## Open decisions
 
@@ -54,3 +54,11 @@ U1 (writer, uncommitted in worktree):
 - Commit 6cf5702 (`feat(ui): add a shared confirm dialog and redesign card manage mode`); parent spot check re-ran vitest (257 passed) and `tsc --noEmit` (clean).
 - Native review: assessed medium (714 lines, `slice_budget_reached`), user granted consent for this candidate (lineage `review-432e571f7f3e5e46`). The reviewer capture could not run: the `claude` executable is not on PATH in this environment. Review is unavailable/pending, not passed. Delivery stays a user decision.
 - Not done / gaps: the group screen (`group-detail.tsx`, mobile group view) has no card manage/delete and was outside the allowed edit surface; select-all covers every card in the current filter, not only the visible page; first-round bug (missing `@reference 'tailwindcss'` in the new CSS) was fixed.
+
+U6a (writer, uncommitted in worktree): leveled word library structure.
+- Data: `WordLibraryLevel` (basic/intermediate/advanced), `WORD_LIBRARY_LEVEL_LABELS` (Básico/Intermedio/Avanzado, no CEFR), `level` on `WordLibraryEntry`; assignment in new `word-library/catalog-levels.ts` (slug lists per category and level, criteria in the header comment) merged in `catalog.ts`. Distribution: basic 253, intermediate 321, advanced 226; every category x level bucket non-empty. Levels were judged by the assistant, pending user review.
+- Pure helpers: `countEntriesByLevel`, `countEntriesByCategory`; `filterCatalogEntries` got an optional 4th `level` argument (default reset keeps old callers working).
+- UI: segmented level control (Todos, Básico, Intermedio, Avanzado with counts) plus category chips (Todas + 4, counts for the current level, wrap instead of scroll, dashed reset chip); changing either filter resets page and selection; level tag on cards only when level is "Todos"; filtered empty state with "Quitar filtros". Fixed a latent bug: the category state used the translated "Todas" label, which broke filtering in English.
+- RED observed (5 new catalog tests failed) then GREEN. Observed: vitest 57 files / 262 tests passed; tsc clean; eslint clean on src/domains/cards and src/lib/i18n; prettier (--end-of-line auto) clean.
+- Browser (Playwright, 390 light/dark and 1280 light, dev server stopped): level and category switching, counts, pagination reset, search to empty, "Quitar filtros" reset all behave; controls and list top offsets identical across level switches (no shift); no horizontal overflow; tap targets 44px minimum; focus outline visible.
+- Not verified: 1280 dark, hover styles (CSS only inside `(hover: hover)`), reduced-motion, keyboard-only walk, a component structure test (the component needs the cards dashboard hook; logic covered by catalog tests). Native review not run. English strings added: Todos, Básico, Intermedio, Avanzado, Quitar filtros, filtered empty message ("Nivel de inglés" already existed).

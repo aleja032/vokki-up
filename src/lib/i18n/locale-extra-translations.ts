@@ -10,6 +10,15 @@ export const extraTranslations: Record<string, string> = {
   Expresión: 'Expression',
   'Verbo frasal': 'Phrasal verb',
 
+  // Word library levels
+  Todos: 'All',
+  Básico: 'Basic',
+  Intermedio: 'Intermediate',
+  Avanzado: 'Advanced',
+  'Quitar filtros': 'Clear filters',
+  'No encontramos palabras con esos filtros.':
+    'We found no words with those filters.',
+
   // Import / export
   'TUS DATOS, A TU MANERA': 'YOUR DATA, YOUR WAY',
   PORTABILIDAD: 'PORTABILITY',
