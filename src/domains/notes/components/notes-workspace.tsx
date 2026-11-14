@@ -33,6 +33,7 @@ export function NotesWorkspace() {
     handleCreateNote,
     handleCreateCategory,
     handleDeleteCategory,
+    handleDeleteNote,
     handleSave,
     handleSelectNote,
     handleToggleFavorite,
@@ -262,6 +263,7 @@ export function NotesWorkspace() {
             note={selectedNote}
             onEdit={() => setEditingNoteId(selectedNote.id)}
             onToggleFavorite={() => handleToggleFavorite(selectedNote.id)}
+            onDelete={() => handleDeleteNote(selectedNote.id)}
           />
         ) : (
           <p className="notes-page__detail-empty">{notesMessages.list.empty}</p>

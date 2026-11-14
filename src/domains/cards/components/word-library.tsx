@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, BookOpen, Check, Search } from 'lucide-react';
+import { ArrowLeft, BookOpen, Check, LockKeyhole, Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import {
   ALL_WORD_LIBRARY_CATEGORIES,
@@ -91,6 +91,17 @@ export function paginateWordLibraryEntries<T>(
   return entries.slice(start, start + pageSize);
 }
 
+export function sortWordLibraryEntries<T extends { term: string }>(
+  entries: readonly T[],
+  existingTerms: ReadonlySet<string>
+) {
+  return [...entries].sort(
+    (a, b) =>
+      Number(existingTerms.has(normalizeCatalogTerm(a.term))) -
+      Number(existingTerms.has(normalizeCatalogTerm(b.term)))
+  );
+}
+
 export function WordLibrary() {
   const dashboard = useCardsDashboard();
   const [category, setCategory] = useState(ALL_WORD_LIBRARY_CATEGORIES);
@@ -98,10 +109,21 @@ export function WordLibrary() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [announcement, setAnnouncement] = useState('');
   const [page, setPage] = useState(1);
+  const existingTerms = useMemo(
+    () =>
+      new Set(
+        dashboard.cards.map(card => normalizeCatalogTerm(card.term))
+      ),
+    [dashboard.cards]
+  );
 
   const filteredEntries = useMemo(
-    () => filterCatalogEntries(wordLibraryCatalog, category, searchText),
-    [category, searchText]
+    () =>
+      sortWordLibraryEntries(
+        filterCatalogEntries(wordLibraryCatalog, category, searchText),
+        existingTerms
+      ),
+    [category, existingTerms, searchText]
   );
   const pageCount = Math.max(
     1,
@@ -111,9 +133,6 @@ export function WordLibrary() {
   const pageEntries = paginateWordLibraryEntries(filteredEntries, currentPage);
   const selectedEntries = wordLibraryCatalog.filter(entry =>
     selectedIds.includes(entry.id)
-  );
-  const existingTerms = new Set(
-    dashboard.cards.map(card => normalizeCatalogTerm(card.term))
   );
   const hasSelectedGroup = selectedEntries.every(entry =>
     getDefaultGroupId(entry.category, dashboard.groups)
@@ -312,24 +331,35 @@ export function WordLibrary() {
             const isAlreadyAdded = existingTerms.has(
               normalizeCatalogTerm(entry.term)
             );
+            const EntryWrapper = isAlreadyAdded ? 'div' : 'label';
 
             return (
-              <label
+              <EntryWrapper
                 className="word-library__entry"
                 key={entry.id}
                 data-selected={isSelected}
                 data-existing={isAlreadyAdded}
               >
-                <input
-                  type="checkbox"
-                  checked={isSelected}
-                  disabled={isAlreadyAdded}
-                  onChange={() => toggleEntry(entry.id)}
-                  aria-label={`${entry.term}: ${entry.meaning}`}
-                />
-                <span className="word-library__check" aria-hidden="true">
-                  <Check size={15} />
-                </span>
+                {isAlreadyAdded ? (
+                  <span
+                    className="word-library__locked"
+                    aria-label={messages.alreadyInLibrary}
+                  >
+                    <LockKeyhole aria-hidden="true" size={16} />
+                  </span>
+                ) : (
+                  <>
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => toggleEntry(entry.id)}
+                      aria-label={`${entry.term}: ${entry.meaning}`}
+                    />
+                    <span className="word-library__check" aria-hidden="true">
+                      <Check size={15} />
+                    </span>
+                  </>
+                )}
                 <span className="word-library__entry-content">
                   <span className="word-library__entry-heading">
                     <span
@@ -356,7 +386,7 @@ export function WordLibrary() {
                     </span>
                   )}
                 </span>
-              </label>
+              </EntryWrapper>
             );
           })}
           {filteredEntries.length === 0 && (

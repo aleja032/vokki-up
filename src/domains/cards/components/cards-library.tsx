@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { paginateItems } from '../hooks/pagination';
 import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
@@ -22,8 +22,10 @@ type CardsLibraryProps = {
   categories: readonly string[];
   activeCategory: string;
   searchText: string;
+  canDeleteCards: boolean;
   onSearchChange: (value: string) => void;
   onCategoryChange: (category: string) => void;
+  onDeleteCards: (cardIds: readonly string[]) => void;
 };
 
 export function CardsLibrary({
@@ -35,10 +37,17 @@ export function CardsLibrary({
   categories,
   activeCategory,
   searchText,
+  canDeleteCards,
   onSearchChange,
-  onCategoryChange
+  onCategoryChange,
+  onDeleteCards
 }: CardsLibraryProps) {
   const [requestedPage, setRequestedPage] = useState({ key: '', page: 1 });
+  const [isManaging, setIsManaging] = useState(false);
+  const [selectedCardIds, setSelectedCardIds] = useState<string[]>([]);
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const confirmationTitleId = useId();
+  const confirmationDescriptionId = useId();
   const pageContextKey = JSON.stringify([
     activeGroup?.id ?? null,
     activeCategory,
@@ -58,18 +67,101 @@ export function CardsLibrary({
     onCategoryChange(category);
   }
 
+  function toggleManaging() {
+    setIsManaging(current => {
+      if (current) {
+        setSelectedCardIds([]);
+        setIsConfirmingDelete(false);
+      }
+      return !current;
+    });
+  }
+
+  function toggleCardSelection(cardId: string) {
+    setSelectedCardIds(current =>
+      current.includes(cardId)
+        ? current.filter(id => id !== cardId)
+        : [...current, cardId]
+    );
+  }
+
+  function confirmDelete() {
+    onDeleteCards(selectedCardIds);
+    setSelectedCardIds([]);
+    setIsConfirmingDelete(false);
+    setIsManaging(false);
+  }
+
   return (
     <section className="deck-library" aria-labelledby="deck-library-title">
-      <h2 id="deck-library-title">
-        <span className="deck-library__title-compact">
-          {activeGroup
-            ? messages.libraryTitleGroup(activeGroup.name)
-            : messages.libraryTitleAll}
-        </span>
-        <span className="deck-library__title-wide">
-          {messages.libraryTitleWide}
-        </span>
-      </h2>
+      <div className="deck-library__heading">
+        <h2 id="deck-library-title">
+          <span className="deck-library__title-compact">
+            {activeGroup
+              ? messages.libraryTitleGroup(activeGroup.name)
+              : messages.libraryTitleAll}
+          </span>
+          <span className="deck-library__title-wide">
+            {messages.libraryTitleWide}
+          </span>
+        </h2>
+        <button
+          className="deck-library__manage"
+          type="button"
+          aria-pressed={isManaging}
+          disabled={!canDeleteCards || cards.length === 0}
+          onClick={toggleManaging}
+        >
+          {isManaging ? messages.manageDone : messages.manageCards}
+        </button>
+      </div>
+      {isManaging && (
+        <div className="deck-library__manage-bar">
+          <span aria-live="polite">
+            {messages.selectedCards(selectedCardIds.length)}
+          </span>
+          <button
+            className="deck-library__delete-selected"
+            disabled={selectedCardIds.length === 0}
+            onClick={() => setIsConfirmingDelete(true)}
+            type="button"
+          >
+            {messages.deleteSelected}
+          </button>
+        </div>
+      )}
+      {isConfirmingDelete && (
+        <div
+          className="deck-confirm deck-library__confirm"
+          role="alertdialog"
+          aria-labelledby={confirmationTitleId}
+          aria-describedby={confirmationDescriptionId}
+        >
+          <div className="deck-confirm__copy">
+            <span id={confirmationTitleId}>
+              {messages.deleteSelectedTitle(selectedCardIds.length)}
+            </span>
+            <span id={confirmationDescriptionId}>
+              {messages.deleteSelectedBody}
+            </span>
+          </div>
+          <div className="deck-confirm__actions">
+            <button
+              onClick={() => setIsConfirmingDelete(false)}
+              type="button"
+            >
+              {messages.cardDeleteCancel}
+            </button>
+            <button
+              className="deck-confirm__danger"
+              onClick={confirmDelete}
+              type="button"
+            >
+              {messages.deleteSelected}
+            </button>
+          </div>
+        </div>
+      )}
       <div className="deck-library__tools">
         <div className="deck-search">
           <label className="sr-only" htmlFor="deck-search-input">
@@ -113,6 +205,9 @@ export function CardsLibrary({
             group={groups.find(group => group.id === card.groupId)}
             schedule={schedules[card.id]}
             now={now}
+            isManaging={isManaging}
+            isSelected={selectedCardIds.includes(card.id)}
+            onToggleSelect={toggleCardSelection}
           />
         ))}
       </div>

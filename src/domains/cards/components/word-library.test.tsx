@@ -3,8 +3,10 @@ import { INITIAL_GROUPS } from '../data';
 import {
   getDefaultGroupId,
   paginateWordLibraryEntries,
+  sortWordLibraryEntries,
   WORD_LIBRARY_PAGE_SIZE
 } from './word-library';
+import { normalizeCatalogTerm } from '../word-library/catalog';
 
 describe('word library default collections', () => {
   it('maps every catalog category to its matching default collection', () => {
@@ -46,5 +48,21 @@ describe('word library default collections', () => {
     expect(secondPage).toHaveLength(24);
     expect(thirdPage).toHaveLength(7);
     expect([...firstPage, ...secondPage, ...thirdPage]).toEqual(entries);
+  });
+
+  it('places owned entries after available entries without reordering either group', () => {
+    const entries = [
+      { id: 'owned-a', term: 'Already owned' },
+      { id: 'available-a', term: 'New phrase' },
+      { id: 'owned-b', term: 'Owned too' },
+      { id: 'available-b', term: 'Another phrase' }
+    ];
+    const ownedTerms = new Set([
+      normalizeCatalogTerm('Already owned'),
+      normalizeCatalogTerm('Owned too')
+    ]);
+
+    expect(sortWordLibraryEntries(entries, ownedTerms).map(entry => entry.id))
+      .toEqual(['available-a', 'available-b', 'owned-a', 'owned-b']);
   });
 });

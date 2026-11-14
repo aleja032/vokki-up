@@ -106,6 +106,13 @@ export function useNotesWorkspace() {
     );
   }
 
+  function handleDeleteNote(noteId: string) {
+    const nextNotes = notes.filter(note => note.id !== noteId);
+    setNotes(nextNotes);
+    if (selectedNoteId === noteId) setSelectedNoteId(nextNotes[0]?.id ?? null);
+    if (editingNoteId === noteId) setEditingNoteId(null);
+  }
+
   function handleCreateCategory(category: string) {
     setCategories(current => [...current, category]);
   }
@@ -150,6 +157,7 @@ export function useNotesWorkspace() {
     handleCreateNote,
     handleCreateCategory,
     handleDeleteCategory,
+    handleDeleteNote,
     handleSave,
     handleSelectNote,
     handleToggleFavorite,

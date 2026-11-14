@@ -40,7 +40,20 @@ export const cardsMessages = createLocalizedMessages({
       next: 'Siguiente',
       status: (page: number, pageCount: number) =>
         `Página ${page} de ${pageCount}`
-    }
+    },
+    manageCards: 'Gestionar',
+    manageDone: 'Listo',
+    cardSelectLabel: (term: string) => `Seleccionar ${term}`,
+    selectedCards: (count: number) =>
+      count === 1 ? '1 tarjeta seleccionada' : `${count} tarjetas seleccionadas`,
+    deleteSelected: 'Eliminar seleccionadas',
+    deleteSelectedTitle: (count: number) =>
+      count === 1
+        ? '¿Eliminar esta tarjeta?'
+        : `¿Eliminar estas ${count} tarjetas?`,
+    deleteSelectedBody:
+      'Se eliminarán las tarjetas seleccionadas y se borrará su progreso de repaso.',
+    cardDeleteCancel: 'Cancelar',
   },
   learningState: {
     new: 'Nueva',
