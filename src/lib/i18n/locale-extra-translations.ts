@@ -252,6 +252,15 @@ export const extraTranslations: Record<string, string> = {
     'Accept, edit, or discard before creating the cards.',
   'Continuar revisión': 'Continue review',
 
+  // Delete confirmations
+  '¿Eliminar esta tarjeta?': 'Delete this card?',
+  'Se eliminarán las tarjetas seleccionadas y se borrará su progreso de repaso.':
+    'The selected cards will be deleted along with their review progress.',
+  'Más opciones de la nota': 'More note options',
+  'Eliminar nota': 'Delete note',
+  'Esta nota se eliminará de tu biblioteca y no se puede recuperar.':
+    'This note will be removed from your library and cannot be recovered.',
+
   // Home
   días: 'days',
   'Todo al día': 'All caught up',
@@ -278,6 +287,8 @@ export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
   ],
   [/^Tarjetas de (.+)$/, 'Cards in $1'],
   [/^¿Eliminar el grupo “(.+)”\?$/, 'Delete the group “$1”?'],
+  [/^¿Eliminar estas (\d+) tarjetas\?$/, 'Delete these $1 cards?'],
+  [/^¿Eliminar “(.+)”\?$/, 'Delete “$1”?'],
   [
     /^La 1 tarjeta no se borra: pasa a “Sin grupo” y conserva su progreso\.$/,
     'The 1 card is not deleted: it moves to “No group” and keeps its progress.'
