@@ -10,10 +10,13 @@ import { isCardScheduleMap, isReviewEventList } from '../scheduling/validators';
 import type { CardScheduleMap, ReviewEvent } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
 import {
-  addCatalogEntries,
   createWordLibraryCardId,
   type WordLibraryEntry
 } from '../word-library/catalog';
+import {
+  addEntriesToDefaultGroups,
+  ensureDefaultGroups
+} from '../word-library/default-groups';
 import { collectionChangeBuilder } from '@/lib/sync/change-builders';
 import { enqueueLocalSyncOperation } from '@/lib/sync/local-queue';
 import { useTrackedBrowserState } from '@/lib/sync/use-tracked-browser-state';
@@ -162,19 +165,25 @@ export function useCardsDashboard() {
     setCards(nextData.cards);
   }
 
-  function addWordLibraryEntries(
-    entries: readonly WordLibraryEntry[],
-    groupId: string
-  ) {
+  // Saves library entries into the default group of their category and
+  // creates any default group the user does not have yet.
+  function addWordLibraryEntries(entries: readonly WordLibraryEntry[]) {
     const idsByEntry = new Map(
       entries.map(entry => [entry.id, createWordLibraryCardId()])
     );
     const createId = (entry: WordLibraryEntry) => idsByEntry.get(entry.id)!;
-    const result = addCatalogEntries(cards, entries, groupId, createId);
-    setCards(
-      currentCards =>
-        addCatalogEntries(currentCards, entries, groupId, createId).cards
-    );
+    const result = addEntriesToDefaultGroups(groups, cards, entries, createId);
+    if (result.added.length > 0) {
+      const categories = result.added.map(entry => entry.category);
+      setGroups(
+        currentGroups => ensureDefaultGroups(currentGroups, categories).groups
+      );
+      setCards(
+        currentCards =>
+          addEntriesToDefaultGroups(groups, currentCards, entries, createId)
+            .cards
+      );
+    }
     return result;
   }
 

@@ -1,12 +1,17 @@
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { INITIAL_GROUPS } from '../data';
 import {
   getDefaultGroupId,
   paginateWordLibraryEntries,
+  WordLibraryEntryCard,
   sortWordLibraryEntries,
   WORD_LIBRARY_PAGE_SIZE
 } from './word-library';
-import { normalizeCatalogTerm } from '../word-library/catalog';
+import {
+  normalizeCatalogTerm,
+  wordLibraryCatalog
+} from '../word-library/catalog';
 
 describe('word library default collections', () => {
   it('maps every catalog category to its matching default collection', () => {
@@ -62,7 +67,53 @@ describe('word library default collections', () => {
       normalizeCatalogTerm('Owned too')
     ]);
 
-    expect(sortWordLibraryEntries(entries, ownedTerms).map(entry => entry.id))
-      .toEqual(['available-a', 'available-b', 'owned-a', 'owned-b']);
+    expect(
+      sortWordLibraryEntries(entries, ownedTerms).map(entry => entry.id)
+    ).toEqual(['available-a', 'available-b', 'owned-a', 'owned-b']);
+  });
+});
+
+describe('WordLibraryEntryCard add mode', () => {
+  const entry = wordLibraryCatalog[0];
+
+  function render(props: {
+    isAdding: boolean;
+    isSelected?: boolean;
+    isAlreadyAdded?: boolean;
+  }) {
+    return renderToStaticMarkup(
+      <WordLibraryEntryCard
+        entry={entry}
+        isAdding={props.isAdding}
+        isSelected={props.isSelected ?? false}
+        isAlreadyAdded={props.isAlreadyAdded ?? false}
+        showLevel
+        onToggleSelect={() => undefined}
+      />
+    );
+  }
+
+  it('has no selection control outside add mode', () => {
+    expect(render({ isAdding: false })).not.toContain('role="checkbox"');
+  });
+
+  it('exposes the whole card as one checkbox with its state', () => {
+    const idle = render({ isAdding: true });
+    const selected = render({ isAdding: true, isSelected: true });
+
+    expect(idle).toContain('role="checkbox"');
+    expect(idle).toContain('aria-checked="false"');
+    expect(idle).toContain(`Seleccionar ${entry.term}`);
+    expect(selected).toContain('aria-checked="true"');
+    expect(selected).toContain('data-selected="true"');
+  });
+
+  it('keeps owned words visible, locked and not selectable', () => {
+    const html = render({ isAdding: true, isAlreadyAdded: true });
+
+    expect(html).not.toContain('role="checkbox"');
+    expect(html).toContain('data-existing="true"');
+    expect(html).toContain('Ya está en tus tarjetas');
+    expect(html).toContain(entry.term);
   });
 });

@@ -547,9 +547,7 @@
   @apply flex items-center justify-between gap-3;
 }
 
-.deck-library__manage,
-.deck-library__cancel,
-.deck-library__delete-selected {
+.deck-library__manage {
   @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-sm font-semibold text-(--ink);
 }
 
@@ -558,45 +556,18 @@
   @apply invisible;
 }
 
-.deck-library__manage:disabled,
-.deck-library__delete-selected:disabled {
+.deck-library__manage:disabled {
   @apply cursor-not-allowed opacity-50;
 }
 
 .deck-library__manage:focus-visible,
-.deck-library__cancel:focus-visible,
-.deck-library__select-all:focus-visible,
-.deck-library__delete-selected:focus-visible,
 .deck-card__select:focus-visible {
   outline: 2px solid var(--indigo);
   outline-offset: 3px;
 }
 
-/* Zero-height sticky dock: the bar floats above the bottom navigation and
-   never pushes the grid. The margin leaves room for it at the end of the list. */
-.deck-library__dock {
-  @apply sticky z-20 mt-28 -mb-4 h-0;
-  bottom: calc(77px + env(safe-area-inset-bottom) + 12px);
-}
-
-.deck-library__manage-bar {
-  @apply absolute inset-x-0 bottom-0 flex flex-col gap-3 rounded-[18px] border border-solid border-(--line) bg-(--surface) p-3 shadow-[0_12px_32px_rgba(20,20,22,0.18)];
-}
-
-.deck-library__manage-summary {
-  @apply flex items-center justify-between gap-2 px-1 text-[13px] font-semibold whitespace-nowrap text-(--ink);
-}
-
-.deck-library__select-all {
-  @apply min-h-9 shrink-0 cursor-pointer rounded-[10px] border-0 bg-transparent px-1.5 text-[13px] font-semibold whitespace-nowrap text-(--indigo-strong);
-}
-
-.deck-library__manage-actions {
-  @apply grid grid-cols-2 gap-3;
-}
-
-.deck-library__delete-selected {
-  @apply border-0 bg-(--red-ink) font-bold text-(--on-indigo);
+.deck-library {
+  --selection-dock-gap: 1rem;
 }
 
 .deck-card__select {
@@ -617,52 +588,13 @@
 }
 
 .deck-card[data-managing='true'],
-.deck-card__check,
-.deck-library__cancel,
-.deck-library__select-all,
-.deck-library__delete-selected {
+.deck-card__check {
   transition: var(--hover-transition);
-}
-
-.deck-library__manage-bar {
-  animation: deck-dock-in 200ms var(--ease-out);
-}
-
-@keyframes deck-dock-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
 }
 
 @media (hover: hover) {
   .deck-card[data-managing='true']:not([data-selected='true']):hover {
     @apply border-(--deck-edge);
-  }
-
-  .deck-library__cancel:hover,
-  .deck-library__select-all:hover {
-    @apply bg-(--indigo-soft);
-  }
-
-  .deck-library__delete-selected:not(:disabled):hover {
-    filter: brightness(1.08);
-  }
-}
-
-@media (min-width: 761px) {
-  .deck-library__dock {
-    bottom: 24px;
-  }
-
-  .deck-library__manage-bar {
-    @apply left-1/2 w-[min(520px,100%)] -translate-x-1/2;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .deck-library__manage-bar {
-    animation: none;
   }
 }
 
