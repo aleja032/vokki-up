@@ -50,10 +50,12 @@ const messages = createLocalizedMessages({
   emptyFiltered: 'No encontramos palabras con esos filtros.',
   resultCount: (count: number) =>
     `${count} ${count === 1 ? 'palabra disponible' : 'palabras disponibles'}`,
-  addMode: 'Agregar',
+  addMode: 'Agregar palabras',
   addBarLabel: 'Agregar palabras',
   selectedWords: (count: number) =>
-    `${count} ${count === 1 ? 'palabra seleccionada' : 'palabras seleccionadas'}`,
+    count === 0
+      ? 'Toca las palabras que quieras agregar'
+      : `${count} ${count === 1 ? 'palabra seleccionada' : 'palabras seleccionadas'}`,
   selectAll: 'Seleccionar todas',
   clearSelection: 'Quitar selección',
   cancelAdd: 'Cancelar',

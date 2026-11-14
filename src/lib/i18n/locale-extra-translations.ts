@@ -267,6 +267,7 @@ export const extraTranslations: Record<string, string> = {
   'Seleccionar todas': 'Select all',
   Gestionar: 'Manage',
   'Agregar palabras': 'Add words',
+  'Toca las palabras que quieras agregar': 'Tap the words you want to add',
   'Se eliminarán las tarjetas seleccionadas y se borrará su progreso de repaso.':
     'The selected cards will be deleted along with their review progress.',
   'Más opciones de la nota': 'More note options',
@@ -299,11 +300,11 @@ export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
     'You wrote too many words. The maximum is $1.'
   ],
   [/^Tarjetas de (.+)$/, 'Cards in $1'],
-  [/^Agregar (d+)$/, 'Add $1'],
+  [/^Agregar (\d+)$/, 'Add $1'],
   [/^1 palabra seleccionada$/, '1 word selected'],
-  [/^(d+) palabras seleccionadas$/, '$1 words selected'],
+  [/^(\d+) palabras seleccionadas$/, '$1 words selected'],
   [/^1 tarjeta seleccionada$/, '1 card selected'],
-  [/^(d+) tarjetas seleccionadas$/, '$1 cards selected'],
+  [/^(\d+) tarjetas seleccionadas$/, '$1 cards selected'],
   [/^Seleccionar (.+)$/, 'Select $1'],
   [/^¿Eliminar el grupo “(.+)”\?$/, 'Delete the group “$1”?'],
   [/^¿Eliminar estas (\d+) tarjetas\?$/, 'Delete these $1 cards?'],

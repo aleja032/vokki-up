@@ -15,7 +15,14 @@
 }
 
 .selection-bar__summary {
-  @apply flex items-center justify-between gap-2 px-1 text-[13px] font-semibold whitespace-nowrap text-(--ink);
+  @apply flex items-center justify-between gap-2 px-1 text-[13px] font-semibold text-(--ink);
+}
+
+/* The summary may be a longer hint ("Toca las palabras..."): let it wrap
+   instead of pushing the toggle past the bar edge. */
+.selection-bar__summary > span {
+  @apply min-w-0 leading-snug;
+  text-wrap: balance;
 }
 
 .selection-bar__toggle {
