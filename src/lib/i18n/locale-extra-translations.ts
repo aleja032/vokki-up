@@ -254,6 +254,7 @@ export const extraTranslations: Record<string, string> = {
 
   // Delete confirmations
   '¿Eliminar esta tarjeta?': 'Delete this card?',
+  'Quitar selección': 'Clear selection',
   'Se eliminarán las tarjetas seleccionadas y se borrará su progreso de repaso.':
     'The selected cards will be deleted along with their review progress.',
   'Más opciones de la nota': 'More note options',

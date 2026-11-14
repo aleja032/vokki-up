@@ -1,5 +1,6 @@
 import { MoreHorizontal, Trash2 } from 'lucide-react';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useState } from 'react';
+import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
 import { groupNoteSections } from '../note-content.util';
 import { notesMessages } from '../messages';
 import type { Note } from '../types';
@@ -24,20 +25,7 @@ export function NoteDetail({
 }: NoteDetailProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
-  const cancelRef = useRef<HTMLButtonElement>(null);
-  const titleId = useId();
-  const descriptionId = useId();
   const isFavorite = note.favorite === true;
-
-  useEffect(() => {
-    if (!isConfirmingDelete) return;
-    cancelRef.current?.focus();
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsConfirmingDelete(false);
-    };
-    document.addEventListener('keydown', closeOnEscape);
-    return () => document.removeEventListener('keydown', closeOnEscape);
-  }, [isConfirmingDelete]);
 
   return (
     <article className="note-detail" aria-label={messages.label}>
@@ -89,37 +77,15 @@ export function NoteDetail({
           </div>
         </div>
       </div>
-      {isConfirmingDelete && (
-        <div
-          className="note-detail__confirmation"
-          role="alertdialog"
-          aria-labelledby={titleId}
-          aria-describedby={descriptionId}
-        >
-          <div>
-            <strong id={titleId}>
-              {messages.deleteTitle(note.title || notesMessages.list.untitled)}
-            </strong>
-            <p id={descriptionId}>{messages.deleteBody}</p>
-          </div>
-          <div className="note-detail__confirmation-actions">
-            <button
-              ref={cancelRef}
-              onClick={() => setIsConfirmingDelete(false)}
-              type="button"
-            >
-              {messages.cancel}
-            </button>
-            <button
-              className="note-detail__delete-confirm"
-              onClick={onDelete}
-              type="button"
-            >
-              {messages.confirmDelete}
-            </button>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        open={isConfirmingDelete}
+        title={messages.deleteTitle(note.title || notesMessages.list.untitled)}
+        description={messages.deleteBody}
+        confirmLabel={messages.confirmDelete}
+        cancelLabel={messages.cancel}
+        onConfirm={onDelete}
+        onCancel={() => setIsConfirmingDelete(false)}
+      />
       <div className="note-detail__body">
         {groupNoteSections(note.body).map((section, sectionIndex) => (
           <div className="note-detail__section" key={sectionIndex}>

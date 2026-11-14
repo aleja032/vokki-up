@@ -507,30 +507,6 @@
     @apply flex h-10 items-center gap-2 rounded-[10px] border-0 bg-transparent px-3 text-left text-sm font-semibold text-(--red-ink);
   }
 
-  .note-detail__confirmation {
-    @apply flex flex-col gap-4 rounded-[16px] border border-solid border-(--line) bg-(--surface-muted) p-4;
-  }
-
-  .note-detail__confirmation strong {
-    @apply text-base font-bold text-(--ink);
-  }
-
-  .note-detail__confirmation p {
-    @apply m-1.5 text-sm leading-[1.45] text-(--ink-soft);
-  }
-
-  .note-detail__confirmation-actions {
-    @apply flex flex-wrap justify-end gap-2;
-  }
-
-  .note-detail__confirmation-actions button {
-    @apply min-h-10 cursor-pointer rounded-[10px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-3.5 text-sm font-semibold text-(--ink);
-  }
-
-  .note-detail__confirmation-actions .note-detail__delete-confirm {
-    @apply border-0 bg-(--red-ink) text-white;
-  }
-
   .note-detail__heading {
     @apply flex max-w-full min-w-0 flex-col gap-2;
   }
@@ -574,7 +550,6 @@
   .note-detail__favorite:focus-visible,
   .note-detail__menu-trigger:focus-visible,
   .note-detail__menu button:focus-visible,
-  .note-detail__confirmation-actions button:focus-visible,
   .note-detail__edit:focus-visible {
     @apply outline-2 outline-offset-2 outline-(--indigo);
   }
@@ -599,7 +574,6 @@
 .note-detail__favorite,
 .note-detail__menu-trigger,
 .note-detail__menu button,
-.note-detail__confirmation-actions button,
 .notes-editor-view__back {
   transition: var(--hover-transition);
 }

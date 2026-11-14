@@ -1,7 +1,8 @@
 'use client';
 
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useId, useState } from 'react';
+import { ChevronLeft, ChevronRight, ListChecks, Trash2, X } from 'lucide-react';
+import { useState } from 'react';
+import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
 import { paginateItems } from '../hooks/pagination';
 import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
@@ -46,8 +47,6 @@ export function CardsLibrary({
   const [isManaging, setIsManaging] = useState(false);
   const [selectedCardIds, setSelectedCardIds] = useState<string[]>([]);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
-  const confirmationTitleId = useId();
-  const confirmationDescriptionId = useId();
   const pageContextKey = JSON.stringify([
     activeGroup?.id ?? null,
     activeCategory,
@@ -56,6 +55,11 @@ export function CardsLibrary({
   const currentPage =
     requestedPage.key === pageContextKey ? requestedPage.page : 1;
   const page = paginateItems(cards, currentPage, CARDS_PAGE_SIZE);
+  const visibleIds = new Set(cards.map(card => card.id));
+  const activeSelection = selectedCardIds.filter(id => visibleIds.has(id));
+  const hasSelection = activeSelection.length > 0;
+  const isAllSelected =
+    cards.length > 0 && activeSelection.length === cards.length;
 
   function changeSearch(value: string) {
     setRequestedPage({ key: pageContextKey, page: 1 });
@@ -67,14 +71,18 @@ export function CardsLibrary({
     onCategoryChange(category);
   }
 
-  function toggleManaging() {
-    setIsManaging(current => {
-      if (current) {
-        setSelectedCardIds([]);
-        setIsConfirmingDelete(false);
-      }
-      return !current;
-    });
+  function startManaging() {
+    setIsManaging(true);
+  }
+
+  function stopManaging() {
+    setIsManaging(false);
+    setSelectedCardIds([]);
+    setIsConfirmingDelete(false);
+  }
+
+  function toggleAllSelected() {
+    setSelectedCardIds(isAllSelected ? [] : cards.map(card => card.id));
   }
 
   function toggleCardSelection(cardId: string) {
@@ -86,14 +94,16 @@ export function CardsLibrary({
   }
 
   function confirmDelete() {
-    onDeleteCards(selectedCardIds);
-    setSelectedCardIds([]);
-    setIsConfirmingDelete(false);
-    setIsManaging(false);
+    onDeleteCards(activeSelection);
+    stopManaging();
   }
 
   return (
-    <section className="deck-library" aria-labelledby="deck-library-title">
+    <section
+      className="deck-library"
+      aria-labelledby="deck-library-title"
+      data-managing={isManaging}
+    >
       <div className="deck-library__heading">
         <h2 id="deck-library-title">
           <span className="deck-library__title-compact">
@@ -108,60 +118,23 @@ export function CardsLibrary({
         <button
           className="deck-library__manage"
           type="button"
-          aria-pressed={isManaging}
           disabled={!canDeleteCards || cards.length === 0}
-          onClick={toggleManaging}
+          inert={isManaging}
+          onClick={startManaging}
         >
-          {isManaging ? messages.manageDone : messages.manageCards}
+          <ListChecks aria-hidden="true" size={18} />
+          {messages.manageCards}
         </button>
       </div>
-      {isManaging && (
-        <div className="deck-library__manage-bar">
-          <span aria-live="polite">
-            {messages.selectedCards(selectedCardIds.length)}
-          </span>
-          <button
-            className="deck-library__delete-selected"
-            disabled={selectedCardIds.length === 0}
-            onClick={() => setIsConfirmingDelete(true)}
-            type="button"
-          >
-            {messages.deleteSelected}
-          </button>
-        </div>
-      )}
-      {isConfirmingDelete && (
-        <div
-          className="deck-confirm deck-library__confirm"
-          role="alertdialog"
-          aria-labelledby={confirmationTitleId}
-          aria-describedby={confirmationDescriptionId}
-        >
-          <div className="deck-confirm__copy">
-            <span id={confirmationTitleId}>
-              {messages.deleteSelectedTitle(selectedCardIds.length)}
-            </span>
-            <span id={confirmationDescriptionId}>
-              {messages.deleteSelectedBody}
-            </span>
-          </div>
-          <div className="deck-confirm__actions">
-            <button
-              onClick={() => setIsConfirmingDelete(false)}
-              type="button"
-            >
-              {messages.cardDeleteCancel}
-            </button>
-            <button
-              className="deck-confirm__danger"
-              onClick={confirmDelete}
-              type="button"
-            >
-              {messages.deleteSelected}
-            </button>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        open={isConfirmingDelete}
+        title={messages.deleteSelectedTitle(activeSelection.length)}
+        description={messages.deleteSelectedBody}
+        confirmLabel={messages.deleteAction}
+        cancelLabel={messages.cardDeleteCancel}
+        onConfirm={confirmDelete}
+        onCancel={() => setIsConfirmingDelete(false)}
+      />
       <div className="deck-library__tools">
         <div className="deck-search">
           <label className="sr-only" htmlFor="deck-search-input">
@@ -206,7 +179,7 @@ export function CardsLibrary({
             schedule={schedules[card.id]}
             now={now}
             isManaging={isManaging}
-            isSelected={selectedCardIds.includes(card.id)}
+            isSelected={activeSelection.includes(card.id)}
             onToggleSelect={toggleCardSelection}
           />
         ))}
@@ -248,6 +221,47 @@ export function CardsLibrary({
             <ChevronRight aria-hidden="true" size={18} />
           </button>
         </nav>
+      )}
+      {isManaging && (
+        <div className="deck-library__dock">
+          <div
+            className="deck-library__manage-bar"
+            role="group"
+            aria-label={messages.manageCards}
+          >
+            <div className="deck-library__manage-summary">
+              <span aria-live="polite">
+                {messages.selectedCards(activeSelection.length)}
+              </span>
+              <button
+                className="deck-library__select-all"
+                onClick={toggleAllSelected}
+                type="button"
+              >
+                {isAllSelected ? messages.clearSelection : messages.selectAll}
+              </button>
+            </div>
+            <div className="deck-library__manage-actions">
+              <button
+                className="deck-library__cancel"
+                onClick={stopManaging}
+                type="button"
+              >
+                <X aria-hidden="true" size={18} />
+                {messages.cardDeleteCancel}
+              </button>
+              <button
+                className="deck-library__delete-selected"
+                disabled={!hasSelection}
+                onClick={() => setIsConfirmingDelete(true)}
+                type="button"
+              >
+                <Trash2 aria-hidden="true" size={18} />
+                {messages.deleteAction}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );

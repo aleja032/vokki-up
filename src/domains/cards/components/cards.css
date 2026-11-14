@@ -548,12 +548,14 @@
 }
 
 .deck-library__manage,
+.deck-library__cancel,
 .deck-library__delete-selected {
-  @apply inline-flex min-h-10 items-center justify-center rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-sm font-semibold text-(--ink);
+  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-sm font-semibold text-(--ink);
 }
 
-.deck-library__manage[aria-pressed='true'] {
-  @apply border-(--indigo) text-(--indigo-strong);
+/* The entry button keeps its slot while managing so the heading never shifts. */
+.deck-library__manage[inert] {
+  @apply invisible;
 }
 
 .deck-library__manage:disabled,
@@ -562,39 +564,106 @@
 }
 
 .deck-library__manage:focus-visible,
+.deck-library__cancel:focus-visible,
+.deck-library__select-all:focus-visible,
 .deck-library__delete-selected:focus-visible,
-.deck-card__select input:focus-visible {
+.deck-card__select:focus-visible {
   outline: 2px solid var(--indigo);
   outline-offset: 3px;
 }
 
+/* Zero-height sticky dock: the bar floats above the bottom navigation and
+   never pushes the grid. The margin leaves room for it at the end of the list. */
+.deck-library__dock {
+  @apply sticky z-20 mt-28 -mb-4 h-0;
+  bottom: calc(77px + env(safe-area-inset-bottom) + 12px);
+}
+
 .deck-library__manage-bar {
-  @apply flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-solid border-(--line) bg-(--surface-muted) px-4 py-3 text-sm font-semibold text-(--ink-soft);
+  @apply absolute inset-x-0 bottom-0 flex flex-col gap-3 rounded-[18px] border border-solid border-(--line) bg-(--surface) p-3 shadow-[0_12px_32px_rgba(20,20,22,0.18)];
+}
+
+.deck-library__manage-summary {
+  @apply flex items-center justify-between gap-2 px-1 text-[13px] font-semibold whitespace-nowrap text-(--ink);
+}
+
+.deck-library__select-all {
+  @apply min-h-9 shrink-0 cursor-pointer rounded-[10px] border-0 bg-transparent px-1.5 text-[13px] font-semibold whitespace-nowrap text-(--indigo-strong);
+}
+
+.deck-library__manage-actions {
+  @apply grid grid-cols-2 gap-3;
 }
 
 .deck-library__delete-selected {
-  @apply border-0 bg-(--deck-danger) text-white;
-}
-
-.deck-library__confirm {
-  @apply border border-solid border-(--deck-danger-edge);
+  @apply border-0 bg-(--red-ink) font-bold text-(--on-indigo);
 }
 
 .deck-card__select {
-  @apply absolute top-3 right-3 z-10 flex size-7 cursor-pointer items-center justify-center rounded-[8px] border border-solid border-(--line) bg-(--surface);
+  @apply absolute inset-0 z-10 m-0 cursor-pointer rounded-[inherit] border-0 bg-transparent p-0;
 }
 
-.deck-card__select input {
-  @apply size-4 accent-(--indigo);
-}
-
-.deck-card[data-managing='true'] {
-  @apply pr-12;
+.deck-card__check {
+  @apply pointer-events-none absolute -top-2 -right-2 z-10 flex size-6 items-center justify-center rounded-full border-2 border-solid border-(--deck-edge) bg-(--surface) text-transparent;
 }
 
 .deck-card[data-selected='true'] {
   @apply border-(--indigo);
   box-shadow: 0 0 0 1px var(--indigo);
+}
+
+.deck-card[data-selected='true'] .deck-card__check {
+  @apply border-(--indigo) bg-(--indigo) text-(--on-indigo);
+}
+
+.deck-card[data-managing='true'],
+.deck-card__check,
+.deck-library__cancel,
+.deck-library__select-all,
+.deck-library__delete-selected {
+  transition: var(--hover-transition);
+}
+
+.deck-library__manage-bar {
+  animation: deck-dock-in 200ms var(--ease-out);
+}
+
+@keyframes deck-dock-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (hover: hover) {
+  .deck-card[data-managing='true']:not([data-selected='true']):hover {
+    @apply border-(--deck-edge);
+  }
+
+  .deck-library__cancel:hover,
+  .deck-library__select-all:hover {
+    @apply bg-(--indigo-soft);
+  }
+
+  .deck-library__delete-selected:not(:disabled):hover {
+    filter: brightness(1.08);
+  }
+}
+
+@media (min-width: 761px) {
+  .deck-library__dock {
+    bottom: 24px;
+  }
+
+  .deck-library__manage-bar {
+    @apply left-1/2 w-[min(520px,100%)] -translate-x-1/2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-library__manage-bar {
+    animation: none;
+  }
 }
 
 .deck-library__title-wide {

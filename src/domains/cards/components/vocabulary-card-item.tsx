@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import {
   LEARNING_STATE_PROGRESS,
@@ -43,7 +44,11 @@ export function VocabularyCardItem({
   } as CSSProperties;
 
   return (
-    <article className="deck-card" data-managing={isManaging} data-selected={isSelected}>
+    <article
+      className="deck-card"
+      data-managing={isManaging}
+      data-selected={isSelected}
+    >
       <div className="deck-card__top">
         <div className="deck-card__title">
           <h3 title={card.term}>{card.term}</h3>
@@ -58,14 +63,19 @@ export function VocabularyCardItem({
         </span>
       </div>
       {isManaging && (
-        <label className="deck-card__select">
-          <input
-            checked={isSelected}
-            onChange={() => onToggleSelect(card.id)}
-            type="checkbox"
+        <>
+          <button
+            aria-checked={isSelected}
+            aria-label={overview.cardSelectLabel(card.term)}
+            className="deck-card__select"
+            onClick={() => onToggleSelect(card.id)}
+            role="checkbox"
+            type="button"
           />
-          <span className="sr-only">{overview.cardSelectLabel(card.term)}</span>
-        </label>
+          <span className="deck-card__check" aria-hidden="true">
+            <Check size={14} strokeWidth={3} />
+          </span>
+        </>
       )}
       <p className="deck-card__meaning">{card.meaning}</p>
       {card.example && <p className="deck-card__example">{card.example}</p>}
