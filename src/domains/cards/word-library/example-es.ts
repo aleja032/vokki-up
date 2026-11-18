@@ -1,6 +1,10 @@
 import { INITIAL_CARDS } from '../data';
 import type { VocabularyCard } from '../types';
-import { normalizeCatalogTerm, wordLibraryCatalog } from './catalog';
+import {
+  normalizeCatalogTerm,
+  wordLibraryCatalog,
+  type WordLibraryEntry
+} from './catalog';
 import { DAILY_EXAMPLES_ES } from './example-es-daily';
 import { PHRASES_EXAMPLES_ES } from './example-es-phrases';
 import { TRAVEL_EXAMPLES_ES } from './example-es-travel';
@@ -70,6 +74,13 @@ function matchesExample(
   return match !== undefined && (example ?? '').trim() === match.english;
 }
 
+/** Catalog translation for a word library entry (matched by term). */
+export function getCatalogEntryExampleEs(
+  entry: Pick<WordLibraryEntry, 'term' | 'example'>
+): string | undefined {
+  return catalogExamplesByTerm.get(normalizeCatalogTerm(entry.term))?.spanish;
+}
+
 /**
  * Spanish example for a card, or undefined when there is none.
  * The value stored on the card wins. Otherwise the catalog translation is used
@@ -77,6 +88,7 @@ function matchesExample(
  * English example, so a custom or edited example never shows a stale
  * translation.
  */
+
 export function getExampleEs(
   card: Pick<VocabularyCard, 'term' | 'example' | 'exampleEs'>
 ): string | undefined {

@@ -27,7 +27,8 @@ export const extraTranslations: Record<string, string> = {
   '(opcional)': '(optional)',
 
   // Optional Spanish example (review screen and card editor)
-  'Ejemplo en español': 'Spanish example',
+  'Mostrar ejemplo en español': 'Show Spanish example',
+  'Ocultar ejemplo en español': 'Hide Spanish example',
   'Ejemplo en español (opcional)': 'Spanish example (optional)',
   'La misma frase, en español': 'The same sentence, in Spanish',
   'El ejemplo en español supera los 160 caracteres.':

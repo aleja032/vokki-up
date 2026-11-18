@@ -186,6 +186,10 @@ export const cardsMessages = createLocalizedMessages({
     clear: 'Limpiar',
     submit: 'Guardar tarjeta'
   },
+  exampleEsToggle: {
+    show: 'Mostrar ejemplo en español',
+    hide: 'Ocultar ejemplo en español'
+  },
   review: {
     loading: 'Preparando tu repaso…',
     closeLabel: 'Cerrar sesión de repaso',
@@ -199,7 +203,6 @@ export const cardsMessages = createLocalizedMessages({
     speechFailed: 'No se pudo reproducir el audio. Puedes volver a intentarlo.',
     meaningLabel: 'Significado',
     exampleLabel: 'Ejemplo',
-    exampleEsLabel: 'Ejemplo en español',
     revealHint: 'Intenta recordarla, luego toca para ver',
     revealAction: 'Mostrar significado',
     ratingsLabel: 'Califica esta tarjeta',

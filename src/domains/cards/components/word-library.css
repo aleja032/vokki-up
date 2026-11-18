@@ -378,6 +378,15 @@
   line-height: 1.5;
 }
 
+.word-library__entry .es-toggle__sentence {
+  font-size: 13px;
+}
+
+.word-library__entry .es-toggle {
+  --es-c: 17px;
+  margin-top: 0;
+}
+
 .word-library__phonetics span,
 .word-library__example span {
   color: var(--ink);

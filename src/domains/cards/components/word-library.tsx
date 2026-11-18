@@ -30,6 +30,8 @@ import type {
 } from '../word-library/catalog';
 import { useCardsDashboard } from '../hooks/use-cards-dashboard';
 import { getDefaultGroupId } from '../word-library/default-groups';
+import { getCatalogEntryExampleEs } from '../word-library/example-es';
+import { ExampleEsToggle } from './example-es-toggle';
 import { SelectionActionBar } from './selection-action-bar';
 import { createLocalizedMessages } from '@/lib/i18n/locale';
 import './word-library.css';
@@ -171,9 +173,14 @@ export function WordLibraryEntryCard({
       <p className="word-library__phonetics">
         <span>{messages.pronunciation}</span> {entry.phonetics}
       </p>
-      <p className="word-library__example">
-        <span>{messages.example}</span> “{entry.example}”
-      </p>
+      <ExampleEsToggle
+        key={entry.id}
+        sentence={getCatalogEntryExampleEs(entry)}
+      >
+        <p className="word-library__example">
+          <span>{messages.example}</span> “{entry.example}”
+        </p>
+      </ExampleEsToggle>
       {isAlreadyAdded && (
         <p className="word-library__existing">
           <LockKeyhole aria-hidden="true" size={14} />

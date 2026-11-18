@@ -191,6 +191,7 @@ export function CardEditor({
             meaning={values.meaning}
             phonetics={values.phonetics}
             example={values.example}
+            exampleEs={values.exampleEs}
             partOfSpeech={values.partOfSpeech}
             tags={activeTags}
           />

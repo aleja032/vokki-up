@@ -108,7 +108,8 @@ const FIXED_STRINGS = [
   '3 / 20 palabras o frases',
   'Racha actual',
   'Palabras vistas',
-  'Ejemplo en español',
+  'Mostrar ejemplo en español',
+  'Ocultar ejemplo en español',
   'Ejemplo en español (opcional)',
   'La misma frase, en español'
 ];

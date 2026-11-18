@@ -44,31 +44,25 @@ describe('ReviewCardScreen Spanish example', () => {
     example: 'We moved the deadline to Friday afternoon.'
   } as VocabularyCard;
 
-  it('shows the eyebrow and the stored Spanish example after reveal', () => {
+  it('adds an icon-only eye toggle for the stored Spanish example', () => {
     const html = render(true, {
       ...withExample,
       exampleEs: 'Movimos la fecha límite al viernes.'
     });
-    expect(html).toContain('Ejemplo en español');
+    expect(html).toContain('aria-label="Mostrar ejemplo en español"');
+    expect(html).toContain('aria-expanded="false"');
     expect(html).toContain('Movimos la fecha límite al viernes.');
   });
 
-  it('shows the catalog translation for an older saved card', () => {
+  it('uses the catalog translation for an older saved card', () => {
     const html = render(true, withExample);
-    expect(html).toContain('Ejemplo en español');
     expect(html).toContain('Movimos la fecha límite al viernes por la tarde.');
+    expect(html).toContain('aria-controls=');
   });
 
-  it('renders the eyebrow as a collapsed toggle with a hidden sentence region', () => {
+  it('shows no visible text label for the toggle', () => {
     const html = render(true, withExample);
-    expect(html).toMatch(/<button[^>]*type="button"[^>]*aria-expanded="false"/);
-    const controls = html.match(/aria-controls="([^"]+)"/)?.[1];
-    expect(controls).toBeTruthy();
-    const region = html.match(
-      new RegExp('<div[^>]*id="' + controls + '"[^>]*>')
-    )?.[0];
-    expect(region).toContain('inert');
-    expect(region).toContain('aria-hidden="true"');
+    expect(html).not.toMatch(/>s*Ejemplo en españols*</i);
   });
 
   it('renders no toggle when there is no Spanish example', () => {
@@ -79,19 +73,10 @@ describe('ReviewCardScreen Spanish example', () => {
     });
     expect(html).not.toContain('aria-expanded');
     expect(html).not.toContain('aria-controls');
+    expect(html).not.toContain('es-toggle');
   });
 
-  it('renders no eyebrow when there is no Spanish example', () => {
-    const html = render(true, {
-      ...withExample,
-      term: 'custom thing',
-      example: 'A custom sentence.'
-    });
-    expect(html).not.toContain('Ejemplo en español');
-    expect(html).not.toContain('drill-es');
-  });
-
-  it('keeps the Spanish example hidden before reveal', () => {
-    expect(render(false, withExample)).not.toContain('Ejemplo en español');
+  it('keeps the toggle out of the unrevealed card', () => {
+    expect(render(false, withExample)).not.toContain('aria-expanded');
   });
 });

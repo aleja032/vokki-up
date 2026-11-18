@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { normalizeCatalogTerm, wordLibraryCatalog } from './catalog';
-import { getExampleEs, parseExampleRows } from './example-es';
+import {
+  getCatalogEntryExampleEs,
+  getExampleEs,
+  parseExampleRows
+} from './example-es';
 import { DAILY_EXAMPLES_ES } from './example-es-daily';
 import { PHRASES_EXAMPLES_ES } from './example-es-phrases';
 import { TRAVEL_EXAMPLES_ES } from './example-es-travel';
@@ -125,5 +129,24 @@ describe('getExampleEs', () => {
     expect(getExampleEs(makeCard({ exampleEs: '   ' }))).toBe(
       'Me pondré en contacto contigo mañana para dar seguimiento.'
     );
+  });
+});
+
+describe('getCatalogEntryExampleEs', () => {
+  it('returns the catalog translation of an entry', () => {
+    expect(getCatalogEntryExampleEs(catalogEntry)).toBe(
+      'Me pondré en contacto contigo mañana para dar seguimiento.'
+    );
+  });
+
+  it('covers every catalog entry', () => {
+    for (const entry of wordLibraryCatalog)
+      expect(getCatalogEntryExampleEs(entry), entry.id).toBeTruthy();
+  });
+
+  it('returns undefined for an entry outside the catalog', () => {
+    expect(
+      getCatalogEntryExampleEs({ term: 'not in catalog', example: 'x.' })
+    ).toBeUndefined();
   });
 });
