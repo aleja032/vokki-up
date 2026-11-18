@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { NOTE_FILTERS } from '../data';
 import { useNotesWorkspace } from '../hooks/use-notes-workspace';
+import { translateText } from '@/lib/i18n/locale';
 import { notesMessages } from '../messages';
 import {
   createNoteCategorySchema,
@@ -150,7 +151,7 @@ export function NotesWorkspace() {
                 onClick={() => setActiveFilter(filter)}
                 type="button"
               >
-                {filter}
+                {translateText(filter)}
               </button>
             ))}
           </div>
@@ -216,7 +217,7 @@ export function NotesWorkspace() {
                 <ul className="notes-category-manager__list">
                   {categories.map(category => (
                     <li key={category}>
-                      <span>{category}</span>
+                      <span>{translateText(category)}</span>
                       {category === 'General' ? (
                         <span className="notes-category-manager__default">
                           {messages.categories.defaultLabel}

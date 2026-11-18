@@ -1,5 +1,6 @@
 'use client';
 import { Check, FileText } from 'lucide-react';
+import { translateText } from '@/lib/i18n/locale';
 import { useNoteFormatting } from '../hooks/use-note-formatting';
 import { useNoteSubmit } from '../hooks/use-note-submit';
 import { notesMessages } from '../messages';
@@ -63,7 +64,9 @@ export function NoteEditor({
           {...register('category')}
         >
           {categories.map(category => (
-            <option key={category}>{category}</option>
+            <option key={category} value={category}>
+              {translateText(category)}
+            </option>
           ))}
         </select>
       </div>

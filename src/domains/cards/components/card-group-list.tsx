@@ -1,6 +1,9 @@
 'use client';
 
+import Link from 'next/link';
+import { Library } from 'lucide-react';
 import { ALL_GROUPS_ID } from '../hooks/use-cards-dashboard';
+import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardGroup } from '../types';
 import { DeckIcon } from './deck-icon';
@@ -36,14 +39,20 @@ export function CardGroupList({
     <section className="deck-groups" aria-labelledby="deck-groups-title">
       <div className="deck-groups__heading">
         <h2 id="deck-groups-title">{messages.groupsTitle}</h2>
-        <button
-          className="deck-groups__add deck-groups__add--compact"
-          type="button"
-          onClick={onAddGroup}
-        >
-          <DeckIcon name="plus" size={16} />
-          {messages.newGroup}
-        </button>
+        <div className="deck-groups__actions">
+          <Link className="deck-link-button" href="/cards/word-library">
+            <Library size={16} aria-hidden="true" />
+            {messages.addFromLibrary}
+          </Link>
+          <button
+            className="deck-groups__add deck-groups__add--compact"
+            type="button"
+            onClick={onAddGroup}
+          >
+            <DeckIcon name="plus" size={16} />
+            {messages.newGroup}
+          </button>
+        </div>
       </div>
       <div
         aria-label={messages.groupsLabel}
@@ -76,14 +85,14 @@ export function CardGroupList({
             data-tone={group.tone}
             type="button"
             key={group.id}
-            title={group.name}
+            title={getGroupDisplayName(group)}
             onClick={() => onOpenGroup(group.id)}
           >
             <span className="deck-group__icon">
               <DeckIcon name="folder" size={18} />
             </span>
             <span className="deck-group__copy">
-              <strong>{group.name}</strong>
+              <strong>{getGroupDisplayName(group)}</strong>
               <span>{messages.groupMeta(cardCount, dueCount)}</span>
             </span>
           </button>

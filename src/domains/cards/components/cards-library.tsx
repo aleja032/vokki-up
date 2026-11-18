@@ -4,15 +4,18 @@ import { ChevronLeft, ChevronRight, ListChecks, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
 import { paginateItems } from '../hooks/pagination';
+import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
 import { DeckIcon } from './deck-icon';
+import { GroupAddActions } from './group-add-actions';
 import { SelectionActionBar } from './selection-action-bar';
 import { VocabularyCardItem } from './vocabulary-card-item';
 import { translateText } from '@/lib/i18n/locale';
 
 const messages = cardsMessages.overview;
+const groupMessages = cardsMessages.groupDetail;
 const CARDS_PAGE_SIZE = 9;
 
 type CardsLibraryProps = {
@@ -28,6 +31,7 @@ type CardsLibraryProps = {
   onSearchChange: (value: string) => void;
   onCategoryChange: (category: string) => void;
   onDeleteCards: (cardIds: readonly string[]) => void;
+  onAddCard: () => void;
 };
 
 export function CardsLibrary({
@@ -42,7 +46,8 @@ export function CardsLibrary({
   canDeleteCards,
   onSearchChange,
   onCategoryChange,
-  onDeleteCards
+  onDeleteCards,
+  onAddCard
 }: CardsLibraryProps) {
   const [requestedPage, setRequestedPage] = useState({ key: '', page: 1 });
   const [isManaging, setIsManaging] = useState(false);
@@ -58,6 +63,11 @@ export function CardsLibrary({
   const page = paginateItems(cards, currentPage, CARDS_PAGE_SIZE);
   const visibleIds = new Set(cards.map(card => card.id));
   const activeSelection = selectedCardIds.filter(id => visibleIds.has(id));
+  // A group view with no search or category filter: its add actions apply.
+  const isUnfilteredGroup =
+    Boolean(activeGroup) &&
+    searchText.trim() === '' &&
+    activeCategory === messages.allCategories;
   const hasSelection = activeSelection.length > 0;
   const isAllSelected =
     cards.length > 0 && activeSelection.length === cards.length;
@@ -109,7 +119,7 @@ export function CardsLibrary({
         <h2 id="deck-library-title">
           <span className="deck-library__title-compact">
             {activeGroup
-              ? messages.libraryTitleGroup(activeGroup.name)
+              ? messages.libraryTitleGroup(getGroupDisplayName(activeGroup))
               : messages.libraryTitleAll}
           </span>
           <span className="deck-library__title-wide">
@@ -136,6 +146,11 @@ export function CardsLibrary({
         onConfirm={confirmDelete}
         onCancel={() => setIsConfirmingDelete(false)}
       />
+      {isUnfilteredGroup && cards.length > 0 && (
+        <div className="deck-library__group-actions">
+          <GroupAddActions variant="header" onAdd={onAddCard} />
+        </div>
+      )}
       <div className="deck-library__tools">
         <div className="deck-search">
           <label className="sr-only" htmlFor="deck-search-input">
@@ -185,9 +200,17 @@ export function CardsLibrary({
           />
         ))}
       </div>
-      {cards.length === 0 && (
-        <p className="deck-library__empty">{messages.emptyFilter}</p>
-      )}
+      {cards.length === 0 &&
+        (isUnfilteredGroup ? (
+          <div className="deck-group-empty">
+            <DeckIcon name="folder" size={23} />
+            <h3>{groupMessages.emptyTitle}</h3>
+            <p>{groupMessages.emptyBody}</p>
+            <GroupAddActions variant="empty" onAdd={onAddCard} />
+          </div>
+        ) : (
+          <p className="deck-library__empty">{messages.emptyFilter}</p>
+        ))}
       {page.pageCount > 1 && (
         <nav className="deck-pagination" aria-label={messages.pagination.label}>
           <button

@@ -1,26 +1,116 @@
 @reference 'tailwindcss';
 
 /*
- * Cards add hub (prefix: addhub). Mobile keeps the full-screen manual editor,
- * so every wrapper is transparent below 761px. From 761px the hub is one card
- * whose container fits the ACTIVE mode only (inactive panels stay mounted but
- * are not rendered), and the active panel fades in when the mode changes.
+ * Cards add hub (prefix: addhub). Mobile-first: below 761px an open hub is a
+ * full-screen sheet with the header, the three mode tabs and the ACTIVE panel.
+ * From 761px it is one card in the page whose container fits the active mode
+ * only. Inactive panels stay mounted but are not rendered, and the active
+ * panel fades in when the mode changes.
  */
 
-.addhub,
-.addhub__stage,
-.addhub__panel--manual {
-  @apply contents;
+.addhub {
+  @apply hidden;
 }
 
-.addhub__header,
-.addhub__modes,
-.addhub__resume,
-.addhub__result,
-.addhub__progress,
-.addhub__capture-summary,
-.addhub__panel:not(.addhub__panel--manual) {
+.addhub[data-open='true'] {
+  @apply fixed inset-0 z-30 flex min-w-0 flex-col gap-4 overflow-x-hidden overflow-y-auto overscroll-contain bg-(--ground) px-4 pt-4 pb-[max(24px,env(safe-area-inset-bottom))] leading-[normal];
+}
+
+.addhub__header {
+  @apply flex min-w-0 flex-col gap-1;
+}
+
+.addhub__exit {
+  @apply -ml-2 inline-flex min-h-11 w-fit items-center gap-1.5 rounded-[10px] px-2 text-[14px] font-semibold text-(--ink-soft);
+}
+
+.addhub__header h2 {
+  @apply m-0 text-[20px] font-bold wrap-anywhere;
+}
+
+.addhub__header p {
+  @apply m-0 text-[14px] wrap-anywhere text-(--ink-soft);
+}
+
+.addhub__modes {
+  @apply grid grid-cols-3 gap-1.5 rounded-[16px] bg-(--surface-muted) p-1.5;
+}
+
+.addhub__mode {
+  @apply flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-[12px] border border-solid border-transparent px-1.5 py-2 text-center text-(--ink-soft);
+}
+
+.addhub__mode[aria-selected='true'] {
+  @apply border-(--line) bg-(--surface) text-(--ink) shadow-[0_1px_2px_rgba(27,26,46,0.08)];
+}
+
+.addhub__mode[aria-disabled='true'] {
+  @apply cursor-not-allowed;
+}
+
+.addhub__mode-icon {
+  @apply flex size-7 shrink-0 items-center justify-center rounded-[8px] text-(--ink-soft);
+}
+
+.addhub__mode[aria-selected='true'] .addhub__mode-icon {
+  @apply bg-(--indigo-soft) text-(--indigo);
+}
+
+.addhub__mode[aria-disabled='true'] .addhub__mode-icon {
+  @apply opacity-60;
+}
+
+.addhub__mode-copy {
+  @apply flex min-w-0 flex-col items-center gap-0.5;
+}
+
+.addhub__mode-copy > strong {
+  @apply flex min-w-0 items-center justify-center gap-1 text-[12px] leading-[1.2] font-bold;
+}
+
+/* Mobile tabs show icon and label only; the hint is for wide screens. */
+.addhub__mode-copy > span {
   @apply hidden;
+}
+
+.addhub__badge {
+  @apply hidden;
+}
+
+.addhub__lock {
+  @apply shrink-0;
+}
+
+.addhub__locked {
+  @apply flex min-w-0 flex-col items-start gap-1.5 rounded-[14px] bg-(--surface-muted) px-4 py-3 text-[14px] text-(--ink-soft);
+}
+
+.addhub__locked strong {
+  @apply text-(--ink);
+}
+
+.addhub__locked p {
+  @apply m-0;
+}
+
+.addhub__locked-links {
+  @apply flex flex-wrap gap-x-5;
+}
+
+.addhub__locked-links a {
+  @apply inline-flex min-h-11 items-center font-semibold text-(--indigo) underline;
+}
+
+.addhub__resume {
+  @apply flex min-w-0 flex-wrap items-center justify-between gap-3 rounded-[14px] bg-(--indigo-soft) px-4 py-3 text-[14px] text-(--ink);
+}
+
+.addhub__resume button {
+  @apply min-h-11 rounded-[10px] bg-(--indigo) px-3.5 text-[13px] font-semibold text-(--surface);
+}
+
+.addhub__progress {
+  @apply block;
 }
 
 /* While the library loads the skeleton replaces the panels (any width). */
@@ -28,17 +118,84 @@
   @apply hidden;
 }
 
+/* Stage: only the active panel is rendered, so the hub fits its content. */
+.addhub__stage {
+  @apply block min-w-0;
+}
+
+.addhub[data-view='review'] .addhub__stage,
+.addhub[data-view='created'] .addhub__stage {
+  @apply hidden;
+}
+
+.addhub .addhub__panel {
+  @apply hidden min-w-0;
+}
+
+.addhub .addhub__panel[data-active='true'] {
+  @apply block;
+  animation: addhub-panel-in 0.22s ease both;
+}
+
+.addhub__result {
+  @apply flex min-w-0 flex-col gap-4;
+  animation: addhub-enter 0.24s ease both;
+}
+
+.addhub__capture-summary {
+  @apply flex min-w-0 rounded-[14px] border border-solid border-(--line) bg-(--surface-muted) px-4 py-3;
+}
+
+.addhub__capture-details {
+  @apply m-0 grid w-full min-w-0 grid-cols-1 gap-3;
+}
+
+.addhub__capture-detail {
+  @apply flex min-w-0 flex-col gap-0.5;
+}
+
+.addhub__capture-detail dt {
+  @apply text-[11px] font-semibold text-(--ink-soft);
+}
+
+.addhub__capture-detail dd {
+  @apply m-0 max-h-[42px] overflow-hidden text-[13px] leading-[1.45] wrap-anywhere text-(--ink);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.addhub__result-head {
+  @apply flex min-w-0 flex-col items-start gap-3;
+}
+
+.addhub__back {
+  @apply inline-flex h-11 shrink-0 items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-3.5 text-[14px] font-semibold text-(--ink);
+}
+
+.addhub__result-title {
+  @apply flex min-w-0 flex-col gap-0.5;
+}
+
+.addhub__result-title h3 {
+  @apply m-0 text-[18px] font-bold wrap-anywhere;
+}
+
+.addhub__result-title p {
+  @apply m-0 text-[14px] wrap-anywhere text-(--ink-soft);
+}
+
 @media (min-width: 761px) {
+  .addhub {
+    @apply box-content flex min-w-0 flex-[1_1_360px] flex-col gap-6 rounded-[26px] border border-solid border-(--line) bg-(--surface) p-7;
+  }
+
   .addhub:not([data-open='true']) {
     @apply hidden;
   }
 
-  .addhub {
-    @apply box-content flex min-w-0 flex-[1_1_360px] flex-col gap-6 rounded-[26px] border border-solid border-(--line) bg-(--surface) p-7 leading-[normal];
-  }
-
   .addhub[data-open='true'] {
-    @apply w-full flex-[1_1_100%];
+    @apply static z-auto box-border w-full flex-[1_1_100%] overflow-visible bg-(--surface) p-7;
   }
 
   .addhub[data-view='review'],
@@ -46,24 +203,12 @@
     @apply order-first flex-[1_1_100%];
   }
 
-  .addhub__header {
-    @apply flex min-w-0 flex-col gap-1;
-  }
-
   .addhub__exit {
-    @apply inline-flex w-fit items-center gap-1.5 rounded-[10px] px-2 py-1 text-[13px] font-semibold text-(--ink-soft) transition-colors;
-  }
-
-  .addhub__header h2 {
-    @apply m-0 text-[20px] font-bold wrap-anywhere;
-  }
-
-  .addhub__header p {
-    @apply m-0 text-[14px] text-(--ink-soft) wrap-anywhere;
+    @apply ml-0 min-h-0 px-2 py-1 text-[13px];
   }
 
   .addhub__modes {
-    @apply grid grid-cols-1 gap-1.5 rounded-[18px] bg-(--surface-muted) p-1.5;
+    @apply grid-cols-1 gap-1.5 rounded-[18px];
   }
 
   /* The expanded hub is wide: the selector becomes a row. */
@@ -73,119 +218,51 @@
   }
 
   .addhub__mode {
-    @apply flex min-w-0 items-center gap-2.5 rounded-[14px] border border-solid border-transparent px-3 py-2.5 text-left text-(--ink-soft) transition-colors;
-  }
-
-  .addhub__mode[aria-selected='true'] {
-    @apply border-(--line) bg-(--surface) text-(--ink) shadow-[0_1px_2px_rgba(27,26,46,0.08)];
+    @apply min-h-0 flex-row justify-start gap-2.5 rounded-[14px] px-3 py-2.5 text-left;
   }
 
   .addhub__mode-icon {
-    @apply flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-(--surface) text-(--ink-soft);
-  }
-
-  .addhub__mode[aria-selected='true'] .addhub__mode-icon {
-    @apply bg-(--indigo-soft) text-(--indigo);
+    @apply size-9 rounded-[10px] bg-(--surface);
   }
 
   .addhub__mode-copy {
-    @apply flex min-w-0 flex-1 flex-col gap-0.5;
+    @apply flex-1 items-stretch;
   }
 
   .addhub__mode-copy > strong {
-    @apply flex min-w-0 items-center gap-1.5 truncate text-[14px] leading-[1.2] font-bold;
+    @apply justify-start truncate text-[14px];
   }
 
   .addhub__mode-copy > span {
-    @apply truncate text-[12px] leading-[1.25] font-medium;
+    @apply block truncate text-[12px] leading-[1.25] font-medium;
   }
 
   .addhub__badge {
-    @apply shrink-0 rounded-[6px] bg-(--indigo-soft) px-1.5 py-0.5 text-[10px] font-extrabold text-(--indigo);
-  }
-
-  .addhub__resume {
-    @apply flex min-w-0 flex-wrap items-center justify-between gap-3 rounded-[14px] bg-(--indigo-soft) px-4 py-3 text-[14px] text-(--ink);
+    @apply block shrink-0 rounded-[6px] bg-(--indigo-soft) px-1.5 py-0.5 text-[10px] font-extrabold text-(--indigo);
   }
 
   .addhub__resume button {
-    @apply h-9 rounded-[10px] bg-(--indigo) px-3.5 text-[13px] font-semibold text-(--surface);
-  }
-
-  .addhub__progress {
-    @apply block;
+    @apply h-9 min-h-0;
   }
 
   .addhub[data-mode='manual'] .addhub__progress {
     @apply hidden;
   }
 
-  /* Stage: only the active panel is rendered, so the card fits its content. */
-  .addhub__stage {
-    @apply block min-w-0;
-  }
-
-  .addhub[data-view='review'] .addhub__stage,
-  .addhub[data-view='created'] .addhub__stage {
-    @apply hidden;
-  }
-
-  .addhub .addhub__panel {
-    @apply hidden min-w-0;
-  }
-
-  .addhub .addhub__panel[data-active='true'] {
-    @apply block;
-    animation: addhub-panel-in 0.22s ease both;
-  }
-
   .addhub__result {
-    @apply flex min-w-0 flex-col gap-5;
-    animation: addhub-enter 0.24s ease both;
-  }
-
-  .addhub__capture-summary {
-    @apply flex min-w-0 rounded-[14px] border border-solid border-(--line) bg-(--surface-muted) px-4 py-3;
+    @apply gap-5;
   }
 
   .addhub__capture-details {
-    @apply m-0 grid min-w-0 grid-cols-3 gap-3;
-    width: 100%;
-  }
-
-  .addhub__capture-detail {
-    @apply flex min-w-0 flex-col gap-0.5;
-  }
-
-  .addhub__capture-detail dt {
-    @apply text-[11px] font-semibold text-(--ink-soft);
-  }
-
-  .addhub__capture-detail dd {
-    @apply m-0 max-h-[42px] overflow-hidden text-[13px] leading-[1.45] text-(--ink) wrap-anywhere;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    @apply grid-cols-3;
   }
 
   .addhub__result-head {
-    @apply flex min-w-0 items-start gap-4;
+    @apply flex-row gap-4;
   }
 
   .addhub__back {
-    @apply inline-flex h-10 shrink-0 items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-3.5 text-[14px] font-semibold text-(--ink);
-  }
-
-  .addhub__result-title {
-    @apply flex min-w-0 flex-col gap-0.5;
-  }
-
-  .addhub__result-title h3 {
-    @apply m-0 text-[18px] font-bold wrap-anywhere;
-  }
-
-  .addhub__result-title p {
-    @apply m-0 text-[14px] text-(--ink-soft) wrap-anywhere;
+    @apply h-10;
   }
 
   .addhub .aicap-review__heading {
@@ -237,8 +314,22 @@
 }
 
 @media (hover: hover) {
-  .addhub__exit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .addhub__mode:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .addhub__exit:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .addhub__mode:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     background-color: var(--indigo-soft);
     color: var(--indigo);
   }

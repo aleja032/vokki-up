@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { INITIAL_CARDS, INITIAL_GROUPS } from '../data';
+import { STARTER_CARDS, STARTER_GROUPS } from '../data';
 import { deriveCardsHomeSummary } from '../home-summary';
 import type { CardRating, VocabularyCard } from '../types';
 import { useBrowserState } from '@/lib/storage/use-browser-state';
@@ -63,12 +63,12 @@ export function getNextIntervalLabel(
 export function useCardReview() {
   const [cards, , cardsLoaded] = useBrowserState(
     'cards/library',
-    INITIAL_CARDS,
+    STARTER_CARDS,
     isVocabularyCardList
   );
   const [, , groupsLoaded] = useBrowserState(
     'cards/groups',
-    INITIAL_GROUPS,
+    STARTER_GROUPS,
     isCardGroupList
   );
   const [schedules, setSchedules, schedulesLoaded] =

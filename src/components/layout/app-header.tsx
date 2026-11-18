@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { VokkiLogo } from '@/components/brand/vokki-logo';
 import { siteConfig, siteMessages } from '@/config/site';

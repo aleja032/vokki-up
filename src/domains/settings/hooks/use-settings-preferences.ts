@@ -13,8 +13,8 @@ import type { AiProvider, AppTheme, SettingsTab } from '../types';
 import type { JsonValue } from '@/lib/sync/types';
 import { THEME_STORAGE_KEY } from '@/lib/theme/theme-init-script';
 import { useBrowserState } from '@/lib/storage/use-browser-state';
-import { setAppLanguage, type AppLanguage } from '@/lib/i18n/locale';
-import { languageToLocale, writeLocaleCookie } from '@/lib/i18n/locale-cookie';
+import { type AppLanguage } from '@/lib/i18n/locale';
+import { commitAppLanguage } from '@/lib/i18n/commit-app-language';
 
 export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
   const [activeTab, setActiveTab] = useState<SettingsTab>(initialTab);
@@ -142,8 +142,7 @@ export function useSettingsPreferences(initialTab: SettingsTab = 'profile') {
   function saveChanges() {
     if (!isLanguageDirty) return;
     setLanguage(draftLanguage);
-    writeLocaleCookie(languageToLocale(draftLanguage));
-    setAppLanguage(draftLanguage);
+    commitAppLanguage(draftLanguage);
   }
 
   async function saveReminderPreferences(enabled: boolean, consent: boolean) {

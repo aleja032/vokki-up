@@ -1,3 +1,4 @@
+import { translateText } from '@/lib/i18n/locale';
 import { getNotePreview } from '../note-content.util';
 import { notesMessages } from '../messages';
 import type { Note } from '../types';
@@ -45,7 +46,7 @@ export function NoteList({
               </span>
               <span className="note-card__meta">
                 <span className="note-card__type" data-category={note.category}>
-                  {note.category}
+                  {translateText(note.category)}
                 </span>
                 <time className="note-card__date" title={note.updatedAt}>
                   {note.updatedAt}

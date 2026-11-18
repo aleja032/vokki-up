@@ -12,6 +12,8 @@ export type VocabularyCard = {
   phonetics: string;
   pronunciationLocale?: string;
   example: string;
+  /** Optional Spanish translation of the example, shown under an eyebrow. */
+  exampleEs?: string;
   partOfSpeech: string;
   groupId: string;
   tags: string[];

@@ -17,7 +17,7 @@ export type HomeDashboardData = {
     greeting: string;
     greetingSupport: string;
     greetingSupportWide: (streakDays: number) => string;
-    newCard: string;
+    addFromLibrary: string;
     nextSessionDescription: string;
     pendingChip: (count: number) => string;
     newChip: (count: number) => string;
