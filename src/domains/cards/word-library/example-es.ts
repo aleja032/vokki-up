@@ -1,3 +1,4 @@
+import { INITIAL_CARDS } from '../data';
 import type { VocabularyCard } from '../types';
 import { normalizeCatalogTerm, wordLibraryCatalog } from './catalog';
 import { DAILY_EXAMPLES_ES } from './example-es-daily';
@@ -36,6 +37,39 @@ for (const entry of wordLibraryCatalog) {
     catalogExamplesByTerm.set(key, { english: entry.example, spanish });
 }
 
+// The starter cards shipped with the app carry their own English examples,
+// which differ from the catalog ones (or are not catalog terms at all).
+const STARTER_EXAMPLES_ES = [
+  'reliable|Ella es una compañera confiable que siempre cumple sus plazos.',
+  'deadline|Tenemos que terminar el informe antes de la fecha límite.',
+  'to schedule|¿Podríamos programar una reunión para el jueves por la mañana?',
+  'to catch up|Pongámonos al día con un café la próxima semana.',
+  'boarding pass|Por favor, ten lista tu tarjeta de embarque en la puerta.',
+  'a layover|Tenemos una escala de tres horas en Madrid.',
+  'to get around|Es fácil moverse por la ciudad en metro.',
+  'to run errands|Tengo que hacer algunos recados después del trabajo.',
+  'thoughtful|Fue un comentario muy considerado.',
+  'to make up your mind|Tómate tu tiempo antes de decidirte.',
+  'I’m looking forward to it|Gracias por invitarme. Tengo muchas ganas de ir.',
+  'to figure out|Encontraremos una mejor forma de organizar los archivos.'
+];
+
+const starterSpanishByTerm = parseExampleRows(STARTER_EXAMPLES_ES);
+const starterExamplesByTerm = new Map<string, CatalogExample>();
+for (const card of INITIAL_CARDS) {
+  const key = normalizeCatalogTerm(card.term);
+  const spanish = starterSpanishByTerm.get(key);
+  if (spanish && card.example)
+    starterExamplesByTerm.set(key, { english: card.example, spanish });
+}
+
+function matchesExample(
+  match: CatalogExample | undefined,
+  example: string | undefined
+) {
+  return match !== undefined && (example ?? '').trim() === match.english;
+}
+
 /**
  * Spanish example for a card, or undefined when there is none.
  * The value stored on the card wins. Otherwise the catalog translation is used
@@ -49,9 +83,10 @@ export function getExampleEs(
   const own = card.exampleEs?.trim();
   if (own) return own;
 
-  const match = catalogExamplesByTerm.get(normalizeCatalogTerm(card.term));
-  if (!match) return undefined;
-  return (card.example ?? '').trim() === match.english
-    ? match.spanish
-    : undefined;
+  const key = normalizeCatalogTerm(card.term);
+  const catalogMatch = catalogExamplesByTerm.get(key);
+  if (matchesExample(catalogMatch, card.example)) return catalogMatch?.spanish;
+  const starterMatch = starterExamplesByTerm.get(key);
+  if (matchesExample(starterMatch, card.example)) return starterMatch?.spanish;
+  return undefined;
 }
