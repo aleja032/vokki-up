@@ -1,11 +1,11 @@
 import { getAppLanguage } from '@/lib/i18n/locale';
 import { languageToLocale, type Locale } from '@/lib/i18n/locale-cookie';
-import { INITIAL_CARDS } from './data';
 import {
   buildDueQueue,
   deriveDailyCreditCount,
   getLocalDateKey
 } from './scheduling/progress';
+import type { VocabularyCard } from './types';
 import { isMastered } from './scheduling/mastery';
 import { getWeeklyStudyMinutes } from './scheduling/review-sessions';
 import type {
@@ -41,7 +41,7 @@ export function formatShortWeekday(date: Date, locale: Locale): string {
 }
 
 export function deriveCardsHomeSummary(
-  cards: typeof INITIAL_CARDS,
+  cards: VocabularyCard[],
   schedules: CardScheduleMap,
   events: ReviewEvent[],
   reviewSessions: ReviewSession[],

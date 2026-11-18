@@ -1,6 +1,6 @@
 'use client';
 
-import { INITIAL_CARDS, INITIAL_GROUPS } from '../data';
+import { STARTER_CARDS, STARTER_GROUPS } from '../data';
 import { isCardList, isGroupList } from '../library-validators';
 import { createCapturedCardsLibrary } from '../persistence/captured-cards';
 import type { VocabularyCard } from '../types';
@@ -16,13 +16,13 @@ const cardChanges = collectionChangeBuilder<VocabularyCard>('card');
 export function useCardsLibraryState() {
   const [, setCards, areCardsLoaded] = useTrackedBrowserState(
     'cards/library',
-    INITIAL_CARDS,
+    STARTER_CARDS,
     isCardList,
     cardChanges
   );
   const [groups, , areGroupsLoaded] = useTrackedBrowserState(
     'cards/groups',
-    INITIAL_GROUPS,
+    STARTER_GROUPS,
     isGroupList,
     () => []
   );

@@ -3,6 +3,10 @@
 import Link from 'next/link';
 import { getCardLearningState } from '../card-learning-state';
 import { useGroupActionsMenu } from '../hooks/use-group-actions-menu';
+import {
+  getGroupDisplayName,
+  getGroupDisplayDescription
+} from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
@@ -97,7 +101,7 @@ export function GroupDetail({
           >
             <div className="deck-confirm__copy">
               <span id="group-delete-title">
-                {messages.deleteTitle(group.name)}
+                {messages.deleteTitle(getGroupDisplayName(group))}
               </span>
               <span>{messages.deleteBody(cards.length)}</span>
             </div>
@@ -121,8 +125,10 @@ export function GroupDetail({
               <DeckIcon name="folder" size={26} />
             </span>
             <div>
-              <h1 id="group-detail-title">{group.name}</h1>
-              {group.description && <span>{group.description}</span>}
+              <h1 id="group-detail-title">{getGroupDisplayName(group)}</h1>
+              {group.description && (
+                <span>{getGroupDisplayDescription(group)}</span>
+              )}
             </div>
           </div>
           <div className="deck-hero__stats">

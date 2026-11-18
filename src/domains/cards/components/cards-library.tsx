@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, ListChecks, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
 import { paginateItems } from '../hooks/pagination';
+import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
@@ -118,7 +119,7 @@ export function CardsLibrary({
         <h2 id="deck-library-title">
           <span className="deck-library__title-compact">
             {activeGroup
-              ? messages.libraryTitleGroup(activeGroup.name)
+              ? messages.libraryTitleGroup(getGroupDisplayName(activeGroup))
               : messages.libraryTitleAll}
           </span>
           <span className="deck-library__title-wide">

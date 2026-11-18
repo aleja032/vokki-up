@@ -5,6 +5,7 @@ import {
   getCardLearningState,
   getDueDayOffset
 } from '../card-learning-state';
+import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardSchedule } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
@@ -93,9 +94,9 @@ export function VocabularyCardItem({
         <span className="deck-card__group" data-tone={group?.tone ?? 'neutral'}>
           <span
             className="deck-card__group-name"
-            title={group?.name ?? overview.noGroup}
+            title={group ? getGroupDisplayName(group) : overview.noGroup}
           >
-            {group?.name ?? overview.noGroup}
+            {group ? getGroupDisplayName(group) : overview.noGroup}
           </span>
         </span>
         <div

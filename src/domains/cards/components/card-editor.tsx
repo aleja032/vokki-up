@@ -12,6 +12,7 @@ import {
   useCardEditorAutofill,
   type CardEditorAutofill
 } from '../hooks/use-card-editor-autofill';
+import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardGroup, VocabularyCard } from '../types';
 import { CardEditorAutofill as CardEditorAutofillPanel } from './card-editor-autofill';
@@ -394,12 +395,14 @@ export function CardEditor({
                     data-tone={group.tone}
                     type="button"
                     key={group.id}
-                    title={group.name}
+                    title={getGroupDisplayName(group)}
                     aria-pressed={values.groupId === group.id}
                     onClick={() => selectGroup(group.id)}
                   >
                     <span />
-                    <span className="deck-choice__label">{group.name}</span>
+                    <span className="deck-choice__label">
+                      {getGroupDisplayName(group)}
+                    </span>
                   </button>
                 ))}
                 <button
