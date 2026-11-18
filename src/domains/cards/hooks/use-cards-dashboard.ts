@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { CARD_PARTS_OF_SPEECH } from '../card-create.schema';
 import { STARTER_CARDS, STARTER_GROUPS } from '../data';
+import { deleteGroupMovingCards } from '../delete-group';
 import { isCardList, isGroupList } from '../library-validators';
 import { cardsMessages } from '../messages';
 import { isMastered } from '../scheduling/mastery';
@@ -194,6 +195,21 @@ export function useCardsDashboard() {
     setGroupView('detail');
   }
 
+  // Removes a group and moves its cards to "Otros". Both lists go through the
+  // tracked setters, so the sync queue gets a delete for the group and upserts
+  // for the moved cards and for a newly created "Otros".
+  function deleteGroup(groupId: string) {
+    if (!areCardsLoaded || !areGroupsLoaded) return;
+    const result = deleteGroupMovingCards(groups, cards, groupId);
+    if (result.groups === groups) return;
+    setGroups(result.groups);
+    if (result.cards !== cards) setCards(result.cards);
+    if (openGroupId === groupId) setOpenGroupId(undefined);
+    if (activeGroupId === groupId) setActiveGroupId(ALL_GROUPS_ID);
+    if (editorGroupId === groupId) setEditorGroupId(undefined);
+    setGroupView('overview');
+  }
+
   function openGroupById(groupId: string) {
     setOpenGroupId(groupId);
     setGroupView('detail');
@@ -248,6 +264,7 @@ export function useCardsDashboard() {
     addWordLibraryEntries,
     isLibraryReady: areCardsLoaded && areGroupsLoaded,
     createGroup,
+    deleteGroup,
     openGroupById,
     startGroupCreation,
     viewExistingCard

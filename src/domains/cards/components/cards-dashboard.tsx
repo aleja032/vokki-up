@@ -54,6 +54,7 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
         masteredPercent={dashboard.openGroupStats.masteredPercent}
         onBack={() => dashboard.setGroupView('overview')}
         onAddCard={dashboard.openEditor}
+        onDelete={dashboard.deleteGroup}
       />
     );
 

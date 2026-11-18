@@ -107,13 +107,17 @@ export const cardsMessages = createLocalizedMessages({
     menuRename: 'Renombrar',
     menuRecolor: 'Cambiar color',
     menuDelete: 'Eliminar grupo',
-    deleteTitle: (name: string) => `¿Eliminar el grupo “${name}”?`,
-    deleteBody: (count: number) =>
-      count === 1
-        ? 'La 1 tarjeta no se borra: pasa a “Sin grupo” y conserva su progreso.'
-        : `Las ${count} tarjetas no se borran: pasan a “Sin grupo” y conservan su progreso.`,
+    menuDeleteBlocked: 'Elimina sus tarjetas para poder borrar este grupo.',
+    deleteTitle: 'Eliminar grupo',
+    deleteBody: (name: string, count: number) => {
+      if (count === 0)
+        return `Se eliminará “${name}”. El grupo no tiene tarjetas.`;
+      return count === 1
+        ? `Se eliminará “${name}”. Su 1 tarjeta pasará a “Otros” y conserva su progreso.`
+        : `Se eliminará “${name}”. Sus ${count} tarjetas pasarán a “Otros” y conservan su progreso.`;
+    },
     deleteCancel: 'Cancelar',
-    deleteConfirm: 'Eliminar grupo',
+    deleteConfirm: 'Eliminar',
     statCards: (count: number) => pluralize(count, 'tarjeta', 'tarjetas'),
     statDue: 'para hoy',
     statMastered: 'dominadas',

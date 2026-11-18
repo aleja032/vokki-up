@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { setAppLanguage } from '@/lib/i18n/locale';
 import { INITIAL_GROUPS } from './data';
+import { OTHERS_GROUP } from './delete-group';
 import {
   getGroupDisplayDescription,
   getGroupDisplayName
@@ -33,5 +34,20 @@ describe('seed group display', () => {
       'Trabajo remoto'
     );
     expect(getGroupDisplayName({ ...work, id: 'g-9' })).toBe('Trabajo');
+  });
+});
+
+describe('Otros display', () => {
+  afterEach(() => setAppLanguage('Español'));
+
+  it('shows Others in English only while unmodified', () => {
+    setAppLanguage('English');
+    expect(getGroupDisplayName(OTHERS_GROUP)).toBe('Others');
+    expect(getGroupDisplayDescription(OTHERS_GROUP)).toBe(
+      'Cards from deleted groups'
+    );
+    expect(getGroupDisplayName({ ...OTHERS_GROUP, name: 'Otros temas' })).toBe(
+      'Otros temas'
+    );
   });
 });

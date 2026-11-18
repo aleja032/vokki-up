@@ -1,5 +1,6 @@
 import { getAppLanguage } from '@/lib/i18n/locale';
 import { INITIAL_GROUPS } from './data';
+import { OTHERS_GROUP } from './delete-group';
 import type { CardGroup } from './types';
 
 // The seed groups are stored in Spanish. Only values that still equal the seed
@@ -16,13 +17,17 @@ const ENGLISH_SEED_TEXT: Record<string, string> = {
   'Día a día': 'Daily life',
   'Palabras para cada momento': 'Words for every moment',
   'Frases útiles': 'Useful phrases',
-  'Expresiones que suenan naturales': 'Expressions that sound natural'
+  'Expresiones que suenan naturales': 'Expressions that sound natural',
+  Otros: 'Others',
+  'Tarjetas de grupos eliminados': 'Cards from deleted groups'
 };
 
 function localizeSeedText(group: CardGroup, field: 'name' | 'description') {
   const value = group[field];
   if (getAppLanguage() !== 'English') return value;
-  const template = INITIAL_GROUPS.find(seed => seed.id === group.id);
+  const template = [...INITIAL_GROUPS, OTHERS_GROUP].find(
+    seed => seed.id === group.id
+  );
   if (!template || template[field] !== value) return value;
   return ENGLISH_SEED_TEXT[value] ?? value;
 }

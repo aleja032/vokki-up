@@ -1432,36 +1432,16 @@
   @apply h-11 rounded-[10px] px-3.5 text-left text-[15px] font-medium text-(--ink) hover:bg-(--surface-muted);
 }
 
+.deck-menu button:disabled {
+  @apply cursor-not-allowed opacity-50 hover:bg-transparent;
+}
+
+.deck-menu__hint {
+  @apply px-3.5 pt-1 pb-2 text-[13px] leading-[1.4] text-(--ink-soft);
+}
+
 .deck-menu .deck-menu__danger {
   @apply font-semibold text-(--red-ink);
-}
-
-.deck-confirm {
-  @apply flex flex-col gap-4 rounded-[20px] bg-(--red-soft) p-5;
-}
-
-.deck-confirm__copy {
-  @apply flex min-w-0 flex-col gap-1 wrap-anywhere text-(--deck-danger-ink);
-}
-
-.deck-confirm__copy > span:first-child {
-  @apply text-[16px] font-bold;
-}
-
-.deck-confirm__copy > span:last-child {
-  @apply text-[14px] leading-[1.45];
-}
-
-.deck-confirm__actions {
-  @apply grid grid-cols-2 gap-3;
-}
-
-.deck-confirm__actions button {
-  @apply h-12 rounded-[14px] border-[1.5px] border-solid border-(--deck-danger-edge) bg-(--surface) px-4 text-[15px] font-semibold text-(--ink);
-}
-
-.deck-confirm__actions .deck-confirm__danger {
-  @apply border-0 bg-(--deck-danger) font-bold text-white;
 }
 
 .deck-hero {
@@ -1716,7 +1696,6 @@
 .deck-editor__cancel,
 .deck-editor__clear,
 .deck-screen__cancel,
-.deck-confirm__actions button:not(.deck-confirm__danger),
 .deck-field__link,
 .deck-editor__back,
 .deck-screen__back,
@@ -1729,10 +1708,6 @@
 .deck-choice__category,
 .deck-choice__tag,
 .deck-choice__group {
-  transition: var(--hover-transition);
-}
-
-.deck-confirm__danger {
   transition: var(--hover-transition);
 }
 
@@ -1816,15 +1791,6 @@
       [aria-current='page']
     ):hover,
   .deck-screen__cancel:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-confirm__actions
-    button:not(.deck-confirm__danger):not(
       :disabled,
       [aria-disabled='true'],
       [aria-pressed='true'],
@@ -1933,18 +1899,6 @@
     color: var(--indigo);
   }
 
-  .deck-confirm__danger:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover {
-    box-shadow: var(--hover-shadow);
-    transform: translateY(var(--lift-1));
-  }
-
   .deck-menu__danger:not(
       :disabled,
       [aria-disabled='true'],
@@ -1984,18 +1938,6 @@
       [aria-current='page']
     ):active,
   .deck-screen__submit:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):active {
-    box-shadow: none;
-    transform: none;
-  }
-
-  .deck-confirm__danger:not(
       :disabled,
       [aria-disabled='true'],
       [aria-pressed='true'],

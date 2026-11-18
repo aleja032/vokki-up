@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-// Static UI state for the group options menu and the delete confirmation.
-// It never mutates stored data: rename, recolor and delete are not wired yet.
+// UI state for the group options menu and the delete confirmation. It never
+// mutates stored data: deleting goes through the dashboard hook.
 export function useGroupActionsMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);

@@ -16,6 +16,8 @@ export const extraTranslations: Record<string, string> = {
   Intermedio: 'Intermediate',
   Avanzado: 'Advanced',
   'Quitar filtros': 'Clear filters',
+  'Elimina sus tarjetas para poder borrar este grupo.':
+    'Delete its cards to remove this group.',
   'No encontramos palabras con esos filtros.':
     'We found no words with those filters.',
 
@@ -379,17 +381,20 @@ export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
   [/^1 tarjeta seleccionada$/, '1 card selected'],
   [/^(\d+) tarjetas seleccionadas$/, '$1 cards selected'],
   [/^Seleccionar (.+)$/, 'Select $1'],
-  [/^¿Eliminar el grupo “(.+)”\?$/, 'Delete the group “$1”?'],
+  [
+    /^Se eliminará “(.+)”\. El grupo no tiene tarjetas\.$/,
+    '“$1” will be deleted. The group has no cards.'
+  ],
+  [
+    /^Se eliminará “(.+)”\. Su 1 tarjeta pasará a “Otros” y conserva su progreso\.$/,
+    '“$1” will be deleted. Its 1 card will move to “Others” and keeps its progress.'
+  ],
+  [
+    /^Se eliminará “(.+)”\. Sus (\d+) tarjetas pasarán a “Otros” y conservan su progreso\.$/,
+    '“$1” will be deleted. Its $2 cards will move to “Others” and keep their progress.'
+  ],
   [/^¿Eliminar estas (\d+) tarjetas\?$/, 'Delete these $1 cards?'],
   [/^¿Eliminar “(.+)”\?$/, 'Delete “$1”?'],
-  [
-    /^La 1 tarjeta no se borra: pasa a “Sin grupo” y conserva su progreso\.$/,
-    'The 1 card is not deleted: it moves to “No group” and keeps its progress.'
-  ],
-  [
-    /^Las (\d+) tarjetas no se borran: pasan a “Sin grupo” y conservan su progreso\.$/,
-    'The $1 cards are not deleted: they move to “No group” and keep their progress.'
-  ],
   [
     /^Ya escribiste (\d+) campos? que la IA sugiere distinto\. ¿Quieres reemplazarlos\?$/,
     'You already wrote $1 field(s) that AI suggests differently. Do you want to replace them?'
