@@ -1,0 +1,108 @@
+@reference 'tailwindcss';
+
+/* Zero-height sticky dock: the bar floats above the bottom navigation and
+   never pushes the content. The top margin leaves room for it at the end of
+   the list; the host sets --selection-dock-gap to its own flex/grid gap. */
+.selection-dock {
+  @apply sticky z-20 mt-28 h-0;
+  margin-bottom: calc(var(--selection-dock-gap, 1rem) * -1);
+  bottom: calc(77px + env(safe-area-inset-bottom) + 12px);
+}
+
+.selection-bar {
+  @apply absolute inset-x-0 bottom-0 flex flex-col gap-3 rounded-[18px] border border-solid border-(--line) bg-(--surface) p-3 shadow-[0_12px_32px_rgba(20,20,22,0.18)];
+  animation: selection-bar-in 200ms var(--ease-out);
+}
+
+.selection-bar__summary {
+  @apply flex items-center justify-between gap-2 px-1 text-[13px] font-semibold text-(--ink);
+}
+
+/* The summary may be a longer hint ("Toca las palabras..."): let it wrap
+   instead of pushing the toggle past the bar edge. */
+.selection-bar__summary > span {
+  @apply min-w-0 leading-snug;
+  text-wrap: balance;
+}
+
+.selection-bar__toggle {
+  @apply min-h-11 shrink-0 cursor-pointer rounded-[10px] border-0 bg-transparent px-1.5 text-[13px] font-semibold whitespace-nowrap text-(--indigo-strong);
+}
+
+.selection-bar__toggle:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+.selection-bar__actions {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.selection-bar__cancel,
+.selection-bar__primary {
+  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-[12px] border-[1.5px] border-solid bg-(--surface) px-3.5 text-sm font-semibold text-(--ink);
+}
+
+.selection-bar__primary {
+  @apply border-0 bg-(--indigo-strong) font-bold text-(--on-indigo);
+}
+
+.selection-bar__primary--danger {
+  @apply bg-(--red-ink);
+}
+
+.selection-bar__primary:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+.selection-bar__toggle:focus-visible,
+.selection-bar__cancel:focus-visible,
+.selection-bar__primary:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 3px;
+}
+
+.selection-bar__toggle,
+.selection-bar__cancel,
+.selection-bar__primary {
+  transition: var(--hover-transition);
+}
+
+@keyframes selection-bar-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (hover: hover) {
+  .selection-bar__cancel:hover,
+  .selection-bar__toggle:not(:disabled):hover {
+    @apply bg-(--indigo-soft);
+  }
+
+  .selection-bar__primary:not(:disabled):hover {
+    filter: brightness(1.08);
+  }
+}
+
+@media (min-width: 761px) {
+  .selection-dock {
+    bottom: 24px;
+  }
+
+  .selection-bar {
+    @apply left-1/2 w-[min(520px,100%)] -translate-x-1/2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .selection-bar {
+    animation: none;
+  }
+}
+
+/* --deck-edge is defined by the cards stylesheet; fall back to the line token
+   on routes that do not load it. */
+.selection-bar__cancel {
+  border-color: var(--deck-edge, var(--line));
+}

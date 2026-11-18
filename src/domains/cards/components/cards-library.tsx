@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, ListChecks, Trash2, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ListChecks, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
 import { paginateItems } from '../hooks/pagination';
@@ -8,6 +8,7 @@ import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
 import { DeckIcon } from './deck-icon';
+import { SelectionActionBar } from './selection-action-bar';
 import { VocabularyCardItem } from './vocabulary-card-item';
 import { translateText } from '@/lib/i18n/locale';
 
@@ -223,45 +224,21 @@ export function CardsLibrary({
         </nav>
       )}
       {isManaging && (
-        <div className="deck-library__dock">
-          <div
-            className="deck-library__manage-bar"
-            role="group"
-            aria-label={messages.manageCards}
-          >
-            <div className="deck-library__manage-summary">
-              <span aria-live="polite">
-                {messages.selectedCards(activeSelection.length)}
-              </span>
-              <button
-                className="deck-library__select-all"
-                onClick={toggleAllSelected}
-                type="button"
-              >
-                {isAllSelected ? messages.clearSelection : messages.selectAll}
-              </button>
-            </div>
-            <div className="deck-library__manage-actions">
-              <button
-                className="deck-library__cancel"
-                onClick={stopManaging}
-                type="button"
-              >
-                <X aria-hidden="true" size={18} />
-                {messages.cardDeleteCancel}
-              </button>
-              <button
-                className="deck-library__delete-selected"
-                disabled={!hasSelection}
-                onClick={() => setIsConfirmingDelete(true)}
-                type="button"
-              >
-                <Trash2 aria-hidden="true" size={18} />
-                {messages.deleteAction}
-              </button>
-            </div>
-          </div>
-        </div>
+        <SelectionActionBar
+          label={messages.manageCards}
+          summary={messages.selectedCards(activeSelection.length)}
+          toggleAllLabel={
+            isAllSelected ? messages.clearSelection : messages.selectAll
+          }
+          cancelLabel={messages.cardDeleteCancel}
+          primaryLabel={messages.deleteAction}
+          primaryIcon={<Trash2 aria-hidden="true" size={18} />}
+          primaryTone="danger"
+          primaryDisabled={!hasSelection}
+          onToggleAll={toggleAllSelected}
+          onCancel={stopManaging}
+          onPrimary={() => setIsConfirmingDelete(true)}
+        />
       )}
     </section>
   );

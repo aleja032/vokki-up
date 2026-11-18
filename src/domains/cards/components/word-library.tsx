@@ -1,18 +1,36 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, BookOpen, Check, LockKeyhole, Search } from 'lucide-react';
+import {
+  ArrowLeft,
+  BookOpen,
+  Check,
+  LockKeyhole,
+  Plus,
+  Search
+} from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { cn } from '@/lib/utils';
 import {
   ALL_WORD_LIBRARY_CATEGORIES,
+  ALL_WORD_LIBRARY_LEVELS,
+  countEntriesByCategory,
+  countEntriesByLevel,
   filterCatalogEntries,
   normalizeCatalogTerm,
   WORD_LIBRARY_CATEGORIES,
+  WORD_LIBRARY_LEVEL_LABELS,
+  WORD_LIBRARY_LEVELS,
   wordLibraryCatalog
 } from '../word-library/catalog';
-import type { WordLibraryCategory } from '../word-library/catalog';
-import type { CardGroup } from '../types';
+import type {
+  WordLibraryCategory,
+  WordLibraryEntry,
+  WordLibraryLevelFilter
+} from '../word-library/catalog';
 import { useCardsDashboard } from '../hooks/use-cards-dashboard';
+import { getDefaultGroupId } from '../word-library/default-groups';
+import { SelectionActionBar } from './selection-action-bar';
 import { createLocalizedMessages } from '@/lib/i18n/locale';
 import './word-library.css';
 
@@ -25,13 +43,24 @@ const messages = createLocalizedMessages({
   searchPlaceholder: 'Buscar palabra, significado o ejemplo…',
   categoriesLabel: 'Categorías de vocabulario',
   allCategories: ALL_WORD_LIBRARY_CATEGORIES,
+  levelsLabel: 'Nivel de inglés',
+  allLevels: 'Todos',
+  levelNames: WORD_LIBRARY_LEVEL_LABELS,
+  clearFilters: 'Quitar filtros',
+  emptyFiltered: 'No encontramos palabras con esos filtros.',
   resultCount: (count: number) =>
     `${count} ${count === 1 ? 'palabra disponible' : 'palabras disponibles'}`,
-  selectWords: (count: number) =>
-    `${count} ${count === 1 ? 'seleccionada' : 'seleccionadas'}`,
-  addSelected: 'Agregar seleccionadas',
-  clearSelection: 'Deseleccionar todo',
-  selectionCleared: 'Se deseleccionaron todas las palabras.',
+  addMode: 'Agregar palabras',
+  addBarLabel: 'Agregar palabras',
+  selectedWords: (count: number) =>
+    count === 0
+      ? 'Toca las palabras que quieras agregar'
+      : `${count} ${count === 1 ? 'palabra seleccionada' : 'palabras seleccionadas'}`,
+  selectAll: 'Seleccionar todas',
+  clearSelection: 'Quitar selección',
+  cancelAdd: 'Cancelar',
+  addAction: (count: number) => `Agregar ${count}`,
+  selectWord: (term: string) => `Seleccionar ${term}`,
   addResult: (added: number, duplicates: number) => {
     const parts = [];
     if (added > 0)
@@ -47,15 +76,10 @@ const messages = createLocalizedMessages({
     return parts.join('. ');
   },
   empty: 'No encontramos palabras con esa búsqueda.',
-  noGroupsTitle: 'Crea un grupo para guardar palabras',
-  noGroupsBody:
-    'Tus palabras se guardan en grupos propios. Crea uno y vuelve para añadirlas.',
-  createGroup: 'Volver para crear un grupo',
   loading: 'Cargando tus grupos…',
   pronunciation: 'Pronunciación',
   example: 'Ejemplo',
   alreadyInLibrary: 'Ya está en tus tarjetas',
-  chooseWordsFirst: 'Selecciona al menos una palabra.',
   previousPage: 'Anterior',
   nextPage: 'Siguiente',
   paginationLabel: 'Paginación de palabras',
@@ -63,22 +87,20 @@ const messages = createLocalizedMessages({
     `Página ${page} de ${pageCount}`
 });
 
-const DEFAULT_GROUP_IDS: Record<WordLibraryCategory, string> = {
-  Trabajo: 'work',
-  Viajes: 'travel',
-  'Día a día': 'daily',
-  'Frases útiles': 'phrases'
-};
+// Kept for callers that import the routing helper from this module.
+export { getDefaultGroupId };
 
-export function getDefaultGroupId(
-  category: WordLibraryCategory,
-  groups: readonly CardGroup[]
-) {
-  const id = DEFAULT_GROUP_IDS[category];
-  const matchingName = groups.find(group => group.name === category);
-  if (matchingName) return matchingName.id;
-  return groups.some(group => group.id === id) ? id : undefined;
-}
+const LEVEL_OPTIONS: readonly WordLibraryLevelFilter[] = [
+  ALL_WORD_LIBRARY_LEVELS,
+  ...WORD_LIBRARY_LEVELS
+];
+
+type CategoryFilter = WordLibraryCategory | typeof ALL_WORD_LIBRARY_CATEGORIES;
+
+const CATEGORY_OPTIONS: readonly CategoryFilter[] = [
+  ALL_WORD_LIBRARY_CATEGORIES,
+  ...WORD_LIBRARY_CATEGORIES
+];
 
 export const WORD_LIBRARY_PAGE_SIZE = 24;
 
@@ -102,41 +124,161 @@ export function sortWordLibraryEntries<T extends { term: string }>(
   );
 }
 
+type WordLibraryEntryCardProps = {
+  entry: WordLibraryEntry;
+  isAdding: boolean;
+  isSelected: boolean;
+  isAlreadyAdded: boolean;
+  showLevel: boolean;
+  onToggleSelect: (entryId: string) => void;
+};
+
+export function WordLibraryEntryCard({
+  entry,
+  isAdding,
+  isSelected,
+  isAlreadyAdded,
+  showLevel,
+  onToggleSelect
+}: WordLibraryEntryCardProps) {
+  const isSelectable = isAdding && !isAlreadyAdded;
+
+  return (
+    <article
+      className="word-library__entry"
+      data-adding={isAdding}
+      data-selected={isSelected}
+      data-existing={isAlreadyAdded}
+    >
+      {isSelectable && (
+        <>
+          <button
+            aria-checked={isSelected}
+            aria-label={messages.selectWord(entry.term)}
+            className="word-library__select"
+            onClick={() => onToggleSelect(entry.id)}
+            role="checkbox"
+            type="button"
+          />
+          <span className="word-library__check" aria-hidden="true">
+            <Check size={14} strokeWidth={3} />
+          </span>
+        </>
+      )}
+      <div className="word-library__entry-heading">
+        <h2 className="word-library__entry-term">{entry.term}</h2>
+        <span className="word-library__category">{entry.category}</span>
+        {showLevel && (
+          <span className="word-library__level-tag">
+            {messages.levelNames[entry.level]}
+          </span>
+        )}
+      </div>
+      <p className="word-library__meaning">{entry.meaning}</p>
+      <p className="word-library__phonetics">
+        <span>{messages.pronunciation}</span> {entry.phonetics}
+      </p>
+      <p className="word-library__example">
+        <span>{messages.example}</span> “{entry.example}”
+      </p>
+      {isAlreadyAdded && (
+        <p className="word-library__existing">
+          <LockKeyhole aria-hidden="true" size={14} />
+          {messages.alreadyInLibrary}
+        </p>
+      )}
+    </article>
+  );
+}
+
 export function WordLibrary() {
   const dashboard = useCardsDashboard();
-  const [category, setCategory] = useState(ALL_WORD_LIBRARY_CATEGORIES);
+  const [category, setCategory] = useState<CategoryFilter>(
+    ALL_WORD_LIBRARY_CATEGORIES
+  );
+  const [level, setLevel] = useState<WordLibraryLevelFilter>(
+    ALL_WORD_LIBRARY_LEVELS
+  );
   const [searchText, setSearchText] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [announcement, setAnnouncement] = useState('');
   const [page, setPage] = useState(1);
   const existingTerms = useMemo(
-    () =>
-      new Set(
-        dashboard.cards.map(card => normalizeCatalogTerm(card.term))
-      ),
+    () => new Set(dashboard.cards.map(card => normalizeCatalogTerm(card.term))),
     [dashboard.cards]
   );
 
   const filteredEntries = useMemo(
     () =>
       sortWordLibraryEntries(
-        filterCatalogEntries(wordLibraryCatalog, category, searchText),
+        filterCatalogEntries(wordLibraryCatalog, category, searchText, level),
         existingTerms
       ),
-    [category, existingTerms, searchText]
+    [category, existingTerms, level, searchText]
   );
+  const levelCounts = useMemo(
+    () => countEntriesByLevel(wordLibraryCatalog),
+    []
+  );
+  const categoryCounts = useMemo(
+    () => countEntriesByCategory(wordLibraryCatalog, level),
+    [level]
+  );
+  const hasActiveFilters =
+    level !== ALL_WORD_LIBRARY_LEVELS ||
+    category !== ALL_WORD_LIBRARY_CATEGORIES ||
+    searchText.trim() !== '';
   const pageCount = Math.max(
     1,
     Math.ceil(filteredEntries.length / WORD_LIBRARY_PAGE_SIZE)
   );
   const currentPage = Math.min(page, pageCount);
   const pageEntries = paginateWordLibraryEntries(filteredEntries, currentPage);
-  const selectedEntries = wordLibraryCatalog.filter(entry =>
-    selectedIds.includes(entry.id)
+  const addableEntries = filteredEntries.filter(
+    entry => !existingTerms.has(normalizeCatalogTerm(entry.term))
   );
-  const hasSelectedGroup = selectedEntries.every(entry =>
-    getDefaultGroupId(entry.category, dashboard.groups)
+  const addableIds = new Set(addableEntries.map(entry => entry.id));
+  const activeSelection = selectedIds.filter(id => addableIds.has(id));
+  const isAllSelected =
+    addableEntries.length > 0 &&
+    activeSelection.length === addableEntries.length;
+  const selectedEntries = addableEntries.filter(entry =>
+    activeSelection.includes(entry.id)
   );
+
+  function resetSelection() {
+    setPage(1);
+    setSelectedIds([]);
+    setAnnouncement('');
+  }
+
+  function changeLevel(next: WordLibraryLevelFilter) {
+    resetSelection();
+    setLevel(next);
+  }
+
+  function changeCategory(next: CategoryFilter) {
+    resetSelection();
+    setCategory(next);
+  }
+
+  function clearFilters() {
+    resetSelection();
+    setLevel(ALL_WORD_LIBRARY_LEVELS);
+    setCategory(ALL_WORD_LIBRARY_CATEGORIES);
+    setSearchText('');
+  }
+
+  function startAdding() {
+    setAnnouncement('');
+    setIsAdding(true);
+  }
+
+  function stopAdding() {
+    setIsAdding(false);
+    setSelectedIds([]);
+  }
 
   function toggleEntry(entryId: string) {
     setSelectedIds(current =>
@@ -144,34 +286,19 @@ export function WordLibrary() {
         ? current.filter(id => id !== entryId)
         : [...current, entryId]
     );
-    setAnnouncement('');
+  }
+
+  function toggleAllSelected() {
+    setSelectedIds(isAllSelected ? [] : addableEntries.map(entry => entry.id));
   }
 
   function addSelectedEntries() {
-    if (selectedEntries.length === 0) {
-      setAnnouncement(messages.chooseWordsFirst);
-      return;
-    }
-
-    const entriesByGroup = new Map<string, typeof selectedEntries>();
-    for (const entry of selectedEntries) {
-      const groupId = getDefaultGroupId(entry.category, dashboard.groups);
-      if (!groupId) continue;
-      entriesByGroup.set(groupId, [
-        ...(entriesByGroup.get(groupId) ?? []),
-        entry
-      ]);
-    }
-
-    let added = 0;
-    let duplicates = 0;
-    for (const [groupId, entries] of entriesByGroup) {
-      const result = dashboard.addWordLibraryEntries(entries, groupId);
-      added += result.added.length;
-      duplicates += result.duplicates.length;
-    }
-    setAnnouncement(messages.addResult(added, duplicates));
-    setSelectedIds([]);
+    if (selectedEntries.length === 0) return;
+    const result = dashboard.addWordLibraryEntries(selectedEntries);
+    setAnnouncement(
+      messages.addResult(result.added.length, result.duplicates.length)
+    );
+    stopAdding();
   }
 
   if (!dashboard.isLibraryReady) {
@@ -182,26 +309,8 @@ export function WordLibrary() {
     );
   }
 
-  if (dashboard.groups.length === 0) {
-    return (
-      <section className="word-library" aria-labelledby="word-library-title">
-        <Link className="word-library__back" href="/cards">
-          <ArrowLeft size={18} aria-hidden="true" />
-          {messages.back}
-        </Link>
-        <header className="word-library__header">
-          <h1 id="word-library-title">{messages.noGroupsTitle}</h1>
-          <p>{messages.noGroupsBody}</p>
-        </header>
-        <Link className="word-library__create-group" href="/cards">
-          {messages.createGroup}
-        </Link>
-      </section>
-    );
-  }
-
   return (
-    <div className="word-library" aria-labelledby="word-library-title">
+    <div className="word-library" data-adding={isAdding}>
       <Link className="word-library__back" href="/cards">
         <ArrowLeft size={18} aria-hidden="true" />
         {messages.back}
@@ -233,39 +342,72 @@ export function WordLibrary() {
                 placeholder={messages.searchPlaceholder}
               />
             </label>
-            <aside
-              className="word-library__add-bar"
-              aria-label={messages.addSelected}
+            <button
+              className="word-library__add-toggle"
+              type="button"
+              inert={isAdding}
+              onClick={startAdding}
             >
-              <button
-                type="button"
-                onClick={addSelectedEntries}
-                disabled={selectedIds.length === 0 || !hasSelectedGroup}
-                aria-label={`${messages.addSelected}: ${messages.selectWords(selectedIds.length)}`}
-              >
-                {messages.addSelected}
-                <span
-                  className="word-library__selected-count"
-                  aria-hidden="true"
-                >
-                  {selectedIds.length}
-                </span>
-              </button>
-            </aside>
+              <Plus aria-hidden="true" size={18} />
+              {messages.addMode}
+            </button>
           </div>
-          {selectedIds.length > 0 && (
-            <div className="word-library__selection-actions">
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedIds([]);
-                  setAnnouncement(messages.selectionCleared);
-                }}
-              >
-                {messages.clearSelection}
-              </button>
+          <div className="word-library__filters">
+            <div
+              className="word-library__levels"
+              role="group"
+              aria-label={messages.levelsLabel}
+            >
+              {LEVEL_OPTIONS.map(item => (
+                <button
+                  key={item}
+                  type="button"
+                  className={cn(
+                    'word-library__level',
+                    item === ALL_WORD_LIBRARY_LEVELS &&
+                      'word-library__level--reset'
+                  )}
+                  aria-pressed={level === item}
+                  onClick={() => changeLevel(item)}
+                >
+                  <span>
+                    {item === ALL_WORD_LIBRARY_LEVELS
+                      ? messages.allLevels
+                      : messages.levelNames[item]}
+                  </span>
+                  <span className="word-library__tally">
+                    {levelCounts[item]}
+                  </span>
+                </button>
+              ))}
             </div>
-          )}
+            <div
+              className="word-library__categories"
+              role="group"
+              aria-label={messages.categoriesLabel}
+            >
+              {CATEGORY_OPTIONS.map(item => (
+                <button
+                  key={item}
+                  type="button"
+                  className={cn(
+                    'word-library__chip',
+                    item === ALL_WORD_LIBRARY_CATEGORIES &&
+                      'word-library__chip--reset'
+                  )}
+                  aria-pressed={category === item}
+                  onClick={() => changeCategory(item)}
+                >
+                  {item === ALL_WORD_LIBRARY_CATEGORIES
+                    ? messages.allCategories
+                    : item}
+                  <span className="word-library__tally">
+                    {categoryCounts[item]}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="word-library__controls-row">
             <p className="word-library__count" aria-live="polite">
               {messages.resultCount(filteredEntries.length)}
@@ -304,95 +446,52 @@ export function WordLibrary() {
           >
             {announcement}
           </p>
-          <div
-            className="word-library__categories"
-            role="group"
-            aria-label={messages.categoriesLabel}
-          >
-            {[messages.allCategories, ...WORD_LIBRARY_CATEGORIES].map(item => (
-              <button
-                key={item}
-                type="button"
-                aria-pressed={category === item}
-                onClick={() => {
-                  setPage(1);
-                  setCategory(item);
-                }}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
         </div>
 
         <div className="word-library__list">
-          {pageEntries.map(entry => {
-            const isSelected = selectedIds.includes(entry.id);
-            const isAlreadyAdded = existingTerms.has(
-              normalizeCatalogTerm(entry.term)
-            );
-            const EntryWrapper = isAlreadyAdded ? 'div' : 'label';
-
-            return (
-              <EntryWrapper
-                className="word-library__entry"
-                key={entry.id}
-                data-selected={isSelected}
-                data-existing={isAlreadyAdded}
-              >
-                {isAlreadyAdded ? (
-                  <span
-                    className="word-library__locked"
-                    aria-label={messages.alreadyInLibrary}
-                  >
-                    <LockKeyhole aria-hidden="true" size={16} />
-                  </span>
-                ) : (
-                  <>
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleEntry(entry.id)}
-                      aria-label={`${entry.term}: ${entry.meaning}`}
-                    />
-                    <span className="word-library__check" aria-hidden="true">
-                      <Check size={15} />
-                    </span>
-                  </>
-                )}
-                <span className="word-library__entry-content">
-                  <span className="word-library__entry-heading">
-                    <span
-                      className="word-library__entry-term"
-                      role="heading"
-                      aria-level={2}
-                    >
-                      {entry.term}
-                    </span>
-                    <span className="word-library__category">
-                      {entry.category}
-                    </span>
-                  </span>
-                  <span className="word-library__meaning">{entry.meaning}</span>
-                  <span className="word-library__phonetics">
-                    <span>{messages.pronunciation}</span> {entry.phonetics}
-                  </span>
-                  <span className="word-library__example">
-                    <span>{messages.example}</span> “{entry.example}”
-                  </span>
-                  {isAlreadyAdded && (
-                    <span className="word-library__existing">
-                      {messages.alreadyInLibrary}
-                    </span>
-                  )}
-                </span>
-              </EntryWrapper>
-            );
-          })}
+          {pageEntries.map(entry => (
+            <WordLibraryEntryCard
+              key={entry.id}
+              entry={entry}
+              isAdding={isAdding}
+              isSelected={activeSelection.includes(entry.id)}
+              isAlreadyAdded={existingTerms.has(
+                normalizeCatalogTerm(entry.term)
+              )}
+              showLevel={level === ALL_WORD_LIBRARY_LEVELS}
+              onToggleSelect={toggleEntry}
+            />
+          ))}
           {filteredEntries.length === 0 && (
-            <p className="word-library__empty">{messages.empty}</p>
+            <div className="word-library__empty">
+              <p>
+                {hasActiveFilters ? messages.emptyFiltered : messages.empty}
+              </p>
+              {hasActiveFilters && (
+                <button type="button" onClick={clearFilters}>
+                  {messages.clearFilters}
+                </button>
+              )}
+            </div>
           )}
         </div>
+        {isAdding && (
+          <SelectionActionBar
+            label={messages.addBarLabel}
+            summary={messages.selectedWords(activeSelection.length)}
+            toggleAllLabel={
+              isAllSelected ? messages.clearSelection : messages.selectAll
+            }
+            toggleAllDisabled={addableEntries.length === 0}
+            cancelLabel={messages.cancelAdd}
+            primaryLabel={messages.addAction(activeSelection.length)}
+            primaryIcon={<Plus aria-hidden="true" size={18} />}
+            primaryDisabled={activeSelection.length === 0}
+            onToggleAll={toggleAllSelected}
+            onCancel={stopAdding}
+            onPrimary={addSelectedEntries}
+          />
+        )}
       </section>
     </div>
   );

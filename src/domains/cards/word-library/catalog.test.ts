@@ -1,12 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import {
   addCatalogEntries,
+  ALL_WORD_LIBRARY_CATEGORIES,
+  ALL_WORD_LIBRARY_LEVELS,
+  countEntriesByCategory,
+  countEntriesByLevel,
   filterCatalogEntries,
   normalizeCatalogTerm,
   WORD_LIBRARY_CATEGORIES,
+  WORD_LIBRARY_LEVELS,
   wordLibraryCatalog,
   type WordLibraryEntry
 } from './catalog';
+import { wordLibraryLevelById } from './catalog-levels';
 import type { VocabularyCard } from '../types';
 
 const baseCard: VocabularyCard = {
@@ -28,6 +34,7 @@ const entry: WordLibraryEntry = {
   example: 'I will follow up with you tomorrow.',
   partOfSpeech: 'Expresión',
   category: 'Trabajo',
+  level: 'intermediate',
   tags: ['work', 'communication']
 };
 
@@ -125,5 +132,94 @@ describe('word library catalog', () => {
       tags: ['work', 'communication', 'Trabajo']
     });
     expect(normalizeCatalogTerm('  Follow   Up  ')).toBe('follow up');
+  });
+
+  it('assigns a level to every entry with no unknown or missing ids', () => {
+    const catalogIds = new Set(wordLibraryCatalog.map(item => item.id));
+    const mappedIds = Object.keys(wordLibraryLevelById);
+
+    expect(mappedIds.filter(id => !catalogIds.has(id))).toEqual([]);
+    expect([...catalogIds].filter(id => !(id in wordLibraryLevelById))).toEqual(
+      []
+    );
+    for (const item of wordLibraryCatalog)
+      expect(WORD_LIBRARY_LEVELS, item.id).toContain(item.level);
+  });
+
+  it('keeps every category and level bucket populated', () => {
+    for (const category of WORD_LIBRARY_CATEGORIES)
+      for (const level of WORD_LIBRARY_LEVELS)
+        expect(
+          filterCatalogEntries(wordLibraryCatalog, category, '', level).length,
+          `${category} / ${level}`
+        ).toBeGreaterThan(0);
+  });
+
+  it('counts entries per level and per category inside a level', () => {
+    const byLevel = countEntriesByLevel(wordLibraryCatalog);
+    expect(byLevel[ALL_WORD_LIBRARY_LEVELS]).toBe(800);
+    expect(
+      WORD_LIBRARY_LEVELS.reduce((total, level) => total + byLevel[level], 0)
+    ).toBe(800);
+
+    const workByLevel = countEntriesByLevel(wordLibraryCatalog, 'Trabajo');
+    expect(workByLevel[ALL_WORD_LIBRARY_LEVELS]).toBe(200);
+
+    const basicByCategory = countEntriesByCategory(wordLibraryCatalog, 'basic');
+    expect(basicByCategory[ALL_WORD_LIBRARY_CATEGORIES]).toBe(byLevel.basic);
+    expect(
+      WORD_LIBRARY_CATEGORIES.reduce(
+        (total, category) => total + basicByCategory[category],
+        0
+      )
+    ).toBe(byLevel.basic);
+    expect(
+      countEntriesByCategory(wordLibraryCatalog, ALL_WORD_LIBRARY_LEVELS)[
+        ALL_WORD_LIBRARY_CATEGORIES
+      ]
+    ).toBe(800);
+  });
+
+  it('filters by level, category and search together', () => {
+    const advancedTravel = filterCatalogEntries(
+      wordLibraryCatalog,
+      'Viajes',
+      '',
+      'advanced'
+    );
+    expect(advancedTravel.length).toBeGreaterThan(0);
+    expect(
+      advancedTravel.every(
+        item => item.category === 'Viajes' && item.level === 'advanced'
+      )
+    ).toBe(true);
+
+    const term = advancedTravel[0].term;
+    expect(
+      filterCatalogEntries(wordLibraryCatalog, 'Viajes', term, 'advanced').map(
+        item => item.id
+      )
+    ).toContain(advancedTravel[0].id);
+    expect(
+      filterCatalogEntries(wordLibraryCatalog, 'Viajes', term, 'basic').map(
+        item => item.id
+      )
+    ).not.toContain(advancedTravel[0].id);
+  });
+
+  it('returns the whole catalog when both filters are reset', () => {
+    const all = filterCatalogEntries(
+      wordLibraryCatalog,
+      ALL_WORD_LIBRARY_CATEGORIES,
+      '',
+      ALL_WORD_LIBRARY_LEVELS
+    );
+    expect(all).toHaveLength(800);
+    expect(new Set(all.map(item => item.level))).toEqual(
+      new Set(WORD_LIBRARY_LEVELS)
+    );
+    expect(
+      filterCatalogEntries(wordLibraryCatalog, ALL_WORD_LIBRARY_CATEGORIES, '')
+    ).toHaveLength(800);
   });
 });

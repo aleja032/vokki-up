@@ -1,4 +1,26 @@
 import type { VocabularyCard } from '../types';
+import { wordLibraryLevelById } from './catalog-levels';
+
+export const WORD_LIBRARY_LEVELS = [
+  'basic',
+  'intermediate',
+  'advanced'
+] as const;
+
+export type WordLibraryLevel = (typeof WORD_LIBRARY_LEVELS)[number];
+
+export const WORD_LIBRARY_LEVEL_LABELS: Record<WordLibraryLevel, string> = {
+  basic: 'Básico',
+  intermediate: 'Intermedio',
+  advanced: 'Avanzado'
+};
+
+/** Filter reset: lists every level. Not a real level. */
+export const ALL_WORD_LIBRARY_LEVELS = 'all';
+
+export type WordLibraryLevelFilter =
+  | WordLibraryLevel
+  | typeof ALL_WORD_LIBRARY_LEVELS;
 
 export const WORD_LIBRARY_CATEGORIES = [
   'Trabajo',
@@ -18,6 +40,7 @@ export type WordLibraryEntry = {
   example: string;
   partOfSpeech: string;
   category: WordLibraryCategory;
+  level: WordLibraryLevel;
   tags: string[];
 };
 
@@ -37,14 +60,17 @@ function makeCatalogEntries(
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '');
 
+    const id = `${categoryId}-${slug}`;
+
     return {
-      id: `${categoryId}-${slug}`,
+      id,
       term,
       meaning,
       phonetics,
       example,
       partOfSpeech,
       category,
+      level: wordLibraryLevelById[id],
       tags: [categoryId]
     };
   });
@@ -909,16 +935,59 @@ export function normalizeCatalogTerm(value: string) {
     .toLocaleLowerCase();
 }
 
+function matchesLevel(entry: WordLibraryEntry, level: string) {
+  return level === ALL_WORD_LIBRARY_LEVELS || entry.level === level;
+}
+
+function matchesCategoryFilter(entry: WordLibraryEntry, category: string) {
+  return (
+    category === ALL_WORD_LIBRARY_CATEGORIES || entry.category === category
+  );
+}
+
+/** Entries per level (plus the reset total), for one category or all. */
+export function countEntriesByLevel(
+  entries: readonly WordLibraryEntry[],
+  category: string = ALL_WORD_LIBRARY_CATEGORIES
+) {
+  const scoped = entries.filter(entry =>
+    matchesCategoryFilter(entry, category)
+  );
+  const counts = {
+    [ALL_WORD_LIBRARY_LEVELS]: scoped.length
+  } as Record<WordLibraryLevelFilter, number>;
+  for (const level of WORD_LIBRARY_LEVELS)
+    counts[level] = scoped.filter(entry => entry.level === level).length;
+  return counts;
+}
+
+/** Entries per category (plus the reset total) inside one level or all. */
+export function countEntriesByCategory(
+  entries: readonly WordLibraryEntry[],
+  level: string = ALL_WORD_LIBRARY_LEVELS
+) {
+  const scoped = entries.filter(entry => matchesLevel(entry, level));
+  const counts = {
+    [ALL_WORD_LIBRARY_CATEGORIES]: scoped.length
+  } as Record<WordLibraryCategory | typeof ALL_WORD_LIBRARY_CATEGORIES, number>;
+  for (const category of WORD_LIBRARY_CATEGORIES)
+    counts[category] = scoped.filter(
+      entry => entry.category === category
+    ).length;
+  return counts;
+}
+
 export function filterCatalogEntries(
   entries: readonly WordLibraryEntry[],
   category: string,
-  searchText: string
+  searchText: string,
+  level: string = ALL_WORD_LIBRARY_LEVELS
 ) {
   const query = normalizeSearchValue(searchText.trim());
 
   return entries.filter(entry => {
     const matchesCategory =
-      category === ALL_WORD_LIBRARY_CATEGORIES || entry.category === category;
+      matchesCategoryFilter(entry, category) && matchesLevel(entry, level);
     const matchesSearch =
       !query ||
       [

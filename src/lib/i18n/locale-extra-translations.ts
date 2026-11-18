@@ -10,6 +10,15 @@ export const extraTranslations: Record<string, string> = {
   Expresión: 'Expression',
   'Verbo frasal': 'Phrasal verb',
 
+  // Word library levels
+  Todos: 'All',
+  Básico: 'Basic',
+  Intermedio: 'Intermediate',
+  Avanzado: 'Advanced',
+  'Quitar filtros': 'Clear filters',
+  'No encontramos palabras con esos filtros.':
+    'We found no words with those filters.',
+
   // Import / export
   'TUS DATOS, A TU MANERA': 'YOUR DATA, YOUR WAY',
   PORTABILIDAD: 'PORTABILITY',
@@ -255,6 +264,10 @@ export const extraTranslations: Record<string, string> = {
   // Delete confirmations
   '¿Eliminar esta tarjeta?': 'Delete this card?',
   'Quitar selección': 'Clear selection',
+  'Seleccionar todas': 'Select all',
+  Gestionar: 'Manage',
+  'Agregar palabras': 'Add words',
+  'Toca las palabras que quieras agregar': 'Tap the words you want to add',
   'Se eliminarán las tarjetas seleccionadas y se borrará su progreso de repaso.':
     'The selected cards will be deleted along with their review progress.',
   'Más opciones de la nota': 'More note options',
@@ -287,6 +300,12 @@ export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
     'You wrote too many words. The maximum is $1.'
   ],
   [/^Tarjetas de (.+)$/, 'Cards in $1'],
+  [/^Agregar (\d+)$/, 'Add $1'],
+  [/^1 palabra seleccionada$/, '1 word selected'],
+  [/^(\d+) palabras seleccionadas$/, '$1 words selected'],
+  [/^1 tarjeta seleccionada$/, '1 card selected'],
+  [/^(\d+) tarjetas seleccionadas$/, '$1 cards selected'],
+  [/^Seleccionar (.+)$/, 'Select $1'],
   [/^¿Eliminar el grupo “(.+)”\?$/, 'Delete the group “$1”?'],
   [/^¿Eliminar estas (\d+) tarjetas\?$/, 'Delete these $1 cards?'],
   [/^¿Eliminar “(.+)”\?$/, 'Delete “$1”?'],

@@ -24,11 +24,11 @@
 }
 
 .word-library__back:focus-visible,
-.word-library__create-group:focus-visible,
-.word-library__categories button:focus-visible,
-.word-library__entry:focus-within,
-.word-library__add-bar button:focus-visible,
-.word-library__selection-actions button:focus-visible {
+.word-library__level:focus-visible,
+.word-library__chip:focus-visible,
+.word-library__empty button:focus-visible,
+.word-library__add-toggle:focus-visible,
+.word-library__select:focus-visible {
   outline: 2px solid var(--indigo);
   outline-offset: 3px;
 }
@@ -75,6 +75,7 @@
 }
 
 .word-library__browser {
+  --selection-dock-gap: 18px;
   display: grid;
   min-width: 0;
   gap: 18px;
@@ -126,16 +127,83 @@
   color: var(--ink-faint);
 }
 
-.word-library__categories {
+.word-library__filters {
   display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 2px 2px 5px;
+  min-width: 0;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.word-library__categories button {
-  min-height: 38px;
-  flex: 0 0 auto;
+.word-library__levels {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  padding: 4px;
+}
+
+.word-library__level {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 52px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  padding: 0 4px;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.25;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.word-library__level--reset::after {
+  position: absolute;
+  inset-block: 14px;
+  inset-inline-end: -3px;
+  width: 1px;
+  background: var(--line);
+  content: '';
+}
+
+.word-library__level[aria-pressed='true'] {
+  background: var(--indigo-strong);
+  color: var(--ground);
+}
+
+.word-library__level[aria-pressed='true']::after {
+  display: none;
+}
+
+.word-library__tally {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.word-library__categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.word-library__chip {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 7px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--surface);
@@ -145,12 +213,33 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
 }
 
-.word-library__categories button[aria-pressed='true'] {
-  border-color: var(--ink);
-  background: var(--ink);
-  color: var(--ground);
+.word-library__chip--reset {
+  border-style: dashed;
+}
+
+.word-library__chip[aria-pressed='true'] {
+  border-style: solid;
+  border-color: var(--indigo-strong);
+  background: var(--indigo-soft);
+  color: var(--indigo-strong);
+}
+
+@media (hover: hover) {
+  .word-library__level[aria-pressed='false']:hover {
+    background: var(--indigo-soft);
+    color: var(--indigo-strong);
+  }
+
+  .word-library__chip[aria-pressed='false']:hover {
+    border-color: var(--indigo-strong);
+    color: var(--ink);
+  }
 }
 
 .word-library__controls-row {
@@ -176,91 +265,68 @@
 
 .word-library__entry {
   position: relative;
-  display: grid;
-  grid-template-columns: 28px minmax(0, 1fr);
-  align-items: start;
-  gap: 12px;
+  display: block;
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--surface);
   padding: 17px;
-  cursor: pointer;
   animation: word-library-entry-in 220ms ease-out both;
   transition:
     border-color 160ms ease,
     background-color 160ms ease,
-    transform 160ms ease;
-}
-
-.word-library__entry:hover:not([data-existing='true']) {
-  transform: translateY(-1px);
+    box-shadow 160ms ease;
 }
 
 .word-library__entry[data-existing='true'] {
   border-color: color-mix(in srgb, var(--line) 70%, var(--ink-faint));
   background: color-mix(in srgb, var(--surface) 90%, var(--ground));
-  cursor: not-allowed;
-}
-
-.word-library__locked {
-  display: grid;
-  width: 22px;
-  height: 22px;
-  place-items: center;
-  margin-top: 1px;
-  color: var(--ink-soft);
 }
 
 .word-library__entry[data-selected='true'] {
   border-color: var(--indigo-strong);
   background: color-mix(in srgb, var(--indigo-soft) 38%, var(--surface));
+  box-shadow: 0 0 0 1px var(--indigo-strong);
 }
 
-.word-library__entry > input {
+/* The whole card is the hit area while adding; it never changes size. */
+.word-library__select {
   position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  clip-path: inset(50%);
-  opacity: 0;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
 }
 
 .word-library__check {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  z-index: 1;
   display: grid;
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   place-items: center;
-  margin-top: 1px;
-  border: 1.5px solid var(--line);
-  border-radius: 6px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
   color: transparent;
+  pointer-events: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
 }
 
-.word-library__entry > input:checked + .word-library__check {
+.word-library__entry[data-selected='true'] .word-library__check {
   border-color: var(--indigo-strong);
   background: var(--indigo-strong);
   color: var(--ground);
   animation: word-library-check-in 180ms ease-out both;
-}
-
-.word-library__entry > input:focus-visible + .word-library__check {
-  outline: 2px solid var(--indigo);
-  outline-offset: 3px;
-}
-
-.word-library__entry:focus-within {
-  outline-offset: 3px;
-}
-
-.word-library__check svg {
-  pointer-events: none;
-}
-
-.word-library__entry-content {
-  display: block;
-  min-width: 0;
 }
 
 .word-library__entry-heading {
@@ -271,6 +337,7 @@
 }
 
 .word-library__entry-term {
+  margin: 0;
   font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -281,6 +348,15 @@
   background: var(--indigo-soft);
   padding: 4px 9px;
   color: var(--indigo-strong);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.word-library__level-tag {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 9px;
+  color: var(--ink-soft);
   font-size: 11px;
   font-weight: 700;
 }
@@ -308,7 +384,9 @@
 }
 
 .word-library__existing {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin: 8px 0 0;
   color: var(--indigo-strong);
   font-size: 12px;
@@ -368,16 +446,50 @@
   }
 }
 
+@media (hover: hover) {
+  .word-library__entry[data-adding='true']:not(
+      [data-existing='true'],
+      [data-selected='true']
+    ):hover {
+    border-color: var(--indigo-strong);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .word-library__entry,
-  .word-library__entry > input:checked + .word-library__check {
-    animation: none;
+  .word-library__level,
+  .word-library__chip,
+  .word-library__check {
     transition: none;
   }
 
-  .word-library__entry:hover:not([data-existing='true']) {
-    transform: none;
+  .word-library__entry,
+  .word-library__entry[data-selected='true'] .word-library__check {
+    animation: none;
+    transition: none;
   }
+}
+
+.word-library__empty p {
+  margin: 0;
+}
+
+.word-library__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.word-library__empty button {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: 0 16px;
+  color: var(--indigo-strong);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .word-library__empty,
@@ -390,67 +502,34 @@
   text-align: center;
 }
 
-.word-library__add-bar {
-  display: flex;
-  flex: 0 0 auto;
-}
-
-.word-library__add-bar button {
+/* The entry button keeps its slot while adding so the search row never shifts. */
+.word-library__add-toggle {
   display: inline-flex;
   min-height: 50px;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border: 0;
+  gap: 8px;
+  border: 1.5px solid var(--deck-edge, var(--line));
   border-radius: 14px;
-  background: var(--indigo-strong);
-  padding: 0 12px;
-  color: var(--ground);
+  background: var(--surface);
+  padding: 0 14px;
+  color: var(--ink);
   font: inherit;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
 }
 
-.word-library__add-bar button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
+.word-library__add-toggle[inert] {
+  visibility: hidden;
 }
 
-.word-library__selection-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.word-library__selection-actions button {
-  min-height: 36px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface);
-  padding: 0 12px;
-  color: var(--ink-soft);
-  font: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.word-library__selection-actions button:hover {
-  border-color: var(--indigo-strong);
-  color: var(--indigo-strong);
-}
-
-.word-library__selected-count {
-  display: grid;
-  min-width: 22px;
-  height: 22px;
-  place-items: center;
-  margin-inline-start: 7px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--ground) 22%, transparent);
-  padding-inline: 5px;
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
+@media (hover: hover) {
+  .word-library__add-toggle:hover {
+    background: var(--indigo-soft);
+  }
 }
 
 .word-library__announcement {
@@ -462,27 +541,11 @@
   white-space: nowrap;
 }
 
-.word-library__create-group {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  border-radius: 12px;
-  background: var(--indigo-strong);
-  padding: 0 17px;
-  color: var(--ground);
-  font: inherit;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.word-library__create-group {
-  width: fit-content;
-}
-
 @media (max-width: 420px) {
+  .word-library__level {
+    font-size: 12px;
+  }
+
   .word-library__search-row {
     gap: 6px;
   }
@@ -496,9 +559,9 @@
     font-size: 13px;
   }
 
-  .word-library__add-bar button {
-    padding-inline: 8px;
-    font-size: 12px;
+  .word-library__add-toggle {
+    padding-inline: 10px;
+    font-size: 13px;
   }
 
   .word-library__controls-row {
@@ -530,7 +593,7 @@
     align-items: start;
   }
 
-  .word-library__add-bar button {
+  .word-library__add-toggle {
     padding-inline: 16px;
   }
 }
