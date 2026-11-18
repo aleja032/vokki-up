@@ -235,6 +235,10 @@
   @apply flex flex-col gap-1 rounded-2xl bg-(--ground) px-4 py-3.5;
 }
 
+.drill-card__example {
+  --es-c: 12px;
+}
+
 .drill-card__sentence {
   @apply text-base leading-normal italic;
 }
@@ -255,10 +259,6 @@
 
 .drill-reveal__action {
   @apply h-14 rounded-2xl border-0 bg-(--indigo) px-6 text-base font-bold text-(--drill-on-indigo);
-}
-
-.drill-reveal__shortcut {
-  @apply hidden;
 }
 
 /* Ratings */
@@ -285,10 +285,6 @@
 
 .drill-rating__hint {
   @apply text-xs;
-}
-
-.drill-rating__key {
-  @apply hidden;
 }
 
 /* Session summary and empty state */
@@ -436,6 +432,10 @@
     @apply gap-1.5 rounded-[18px] px-5 py-[18px];
   }
 
+  .drill-card__example {
+    --es-c: 14px;
+  }
+
   .drill-card__sentence {
     @apply text-lg;
   }
@@ -450,14 +450,6 @@
 
   .drill-reveal__action {
     @apply h-[58px] w-full max-w-[420px];
-  }
-
-  .drill-reveal__shortcut {
-    @apply block text-[13px] text-(--ink-soft);
-  }
-
-  .drill-reveal__shortcut kbd {
-    @apply rounded-md border border-(--drill-edge) bg-(--surface) px-2 py-0.5 font-[inherit] text-xs;
   }
 
   .drill-ratings {
@@ -482,10 +474,6 @@
 
   .drill-rating__hint {
     @apply text-[13px];
-  }
-
-  .drill-rating__key {
-    @apply inline;
   }
 
   .drill-done {

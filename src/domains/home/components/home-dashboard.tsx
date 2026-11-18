@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Plus } from 'lucide-react';
+import { Library } from 'lucide-react';
 import { homeDashboardData } from '../data';
 import { deriveHomeDashboardData } from '../derive-home-dashboard-data';
 import type { HomeSummary } from '../home-summary.types';
@@ -46,9 +46,9 @@ export function HomeDashboard({ summary }: HomeDashboardProps) {
             ) : null}
           </p>
         </div>
-        <Link className="home-intro__action" href="/cards">
-          <Plus aria-hidden="true" size={18} strokeWidth={1.8} />
-          {copy.newCard}
+        <Link className="home-intro__action" href="/cards/word-library">
+          <Library aria-hidden="true" size={18} strokeWidth={1.8} />
+          {copy.addFromLibrary}
         </Link>
       </header>
       <div className="home-dashboard__featured">

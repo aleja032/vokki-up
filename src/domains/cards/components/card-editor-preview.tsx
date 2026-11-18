@@ -1,4 +1,6 @@
 import { cardsMessages } from '../messages';
+import { getExampleEs } from '../word-library/example-es';
+import { ExampleEsToggle } from './example-es-toggle';
 import { translateText } from '@/lib/i18n/locale';
 
 const messages = cardsMessages.cardEditor;
@@ -8,6 +10,7 @@ type CardEditorPreviewProps = {
   meaning: string;
   phonetics: string;
   example: string;
+  exampleEs: string;
   partOfSpeech: string;
   tags: string[];
 };
@@ -17,6 +20,7 @@ export function CardEditorPreview({
   meaning,
   phonetics,
   example,
+  exampleEs,
   partOfSpeech,
   tags
 }: CardEditorPreviewProps) {
@@ -53,7 +57,17 @@ export function CardEditorPreview({
             {trimmedMeaning || messages.previewMeaningFallback}
           </span>
           {trimmedExample && (
-            <span className="deck-preview__example">{example}</span>
+            <div className="deck-preview__example">
+              <ExampleEsToggle
+                sentence={getExampleEs({
+                  term,
+                  example: trimmedExample,
+                  exampleEs
+                })}
+              >
+                <span>{example}</span>
+              </ExampleEsToggle>
+            </div>
           )}
         </div>
       </div>

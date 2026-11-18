@@ -9,23 +9,24 @@ type AiCaptureStepsProps = {
   isMobileOnly?: boolean;
 };
 
-const STEP_LABELS = [
-  aiMessages.steps.add,
-  aiMessages.steps.review,
-  aiMessages.steps.save
-] as const;
-
 export function AiCaptureSteps({
   active,
   isWorking = false,
   isMobileOnly = false
 }: AiCaptureStepsProps) {
+  // Read at render time: module-level reads would freeze the Spanish text.
+  const stepLabels = [
+    aiMessages.steps.add,
+    aiMessages.steps.review,
+    aiMessages.steps.save
+  ] as const;
+
   return (
     <ol
       className={cn('aicap-steps', isMobileOnly && 'aicap-steps--mobile')}
       aria-label={aiMessages.frame.stepsLabel}
     >
-      {STEP_LABELS.map((label, index) => {
+      {stepLabels.map((label, index) => {
         const stepNumber = index + 1;
         const isCurrent = stepNumber === active;
         const isDone = stepNumber < active;

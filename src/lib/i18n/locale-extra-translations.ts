@@ -19,6 +19,21 @@ export const extraTranslations: Record<string, string> = {
   'No encontramos palabras con esos filtros.':
     'We found no words with those filters.',
 
+  // Home statistics: capitalized variants need their own exact entries, the
+  // substring fallback would leave "Words vistas" / "Racha actual" half Spanish.
+  'Racha actual': 'Current streak',
+  'Palabras vistas': 'Words seen',
+
+  '(opcional)': '(optional)',
+
+  // Optional Spanish example (review screen and card editor)
+  'Mostrar ejemplo en español': 'Show Spanish example',
+  'Ocultar ejemplo en español': 'Hide Spanish example',
+  'Ejemplo en español (opcional)': 'Spanish example (optional)',
+  'La misma frase, en español': 'The same sentence, in Spanish',
+  'El ejemplo en español supera los 160 caracteres.':
+    'The Spanish example exceeds 160 characters.',
+
   // Import / export
   'TUS DATOS, A TU MANERA': 'YOUR DATA, YOUR WAY',
   PORTABILIDAD: 'PORTABILITY',
@@ -275,6 +290,47 @@ export const extraTranslations: Record<string, string> = {
   'Esta nota se eliminará de tu biblioteca y no se puede recuperar.':
     'This note will be removed from your library and cannot be recovered.',
 
+  // Word library and navigation
+  Biblioteca: 'Library',
+  'Biblioteca de palabras': 'Word library',
+  'Explora vocabulario y guárdalo en tus grupos':
+    'Explore vocabulary and save it to your groups',
+  'Explora vocabulario en inglés y guarda cada palabra en su colección.':
+    'Explore English vocabulary and save each word to its collection.',
+  'Buscar en la biblioteca': 'Search the library',
+  'Buscar palabra, significado o ejemplo…': 'Search word, meaning, or example…',
+  'Categorías de vocabulario': 'Vocabulary categories',
+  'No encontramos palabras con esa búsqueda.':
+    'We found no words for that search.',
+  'Cargando tus grupos…': 'Loading your groups…',
+  'Ya está en tus tarjetas': 'Already in your cards',
+  'Paginación de palabras': 'Word pagination',
+  '1 palabra ya existe en tus tarjetas y no se añadió de nuevo':
+    '1 word already exists in your cards and was not added again',
+
+  'Guardado en este dispositivo': 'Saved on this device',
+  'Agregar vocabulario': 'Add vocabulary',
+  'Tarjetas repasadas esta semana': 'Cards reviewed this week',
+  'Estudiados esta semana': 'Studied this week',
+  Favoritas: 'Favorites',
+  Expresiones: 'Expressions',
+  Gramática: 'Grammar',
+  Cultura: 'Culture',
+  'Ej. take for granted': 'e.g. take for granted',
+  'Ej. oportunity, take for granted, reliable':
+    'e.g. opportunity, take for granted, reliable',
+  dominadas: 'mastered',
+
+  // Add flows
+  'Agregar desde la biblioteca': 'Add from the library',
+  'Ir a la biblioteca': 'Go to the library',
+  'Imagen y Palabras están bloqueadas': 'Image and Words are locked',
+  'Estos modos usan la IA. Actívala y configura tu API key en Ajustes. Mientras tanto puedes agregar a mano o desde la biblioteca.':
+    'These modes use AI. Turn it on and set your API key in Settings. Meanwhile you can add by hand or from the library.',
+  'Solo se crean las propuestas aceptadas':
+    'Only accepted suggestions are created',
+  Palabra: 'Word',
+
   // Home
   días: 'days',
   'Todo al día': 'All caught up',
@@ -283,6 +339,23 @@ export const extraTranslations: Record<string, string> = {
 
 // Interpolated messages: [Spanish pattern, English replacement].
 export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
+  [/^de (\d+) hoy$/, 'of $1 today'],
+  [/^(\d+) \/ (\d+) palabras o frases$/, '$1 / $2 words or phrases'],
+  [/^Repasar este grupo · (\d+)$/, 'Review this group · $1'],
+  [/^1 palabra disponible$/, '1 word available'],
+  [/^(\d+) palabras disponibles$/, '$1 words available'],
+  [
+    /^1 palabra agregada a sus colecciones$/,
+    '1 word added to your collections'
+  ],
+  [
+    /^(\d+) palabras agregadas a sus colecciones$/,
+    '$1 words added to your collections'
+  ],
+  [
+    /^(\d+) palabras ya existen en tus tarjetas y no se añadieron de nuevo$/,
+    '$1 words already exist in your cards and were not added again'
+  ],
   [
     /^Tienes (\d+) propuestas por revisar\.$/,
     'You have $1 suggestions to review.'

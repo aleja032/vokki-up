@@ -30,6 +30,8 @@
   --focus-ring: #4a3ac9;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --hover-duration: 150ms;
+  --enter-duration: 200ms;
+  --enter-distance: 6px;
   --hover-shadow: 0 6px 18px rgb(27 26 46 / 0.1);
   --lift-1: -1px;
   --lift-2: -2px;
@@ -281,7 +283,36 @@ a:focus-visible {
   font-size: 11px;
 }
 
+/* Enter motion: opacity plus a small rise, paint-only (no layout shift).
+   --enter-delay lets a list stagger its first items. */
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes enter-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--enter-distance));
+  }
+}
+
+.enter-fade {
+  animation: enter-fade var(--enter-duration) var(--ease-out) backwards;
+}
+
+.enter-rise {
+  animation: enter-rise var(--enter-duration) var(--ease-out)
+    var(--enter-delay, 0ms) backwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .enter-fade,
+  .enter-rise {
+    animation: none;
+  }
+
   *,
   *::before,
   *::after {

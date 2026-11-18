@@ -65,7 +65,7 @@ export const INITIAL_CARDS: VocabularyCard[] = [
     phonetics: '/kætʃ ʌp/',
     example: 'Let’s catch up over coffee next week.',
     partOfSpeech: 'Verbo frasal',
-    groupId: 'work',
+    groupId: 'daily',
     tags: ['phrases']
   },
   {
@@ -149,3 +149,15 @@ export const INITIAL_CARDS: VocabularyCard[] = [
     tags: ['work', 'phrases']
   }
 ];
+
+/** Groups every first run starts with; "Frases útiles" is created on demand. */
+const STARTER_GROUP_IDS = ['work', 'travel', 'daily'];
+
+export const STARTER_GROUPS: CardGroup[] = INITIAL_GROUPS.filter(group =>
+  STARTER_GROUP_IDS.includes(group.id)
+);
+
+/** Starter cards: only the ones that belong to a starter group (no orphans). */
+export const STARTER_CARDS: VocabularyCard[] = INITIAL_CARDS.filter(card =>
+  STARTER_GROUPS.some(group => group.id === card.groupId)
+);

@@ -5,9 +5,12 @@ import {
   getCardLearningState,
   getDueDayOffset
 } from '../card-learning-state';
+import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardSchedule } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
+import { getExampleEs } from '../word-library/example-es';
+import { ExampleEsToggle } from './example-es-toggle';
 import { translateText } from '@/lib/i18n/locale';
 
 const { learningState: stateMessages, dueLabel, overview } = cardsMessages;
@@ -77,15 +80,23 @@ export function VocabularyCardItem({
           </span>
         </>
       )}
-      <p className="deck-card__meaning">{card.meaning}</p>
-      {card.example && <p className="deck-card__example">{card.example}</p>}
+      <div className="deck-card__body">
+        <p className="deck-card__meaning">{card.meaning}</p>
+        {card.example && (
+          <div className="deck-card__example">
+            <ExampleEsToggle key={card.id} sentence={getExampleEs(card)}>
+              <p className="deck-card__example-text">{card.example}</p>
+            </ExampleEsToggle>
+          </div>
+        )}
+      </div>
       <div className="deck-card__footer">
         <span className="deck-card__group" data-tone={group?.tone ?? 'neutral'}>
           <span
             className="deck-card__group-name"
-            title={group?.name ?? overview.noGroup}
+            title={group ? getGroupDisplayName(group) : overview.noGroup}
           >
-            {group?.name ?? overview.noGroup}
+            {group ? getGroupDisplayName(group) : overview.noGroup}
           </span>
         </span>
         <div

@@ -3,10 +3,15 @@
 import Link from 'next/link';
 import { getCardLearningState } from '../card-learning-state';
 import { useGroupActionsMenu } from '../hooks/use-group-actions-menu';
+import {
+  getGroupDisplayName,
+  getGroupDisplayDescription
+} from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
 import { DeckIcon } from './deck-icon';
+import { GroupAddActions } from './group-add-actions';
 
 const messages = cardsMessages.groupDetail;
 const stateMessages = cardsMessages.learningState;
@@ -96,7 +101,7 @@ export function GroupDetail({
           >
             <div className="deck-confirm__copy">
               <span id="group-delete-title">
-                {messages.deleteTitle(group.name)}
+                {messages.deleteTitle(getGroupDisplayName(group))}
               </span>
               <span>{messages.deleteBody(cards.length)}</span>
             </div>
@@ -120,8 +125,10 @@ export function GroupDetail({
               <DeckIcon name="folder" size={26} />
             </span>
             <div>
-              <h1 id="group-detail-title">{group.name}</h1>
-              {group.description && <span>{group.description}</span>}
+              <h1 id="group-detail-title">{getGroupDisplayName(group)}</h1>
+              {group.description && (
+                <span>{getGroupDisplayDescription(group)}</span>
+              )}
             </div>
           </div>
           <div className="deck-hero__stats">
@@ -148,10 +155,9 @@ export function GroupDetail({
         </section>
         <div className="deck-screen__list-heading">
           <h2>{messages.listTitle}</h2>
-          <button type="button" onClick={onAddCard}>
-            <DeckIcon name="plus" size={16} />
-            {messages.add}
-          </button>
+          {cards.length > 0 && (
+            <GroupAddActions variant="header" onAdd={onAddCard} />
+          )}
         </div>
         {cards.length ? (
           <div className="deck-group-cards">
@@ -178,10 +184,7 @@ export function GroupDetail({
             <DeckIcon name="folder" size={23} />
             <h3>{messages.emptyTitle}</h3>
             <p>{messages.emptyBody}</p>
-            <button type="button" onClick={onAddCard}>
-              <DeckIcon name="plus" size={16} />
-              {messages.emptyAction}
-            </button>
+            <GroupAddActions variant="empty" onAdd={onAddCard} />
           </div>
         )}
       </div>

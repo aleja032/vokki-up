@@ -265,7 +265,8 @@
 
 .word-library__entry {
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: 16px;
@@ -377,6 +378,15 @@
   line-height: 1.5;
 }
 
+.word-library__entry .es-toggle__sentence {
+  font-size: 13px;
+}
+
+.word-library__entry .es-toggle {
+  --es-c: 17px;
+  margin-top: 0;
+}
+
 .word-library__phonetics span,
 .word-library__example span {
   color: var(--ink);
@@ -387,7 +397,8 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin: 8px 0 0;
+  margin: auto 0 0;
+  padding-top: 8px;
   color: var(--indigo-strong);
   font-size: 12px;
   font-weight: 700;
@@ -590,7 +601,6 @@
 
   .word-library__list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
   }
 
   .word-library__add-toggle {

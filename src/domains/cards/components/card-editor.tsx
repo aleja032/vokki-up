@@ -12,6 +12,7 @@ import {
   useCardEditorAutofill,
   type CardEditorAutofill
 } from '../hooks/use-card-editor-autofill';
+import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardGroup, VocabularyCard } from '../types';
 import { CardEditorAutofill as CardEditorAutofillPanel } from './card-editor-autofill';
@@ -94,6 +95,8 @@ export function CardEditor({
   });
   const exampleLength = values.example.length;
   const isExampleTooLong = exampleLength > CARD_EXAMPLE_MAX_LENGTH;
+  const exampleEsLength = values.exampleEs.length;
+  const isExampleEsTooLong = exampleEsLength > CARD_EXAMPLE_MAX_LENGTH;
   const isPronunciationLocaleValid = isPronunciationLocale(pronunciationLocale);
 
   return (
@@ -189,6 +192,7 @@ export function CardEditor({
             meaning={values.meaning}
             phonetics={values.phonetics}
             example={values.example}
+            exampleEs={values.exampleEs}
             partOfSpeech={values.partOfSpeech}
             tags={activeTags}
           />
@@ -306,6 +310,32 @@ export function CardEditor({
               )}
             </div>
             <div className="deck-field">
+              <div className="deck-field__row">
+                <label htmlFor="card-example-es">
+                  {messages.exampleEsLabel}
+                </label>
+                <span data-invalid={isExampleEsTooLong}>
+                  {messages.exampleCounter(exampleEsLength)}
+                </span>
+              </div>
+              <textarea
+                id="card-example-es"
+                className="deck-field__input deck-field__input--example"
+                rows={2}
+                placeholder={messages.exampleEsPlaceholder}
+                aria-invalid={Boolean(fieldErrors.exampleEs)}
+                aria-describedby={
+                  fieldErrors.exampleEs ? 'card-example-es-error' : undefined
+                }
+                {...register('exampleEs')}
+              />
+              {fieldErrors.exampleEs && (
+                <DeckFieldError id="card-example-es-error">
+                  {fieldErrors.exampleEs}
+                </DeckFieldError>
+              )}
+            </div>
+            <div className="deck-field">
               <label htmlFor="card-phonetics">{messages.phoneticsLabel}</label>
               <input
                 id="card-phonetics"
@@ -365,12 +395,14 @@ export function CardEditor({
                     data-tone={group.tone}
                     type="button"
                     key={group.id}
-                    title={group.name}
+                    title={getGroupDisplayName(group)}
                     aria-pressed={values.groupId === group.id}
                     onClick={() => selectGroup(group.id)}
                   >
                     <span />
-                    <span className="deck-choice__label">{group.name}</span>
+                    <span className="deck-choice__label">
+                      {getGroupDisplayName(group)}
+                    </span>
                   </button>
                 ))}
                 <button

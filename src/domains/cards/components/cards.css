@@ -427,7 +427,11 @@
 }
 
 .deck-groups__heading {
-  @apply flex items-center justify-between gap-3;
+  @apply flex flex-wrap items-center justify-between gap-3;
+}
+
+.deck-groups__actions {
+  @apply ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2;
 }
 
 .deck-groups__heading h2,
@@ -438,7 +442,7 @@
 
 .deck-groups__add,
 .deck-screen__list-heading button {
-  @apply inline-flex h-[43px] items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-[14px] font-semibold text-(--ink);
+  @apply inline-flex h-11 items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-[14px] font-semibold text-(--ink);
 }
 
 .deck-groups__list {
@@ -700,6 +704,31 @@
 
 .deck-card {
   @apply relative flex min-w-0 flex-col gap-3 rounded-[20px] border border-solid border-(--line) bg-(--surface) p-5;
+
+  animation: enter-rise var(--enter-duration) var(--ease-out)
+    var(--enter-delay, 0ms) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-card {
+    animation: none;
+  }
+}
+
+.deck-card:nth-child(2) {
+  --enter-delay: 30ms;
+}
+
+.deck-card:nth-child(3) {
+  --enter-delay: 60ms;
+}
+
+.deck-card:nth-child(4) {
+  --enter-delay: 90ms;
+}
+
+.deck-card:nth-child(n + 5) {
+  --enter-delay: 120ms;
 }
 
 .deck-card__top {
@@ -723,8 +752,20 @@
   overflow-wrap: anywhere;
 }
 
+.deck-card__body {
+  @apply flex min-w-0 flex-col gap-3;
+}
+
 .deck-card__meaning {
   @apply m-0 line-clamp-3 text-[15px] leading-[1.45] wrap-anywhere;
+}
+
+.deck-card__example-text {
+  @apply m-0;
+}
+
+.deck-card__example .es-toggle__sentence {
+  font-size: 14px;
 }
 
 .deck-card__example {
@@ -793,8 +834,14 @@
 }
 
 @media (min-width: 761px) {
+  /* Cards in one grid row share three subgrid rows (heading, body, footer),
+     so a two-line title or a longer body never shifts a neighbor. */
   .deck-card {
-    @apply gap-3.5 rounded-[22px] p-5.5;
+    @apply row-span-3 grid grid-rows-subgrid gap-3.5 rounded-[22px] p-5.5;
+  }
+
+  .deck-card__body {
+    @apply gap-3.5;
   }
 
   .deck-card__title h3 {
@@ -802,6 +849,10 @@
   }
 
   .deck-card__example {
+    @apply block;
+  }
+
+  .deck-card__example-text {
     @apply line-clamp-2;
   }
 
@@ -1098,6 +1149,10 @@
   @apply text-(--ink-faint);
 }
 
+.deck-preview__example .es-toggle__sentence {
+  font-size: 14px;
+}
+
 .deck-preview__example {
   @apply rounded-[12px] bg-(--ground) px-3.5 py-2.5 text-[14px] leading-normal text-(--ink-soft) italic;
 }
@@ -1282,6 +1337,19 @@
   @apply fixed inset-x-0 top-0 bottom-[calc(76px+env(safe-area-inset-bottom))] z-9 flex flex-col bg-(--ground);
 }
 
+/* Switching into a group screen eases in instead of snapping. */
+.deck-screen--form,
+.deck-screen--detail {
+  animation: enter-rise var(--enter-duration) var(--ease-out) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-screen--form,
+  .deck-screen--detail {
+    animation: none;
+  }
+}
+
 .deck-screen__header h1 {
   @apply m-0 flex-1 text-[18px] font-bold;
 }
@@ -1441,7 +1509,7 @@
 }
 
 .deck-screen__list-heading {
-  @apply flex items-center justify-between gap-3;
+  @apply flex flex-wrap items-center justify-between gap-3;
 }
 
 .deck-screen__list-heading h2 {
@@ -1498,6 +1566,26 @@
 
 .deck-group-empty p {
   @apply m-0 text-[14px];
+}
+
+.deck-library__group-actions {
+  @apply flex justify-end;
+}
+
+.deck-group-empty__actions {
+  @apply mt-2 flex flex-wrap items-center justify-center gap-2;
+}
+
+.deck-group-empty .deck-group-empty__actions button {
+  @apply mt-0 h-11;
+}
+
+.deck-screen__list-actions {
+  @apply ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2;
+}
+
+.deck-link-button {
+  @apply inline-flex h-11 items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-[14px] font-semibold whitespace-nowrap text-(--ink) no-underline;
 }
 
 .deck-group-empty button {
@@ -1585,6 +1673,32 @@
   .deck-editor--embedded .deck-editor__header,
   .deck-editor--embedded .deck-modes {
     @apply hidden;
+  }
+}
+
+/* Inside the add hub (mobile) the hub sheet owns the chrome; the editor flows inline. */
+
+@media (max-width: 760px) {
+  .deck-editor.deck-editor--embedded,
+  .deck-editor.deck-editor--embedded[data-open='true'] {
+    @apply static block bg-transparent;
+  }
+
+  .deck-editor--embedded .deck-editor__form {
+    @apply h-auto;
+  }
+
+  .deck-editor--embedded .deck-editor__header,
+  .deck-editor--embedded .deck-modes {
+    @apply hidden;
+  }
+
+  .deck-editor--embedded .deck-editor__body {
+    @apply overflow-visible p-0;
+  }
+
+  .deck-editor--embedded .deck-editor__footer {
+    @apply border-t-0 bg-transparent px-0 pt-4 pb-0;
   }
 }
 

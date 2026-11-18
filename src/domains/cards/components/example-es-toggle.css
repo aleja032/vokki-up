@@ -1,0 +1,95 @@
+/* Eye toggle that reveals the Spanish example next to an English example.
+   Plain declarations on purpose: this file does not rely on utility classes. */
+
+.es-toggle {
+  display: block;
+  min-width: 0;
+}
+
+.es-toggle__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.es-toggle__main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* 44x44 hit area around an 18px icon. Its margin box is zero tall, so the
+   toggle never changes the surrounding layout. */
+.es-toggle__button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  /* --es-c: distance from the row top to the middle of the first text line. */
+  margin: calc(var(--es-c, 10px) - 22px) -12px calc(-22px - var(--es-c, 10px)) 0;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-style: normal;
+  cursor: pointer;
+}
+
+.es-toggle__button:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: -2px;
+}
+
+.es-toggle[data-open='true'] .es-toggle__button {
+  color: var(--indigo);
+}
+
+@media (hover: hover) {
+  .es-toggle__button:hover {
+    color: var(--indigo);
+    background: var(--indigo-soft);
+  }
+}
+
+.es-toggle__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 200ms ease;
+}
+
+.es-toggle[data-open='true'] .es-toggle__panel {
+  grid-template-rows: 1fr;
+}
+
+.es-toggle__region {
+  display: block;
+  min-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s linear 200ms;
+}
+
+.es-toggle[data-open='true'] .es-toggle__region {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.es-toggle__sentence {
+  display: block;
+  padding-top: 6px;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .es-toggle__panel,
+  .es-toggle__region {
+    transition: none;
+  }
+}

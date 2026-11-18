@@ -56,6 +56,7 @@ export function useCardCreateSubmit({
       meaning: '',
       phonetics: '',
       example: '',
+      exampleEs: '',
       partOfSpeech: 'Sustantivo',
       groupId: initialGroupId ?? groups[0]?.id ?? '',
       tags: ''
@@ -67,6 +68,7 @@ export function useCardCreateSubmit({
     meaning: watched.meaning ?? '',
     phonetics: watched.phonetics ?? '',
     example: watched.example ?? '',
+    exampleEs: watched.exampleEs ?? '',
     partOfSpeech: watched.partOfSpeech ?? 'Sustantivo',
     groupId: watched.groupId ?? '',
     tags: watched.tags ?? ''
@@ -134,6 +136,7 @@ export function useCardCreateSubmit({
       meaning: '',
       phonetics: '',
       example: '',
+      exampleEs: '',
       tags: ''
     });
   }
@@ -141,7 +144,8 @@ export function useCardCreateSubmit({
   const fieldErrors = {
     term: errors.term?.message,
     meaning: errors.meaning?.message,
-    example: errors.example?.message
+    example: errors.example?.message,
+    exampleEs: errors.exampleEs?.message
   };
   const errorCount = Object.values(fieldErrors).filter(Boolean).length;
 

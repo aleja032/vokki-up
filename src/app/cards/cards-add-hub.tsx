@@ -1,7 +1,9 @@
 'use client';
 
+import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { cardsMessages } from '@/domains/cards/messages';
 import { AiCaptureReviewPanel } from '@/domains/ai/components/ai-capture-review-panel';
 import { AiCreatedPanel } from '@/domains/ai/components/ai-created-panel';
 import { AiCaptureSteps } from '@/domains/ai/components/ai-capture-steps';
@@ -20,8 +22,8 @@ import type { CardsAddPanelApi } from '@/domains/cards/components/cards-add-pane
 import { createCapturedCardsLibrary } from '@/domains/cards/persistence/captured-cards';
 import { addHubMessages } from './add-hub-messages';
 import { resolveHubMode, type AddHubMode } from './add-hub-modes';
-import { AiDisabledNotice } from './ai-disabled-notice';
 import {
+  ADD_HUB_NOTICE_ID,
   addHubPanelId,
   addHubTabId,
   AddHubModeTabs
@@ -60,7 +62,8 @@ export function CardsAddHub({ panel, initialMode }: CardsAddHubProps) {
       groups: panel.groups,
       isReady: panel.isLibraryReady,
       addCards: panel.onAddCards
-    })
+    }),
+    panel.initialGroupId
   );
   const autofill = useCardAutofill();
   const view = isResultOpen && flow.step !== 'add' ? flow.step : 'modes';
@@ -169,7 +172,7 @@ export function CardsAddHub({ panel, initialMode }: CardsAddHubProps) {
         isAiEnabled={isAiEnabled}
         onSelect={handleSelectMode}
       />
-      {!isAiEnabled && <AiDisabledNotice />}
+      {!isAiEnabled && <LockedModesNotice />}
       {mode !== 'manual' && (
         <div className="addhub__progress">
           <AiCaptureSteps active={activeStep} />
@@ -328,6 +331,27 @@ export function CardsAddHub({ panel, initialMode }: CardsAddHubProps) {
         </div>
       )}
     </section>
+  );
+}
+
+/** Explains why the AI modes are locked and where to go instead. */
+function LockedModesNotice() {
+  return (
+    <div
+      className="addhub__locked"
+      role="status"
+      id={ADD_HUB_NOTICE_ID}
+      tabIndex={-1}
+    >
+      <strong>{cardsMessages.addLocked.title}</strong>
+      <p>{cardsMessages.addLocked.body}</p>
+      <div className="addhub__locked-links">
+        <Link href="/settings">{messages.aiDisabled.settingsLink}</Link>
+        <Link href="/cards/word-library">
+          {cardsMessages.addLocked.libraryLink}
+        </Link>
+      </div>
+    </div>
   );
 }
 

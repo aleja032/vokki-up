@@ -1,10 +1,11 @@
 'use client';
 
-import { ImageUp, ListChecks, PencilLine } from 'lucide-react';
+import { ImageUp, ListChecks, Lock, PencilLine } from 'lucide-react';
 import type { KeyboardEvent } from 'react';
 import {
   ADD_HUB_MODES,
   getSelectableHubModes,
+  isHubModeLocked,
   type AddHubMode
 } from './add-hub-modes';
 import { addHubMessages } from './add-hub-messages';
@@ -19,6 +20,7 @@ const MODE_ICONS = {
 
 export const addHubTabId = (mode: AddHubMode) => `addhub-tab-${mode}`;
 export const addHubPanelId = (mode: AddHubMode) => `addhub-panel-${mode}`;
+export const ADD_HUB_NOTICE_ID = 'addhub-ai-notice';
 
 type AddHubModeTabsProps = {
   mode: AddHubMode;
@@ -26,7 +28,10 @@ type AddHubModeTabsProps = {
   onSelect: (mode: AddHubMode) => void;
 };
 
-/** Three-option selector: tabs with icon, short label and one-line description. */
+/**
+ * Three-option selector: tabs with icon, short label and one-line description.
+ * Locked AI modes stay visible with a lock; activating one explains why.
+ */
 export function AddHubModeTabs({
   mode,
   isAiEnabled,
@@ -50,6 +55,14 @@ export function AddHubModeTabs({
     document.getElementById(addHubTabId(next))?.focus();
   }
 
+  function handleClick(item: AddHubMode) {
+    if (!isHubModeLocked(item, isAiEnabled)) return onSelect(item);
+    // A locked mode cannot open: bring the explanation and its links forward.
+    const notice = document.getElementById(ADD_HUB_NOTICE_ID);
+    notice?.scrollIntoView({ block: 'nearest' });
+    notice?.focus();
+  }
+
   return (
     <div
       className="addhub__modes"
@@ -60,7 +73,10 @@ export function AddHubModeTabs({
       {ADD_HUB_MODES.map(item => {
         const Icon = MODE_ICONS[item];
         const isSelected = item === mode;
-        const isDisabled = !selectable.includes(item);
+        const isLocked = isHubModeLocked(item, isAiEnabled);
+        const hint = isLocked
+          ? messages.aiDisabled.tabHint
+          : messages.modes[item].hint;
         return (
           <button
             className="addhub__mode"
@@ -70,10 +86,10 @@ export function AddHubModeTabs({
             id={addHubTabId(item)}
             aria-selected={isSelected}
             aria-controls={addHubPanelId(item)}
+            aria-disabled={isLocked || undefined}
+            aria-describedby={isLocked ? ADD_HUB_NOTICE_ID : undefined}
             tabIndex={isSelected ? 0 : -1}
-            disabled={isDisabled}
-            title={isDisabled ? messages.aiDisabled.tabHint : undefined}
-            onClick={() => onSelect(item)}
+            onClick={() => handleClick(item)}
           >
             <span className="addhub__mode-icon" aria-hidden="true">
               <Icon size={20} strokeWidth={1.8} />
@@ -81,13 +97,19 @@ export function AddHubModeTabs({
             <span className="addhub__mode-copy">
               <strong title={messages.modes[item].label}>
                 {messages.modes[item].label}
-                {item !== 'manual' && (
+                {isLocked && (
+                  <Lock
+                    className="addhub__lock"
+                    size={12}
+                    strokeWidth={2.2}
+                    aria-hidden="true"
+                  />
+                )}
+                {!isLocked && item !== 'manual' && (
                   <span className="addhub__badge">{messages.badge}</span>
                 )}
               </strong>
-              <span title={messages.modes[item].hint}>
-                {messages.modes[item].hint}
-              </span>
+              <span title={hint}>{hint}</span>
             </span>
           </button>
         );
