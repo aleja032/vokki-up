@@ -8,5 +8,6 @@ export const cardsValidationMessages = createLocalizedMessages({
   cardTermDuplicate: (term: string) => `Ya tienes “${term}” en tu mazo.`,
   cardMeaningRequired: 'Escribe el significado en español.',
   cardExampleTooLong: 'El ejemplo supera los 160 caracteres.',
+  cardExampleEsTooLong: 'El ejemplo en español supera los 160 caracteres.',
   cardCategoryInvalid: 'Elige una categoría válida.'
 });

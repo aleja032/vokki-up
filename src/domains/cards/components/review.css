@@ -235,6 +235,10 @@
   @apply flex flex-col gap-1 rounded-2xl bg-(--ground) px-4 py-3.5;
 }
 
+.drill-card__example {
+  --es-c: 12px;
+}
+
 .drill-card__sentence {
   @apply text-base leading-normal italic;
 }
@@ -426,6 +430,10 @@
 
   .drill-card__example {
     @apply gap-1.5 rounded-[18px] px-5 py-[18px];
+  }
+
+  .drill-card__example {
+    --es-c: 14px;
   }
 
   .drill-card__sentence {

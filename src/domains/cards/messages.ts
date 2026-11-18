@@ -162,6 +162,8 @@ export const cardsMessages = createLocalizedMessages({
     exampleLabel: 'Ejemplo natural',
     examplePlaceholder: 'Una frase real donde la usarías',
     exampleCounter: (count: number) => `${count} / 160`,
+    exampleEsLabel: 'Ejemplo en español (opcional)',
+    exampleEsPlaceholder: 'La misma frase, en español',
     phoneticsLabel: 'Pronunciación',
     phoneticsPlaceholder: '/ɪɡˈzɑːm.pəl/',
     pronunciationLocaleLabel: 'Idioma de pronunciación (BCP 47)',
@@ -183,6 +185,10 @@ export const cardsMessages = createLocalizedMessages({
     cancel: 'Cancelar',
     clear: 'Limpiar',
     submit: 'Guardar tarjeta'
+  },
+  exampleEsToggle: {
+    show: 'Mostrar ejemplo en español',
+    hide: 'Ocultar ejemplo en español'
   },
   review: {
     loading: 'Preparando tu repaso…',

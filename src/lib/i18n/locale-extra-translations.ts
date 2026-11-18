@@ -19,6 +19,21 @@ export const extraTranslations: Record<string, string> = {
   'No encontramos palabras con esos filtros.':
     'We found no words with those filters.',
 
+  // Home statistics: capitalized variants need their own exact entries, the
+  // substring fallback would leave "Words vistas" / "Racha actual" half Spanish.
+  'Racha actual': 'Current streak',
+  'Palabras vistas': 'Words seen',
+
+  '(opcional)': '(optional)',
+
+  // Optional Spanish example (review screen and card editor)
+  'Mostrar ejemplo en español': 'Show Spanish example',
+  'Ocultar ejemplo en español': 'Hide Spanish example',
+  'Ejemplo en español (opcional)': 'Spanish example (optional)',
+  'La misma frase, en español': 'The same sentence, in Spanish',
+  'El ejemplo en español supera los 160 caracteres.':
+    'The Spanish example exceeds 160 characters.',
+
   // Import / export
   'TUS DATOS, A TU MANERA': 'YOUR DATA, YOUR WAY',
   PORTABILIDAD: 'PORTABILITY',

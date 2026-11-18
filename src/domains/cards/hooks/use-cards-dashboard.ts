@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { CARD_PARTS_OF_SPEECH } from '../card-create.schema';
+import { STARTER_CARDS, STARTER_GROUPS } from '../data';
 import { isCardList, isGroupList } from '../library-validators';
 import { cardsMessages } from '../messages';
 import { isMastered } from '../scheduling/mastery';
@@ -35,13 +36,13 @@ export type GroupView = 'overview' | 'new' | 'detail';
 export function useCardsDashboard() {
   const [cards, setCards, areCardsLoaded] = useTrackedBrowserState(
     'cards/library',
-    [],
+    STARTER_CARDS,
     isCardList,
     cardChanges
   );
   const [groups, setGroups, areGroupsLoaded] = useTrackedBrowserState(
     'cards/groups',
-    [],
+    STARTER_GROUPS,
     isGroupList,
     groupChanges
   );

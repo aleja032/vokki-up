@@ -11,6 +11,8 @@ import {
 import { cardsMessages } from '../messages';
 import type { CardRating, VocabularyCard } from '../types';
 import { REVIEW_RATINGS } from '../hooks/use-card-review';
+import { getExampleEs } from '../word-library/example-es';
+import { ExampleEsToggle } from './example-es-toggle';
 import { ReviewIcon } from './review-icon';
 import { normalizePronunciationLocale, translateText } from '@/lib/i18n/locale';
 
@@ -138,6 +140,7 @@ export function ReviewCardScreen({
   const lastAutoPlayCardId = useRef<string | null>(null);
   const previousRevealState = useRef({ cardId: card.id, isRevealed });
   const example = card.example ? splitExample(card.example, card.term) : null;
+  const exampleEs = getExampleEs(card);
 
   useLayoutEffect(() => {
     return () => {
@@ -267,11 +270,13 @@ export function ReviewCardScreen({
                 <span className="drill-card__label">
                   {messages.exampleLabel}
                 </span>
-                <span className="drill-card__sentence">
-                  {example.before}
-                  {example.match && <strong>{example.match}</strong>}
-                  {example.after}
-                </span>
+                <ExampleEsToggle key={card.id} sentence={exampleEs}>
+                  <span className="drill-card__sentence">
+                    {example.before}
+                    {example.match && <strong>{example.match}</strong>}
+                    {example.after}
+                  </span>
+                </ExampleEsToggle>
               </div>
             )}
           </div>

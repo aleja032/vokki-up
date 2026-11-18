@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Library } from 'lucide-react';
 import { ALL_GROUPS_ID } from '../hooks/use-cards-dashboard';
+import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardGroup } from '../types';
 import { DeckIcon } from './deck-icon';
@@ -84,14 +85,14 @@ export function CardGroupList({
             data-tone={group.tone}
             type="button"
             key={group.id}
-            title={group.name}
+            title={getGroupDisplayName(group)}
             onClick={() => onOpenGroup(group.id)}
           >
             <span className="deck-group__icon">
               <DeckIcon name="folder" size={18} />
             </span>
             <span className="deck-group__copy">
-              <strong>{group.name}</strong>
+              <strong>{getGroupDisplayName(group)}</strong>
               <span>{messages.groupMeta(cardCount, dueCount)}</span>
             </span>
           </button>
