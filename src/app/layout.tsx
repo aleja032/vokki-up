@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import {
-  DM_Sans as dmSansFont,
   Fraunces as frauncesFont,
-  Noto_Sans as notoSansFont
+  Noto_Sans as notoSansFont,
+  Pixelify_Sans as pixelifySansFont,
+  Plus_Jakarta_Sans as plusJakartaSansFont
 } from 'next/font/google';
 import { cookies } from 'next/headers';
 import { siteConfig } from '@/config/site';
@@ -19,11 +20,17 @@ import { THEME_INIT_SCRIPT } from '@/lib/theme/theme-init-script';
 import './globals.css';
 import './error-pages.css';
 
-const dmSans = dmSansFont({
+const plusJakartaSans = plusJakartaSansFont({
   variable: '--font-ui',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500', '600', '700', '800'],
   style: ['normal', 'italic']
+});
+
+const pixelifySans = pixelifySansFont({
+  variable: '--font-pixel',
+  subsets: ['latin'],
+  weight: ['500', '600', '700']
 });
 
 const notoSans = notoSansFont({
@@ -71,7 +78,7 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body
-        className={`${dmSans.variable} ${fraunces.variable} ${notoSans.variable}`}
+        className={`${plusJakartaSans.variable} ${pixelifySans.variable} ${fraunces.variable} ${notoSans.variable}`}
       >
         <ShellSessionBridge>{children}</ShellSessionBridge>
         <ServiceWorkerRegistration />

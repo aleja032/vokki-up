@@ -1,29 +1,84 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@theme inline {
+  --color-mint: var(--mint);
+  --color-mint-soft: var(--mint-soft);
+  --color-coral: var(--coral);
+  --color-coral-soft: var(--coral-soft);
+  --color-brand: var(--brand);
+  --color-nav: var(--nav);
+  --color-track: var(--track);
+  --color-urgency-coral: var(--urgency-coral);
+  --color-urgency-amber: var(--urgency-amber);
+  --color-urgency-green: var(--urgency-green);
+  --color-hero: var(--hero-surface);
+  --color-hero-lavender: var(--hero-lavender);
+  --font-label: var(--font-pixel), monospace;
+  --radius-d-14: var(--radius-14);
+  --radius-d-18: var(--radius-18);
+  --radius-d-22: var(--radius-22);
+  --radius-d-26: var(--radius-26);
+  --radius-d-28: var(--radius-28);
+  --radius-d-30: var(--radius-30);
+  --radius-d-34: var(--radius-34);
+  --radius-d-36: var(--radius-36);
+  --radius-d-40: var(--radius-40);
+  --radius-d-44: var(--radius-44);
+  --radius-d-pill: var(--radius-pill);
+}
+
 :root {
   color-scheme: light;
   --ground: #f7f4ee;
   --surface: #ffffff;
-  --surface-muted: #efebe3;
-  --line: #e2ddd3;
-  --rule: #efebe3;
-  --ink: #1b1a2e;
-  --ink-soft: #5b5870;
-  --ink-faint: #777487;
+  --surface-muted: #f0eee8;
+  --line: #e3e0d8;
+  --rule: #f0eee8;
+  --track: #e3e0d8;
+  --nav: #ffffff;
+  --ink: #17202b;
+  --ink-soft: #566275;
+  --ink-faint: #667286;
   --indigo: #4a3ac9;
   --indigo-strong: #3a2cb0;
   --indigo-soft: #e9e6fb;
   --on-indigo: #ffffff;
+  --brand: #4a3ac9;
   --amber: #f2b53a;
-  --amber-soft: #fcebc4;
-  --amber-ink: #7a4f00;
-  --green: #1f7a52;
-  --green-soft: #ddf2e7;
+  --amber-soft: #fff0d0;
+  --amber-ink: #8a5a00;
+  --green: #0a6b4f;
+  --green-soft: #e1f6ee;
+  --mint: #0a6b4f;
+  --mint-soft: #e1f6ee;
+  --coral: #a33a1b;
+  --coral-soft: #ffe9e2;
   --blue: #135f6e;
   --blue-soft: #d9eef2;
-  --red-soft: #fbe4dd;
-  --red-ink: #a8381f;
+  --red-soft: #ffe9e2;
+  --red-ink: #a33a1b;
+  --urgency-coral: #ff7a59;
+  --urgency-amber: #ffb84d;
+  --urgency-green: #2fcb9b;
+  --cta-from: #5be8bc;
+  --cta-to: #2fcb9b;
+  --cta-ink: #062b20;
+  --cta-gradient: linear-gradient(135deg, var(--cta-from), var(--cta-to));
+  --hero-surface: #0b1520;
+  --hero-lavender: #b8adff;
+  --radius-14: 14px;
+  --radius-18: 18px;
+  --radius-22: 22px;
+  --radius-26: 26px;
+  --radius-28: 28px;
+  --radius-30: 30px;
+  --radius-34: 34px;
+  --radius-36: 36px;
+  --radius-40: 40px;
+  --radius-44: 44px;
+  --radius-pill: 999px;
+  --hover-lift: -4px;
   --card-radius: 24px;
   --control-radius: 14px;
   --page-max: 1480px;
@@ -32,7 +87,7 @@
   --hover-duration: 150ms;
   --enter-duration: 200ms;
   --enter-distance: 6px;
-  --hover-shadow: 0 6px 18px rgb(27 26 46 / 0.1);
+  --hover-shadow: 0 6px 18px rgb(23 32 43 / 0.1);
   --lift-1: -1px;
   --lift-2: -2px;
   --press-scale: 0.98;
@@ -50,56 +105,70 @@
 :root[data-theme='dark'],
 .dark {
   color-scheme: dark;
-  --ground: #141416;
-  --surface: #1d1d21;
-  --surface-muted: #26262b;
-  --line: #33333a;
-  --rule: #33333a;
-  --ink: #edebe6;
-  --ink-soft: #a6a3ad;
-  --ink-faint: #86838d;
-  --indigo: #9a91f5;
-  --indigo-strong: #b0a9fa;
-  --indigo-soft: #302d4c;
-  --on-indigo: #141416;
-  --amber: #e3b25a;
-  --amber-soft: #3b3020;
-  --amber-ink: #e3b25a;
-  --green: #67bd91;
-  --green-soft: #1e3429;
+  --ground: #0c1118;
+  --surface: #151c27;
+  --surface-muted: #1b2433;
+  --line: #243044;
+  --rule: #243044;
+  --track: #2a3649;
+  --nav: #111823;
+  --ink: #eef2f7;
+  --ink-soft: #9aa8bc;
+  --ink-faint: #7f8da3;
+  --indigo: #c8c0ff;
+  --indigo-strong: #dad4ff;
+  --indigo-soft: #2b2766;
+  --on-indigo: #14102e;
+  --brand: #8e84ff;
+  --amber: #ffd27a;
+  --amber-soft: #33260f;
+  --amber-ink: #ffd27a;
+  --green: #6ee7be;
+  --green-soft: #0f2e2a;
+  --mint: #6ee7be;
+  --mint-soft: #0f2e2a;
+  --coral: #ffa68e;
+  --coral-soft: #33191a;
   --blue: #72bac6;
   --blue-soft: #1d3439;
-  --red-soft: #422821;
-  --red-ink: #f09a7e;
-  --focus-ring: #b0a9fa;
+  --red-soft: #33191a;
+  --red-ink: #ffa68e;
+  --focus-ring: #c8c0ff;
   --hover-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     color-scheme: dark;
-    --ground: #141416;
-    --surface: #1d1d21;
-    --surface-muted: #26262b;
-    --line: #33333a;
-    --rule: #33333a;
-    --ink: #edebe6;
-    --ink-soft: #a6a3ad;
-    --ink-faint: #86838d;
-    --indigo: #9a91f5;
-    --indigo-strong: #b0a9fa;
-    --indigo-soft: #302d4c;
-    --on-indigo: #141416;
-    --amber: #e3b25a;
-    --amber-soft: #3b3020;
-    --amber-ink: #e3b25a;
-    --green: #67bd91;
-    --green-soft: #1e3429;
+    --ground: #0c1118;
+    --surface: #151c27;
+    --surface-muted: #1b2433;
+    --line: #243044;
+    --rule: #243044;
+    --track: #2a3649;
+    --nav: #111823;
+    --ink: #eef2f7;
+    --ink-soft: #9aa8bc;
+    --ink-faint: #7f8da3;
+    --indigo: #c8c0ff;
+    --indigo-strong: #dad4ff;
+    --indigo-soft: #2b2766;
+    --on-indigo: #14102e;
+    --brand: #8e84ff;
+    --amber: #ffd27a;
+    --amber-soft: #33260f;
+    --amber-ink: #ffd27a;
+    --green: #6ee7be;
+    --green-soft: #0f2e2a;
+    --mint: #6ee7be;
+    --mint-soft: #0f2e2a;
+    --coral: #ffa68e;
+    --coral-soft: #33191a;
     --blue: #72bac6;
     --blue-soft: #1d3439;
-    --red-soft: #422821;
-    --red-ink: #f09a7e;
-    --focus-ring: #b0a9fa;
+    --red-soft: #33191a;
+    --red-ink: #ffa68e;
+    --focus-ring: #c8c0ff;
     --hover-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
   }
 }
@@ -307,9 +376,71 @@ a:focus-visible {
     var(--enter-delay, 0ms) backwards;
 }
 
+/* Ambient motion (mascot, sparkles, CTA, glow). Each class opts out below. */
+@keyframes mascot-bob {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cta-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--cta-to) 22%, transparent);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.motion-mascot-bob {
+  animation: mascot-bob 4s ease-in-out infinite;
+}
+
+.motion-twinkle {
+  animation: twinkle 2.6s ease-in-out infinite;
+}
+
+.motion-cta-pulse {
+  animation: cta-pulse 2.6s ease-in-out infinite;
+}
+
+.motion-glow {
+  animation: glow 2.4s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .enter-fade,
-  .enter-rise {
+  .enter-rise,
+  .motion-mascot-bob,
+  .motion-twinkle,
+  .motion-cta-pulse,
+  .motion-glow {
     animation: none;
   }
 
@@ -324,6 +455,7 @@ a:focus-visible {
   :root {
     --lift-1: 0px;
     --lift-2: 0px;
+    --hover-lift: 0px;
     --press-scale: 1;
   }
 }
