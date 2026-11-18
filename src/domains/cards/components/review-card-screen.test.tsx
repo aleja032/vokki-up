@@ -13,10 +13,10 @@ const card = {
   partOfSpeech: 'noun'
 } as unknown as VocabularyCard;
 
-function render(isRevealed: boolean) {
+function render(isRevealed: boolean, cardOverride: VocabularyCard = card) {
   return renderToStaticMarkup(
     createElement(ReviewCardScreen, {
-      card,
+      card: cardOverride,
       isRevealed,
       getIntervalLabel: () => '1 día',
       onReveal: () => undefined,
@@ -36,4 +36,40 @@ describe('ReviewCardScreen', () => {
       expect(html).not.toContain('<kbd');
     }
   );
+});
+
+describe('ReviewCardScreen Spanish example', () => {
+  const withExample = {
+    ...card,
+    example: 'We moved the deadline to Friday afternoon.'
+  } as VocabularyCard;
+
+  it('shows the eyebrow and the stored Spanish example after reveal', () => {
+    const html = render(true, {
+      ...withExample,
+      exampleEs: 'Movimos la fecha límite al viernes.'
+    });
+    expect(html).toContain('Ejemplo en español');
+    expect(html).toContain('Movimos la fecha límite al viernes.');
+  });
+
+  it('shows the catalog translation for an older saved card', () => {
+    const html = render(true, withExample);
+    expect(html).toContain('Ejemplo en español');
+    expect(html).toContain('Movimos la fecha límite al viernes por la tarde.');
+  });
+
+  it('renders no eyebrow when there is no Spanish example', () => {
+    const html = render(true, {
+      ...withExample,
+      term: 'custom thing',
+      example: 'A custom sentence.'
+    });
+    expect(html).not.toContain('Ejemplo en español');
+    expect(html).not.toContain('drill-card__translation');
+  });
+
+  it('keeps the Spanish example hidden before reveal', () => {
+    expect(render(false, withExample)).not.toContain('Ejemplo en español');
+  });
 });

@@ -108,6 +108,39 @@ describe('cardCreateSchema', () => {
   });
 });
 
+describe('cardCreateSchema optional Spanish example', () => {
+  it('stores undefined when the field is missing, empty or blank', () => {
+    for (const exampleEs of [undefined, '', '   ']) {
+      const result = cardCreateSchema.safeParse({ ...validInput, exampleEs });
+      expect(result.success).toBe(true);
+      if (result.success) expect(result.data.exampleEs).toBeUndefined();
+    }
+  });
+
+  it('trims a provided Spanish example', () => {
+    const result = cardCreateSchema.safeParse({
+      ...validInput,
+      exampleEs: '  Una frase.  '
+    });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.exampleEs).toBe('Una frase.');
+  });
+
+  it('rejects a Spanish example longer than 160 characters', () => {
+    const tooLong = cardCreateSchema.safeParse({
+      ...validInput,
+      exampleEs: 'a'.repeat(161)
+    });
+    expect(tooLong.success).toBe(false);
+    if (!tooLong.success) {
+      expect(tooLong.error.issues[0]?.message).toBe(
+        cardsValidationMessages.cardExampleEsTooLong
+      );
+      expect(tooLong.error.issues[0]?.path).toEqual(['exampleEs']);
+    }
+  });
+});
+
 describe('createCardCreateSchema', () => {
   const schema = createCardCreateSchema(['Opportunity', ' reliable ']);
 

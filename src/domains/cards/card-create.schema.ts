@@ -39,6 +39,15 @@ export function createCardCreateSchema(existingTerms: readonly string[]) {
         error: () => cardsValidationMessages.cardExampleTooLong
       })
       .trim(),
+    // Optional Spanish translation of the example; empty becomes undefined.
+    exampleEs: z
+      .string()
+      .max(CARD_EXAMPLE_MAX_LENGTH, {
+        error: () => cardsValidationMessages.cardExampleEsTooLong
+      })
+      .trim()
+      .transform(value => value || undefined)
+      .optional(),
     partOfSpeech: z.enum(CARD_PARTS_OF_SPEECH, {
       error: () => cardsValidationMessages.cardCategoryInvalid
     }),

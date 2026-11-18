@@ -18,7 +18,7 @@ const sources = import.meta.glob(
 ) as Record<string, string>;
 
 const SPANISH_MARKERS =
-  /[ñáéíóúÁÉÍÓÚ¿¡]|\b(el|la|los|las|de|del|para|con|tu|tus|una|un|que|por|sin|tarjetas?|nota|guardar|cancelar|crear|biblioteca|agregar|palabras?|inicio|hoy|ajustes|sesión|dispositivo|grupos?|añadir|guardado|repasar|vocabulario|revisar|mazo|propuestas?|dominadas?|este|esta|ejemplo|significado)\b|\bEj\./i;
+  /[ñáéíóúÁÉÍÓÚ¿¡]|\b(el|la|los|las|de|del|para|con|tu|tus|una|un|que|por|sin|tarjetas?|nota|guardar|cancelar|crear|biblioteca|agregar|palabras?|inicio|hoy|ajustes|sesión|dispositivo|grupos?|añadir|guardado|repasar|vocabulario|revisar|mazo|propuestas?|dominadas?|este|esta|ejemplo|significado|vistas?|racha|espa[ñn]ol|opcional)\b|\bEj\./i;
 const IGNORED = new Set<string>(['Vokki Up', 'vokki-up-tarjetas-ejemplo.csv']);
 // Matches `createLocalizedMessages(` and `createLocalizedMessages<Type>(`.
 const CALL = /createLocalizedMessages(?:<[^>(]*>)?\(/g;
@@ -105,7 +105,12 @@ const FIXED_STRINGS = [
   'de 20 hoy',
   '3 palabras agregadas a sus colecciones',
   '1 · Agregar',
-  '3 / 20 palabras o frases'
+  '3 / 20 palabras o frases',
+  'Racha actual',
+  'Palabras vistas',
+  'Ejemplo en español',
+  'Ejemplo en español (opcional)',
+  'La misma frase, en español'
 ];
 
 describe('inline message coverage', () => {

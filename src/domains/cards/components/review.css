@@ -239,6 +239,14 @@
   @apply text-base leading-normal italic;
 }
 
+.drill-card__translation {
+  @apply flex flex-col gap-1 px-4;
+}
+
+.drill-card__translation .drill-card__sentence {
+  @apply text-[15px] text-(--ink-soft) not-italic;
+}
+
 .drill-card__sentence strong {
   @apply font-bold text-(--indigo) not-italic;
 }
@@ -430,6 +438,14 @@
 
   .drill-card__sentence {
     @apply text-lg;
+  }
+
+  .drill-card__translation {
+    @apply px-5;
+  }
+
+  .drill-card__translation .drill-card__sentence {
+    @apply text-base;
   }
 
   .drill-card__hint {

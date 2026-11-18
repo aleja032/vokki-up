@@ -94,6 +94,8 @@ export function CardEditor({
   });
   const exampleLength = values.example.length;
   const isExampleTooLong = exampleLength > CARD_EXAMPLE_MAX_LENGTH;
+  const exampleEsLength = values.exampleEs.length;
+  const isExampleEsTooLong = exampleEsLength > CARD_EXAMPLE_MAX_LENGTH;
   const isPronunciationLocaleValid = isPronunciationLocale(pronunciationLocale);
 
   return (
@@ -302,6 +304,32 @@ export function CardEditor({
               {fieldErrors.example && (
                 <DeckFieldError id="card-example-error">
                   {fieldErrors.example}
+                </DeckFieldError>
+              )}
+            </div>
+            <div className="deck-field">
+              <div className="deck-field__row">
+                <label htmlFor="card-example-es">
+                  {messages.exampleEsLabel}
+                </label>
+                <span data-invalid={isExampleEsTooLong}>
+                  {messages.exampleCounter(exampleEsLength)}
+                </span>
+              </div>
+              <textarea
+                id="card-example-es"
+                className="deck-field__input deck-field__input--example"
+                rows={2}
+                placeholder={messages.exampleEsPlaceholder}
+                aria-invalid={Boolean(fieldErrors.exampleEs)}
+                aria-describedby={
+                  fieldErrors.exampleEs ? 'card-example-es-error' : undefined
+                }
+                {...register('exampleEs')}
+              />
+              {fieldErrors.exampleEs && (
+                <DeckFieldError id="card-example-es-error">
+                  {fieldErrors.exampleEs}
                 </DeckFieldError>
               )}
             </div>
