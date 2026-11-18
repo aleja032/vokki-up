@@ -438,7 +438,7 @@
 
 .deck-groups__add,
 .deck-screen__list-heading button {
-  @apply inline-flex h-[43px] items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-[14px] font-semibold text-(--ink);
+  @apply inline-flex h-11 items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-[14px] font-semibold text-(--ink);
 }
 
 .deck-groups__list {
@@ -1441,7 +1441,7 @@
 }
 
 .deck-screen__list-heading {
-  @apply flex items-center justify-between gap-3;
+  @apply flex flex-wrap items-center justify-between gap-3;
 }
 
 .deck-screen__list-heading h2 {
@@ -1498,6 +1498,22 @@
 
 .deck-group-empty p {
   @apply m-0 text-[14px];
+}
+
+.deck-group-empty__actions {
+  @apply mt-2 flex flex-wrap items-center justify-center gap-2;
+}
+
+.deck-group-empty .deck-group-empty__actions button {
+  @apply mt-0 h-11;
+}
+
+.deck-screen__list-actions {
+  @apply ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2;
+}
+
+.deck-link-button {
+  @apply inline-flex h-11 items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-[14px] font-semibold whitespace-nowrap text-(--ink) no-underline;
 }
 
 .deck-group-empty button {
@@ -1585,6 +1601,32 @@
   .deck-editor--embedded .deck-editor__header,
   .deck-editor--embedded .deck-modes {
     @apply hidden;
+  }
+}
+
+/* Inside the add hub (mobile) the hub sheet owns the chrome; the editor flows inline. */
+
+@media (max-width: 760px) {
+  .deck-editor.deck-editor--embedded,
+  .deck-editor.deck-editor--embedded[data-open='true'] {
+    @apply static block bg-transparent;
+  }
+
+  .deck-editor--embedded .deck-editor__form {
+    @apply h-auto;
+  }
+
+  .deck-editor--embedded .deck-editor__header,
+  .deck-editor--embedded .deck-modes {
+    @apply hidden;
+  }
+
+  .deck-editor--embedded .deck-editor__body {
+    @apply overflow-visible p-0;
+  }
+
+  .deck-editor--embedded .deck-editor__footer {
+    @apply border-t-0 bg-transparent px-0 pt-4 pb-0;
   }
 }
 

@@ -126,8 +126,8 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
             <BookOpen size={22} aria-hidden="true" />
           </span>
           <span className="deck-action__copy">
-            <strong>Biblioteca de palabras</strong>
-            <span>Explora vocabulario y guárdalo en tus grupos</span>
+            <strong>{messages.libraryTitle}</strong>
+            <span>{messages.libraryHint}</span>
           </span>
         </Link>
       </div>

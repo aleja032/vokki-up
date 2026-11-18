@@ -21,12 +21,15 @@ export type CaptureSourceKind = 'text' | 'image';
  * from the route layer through `library`, so this hook stays inside the ai domain.
  * `generate('text' | 'image')` sends only that input; without it both are sent.
  */
-export function useCardCaptureFlow(library: CaptureLibrary) {
+export function useCardCaptureFlow(
+  library: CaptureLibrary,
+  initialGroupId = ''
+) {
   const { groups } = library;
   const [step, setStep] = useState<'add' | 'review' | 'created'>('add');
   const [text, setText] = useState('');
   const [image, setImage] = useState<File | null>(null);
-  const [requestedGroupId, setSelectedGroupId] = useState('');
+  const [requestedGroupId, setSelectedGroupId] = useState(initialGroupId);
   const [proposals, setProposals] = useState<CaptureProposal[]>([]);
   const [createdCards, setCreatedCards] = useState<CapturedCardSummary[]>([]);
   const [createdGroupName, setCreatedGroupName] = useState('');

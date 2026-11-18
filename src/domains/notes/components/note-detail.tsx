@@ -1,6 +1,7 @@
 import { MoreHorizontal, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
+import { translateText } from '@/lib/i18n/locale';
 import { groupNoteSections } from '../note-content.util';
 import { notesMessages } from '../messages';
 import type { Note } from '../types';
@@ -35,7 +36,7 @@ export function NoteDetail({
             {note.title || notesMessages.list.untitled}
           </h2>
           <span className="note-detail__meta">
-            {messages.meta(note.category, note.updatedAt)}
+            {messages.meta(translateText(note.category), note.updatedAt)}
           </span>
         </div>
         <div className="note-detail__actions">

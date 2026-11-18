@@ -1,17 +1,31 @@
 import { describe, expect, it } from 'vitest';
 import {
+  ADD_HUB_MODES,
   getSelectableHubModes,
+  isHubModeLocked,
   resolveHubMode,
   parseAddHubMode
 } from './add-hub-modes';
 
 describe('hub modes with AI disabled', () => {
-  it('only offers manual when AI is disabled', () => {
+  it('always lists the three modes', () => {
+    expect([...ADD_HUB_MODES]).toEqual(['image', 'words', 'manual']);
+  });
+
+  it('only allows selecting manual when AI is disabled', () => {
     expect(getSelectableHubModes(false)).toEqual(['manual']);
     expect(getSelectableHubModes(true)).toEqual(['image', 'words', 'manual']);
   });
 
-  it('moves AI modes to manual when AI is disabled', () => {
+  it('locks only the AI modes when AI is disabled', () => {
+    expect(isHubModeLocked('image', false)).toBe(true);
+    expect(isHubModeLocked('words', false)).toBe(true);
+    expect(isHubModeLocked('manual', false)).toBe(false);
+    expect(isHubModeLocked('image', true)).toBe(false);
+    expect(isHubModeLocked('words', true)).toBe(false);
+  });
+
+  it('moves a locked AI mode to manual', () => {
     expect(resolveHubMode('image', false)).toBe('manual');
     expect(resolveHubMode('words', false)).toBe('manual');
     expect(resolveHubMode('manual', false)).toBe('manual');

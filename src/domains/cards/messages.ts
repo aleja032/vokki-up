@@ -12,6 +12,8 @@ export const cardsMessages = createLocalizedMessages({
       `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} en tu mazo · ${due} para repasar hoy`,
     newCardTitle: 'Nueva tarjeta',
     newCardHint: 'Con IA o manual',
+    libraryTitle: 'Biblioteca de palabras',
+    libraryHint: 'Explora vocabulario y guárdalo en tus grupos',
     reviewTitle: 'Repasar',
     reviewPending: (due: number) =>
       `${due} ${pluralize(due, 'pendiente', 'pendientes')} hoy`,
@@ -93,6 +95,11 @@ export const cardsMessages = createLocalizedMessages({
     cancel: 'Cancelar',
     submit: 'Crear grupo'
   },
+  addLocked: {
+    title: 'Imagen y Palabras están bloqueadas',
+    body: 'Estos modos usan la IA. Actívala y configura tu API key en Ajustes. Mientras tanto puedes agregar a mano o desde la biblioteca.',
+    libraryLink: 'Ir a la biblioteca'
+  },
   groupDetail: {
     backLabel: 'Volver a grupos',
     eyebrow: 'Grupo',
@@ -114,6 +121,7 @@ export const cardsMessages = createLocalizedMessages({
     review: (due: number) => `Repasar este grupo · ${due}`,
     listTitle: 'Tarjetas del grupo',
     add: 'Añadir',
+    addFromLibrary: 'Agregar desde la biblioteca',
     emptyTitle: 'Este grupo todavía está vacío',
     emptyBody: 'Añade una tarjeta para empezar a reunir palabras aquí.',
     emptyAction: 'Añadir tarjeta'

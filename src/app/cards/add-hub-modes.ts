@@ -3,17 +3,25 @@ export type AddHubMode = (typeof ADD_HUB_MODES)[number];
 
 export const DEFAULT_ADD_HUB_MODE: AddHubMode = 'manual';
 
-/** Without AI only the manual mode can be selected. */
-export function getSelectableHubModes(isAiEnabled: boolean): AddHubMode[] {
-  return isAiEnabled ? [...ADD_HUB_MODES] : ['manual'];
+/** The image and word-list modes depend on AI; manual never does. */
+export function isHubModeLocked(
+  mode: AddHubMode,
+  isAiEnabled: boolean
+): boolean {
+  return mode !== 'manual' && !isAiEnabled;
 }
 
-/** Moves an AI mode (e.g. from a deep link) to manual when AI is disabled. */
+/** Modes are always listed; without AI only manual can be selected. */
+export function getSelectableHubModes(isAiEnabled: boolean): AddHubMode[] {
+  return ADD_HUB_MODES.filter(mode => !isHubModeLocked(mode, isAiEnabled));
+}
+
+/** Moves a locked AI mode (e.g. from a deep link) to manual. */
 export function resolveHubMode(
   mode: AddHubMode,
   isAiEnabled: boolean
 ): AddHubMode {
-  return getSelectableHubModes(isAiEnabled).includes(mode) ? mode : 'manual';
+  return isHubModeLocked(mode, isAiEnabled) ? 'manual' : mode;
 }
 
 /** Reads the `?mode=` deep link; unknown values keep the default (manual). */

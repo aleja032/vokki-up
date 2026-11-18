@@ -61,20 +61,13 @@ const messages = createLocalizedMessages({
   cancelAdd: 'Cancelar',
   addAction: (count: number) => `Agregar ${count}`,
   selectWord: (term: string) => `Seleccionar ${term}`,
-  addResult: (added: number, duplicates: number) => {
-    const parts = [];
-    if (added > 0)
-      parts.push(
-        `${added} ${added === 1 ? 'palabra agregada' : 'palabras agregadas'} a sus colecciones`
-      );
-    if (duplicates > 0)
-      parts.push(
-        duplicates === 1
-          ? '1 palabra ya existe en tus tarjetas y no se añadió de nuevo'
-          : `${duplicates} palabras ya existen en tus tarjetas y no se añadieron de nuevo`
-      );
-    return parts.join('. ');
-  },
+  // Each part is translated on its own, then joined (see `buildAddResult`).
+  addedPart: (added: number) =>
+    `${added} ${added === 1 ? 'palabra agregada' : 'palabras agregadas'} a sus colecciones`,
+  duplicatesPart: (duplicates: number) =>
+    duplicates === 1
+      ? '1 palabra ya existe en tus tarjetas y no se añadió de nuevo'
+      : `${duplicates} palabras ya existen en tus tarjetas y no se añadieron de nuevo`,
   empty: 'No encontramos palabras con esa búsqueda.',
   loading: 'Cargando tus grupos…',
   pronunciation: 'Pronunciación',
@@ -295,9 +288,12 @@ export function WordLibrary() {
   function addSelectedEntries() {
     if (selectedEntries.length === 0) return;
     const result = dashboard.addWordLibraryEntries(selectedEntries);
-    setAnnouncement(
-      messages.addResult(result.added.length, result.duplicates.length)
-    );
+    const parts = [
+      result.added.length > 0 && messages.addedPart(result.added.length),
+      result.duplicates.length > 0 &&
+        messages.duplicatesPart(result.duplicates.length)
+    ].filter(Boolean);
+    setAnnouncement(parts.join('. '));
     stopAdding();
   }
 
