@@ -12,6 +12,7 @@ import { cardsMessages } from '../messages';
 import type { CardRating, VocabularyCard } from '../types';
 import { REVIEW_RATINGS } from '../hooks/use-card-review';
 import { getExampleEs } from '../word-library/example-es';
+import { ReviewExampleEs } from './review-example-es';
 import { ReviewIcon } from './review-icon';
 import { normalizePronunciationLocale, translateText } from '@/lib/i18n/locale';
 
@@ -277,12 +278,11 @@ export function ReviewCardScreen({
               </div>
             )}
             {exampleEs && (
-              <div className="drill-card__translation">
-                <span className="drill-card__label">
-                  {messages.exampleEsLabel}
-                </span>
-                <span className="drill-card__sentence">{exampleEs}</span>
-              </div>
+              <ReviewExampleEs
+                key={card.id}
+                label={messages.exampleEsLabel}
+                sentence={exampleEs}
+              />
             )}
           </div>
         ) : (

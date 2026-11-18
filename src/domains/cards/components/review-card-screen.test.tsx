@@ -59,6 +59,28 @@ describe('ReviewCardScreen Spanish example', () => {
     expect(html).toContain('Movimos la fecha límite al viernes por la tarde.');
   });
 
+  it('renders the eyebrow as a collapsed toggle with a hidden sentence region', () => {
+    const html = render(true, withExample);
+    expect(html).toMatch(/<button[^>]*type="button"[^>]*aria-expanded="false"/);
+    const controls = html.match(/aria-controls="([^"]+)"/)?.[1];
+    expect(controls).toBeTruthy();
+    const region = html.match(
+      new RegExp('<div[^>]*id="' + controls + '"[^>]*>')
+    )?.[0];
+    expect(region).toContain('inert');
+    expect(region).toContain('aria-hidden="true"');
+  });
+
+  it('renders no toggle when there is no Spanish example', () => {
+    const html = render(true, {
+      ...withExample,
+      term: 'custom thing',
+      example: 'A custom sentence.'
+    });
+    expect(html).not.toContain('aria-expanded');
+    expect(html).not.toContain('aria-controls');
+  });
+
   it('renders no eyebrow when there is no Spanish example', () => {
     const html = render(true, {
       ...withExample,
@@ -66,7 +88,7 @@ describe('ReviewCardScreen Spanish example', () => {
       example: 'A custom sentence.'
     });
     expect(html).not.toContain('Ejemplo en español');
-    expect(html).not.toContain('drill-card__translation');
+    expect(html).not.toContain('drill-es');
   });
 
   it('keeps the Spanish example hidden before reveal', () => {
