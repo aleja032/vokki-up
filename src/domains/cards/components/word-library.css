@@ -265,7 +265,8 @@
 
 .word-library__entry {
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: 16px;
@@ -387,7 +388,8 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin: 8px 0 0;
+  margin: auto 0 0;
+  padding-top: 8px;
   color: var(--indigo-strong);
   font-size: 12px;
   font-weight: 700;
@@ -590,7 +592,6 @@
 
   .word-library__list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
   }
 
   .word-library__add-toggle {

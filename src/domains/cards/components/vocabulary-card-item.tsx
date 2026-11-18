@@ -77,8 +77,10 @@ export function VocabularyCardItem({
           </span>
         </>
       )}
-      <p className="deck-card__meaning">{card.meaning}</p>
-      {card.example && <p className="deck-card__example">{card.example}</p>}
+      <div className="deck-card__body">
+        <p className="deck-card__meaning">{card.meaning}</p>
+        {card.example && <p className="deck-card__example">{card.example}</p>}
+      </div>
       <div className="deck-card__footer">
         <span className="deck-card__group" data-tone={group?.tone ?? 'neutral'}>
           <span

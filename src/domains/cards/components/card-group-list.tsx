@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+import { Library } from 'lucide-react';
 import { ALL_GROUPS_ID } from '../hooks/use-cards-dashboard';
 import { cardsMessages } from '../messages';
 import type { CardGroup } from '../types';
@@ -36,14 +38,20 @@ export function CardGroupList({
     <section className="deck-groups" aria-labelledby="deck-groups-title">
       <div className="deck-groups__heading">
         <h2 id="deck-groups-title">{messages.groupsTitle}</h2>
-        <button
-          className="deck-groups__add deck-groups__add--compact"
-          type="button"
-          onClick={onAddGroup}
-        >
-          <DeckIcon name="plus" size={16} />
-          {messages.newGroup}
-        </button>
+        <div className="deck-groups__actions">
+          <Link className="deck-link-button" href="/cards/word-library">
+            <Library size={16} aria-hidden="true" />
+            {messages.addFromLibrary}
+          </Link>
+          <button
+            className="deck-groups__add deck-groups__add--compact"
+            type="button"
+            onClick={onAddGroup}
+          >
+            <DeckIcon name="plus" size={16} />
+            {messages.newGroup}
+          </button>
+        </div>
       </div>
       <div
         aria-label={messages.groupsLabel}

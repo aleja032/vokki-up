@@ -103,6 +103,19 @@
   @apply mx-auto max-w-280;
 }
 
+/* Route content fades in. Opacity only: a transform here would re-anchor the
+   fixed overlays (group screens, notes button) for the length of the animation.
+   The loading skeleton stays still so the swap to the page is one fade. */
+.app-main__inner:not(:has(> .status-skeleton)) {
+  animation: enter-fade var(--enter-duration) var(--ease-out) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-main__inner:not(:has(> .status-skeleton)) {
+    animation: none;
+  }
+}
+
 /* Bottom navigation (mobile) */
 
 .bottom-navigation {

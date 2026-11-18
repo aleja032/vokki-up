@@ -12,8 +12,7 @@ export const cardsMessages = createLocalizedMessages({
       `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} en tu mazo · ${due} para repasar hoy`,
     newCardTitle: 'Nueva tarjeta',
     newCardHint: 'Con IA o manual',
-    libraryTitle: 'Biblioteca de palabras',
-    libraryHint: 'Explora vocabulario y guárdalo en tus grupos',
+    addFromLibrary: 'Agregar desde la biblioteca',
     reviewTitle: 'Repasar',
     reviewPending: (due: number) =>
       `${due} ${pluralize(due, 'pendiente', 'pendientes')} hoy`,
@@ -200,12 +199,9 @@ export const cardsMessages = createLocalizedMessages({
     exampleLabel: 'Ejemplo',
     revealHint: 'Intenta recordarla, luego toca para ver',
     revealAction: 'Mostrar significado',
-    shortcutLabel: 'Atajo:',
-    spaceKey: 'Espacio',
     ratingsLabel: 'Califica esta tarjeta',
     ratingPrompt: '¿Qué tan fácil fue recordarla?',
     ratings: { again: 'Difícil', good: 'Bien', easy: 'Fácil' },
-    keyHint: (key: number) => `tecla ${key}`,
     intervals: {
       again: '<10 min',
       underHour: '<1 hora',

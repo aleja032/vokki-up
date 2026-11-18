@@ -427,7 +427,11 @@
 }
 
 .deck-groups__heading {
-  @apply flex items-center justify-between gap-3;
+  @apply flex flex-wrap items-center justify-between gap-3;
+}
+
+.deck-groups__actions {
+  @apply ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2;
 }
 
 .deck-groups__heading h2,
@@ -700,6 +704,31 @@
 
 .deck-card {
   @apply relative flex min-w-0 flex-col gap-3 rounded-[20px] border border-solid border-(--line) bg-(--surface) p-5;
+
+  animation: enter-rise var(--enter-duration) var(--ease-out)
+    var(--enter-delay, 0ms) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-card {
+    animation: none;
+  }
+}
+
+.deck-card:nth-child(2) {
+  --enter-delay: 30ms;
+}
+
+.deck-card:nth-child(3) {
+  --enter-delay: 60ms;
+}
+
+.deck-card:nth-child(4) {
+  --enter-delay: 90ms;
+}
+
+.deck-card:nth-child(n + 5) {
+  --enter-delay: 120ms;
 }
 
 .deck-card__top {
@@ -721,6 +750,10 @@
 .deck-card__category {
   @apply max-w-[45%] shrink-0 rounded-full bg-(--cat-soft) px-3 py-1.5 text-[12px] font-semibold text-(--cat-ink);
   overflow-wrap: anywhere;
+}
+
+.deck-card__body {
+  @apply flex min-w-0 flex-col gap-3;
 }
 
 .deck-card__meaning {
@@ -793,8 +826,14 @@
 }
 
 @media (min-width: 761px) {
+  /* Cards in one grid row share three subgrid rows (heading, body, footer),
+     so a two-line title or a longer body never shifts a neighbor. */
   .deck-card {
-    @apply gap-3.5 rounded-[22px] p-5.5;
+    @apply row-span-3 grid grid-rows-subgrid gap-3.5 rounded-[22px] p-5.5;
+  }
+
+  .deck-card__body {
+    @apply gap-3.5;
   }
 
   .deck-card__title h3 {
@@ -1280,6 +1319,19 @@
 
 .deck-screen--detail {
   @apply fixed inset-x-0 top-0 bottom-[calc(76px+env(safe-area-inset-bottom))] z-9 flex flex-col bg-(--ground);
+}
+
+/* Switching into a group screen eases in instead of snapping. */
+.deck-screen--form,
+.deck-screen--detail {
+  animation: enter-rise var(--enter-duration) var(--ease-out) backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-screen--form,
+  .deck-screen--detail {
+    animation: none;
+  }
 }
 
 .deck-screen__header h1 {

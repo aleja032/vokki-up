@@ -7,7 +7,7 @@ export const homeDashboardData = createLocalizedMessages<HomeDashboardData>({
     greetingSupport: 'Cinco minutos hoy mantienen tu racha.',
     greetingSupportWide: streakDays =>
       `Cinco minutos hoy mantienen tu racha de ${streakDays} días.`,
-    newCard: 'Nueva tarjeta',
+    addFromLibrary: 'Agregar desde la biblioteca',
     nextSessionDescription:
       'Funciona sin conexión. Tu progreso se sincroniza después.',
     pendingChip: count => `${count} por repasar`,

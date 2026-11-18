@@ -10,17 +10,11 @@ import {
 } from 'react';
 import { cardsMessages } from '../messages';
 import type { CardRating, VocabularyCard } from '../types';
-import { REVIEW_RATINGS, type ReviewRating } from '../hooks/use-card-review';
+import { REVIEW_RATINGS } from '../hooks/use-card-review';
 import { ReviewIcon } from './review-icon';
 import { normalizePronunciationLocale, translateText } from '@/lib/i18n/locale';
 
 const messages = cardsMessages.review;
-
-const RATING_KEYS: Record<ReviewRating, number> = {
-  again: 1,
-  good: 2,
-  easy: 3
-};
 
 type ReviewCardScreenProps = {
   card: VocabularyCard;
@@ -309,10 +303,6 @@ export function ReviewCardScreen({
                 </span>
                 <span className="drill-rating__hint">
                   {getIntervalLabel(rating)}
-                  <span className="drill-rating__key">
-                    {' · '}
-                    {messages.keyHint(RATING_KEYS[rating])}
-                  </span>
                 </span>
               </button>
             ))}
@@ -327,9 +317,6 @@ export function ReviewCardScreen({
           >
             {messages.revealAction}
           </button>
-          <span className="drill-reveal__shortcut">
-            {messages.shortcutLabel} <kbd>{messages.spaceKey}</kbd>
-          </span>
         </div>
       )}
     </>
