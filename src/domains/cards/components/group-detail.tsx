@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
 import { getCardLearningState } from '../card-learning-state';
+import { canDeleteGroup } from '../delete-group';
 import { useGroupActionsMenu } from '../hooks/use-group-actions-menu';
 import {
   getGroupDisplayName,
@@ -24,6 +26,7 @@ type GroupDetailProps = {
   masteredPercent: number;
   onBack: () => void;
   onAddCard: () => void;
+  onDelete: (groupId: string) => void;
 };
 
 export function GroupDetail({
@@ -33,7 +36,8 @@ export function GroupDetail({
   dueCount,
   masteredPercent,
   onBack,
-  onAddCard
+  onAddCard,
+  onDelete
 }: GroupDetailProps) {
   const {
     isMenuOpen,
@@ -43,6 +47,8 @@ export function GroupDetail({
     askDelete,
     dismissDelete
   } = useGroupActionsMenu();
+  const isDeletable = canDeleteGroup(group, cards);
+  const displayName = getGroupDisplayName(group);
 
   return (
     <section
@@ -86,39 +92,20 @@ export function GroupDetail({
             className="deck-menu__danger"
             type="button"
             role="menuitem"
+            disabled={!isDeletable}
+            aria-describedby={isDeletable ? undefined : 'group-delete-blocked'}
             onClick={askDelete}
           >
             {messages.menuDelete}
           </button>
+          {!isDeletable && (
+            <span className="deck-menu__hint" id="group-delete-blocked">
+              {messages.menuDeleteBlocked}
+            </span>
+          )}
         </div>
       )}
       <div className="deck-screen__body">
-        {isConfirmingDelete && (
-          <div
-            className="deck-confirm"
-            role="alertdialog"
-            aria-labelledby="group-delete-title"
-          >
-            <div className="deck-confirm__copy">
-              <span id="group-delete-title">
-                {messages.deleteTitle(getGroupDisplayName(group))}
-              </span>
-              <span>{messages.deleteBody(cards.length)}</span>
-            </div>
-            <div className="deck-confirm__actions">
-              <button type="button" onClick={dismissDelete}>
-                {messages.deleteCancel}
-              </button>
-              <button
-                className="deck-confirm__danger"
-                type="button"
-                onClick={dismissDelete}
-              >
-                {messages.deleteConfirm}
-              </button>
-            </div>
-          </div>
-        )}
         <section className="deck-hero" data-tone={group.tone}>
           <div className="deck-hero__identity">
             <span className="deck-hero__icon">
@@ -188,6 +175,18 @@ export function GroupDetail({
           </div>
         )}
       </div>
+      <ConfirmDialog
+        open={isConfirmingDelete}
+        title={messages.deleteTitle}
+        description={messages.deleteBody(displayName, cards.length)}
+        confirmLabel={messages.deleteConfirm}
+        cancelLabel={messages.deleteCancel}
+        onConfirm={() => {
+          dismissDelete();
+          onDelete(group.id);
+        }}
+        onCancel={dismissDelete}
+      />
     </section>
   );
 }
