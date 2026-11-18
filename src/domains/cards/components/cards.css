@@ -1500,6 +1500,10 @@
   @apply m-0 text-[14px];
 }
 
+.deck-library__group-actions {
+  @apply flex justify-end;
+}
+
 .deck-group-empty__actions {
   @apply mt-2 flex flex-wrap items-center justify-center gap-2;
 }

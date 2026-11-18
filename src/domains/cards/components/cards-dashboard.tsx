@@ -156,6 +156,7 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
           onSearchChange={dashboard.setSearchText}
           onCategoryChange={dashboard.setActiveCategory}
           onDeleteCards={dashboard.deleteCards}
+          onAddCard={dashboard.openEditor}
         />
         {renderAddPanel ? (
           renderAddPanel(addPanelApi)

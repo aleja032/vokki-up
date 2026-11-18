@@ -1,13 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { Library } from 'lucide-react';
 import { getCardLearningState } from '../card-learning-state';
 import { useGroupActionsMenu } from '../hooks/use-group-actions-menu';
 import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
 import { DeckIcon } from './deck-icon';
+import { GroupAddActions } from './group-add-actions';
 
 const messages = cardsMessages.groupDetail;
 const stateMessages = cardsMessages.learningState;
@@ -150,13 +150,7 @@ export function GroupDetail({
         <div className="deck-screen__list-heading">
           <h2>{messages.listTitle}</h2>
           {cards.length > 0 && (
-            <div className="deck-screen__list-actions">
-              <LibraryLink />
-              <button type="button" onClick={onAddCard}>
-                <DeckIcon name="plus" size={16} />
-                {messages.add}
-              </button>
-            </div>
+            <GroupAddActions variant="header" onAdd={onAddCard} />
           )}
         </div>
         {cards.length ? (
@@ -184,25 +178,10 @@ export function GroupDetail({
             <DeckIcon name="folder" size={23} />
             <h3>{messages.emptyTitle}</h3>
             <p>{messages.emptyBody}</p>
-            <div className="deck-group-empty__actions">
-              <button type="button" onClick={onAddCard}>
-                <DeckIcon name="plus" size={16} />
-                {messages.emptyAction}
-              </button>
-              <LibraryLink />
-            </div>
+            <GroupAddActions variant="empty" onAdd={onAddCard} />
           </div>
         )}
       </div>
     </section>
-  );
-}
-
-function LibraryLink() {
-  return (
-    <Link className="deck-link-button" href="/cards/word-library">
-      <Library size={16} aria-hidden="true" />
-      {messages.addFromLibrary}
-    </Link>
   );
 }
