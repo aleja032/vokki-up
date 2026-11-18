@@ -82,6 +82,14 @@ describe('Spanish example data coverage', () => {
     }
   });
 
+  it('keeps country-specific vocabulary out of the examples', () => {
+    // Neutral international Spanish: these regionalisms were replaced on purpose.
+    const denylist =
+      /(botanas?|trapea|chamarras?|ahorita|platica|vosotros|vos|arepas|laptops?|foco|mandados|mesero|cuadras|alacena|ecotour|riñonera|cartilla)|equipaje documentado|hora feliz|ticket de soporte|guante de cocina|pase de abordar/i;
+    for (const spanish of parsed.values())
+      expect(denylist.test(spanish), spanish).toBe(false);
+  });
+
   it('never wraps the sentence in quotes', () => {
     for (const spanish of parsed.values())
       expect(/^["“”«']|["“”»']$/.test(spanish), spanish).toBe(false);
@@ -97,7 +105,7 @@ describe('getExampleEs', () => {
 
   it('falls back to the catalog translation by normalized term', () => {
     expect(getExampleEs(makeCard({ term: '  Follow   Up ' }))).toBe(
-      'Te daré seguimiento mañana.'
+      'Me pondré en contacto contigo mañana para dar seguimiento.'
     );
   });
 
@@ -115,7 +123,7 @@ describe('getExampleEs', () => {
 
   it('ignores a blank stored value and falls back', () => {
     expect(getExampleEs(makeCard({ exampleEs: '   ' }))).toBe(
-      'Te daré seguimiento mañana.'
+      'Me pondré en contacto contigo mañana para dar seguimiento.'
     );
   });
 });
