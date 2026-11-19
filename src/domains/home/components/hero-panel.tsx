@@ -32,6 +32,14 @@ export function HeroPanel({
         <span className="hero-panel__shade" />
         <span className="hero-panel__glow" />
         <span className="hero-panel__star motion-twinkle" />
+        <svg
+          aria-hidden="true"
+          className="hero-panel__wave"
+          preserveAspectRatio="none"
+          viewBox="0 0 1200 60"
+        >
+          <path d="M0 60 L0 34 C 140 6, 300 58, 470 32 S 760 4, 930 30 S 1110 54, 1200 24 L1200 60 Z" />
+        </svg>
       </div>
       <Image
         alt={copy.heroMascotAlt}

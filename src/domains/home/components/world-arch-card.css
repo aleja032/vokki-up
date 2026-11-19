@@ -30,6 +30,21 @@
   @apply border-[3px] border-(--brand) bg-(--hero-surface) text-white;
 }
 
+.world-arch {
+  transition:
+    translate 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out);
+}
+
+@media (hover: hover) {
+  .world-arch:hover {
+    translate: 0 var(--hover-lift);
+    border-color: var(--hover-accent);
+    box-shadow: 0 14px 30px var(--hover-accent-glow);
+  }
+}
+
 .world-arch__image {
   @apply object-cover;
   image-rendering: pixelated;
@@ -37,11 +52,7 @@
 
 .world-arch__shade {
   @apply absolute inset-0;
-  background: linear-gradient(
-    0deg,
-    color-mix(in srgb, var(--hero-surface) 95%, transparent) 6%,
-    transparent 62%
-  );
+  background: linear-gradient(0deg, var(--hero-shade-95) 6%, transparent 62%);
 }
 
 .world-arch__icon {
@@ -74,7 +85,7 @@
 }
 
 .world-arch[data-state='active'] .world-arch__bar {
-  @apply bg-white/20;
+  @apply bg-(--on-hero-track);
 }
 
 .world-arch__count {

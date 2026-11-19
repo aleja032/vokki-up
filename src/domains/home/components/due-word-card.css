@@ -9,7 +9,7 @@
     var(--surface) 100%
   );
   box-shadow:
-    0 14px 28px color-mix(in srgb, var(--ink) 18%, transparent),
+    0 18px 34px var(--shadow-card),
     0 0 0 3px var(--ground);
   transition:
     translate 180ms var(--ease-out),
@@ -26,7 +26,7 @@
 }
 
 .due-card[data-tone='mint'] {
-  --due-accent: var(--urgency-green);
+  --due-accent: var(--line);
 }
 
 .due-card__tag {
@@ -76,9 +76,9 @@
 @media (hover: hover) {
   .due-card:hover {
     translate: 0 var(--hover-lift);
-    border-color: var(--brand);
+    border-color: var(--hover-accent);
     box-shadow:
-      0 14px 30px color-mix(in srgb, var(--brand) 25%, transparent),
+      0 14px 30px var(--hover-accent-glow),
       0 0 0 3px var(--ground);
   }
 }

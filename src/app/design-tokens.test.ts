@@ -52,6 +52,107 @@ const fixedTokens = [
   '--hover-lift'
 ];
 
+// Values copied from the theme objects of VokkiD.dc.html / VokkiDLight.dc.html.
+const designLight: Record<string, string> = {
+  '--ground': '#f7f4ee',
+  '--nav': '#ffffff',
+  '--surface': '#ffffff',
+  '--surface-muted': '#f0eee8',
+  '--line': '#e3e0d8',
+  '--ink': '#17202b',
+  '--ink-soft': '#566275',
+  '--track': '#e3e0d8',
+  '--mint': '#0a6b4f',
+  '--mint-soft': '#e1f6ee',
+  '--amber-ink': '#8a5a00',
+  '--amber-soft': '#fff0d0',
+  '--coral': '#a33a1b',
+  '--coral-soft': '#ffe9e2',
+  '--indigo': '#4a3ac9',
+  '--indigo-soft': '#e9e6fb',
+  '--brand': '#4a3ac9',
+  '--on-indigo': '#ffffff'
+};
+
+const designDark: Record<string, string> = {
+  '--ground': '#0c1118',
+  '--nav': '#111823',
+  '--surface': '#151c27',
+  '--surface-muted': '#1b2433',
+  '--line': '#243044',
+  '--ink': '#eef2f7',
+  '--ink-soft': '#9aa8bc',
+  '--track': '#2a3649',
+  '--mint': '#6ee7be',
+  '--mint-soft': '#0f2e2a',
+  '--amber-ink': '#ffd27a',
+  '--amber-soft': '#33260f',
+  '--coral': '#ffa68e',
+  '--coral-soft': '#33191a',
+  '--indigo': '#c8c0ff',
+  '--indigo-soft': '#2b2766',
+  '--brand': '#8e84ff',
+  '--on-indigo': '#14102e'
+};
+
+// Colors that do not change with the theme in the proposal.
+const designFixed: Record<string, string> = {
+  '--hero-surface': '#0b1520',
+  '--hero-lavender': '#b8adff',
+  '--hero-text-soft': '#c9d4e2',
+  '--hero-accent': '#6ee7be',
+  '--hero-star': '#ffe9c2',
+  '--hero-bubble-bg': '#ffffff',
+  '--hero-bubble-ink': '#16202c',
+  '--hero-glow': 'rgb(142 132 255 / 0.24)',
+  '--hero-shade-80': 'rgb(11 21 32 / 0.8)',
+  '--hero-shade-10': 'rgb(11 21 32 / 0.1)',
+  '--hero-shade-95': 'rgb(11 21 32 / 0.95)',
+  '--on-hero-track': 'rgb(255 255 255 / 0.2)',
+  '--urgency-coral': '#ff7a59',
+  '--urgency-amber': '#ffb84d',
+  '--urgency-green': '#2fcb9b',
+  '--cta-from': '#5be8bc',
+  '--cta-to': '#2fcb9b',
+  '--cta-ink': '#062b20',
+  '--cta-glow-ring': 'rgb(47 203 155 / 0.5)',
+  '--cta-glow': 'rgb(47 203 155 / 0.35)',
+  '--cta-fab-glow': 'rgb(47 203 155 / 0.4)',
+  '--shadow-mascot': 'rgb(0 0 0 / 0.5)',
+  '--shadow-bubble': 'rgb(0 0 0 / 0.3)',
+  '--shadow-card': 'rgb(0 0 0 / 0.28)',
+  '--shadow-nav': 'rgb(0 0 0 / 0.3)',
+  '--hover-accent': '#8e84ff',
+  '--hover-accent-glow': 'rgb(142 132 255 / 0.22)',
+  '--chart-line': '#2a8f6c',
+  '--chart-vein': '#138a66',
+  '--chart-area-top': 'rgb(47 203 155 / 0.28)',
+  '--chart-today-fill': 'rgb(47 203 155 / 0.25)'
+};
+
+function declared(source: string, token: string): string | undefined {
+  return source.match(new RegExp(`${token}:\\s*([^;]+);`))?.[1].trim();
+}
+
+describe('proposal D palette', () => {
+  it.each(Object.entries(designLight))('%s is %s in light', (token, value) => {
+    expect(declared(lightBlock, token)).toBe(value);
+  });
+
+  it.each(Object.entries(designDark))('%s is %s in dark', (token, value) => {
+    expect(declared(darkBlock, token)).toBe(value);
+    expect(declared(mediaDarkBlock, token)).toBe(value);
+  });
+
+  it.each(Object.entries(designFixed))(
+    '%s is %s in both themes',
+    (token, value) => {
+      expect(declared(lightBlock, token)).toBe(value);
+      expect(darkBlock).not.toContain(`${token}:`);
+    }
+  );
+});
+
 describe('design tokens', () => {
   it.each(themedTokens)('defines %s in light, dark and system dark', token => {
     expect(lightBlock).toContain(`${token}:`);

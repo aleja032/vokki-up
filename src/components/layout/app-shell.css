@@ -34,7 +34,7 @@
 /* Avatar */
 
 .user-avatar {
-  @apply flex size-11 shrink-0 items-center justify-center rounded-full bg-(--indigo) text-[15px] font-bold text-(--surface);
+  @apply flex size-11 shrink-0 items-center justify-center rounded-full bg-(--brand) text-[15px] font-bold text-(--on-indigo);
 }
 
 /* Connection pill */
@@ -120,7 +120,7 @@
 
 .bottom-navigation {
   @apply fixed inset-x-3 bottom-[max(14px,env(safe-area-inset-bottom))] z-10 grid auto-cols-fr grid-flow-col items-end rounded-(--radius-pill) border border-solid border-(--line) bg-(--nav) px-1.5 pt-2 pb-2.5;
-  box-shadow: 0 12px 30px color-mix(in srgb, black 30%, transparent);
+  box-shadow: 0 12px 30px var(--shadow-nav);
 }
 
 .bottom-navigation__item {
@@ -149,7 +149,7 @@
   background: var(--cta-gradient);
   box-shadow:
     0 0 0 5px var(--nav),
-    0 8px 18px color-mix(in srgb, var(--cta-to) 40%, transparent);
+    0 8px 18px var(--cta-fab-glow);
   transition: transform var(--hover-duration) var(--ease-out);
 }
 

@@ -24,32 +24,38 @@
   @apply absolute inset-x-0 top-0 h-50;
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--hero-surface) 10%, transparent),
+    var(--hero-shade-10),
     var(--hero-surface)
   );
+}
+
+.hero-panel__wave {
+  @apply absolute inset-x-0 -bottom-px hidden h-11 w-full;
+  fill: var(--ground);
 }
 
 .hero-panel__glow {
   @apply absolute -top-0 -right-12 size-80 rounded-full;
   background: radial-gradient(
     circle,
-    color-mix(in srgb, var(--brand) 28%, transparent) 0%,
-    transparent 66%
+    var(--hero-glow) 0%,
+    color-mix(in srgb, var(--hero-glow) 33%, transparent) 45%,
+    transparent 68%
   );
 }
 
 .hero-panel__star {
-  @apply absolute top-[14%] left-[8%] size-1 bg-(--amber);
+  @apply absolute top-[14%] left-[8%] size-1 bg-(--hero-star);
 }
 
 .hero-panel__mascot {
   @apply absolute -top-7 right-3.5 h-42.5 w-auto;
-  filter: drop-shadow(0 14px 20px color-mix(in srgb, black 50%, transparent));
+  filter: drop-shadow(0 14px 20px var(--shadow-mascot));
 }
 
 .hero-panel__bubble {
-  @apply absolute top-3 left-4 m-0 max-w-37.5 rounded-tl-[20px] rounded-tr-[20px] rounded-br-[20px] rounded-bl-[6px] bg-white px-3.5 py-2.5 text-[13.5px] leading-tight font-extrabold text-(--hero-surface);
-  box-shadow: 0 12px 26px color-mix(in srgb, black 30%, transparent);
+  @apply absolute top-3 left-4 m-0 max-w-37.5 rounded-tl-[20px] rounded-tr-[20px] rounded-br-[20px] rounded-bl-[6px] bg-(--hero-bubble-bg) px-3.5 py-2.5 text-[13.5px] leading-tight font-extrabold text-(--hero-bubble-ink);
+  box-shadow: 0 12px 26px var(--shadow-bubble);
 }
 
 .hero-panel__copy {
@@ -57,7 +63,7 @@
 }
 
 .hero-panel__kicker {
-  @apply text-[12px] tracking-[0.1em] text-white/75;
+  @apply text-[12px] tracking-[0.1em] text-(--hero-text-soft);
 }
 
 .hero-panel__title {
@@ -65,11 +71,11 @@
 }
 
 .hero-panel__accent {
-  @apply text-(--cta-from);
+  @apply text-(--hero-accent);
 }
 
 .hero-panel__lead {
-  @apply m-0 max-w-md text-[15px] text-white/75;
+  @apply m-0 max-w-md text-[15px] text-(--hero-text-soft);
 }
 
 .hero-panel__chips {
@@ -111,9 +117,13 @@
       90deg,
       var(--hero-surface) 0%,
       var(--hero-surface) 42%,
-      color-mix(in srgb, var(--hero-surface) 80%, transparent) 54%,
-      transparent 76%
+      var(--hero-shade-80) 54%,
+      var(--hero-shade-10) 76%
     );
+  }
+
+  .hero-panel__wave {
+    @apply block;
   }
 
   .hero-panel__glow {

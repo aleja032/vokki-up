@@ -17,8 +17,7 @@
 }
 
 .week-leaf__stop--top {
-  stop-color: var(--urgency-green);
-  stop-opacity: 0.28;
+  stop-color: var(--chart-area-top);
 }
 
 .week-leaf__stop--bottom {
@@ -40,7 +39,7 @@
 
 .week-leaf__line {
   fill: none;
-  stroke: var(--mint);
+  stroke: var(--chart-line);
   stroke-width: 3.5;
   stroke-linecap: round;
 }
@@ -50,7 +49,7 @@
 }
 
 .week-leaf__leaf[data-today='true'] {
-  fill: color-mix(in srgb, var(--urgency-green) 25%, transparent);
+  fill: var(--chart-today-fill);
   stroke: var(--urgency-green);
   stroke-width: 2.2;
   stroke-dasharray: 4 3;
@@ -58,7 +57,7 @@
 
 .week-leaf__vein {
   fill: none;
-  stroke: var(--mint);
+  stroke: var(--chart-vein);
   stroke-width: 1.6;
   stroke-linecap: round;
 }

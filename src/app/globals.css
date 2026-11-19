@@ -67,6 +67,29 @@
   --cta-gradient: linear-gradient(135deg, var(--cta-from), var(--cta-to));
   --hero-surface: #0b1520;
   --hero-lavender: #b8adff;
+  --hero-text-soft: #c9d4e2;
+  --hero-accent: #6ee7be;
+  --hero-star: #ffe9c2;
+  --hero-bubble-bg: #ffffff;
+  --hero-bubble-ink: #16202c;
+  --hero-glow: rgb(142 132 255 / 0.24);
+  --hero-shade-80: rgb(11 21 32 / 0.8);
+  --hero-shade-10: rgb(11 21 32 / 0.1);
+  --hero-shade-95: rgb(11 21 32 / 0.95);
+  --on-hero-track: rgb(255 255 255 / 0.2);
+  --shadow-mascot: rgb(0 0 0 / 0.5);
+  --shadow-bubble: rgb(0 0 0 / 0.3);
+  --shadow-card: rgb(0 0 0 / 0.28);
+  --shadow-nav: rgb(0 0 0 / 0.3);
+  --hover-accent: #8e84ff;
+  --hover-accent-glow: rgb(142 132 255 / 0.22);
+  --chart-line: #2a8f6c;
+  --chart-vein: #138a66;
+  --chart-area-top: rgb(47 203 155 / 0.28);
+  --chart-today-fill: rgb(47 203 155 / 0.25);
+  --cta-glow-ring: rgb(47 203 155 / 0.5);
+  --cta-glow: rgb(47 203 155 / 0.35);
+  --cta-fab-glow: rgb(47 203 155 / 0.4);
   --radius-14: 14px;
   --radius-18: 18px;
   --radius-22: 22px;
@@ -378,32 +401,39 @@ a:focus-visible {
 
 /* Ambient motion (mascot, sparkles, CTA, glow). Each class opts out below. */
 @keyframes mascot-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
   50% {
-    transform: translateY(-6px);
+    transform: translateY(-9px) rotate(1deg);
   }
 }
 
 @keyframes twinkle {
   0%,
   100% {
-    opacity: 0.35;
-    transform: scale(0.85);
+    opacity: 0.2;
   }
 
   50% {
     opacity: 1;
-    transform: scale(1);
   }
 }
 
 @keyframes cta-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 transparent;
+    box-shadow:
+      0 0 0 0 var(--cta-glow-ring),
+      0 8px 22px var(--cta-glow);
   }
 
   50% {
-    box-shadow: 0 0 0 8px color-mix(in srgb, var(--cta-to) 22%, transparent);
+    box-shadow:
+      0 0 0 9px transparent,
+      0 8px 22px var(--cta-glow);
   }
 }
 
