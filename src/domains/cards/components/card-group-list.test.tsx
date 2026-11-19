@@ -4,7 +4,12 @@ import { describe, expect, it } from 'vitest';
 import type { CardGroup } from '../types';
 import { CardGroupList } from './card-group-list';
 
-const group = { id: 'g1', name: 'Trabajo', tone: 'indigo' } as CardGroup;
+const group = {
+  id: 'g1',
+  name: 'Trabajo',
+  description: 'Reuniones y correos',
+  tone: 'coral'
+} as CardGroup;
 
 function render(
   tiles: Parameters<typeof CardGroupList>[0]['tiles'],
@@ -23,23 +28,29 @@ function render(
   );
 }
 
-describe('CardGroupList chips', () => {
-  it('shows the all chip with the total and marks it pressed', () => {
+describe('CardGroupList folders', () => {
+  it('shows the all folder with the total and marks it pressed', () => {
     const html = render([]);
-    expect(html).toContain('Todas · 46');
+    expect(html).toContain('>Todas<');
+    expect(html).toContain('>46<');
+    expect(html).toContain('Todo tu mazo');
     expect(html).toContain('aria-pressed="true"');
   });
 
-  it('shows one chip per group with its card count and no pressed state', () => {
+  it('shows one folder per group with count, name, description and tone', () => {
     const html = render([{ group, cardCount: 17, dueCount: 3 }]);
-    expect(html).toContain('Trabajo · 17');
-    expect(html).toContain('Trabajo · 17 tarjetas · 3 hoy');
+    expect(html).toContain('>Trabajo<');
+    expect(html).toContain('>17<');
+    expect(html).toContain('Reuniones y correos');
+    expect(html).toContain('data-tone="coral"');
+    expect(html).toContain('aria-label="Trabajo · 17 tarjetas · 3 hoy"');
     expect(html.split('aria-pressed').length - 1).toBe(1);
   });
 
-  it('keeps a labelled control to create a group', () => {
+  it('keeps a visible control to create a group', () => {
     const html = render([]);
-    expect(html).toContain('aria-label="Nuevo grupo"');
+    expect(html).toContain('folder-tile--add');
+    expect(html).toContain('Nuevo grupo');
   });
 
   it('no longer carries the library link (it lives in the page header)', () => {

@@ -358,6 +358,13 @@ export const extraTranslations: Record<string, string> = {
 
   // Mi mazo (cards overview, proposal D)
   'Mi mazo': 'My deck',
+  'Opciones para agregar tarjetas': 'Options to add cards',
+  'Crear tarjeta': 'Create card',
+  'Todo tu mazo': 'Your whole deck',
+  'Filtrar por estado': 'Filter by status',
+  'Para hoy': 'For today',
+  Dominadas: 'Mastered',
+  Tipo: 'Type',
 
   // Review round and results (proposal D)
   'Palabra nueva': 'New word',
@@ -373,10 +380,7 @@ export const extraTranslations: Record<string, string> = {
 
 // Interpolated messages: [Spanish pattern, English replacement].
 export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
-  [
-    /^(\d+) tarjetas? · (\d+) para repasar hoy · (\d+) dominadas?$/,
-    '$1 cards · $2 to review today · $3 mastered'
-  ],
+  [/^(\d+) tarjetas? · (\d+) carpetas?$/, '$1 cards · $2 folders'],
   [/^Repasar (\d+)$/, 'Review $1'],
   [/^de (\d+) hoy$/, 'of $1 today'],
   [/^(\d+) \/ (\d+) palabras o frases$/, '$1 / $2 words or phrases'],

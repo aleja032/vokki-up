@@ -8,6 +8,8 @@ type SearchFieldProps = {
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
+  /** `soft` swaps the pill for a 16px radius (Mi mazo toolbar). */
+  shape?: 'pill' | 'soft';
   className?: string;
 };
 
@@ -17,10 +19,17 @@ export function SearchField({
   placeholder,
   value,
   onChange,
+  shape = 'pill',
   className
 }: SearchFieldProps) {
   return (
-    <div className={cn('search-field', className)}>
+    <div
+      className={cn(
+        'search-field',
+        shape === 'soft' && 'search-field--soft',
+        className
+      )}
+    >
       <label className="sr-only" htmlFor={id}>
         {label}
       </label>

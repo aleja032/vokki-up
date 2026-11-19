@@ -6,25 +6,34 @@ function pluralize(count: number, singular: string, plural: string) {
 export const cardsMessages = createLocalizedMessages({
   overview: {
     title: 'Mi mazo',
-    summary: (cards: number, due: number, mastered: number) =>
-      `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} · ${due} para repasar hoy · ${mastered} ${pluralize(mastered, 'dominada', 'dominadas')}`,
+    summary: (cards: number, folders: number) =>
+      `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} · ${folders} ${pluralize(folders, 'carpeta', 'carpetas')}`,
     newCardTitle: 'Nueva tarjeta',
+    newCardMenuLabel: 'Opciones para agregar tarjetas',
+    createCard: 'Crear tarjeta',
     addFromLibrary: 'Agregar desde la biblioteca',
-    addFromLibraryShort: 'Biblioteca',
     reviewShort: (due: number) => `Repasar ${due}`,
     memoryLabel: (level: number) => `Memoria ${level} de 5`,
     groupsTitle: 'Grupos',
     groupsLabel: 'Grupos de tarjetas',
     allGroups: 'Todas',
+    allGroupsHint: 'Todo tu mazo',
     newGroup: 'Nuevo grupo',
     groupMeta: (cards: number, due: number) =>
       `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} · ${due} hoy`,
     libraryTitleAll: 'Todas mis tarjetas',
     libraryTitleGroup: (name: string) => `Tarjetas de ${name}`,
-    libraryTitleWide: 'Mis tarjetas',
     searchLabel: 'Buscar tarjetas',
     searchPlaceholder: 'Buscar palabra o significado…',
-    filtersLabel: 'Filtrar por categoría',
+    statusFiltersLabel: 'Filtrar por estado',
+    statusFilters: {
+      all: 'Todas',
+      due: 'Para hoy',
+      learning: 'En curso',
+      mastered: 'Dominadas'
+    },
+    typeLabel: 'Tipo',
+    allTypes: 'Todos',
     allCategories: 'Todas',
     emptyFilter: 'No hay tarjetas con ese filtro.',
     noGroup: 'Sin grupo',

@@ -1,26 +1,26 @@
 import Image from 'next/image';
-import { Library, Play, Plus } from 'lucide-react';
+import { Play } from 'lucide-react';
 import { ActionPill } from '@/components/ui/action-pill';
-import { HeaderStreakPill } from '@/components/layout/header-streak-pill';
 import { cardsMessages } from '../messages';
+import { NewCardMenu } from './new-card-menu';
 import './deck-page-header.css';
 
 const messages = cardsMessages.overview;
 
 type DeckPageHeaderProps = {
   totalCards: number;
+  groupCount: number;
   dueCount: number;
-  masteredCount: number;
   onAddCard: () => void;
 };
 
-// Mi mazo header (proposal D): mascot, title with the deck summary, and the
-// three actions. On phones the review action comes first and the mascot is
-// dropped; the streak pill replaces the shell header the page hides there.
+// Mi mazo header (proposal D): mascot, title with the deck summary, the new
+// card menu and the review action. On phones the title row carries the round
+// plus button and the review action takes its own full-width line.
 export function DeckPageHeader({
   totalCards,
+  groupCount,
   dueCount,
-  masteredCount,
   onAddCard
 }: DeckPageHeaderProps) {
   return (
@@ -35,39 +35,14 @@ export function DeckPageHeader({
           width={700}
         />
         <div className="deck-header__copy">
-          <div className="deck-header__title-row">
-            <h1>{messages.title}</h1>
-            <span className="deck-header__streak">
-              <HeaderStreakPill />
-            </span>
-          </div>
+          <h1>{messages.title}</h1>
           <p className="deck-header__summary">
-            {messages.summary(totalCards, dueCount, masteredCount)}
+            {messages.summary(totalCards, groupCount)}
           </p>
         </div>
       </div>
       <div className="deck-header__actions">
-        <ActionPill
-          aria-label={messages.addFromLibrary}
-          className="deck-header__action"
-          href="/cards/word-library"
-          icon={<Library size={18} strokeWidth={2.2} />}
-        >
-          <span className="deck-header__label--compact">
-            {messages.addFromLibraryShort}
-          </span>
-          <span className="deck-header__label--wide">
-            {messages.addFromLibrary}
-          </span>
-        </ActionPill>
-        <ActionPill
-          className="deck-header__action"
-          icon={<Plus size={18} strokeWidth={2.2} />}
-          onClick={onAddCard}
-          variant="brand"
-        >
-          {messages.newCardTitle}
-        </ActionPill>
+        <NewCardMenu onCreate={onAddCard} />
         <ActionPill
           className="deck-header__cta"
           href="/review?from=cards"

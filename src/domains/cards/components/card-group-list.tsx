@@ -1,11 +1,14 @@
 'use client';
 
-import { Plus } from 'lucide-react';
-import { Chip } from '@/components/ui/chip';
+import { FolderTile } from '@/components/ui/folder-tile';
 import { ALL_GROUPS_ID } from '../hooks/use-cards-dashboard';
-import { getGroupDisplayName } from '../group-display';
+import {
+  getGroupDisplayDescription,
+  getGroupDisplayName
+} from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardGroup } from '../types';
+import { DeckIcon } from './deck-icon';
 import './card-group-list.css';
 
 const messages = cardsMessages.overview;
@@ -26,8 +29,9 @@ type CardGroupListProps = {
   onAddGroup: () => void;
 };
 
-// Group chips (proposal D): "Todas" filters the library below, a group chip
-// opens that group's own screen, and the dashed chip starts a new group.
+// Group folders (proposal D): "Todas" filters the library below, a group
+// folder opens that group's own screen, and the dashed folder starts a new
+// group.
 export function CardGroupList({
   tiles,
   totalCards,
@@ -47,25 +51,29 @@ export function CardGroupList({
         className="deck-groups__list"
         role="group"
       >
-        <Chip
+        <FolderTile
+          aria-label={`${messages.allGroups} · ${messages.groupMeta(totalCards, totalDue)}`}
+          count={totalCards}
+          icon={<DeckIcon name="stack" size={24} />}
           onClick={onSelectAll}
           pressed={activeGroupId === ALL_GROUPS_ID}
-          title={messages.groupMeta(totalCards, totalDue)}
-        >
-          {`${messages.allGroups} · ${totalCards}`}
-        </Chip>
+          subtitle={messages.allGroupsHint}
+          title={messages.allGroups}
+        />
         {tiles.map(({ group, cardCount, dueCount }) => (
-          <Chip
+          <FolderTile
+            aria-label={`${getGroupDisplayName(group)} · ${messages.groupMeta(cardCount, dueCount)}`}
+            count={cardCount}
+            icon={<DeckIcon name="stack" size={24} />}
             key={group.id}
             onClick={() => onOpenGroup(group.id)}
-            title={`${getGroupDisplayName(group)} · ${messages.groupMeta(cardCount, dueCount)}`}
-          >
-            {`${getGroupDisplayName(group)} · ${cardCount}`}
-          </Chip>
+            subtitle={getGroupDisplayDescription(group) || undefined}
+            title={getGroupDisplayName(group)}
+            tone={group.tone}
+          />
         ))}
-        <Chip
-          aria-label={messages.newGroup}
-          icon={<Plus size={18} strokeWidth={2.6} />}
+        <FolderTile
+          icon={<DeckIcon name="plus" size={26} />}
           onClick={onAddGroup}
           title={messages.newGroup}
           variant="add"

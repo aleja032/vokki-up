@@ -5,6 +5,10 @@
   transition: var(--hover-transition);
 }
 
+.search-field--soft {
+  @apply rounded-2xl px-4;
+}
+
 .search-field__icon {
   @apply shrink-0;
 }

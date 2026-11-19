@@ -1,6 +1,7 @@
-import { createElement, type ReactNode } from 'react';
+import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import type { CardStatusFilter } from '../card-status';
 import type { CardGroup, VocabularyCard } from '../types';
 import { CardsLibrary } from './cards-library';
 
@@ -18,12 +19,11 @@ function render(
   options: {
     activeGroup?: CardGroup;
     searchText?: string;
-    groupFilters?: ReactNode;
+    activeStatus?: CardStatusFilter;
   } = {}
 ) {
   return renderToStaticMarkup(
     createElement(CardsLibrary, {
-      groupFilters: options.groupFilters,
       cards,
       groups: [group],
       schedules: {},
@@ -31,10 +31,13 @@ function render(
       activeGroup: options.activeGroup,
       categories: ['Todas'],
       activeCategory: 'Todas',
+      activeStatus: options.activeStatus ?? 'all',
+      statusCounts: { all: 46, due: 12, learning: 11, mastered: 23 },
       searchText: options.searchText ?? '',
       canDeleteCards: true,
       onSearchChange: () => undefined,
       onCategoryChange: () => undefined,
+      onStatusChange: () => undefined,
       onDeleteCards: () => undefined,
       onAddCard: () => undefined
     })
@@ -44,13 +47,25 @@ function render(
 const count = (html: string, text: string) => html.split(text).length - 1;
 
 describe('CardsLibrary toolbar', () => {
-  it('renders the group filters slot next to the search and category chips', () => {
-    const html = render([card], {
-      groupFilters: createElement('div', { 'data-slot': 'groups' })
-    });
-    expect(html).toContain('data-slot="groups"');
+  it('renders the search field, the type select and the manage button', () => {
+    const html = render([card]);
     expect(html).toContain('id="deck-search-input"');
-    expect(html).toContain('aria-pressed="true"');
+    expect(html).toContain('id="deck-type-select"');
+    expect(html).toContain('>Tipo<');
+    expect(html).toContain('>Gestionar<');
+  });
+
+  it('shows the status filter with a count per status and one pressed', () => {
+    const html = render([card], { activeStatus: 'due' });
+    expect(html).toContain('aria-label="Filtrar por estado"');
+    for (const label of ['Todas', 'Para hoy', 'En curso', 'Dominadas'])
+      expect(html).toContain(label);
+    for (const total of ['>46<', '>12<', '>11<', '>23<'])
+      expect(html).toContain(total);
+    expect(html.match(/aria-pressed="true"/g)).toHaveLength(1);
+    expect(html).toMatch(
+      /aria-pressed="true"[^>]*><span[^>]*><\/span>Para hoy/
+    );
   });
 });
 
@@ -71,6 +86,12 @@ describe('CardsLibrary group add actions', () => {
 
   it('keeps the filter message, without CTAs, when a search empties a group', () => {
     const html = render([], { activeGroup: group, searchText: 'zzz' });
+    expect(html).toContain('No hay tarjetas con ese filtro.');
+    expect(html).not.toContain('word-library');
+  });
+
+  it('hides the group CTAs while a status filter is active', () => {
+    const html = render([], { activeGroup: group, activeStatus: 'due' });
     expect(html).toContain('No hay tarjetas con ese filtro.');
     expect(html).not.toContain('word-library');
   });

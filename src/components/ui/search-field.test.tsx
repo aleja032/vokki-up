@@ -20,4 +20,21 @@ describe('SearchField', () => {
     expect(html).toContain('placeholder="Buscar palabra"');
     expect(html).toContain('value="deadline"');
   });
+
+  it('uses the pill shape unless the soft shape is requested', () => {
+    const render = (shape?: 'soft') =>
+      renderToStaticMarkup(
+        <SearchField
+          id="s"
+          label="Buscar"
+          onChange={() => undefined}
+          placeholder="Buscar"
+          shape={shape}
+          value=""
+        />
+      );
+
+    expect(render()).not.toContain('search-field--soft');
+    expect(render('soft')).toContain('search-field--soft');
+  });
 });

@@ -1,55 +1,44 @@
 @reference 'tailwindcss';
 
-/* Mobile first: title row with the streak pill, review CTA on its own line,
-   then the two secondary actions side by side. */
+/* Mobile first: title and summary with the round plus button on one row, the
+   review action on its own full-width line below. */
 
 .deck-header {
-  @apply flex flex-col gap-3.5;
+  @apply grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2.5 gap-y-4;
 }
 
 .deck-header__identity {
-  @apply flex min-w-0 items-center gap-4.5;
+  @apply flex min-w-0 items-center gap-4;
 }
 
 .deck-header__mascot {
-  @apply hidden h-22 w-auto;
+  @apply hidden h-19 w-auto;
 }
 
 .deck-header__copy {
-  @apply flex min-w-0 flex-1 flex-col gap-0.5;
-}
-
-.deck-header__title-row {
-  @apply flex items-center justify-between gap-3;
+  @apply flex min-w-0 flex-1 flex-col;
 }
 
 .deck-header h1 {
-  @apply m-0 text-[28px] leading-[1.05] font-bold tracking-[-0.8px] wrap-anywhere;
+  @apply m-0 text-[28px] leading-[1.1] font-bold tracking-[-0.8px] wrap-anywhere;
 }
 
 .deck-header__summary {
-  @apply m-0 px-1 text-[13.5px] text-(--ink-soft);
+  @apply m-0 text-[13px] text-(--ink-soft);
 }
 
+/* The actions wrapper dissolves on phones so the plus button joins the title row. */
 .deck-header__actions {
-  @apply flex flex-wrap items-center gap-2.5;
+  @apply contents;
 }
 
 .deck-header__cta {
-  @apply order-first basis-full text-[17px];
-}
-
-.deck-header__action {
-  @apply min-h-12 flex-1 px-3.5 whitespace-nowrap;
-}
-
-.deck-header__label--wide {
-  @apply hidden;
+  @apply col-span-full text-[17px];
 }
 
 @media (min-width: 761px) {
   .deck-header {
-    @apply flex-row flex-wrap items-center justify-between gap-4.5;
+    @apply flex flex-wrap justify-between gap-4.5;
   }
 
   .deck-header__mascot {
@@ -57,34 +46,18 @@
   }
 
   .deck-header h1 {
-    @apply text-[40px] tracking-[-1.2px];
+    @apply text-[40px] leading-[1.05] tracking-[-1.2px];
   }
 
   .deck-header__summary {
-    @apply px-0 text-[15px];
-  }
-
-  .deck-header__streak {
-    @apply hidden;
+    @apply text-[15px];
   }
 
   .deck-header__actions {
-    @apply gap-3;
+    @apply flex flex-wrap items-center gap-3;
   }
 
   .deck-header__cta {
-    @apply order-none basis-auto text-[16px];
-  }
-
-  .deck-header__action {
-    @apply min-h-13 flex-none px-5.5;
-  }
-
-  .deck-header__label--compact {
-    @apply hidden;
-  }
-
-  .deck-header__label--wide {
-    @apply inline;
+    @apply col-auto text-[16px];
   }
 }

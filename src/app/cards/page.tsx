@@ -9,7 +9,7 @@ type CardsPageProps = {
 export default async function CardsPage({ searchParams }: CardsPageProps) {
   const { mode } = await searchParams;
   return (
-    <AppShell>
+    <AppShell palette="violet">
       <CardsPageContainer initialMode={parseAddHubMode(mode)} />
     </AppShell>
   );

@@ -2,6 +2,12 @@
 
 import { useMemo, useState } from 'react';
 import { CARD_PARTS_OF_SPEECH } from '../card-create.schema';
+import {
+  ALL_CARD_STATUSES,
+  countCardStatuses,
+  matchesStatusFilter,
+  type CardStatusFilter
+} from '../card-status';
 import { STARTER_CARDS, STARTER_GROUPS } from '../data';
 import { deleteGroupMovingCards } from '../delete-group';
 import { isCardList, isGroupList } from '../library-validators';
@@ -57,6 +63,8 @@ export function useCardsDashboard() {
     );
   const [activeGroupId, setActiveGroupId] = useState(ALL_GROUPS_ID);
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORIES);
+  const [activeStatus, setActiveStatus] =
+    useState<CardStatusFilter>(ALL_CARD_STATUSES);
   const [searchText, setSearchText] = useState('');
   const [groupView, setGroupView] = useState<GroupView>('overview');
   // The open group detail is independent from the library filter above.
@@ -83,9 +91,18 @@ export function useCardsDashboard() {
     };
   });
 
-  const filteredCards = cards.filter(card => {
-    const belongsToGroup =
-      activeGroupId === ALL_GROUPS_ID || card.groupId === activeGroupId;
+  const cardsInGroup = cards.filter(
+    card => activeGroupId === ALL_GROUPS_ID || card.groupId === activeGroupId
+  );
+  const statusCounts = countCardStatuses(cardsInGroup, schedules, now);
+
+  const filteredCards = cardsInGroup.filter(card => {
+    const belongsToStatus = matchesStatusFilter(
+      activeStatus,
+      card.id,
+      schedules,
+      now
+    );
     const belongsToCategory =
       activeCategory === ALL_CATEGORIES || card.partOfSpeech === activeCategory;
     const query = searchText.trim().toLocaleLowerCase();
@@ -94,7 +111,7 @@ export function useCardsDashboard() {
       [card.term, card.meaning, ...card.tags].some(value =>
         value.toLocaleLowerCase().includes(query)
       );
-    return belongsToGroup && belongsToCategory && matchesSearch;
+    return belongsToStatus && belongsToCategory && matchesSearch;
   });
 
   const openGroupCards = openGroup
@@ -131,6 +148,7 @@ export function useCardsDashboard() {
     setCards(currentCards => [card, ...currentCards]);
     setActiveGroupId(ALL_GROUPS_ID);
     setActiveCategory(ALL_CATEGORIES);
+    setActiveStatus(ALL_CARD_STATUSES);
     setSearchText('');
     setIsEditorOpen(false);
     setEditorKey(key => key + 1);
@@ -143,6 +161,7 @@ export function useCardsDashboard() {
     setCards(currentCards => [...newCards, ...currentCards]);
     setActiveGroupId(ALL_GROUPS_ID);
     setActiveCategory(ALL_CATEGORIES);
+    setActiveStatus(ALL_CARD_STATUSES);
     setSearchText('');
   }
 
@@ -225,6 +244,7 @@ export function useCardsDashboard() {
     setEditorKey(key => key + 1);
     setActiveGroupId(ALL_GROUPS_ID);
     setActiveCategory(ALL_CATEGORIES);
+    setActiveStatus(ALL_CARD_STATUSES);
     setSearchText(term);
     setGroupView('overview');
   }
@@ -241,12 +261,14 @@ export function useCardsDashboard() {
     groupTiles,
     categories: CATEGORY_FILTERS,
     filteredCards,
+    statusCounts,
     activeGroup,
     activeGroupId,
     openGroup,
     openGroupCards,
     openGroupStats,
     activeCategory,
+    activeStatus,
     searchText,
     groupView,
     isEditorOpen,
@@ -254,6 +276,7 @@ export function useCardsDashboard() {
     editorGroupId,
     setActiveGroupId,
     setActiveCategory,
+    setActiveStatus,
     setSearchText,
     setGroupView,
     openEditor,

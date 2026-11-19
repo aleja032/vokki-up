@@ -25,7 +25,7 @@ describe('ActionPill', () => {
     expect(html).toContain('motion-cta-pulse');
   });
 
-  it.each(['brand', 'outline', 'cta', 'mint'] as const)(
+  it.each(['brand', 'outline', 'cta', 'mint', 'line'] as const)(
     'applies the %s variant modifier',
     variant => {
       expect(
@@ -53,5 +53,24 @@ describe('ActionPill', () => {
     expect(html).toContain('class="action-pill__icon"');
     expect(html).toContain('aria-hidden="true"');
     expect(html).toContain('disabled=""');
+  });
+
+  it('exposes menu semantics and a trailing icon on button pills', () => {
+    const html = renderToStaticMarkup(
+      <ActionPill
+        aria-controls="menu-id"
+        aria-expanded={false}
+        aria-haspopup="menu"
+        iconEnd={<svg data-end />}
+        variant="line"
+      >
+        Nueva
+      </ActionPill>
+    );
+
+    expect(html).toContain('aria-haspopup="menu"');
+    expect(html).toContain('aria-expanded="false"');
+    expect(html).toContain('aria-controls="menu-id"');
+    expect(html).toMatch(/Nueva<span[^>]*><svg data-end/);
   });
 });

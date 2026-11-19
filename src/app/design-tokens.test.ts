@@ -161,6 +161,76 @@ describe('proposal D palette', () => {
   );
 });
 
+// Violet palette of the Mi mazo artboards (VokkiDMazo.dc.html), scoped on
+// `.palette-violet`. Keys are the app tokens, values the artboard theme colors.
+const violetLight: Record<string, string> = {
+  '--ground': '#f7f4ee',
+  '--nav': '#ffffff',
+  '--surface': '#ffffff',
+  '--surface-muted': '#f1ede6',
+  '--line': '#e6e1d8',
+  '--track': '#e6e1d8',
+  '--ink': '#1b1a2e',
+  '--ink-soft': '#5b5873',
+  '--mint': '#0b6e55',
+  '--mint-soft': '#ddf8ef',
+  '--coral': '#b5402d',
+  '--coral-soft': '#ffe8e3',
+  '--amber-ink': '#b5402d',
+  '--amber-soft': '#ffe8e3',
+  '--indigo': '#5b3fe0',
+  '--indigo-soft': '#ede8ff',
+  '--brand': '#7456ff',
+  '--brand-line': '#7456ff',
+  '--on-indigo': '#ffffff',
+  '--urgency-coral': '#ff846f',
+  '--urgency-green': '#6ee7c2'
+};
+
+const violetDark: Record<string, string> = {
+  '--ground': '#0f0d16',
+  '--nav': '#14111c',
+  '--surface': '#1a1724',
+  '--surface-muted': '#221e2f',
+  '--line': '#2f2a3f',
+  '--track': '#2f2a3f',
+  '--ink': '#f4f1fa',
+  '--ink-soft': '#a8a2bd',
+  '--mint': '#6ee7c2',
+  '--mint-soft': '#102e29',
+  '--coral': '#ffab9c',
+  '--coral-soft': '#36202a',
+  '--amber-ink': '#ffab9c',
+  '--amber-soft': '#36202a',
+  '--indigo': '#c3b4ff',
+  '--indigo-soft': '#2b2350',
+  '--brand-line': '#a99bff'
+};
+
+const violetLightBlock = block('.palette-violet');
+const violetDarkBlock = block(
+  ":root[data-theme='dark'] .palette-violet,\n.dark .palette-violet"
+);
+const violetMediaBlock = block(
+  ":root:not([data-theme='light']) .palette-violet"
+);
+
+describe('violet palette (Mi mazo)', () => {
+  it.each(Object.entries(violetLight))('%s is %s in light', (token, value) => {
+    expect(declared(violetLightBlock, token)).toBe(value);
+  });
+
+  it.each(Object.entries(violetDark))('%s is %s in dark', (token, value) => {
+    expect(declared(violetDarkBlock, token)).toBe(value);
+    expect(declared(violetMediaBlock, token)).toBe(value);
+  });
+
+  it('keeps the learning tone violet and the CTA gradient untouched', () => {
+    expect(declared(violetLightBlock, '--urgency-amber')).toBe('var(--brand)');
+    expect(violetLightBlock).not.toContain('--cta-from');
+  });
+});
+
 describe('design tokens', () => {
   it.each(themedTokens)('defines %s in light, dark and system dark', token => {
     expect(lightBlock).toContain(`${token}:`);

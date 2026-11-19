@@ -158,7 +158,7 @@
 }
 
 /* Shell adjustments: the proposal Mi mazo page has no brand header on mobile
-   (its own title row carries the streak pill). */
+   (its own title row carries the new card button). */
 
 @media (max-width: 760px) {
   .app-shell:has(.deck-page) .app-header {
@@ -173,7 +173,7 @@
 /* Page */
 
 .deck-page {
-  @apply flex flex-col gap-3.5 leading-[normal];
+  @apply flex flex-col gap-4 leading-[normal];
 }
 
 .deck-page__workspace {
@@ -186,7 +186,7 @@
   }
 
   .deck-page {
-    @apply gap-5.5;
+    @apply gap-6.5;
   }
 
   .deck-page__workspace {
@@ -195,6 +195,7 @@
 
   /* An open add hub replaces the page content on wide screens. */
   .deck-page:has(.addhub[data-open='true']) > .deck-header,
+  .deck-page:has(.addhub[data-open='true']) > .deck-groups,
   .deck-page:has(.addhub[data-open='true']) .deck-library {
     @apply hidden;
   }

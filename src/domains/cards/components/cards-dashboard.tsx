@@ -2,7 +2,6 @@
 
 import type { ReactNode } from 'react';
 import { ALL_GROUPS_ID, useCardsDashboard } from '../hooks/use-cards-dashboard';
-import { isMastered } from '../scheduling/mastery';
 import { CardEditor } from './card-editor';
 import type { CardsAddPanelApi } from './cards-add-panel.types';
 import { CardGroupList } from './card-group-list';
@@ -70,17 +69,24 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
     onCreateGroup: dashboard.startGroupCreation,
     onViewExisting: dashboard.viewExistingCard
   };
-  const masteredCount = cards.filter(card =>
-    isMastered(schedules[card.id])
-  ).length;
 
   return (
     <div className="deck-page">
       <DeckPageHeader
         totalCards={cards.length}
         dueCount={dueCount}
-        masteredCount={masteredCount}
+        groupCount={groups.length}
         onAddCard={dashboard.openEditor}
+      />
+
+      <CardGroupList
+        tiles={groupTiles}
+        totalCards={cards.length}
+        totalDue={dueCount}
+        activeGroupId={activeGroupId}
+        onSelectAll={() => dashboard.setActiveGroupId(ALL_GROUPS_ID)}
+        onOpenGroup={dashboard.openGroupById}
+        onAddGroup={dashboard.startGroupCreation}
       />
 
       <div className="deck-page__workspace">
@@ -92,23 +98,15 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
           activeGroup={activeGroup}
           categories={dashboard.categories}
           activeCategory={dashboard.activeCategory}
+          activeStatus={dashboard.activeStatus}
+          statusCounts={dashboard.statusCounts}
           searchText={dashboard.searchText}
           canDeleteCards={dashboard.canDeleteCards}
           onSearchChange={dashboard.setSearchText}
           onCategoryChange={dashboard.setActiveCategory}
+          onStatusChange={dashboard.setActiveStatus}
           onDeleteCards={dashboard.deleteCards}
           onAddCard={dashboard.openEditor}
-          groupFilters={
-            <CardGroupList
-              tiles={groupTiles}
-              totalCards={cards.length}
-              totalDue={dueCount}
-              activeGroupId={activeGroupId}
-              onSelectAll={() => dashboard.setActiveGroupId(ALL_GROUPS_ID)}
-              onOpenGroup={dashboard.openGroupById}
-              onAddGroup={dashboard.startGroupCreation}
-            />
-          }
         />
         {renderAddPanel ? (
           renderAddPanel(addPanelApi)

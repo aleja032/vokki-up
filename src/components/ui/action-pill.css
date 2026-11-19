@@ -17,6 +17,11 @@
   @apply bg-(--brand) text-(--on-indigo);
 }
 
+/* Outlined in the brand line color, transparent inside (menu triggers). */
+.action-pill--line {
+  @apply border-(--brand-line) bg-transparent text-(--indigo);
+}
+
 .action-pill--mint {
   @apply bg-(--mint-soft) text-(--mint);
 }
@@ -43,6 +48,11 @@
   .action-pill--outline:not(:disabled):hover {
     border-color: var(--hover-accent);
     box-shadow: 0 8px 20px var(--hover-accent-glow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .action-pill--line:not(:disabled):hover {
+    background-color: var(--indigo-soft);
     transform: translateY(var(--lift-1));
   }
 

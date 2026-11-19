@@ -1,0 +1,53 @@
+@reference 'tailwindcss';
+
+/* Phones: a 48px round plus button. From 761px: the labelled pill with a chevron. */
+
+.new-card-menu {
+  @apply relative;
+}
+
+.new-card-menu .new-card-menu__trigger {
+  @apply size-12 min-h-12 gap-0 p-0;
+}
+
+.new-card-menu__label,
+.new-card-menu__chevron {
+  @apply hidden;
+}
+
+.new-card-menu__list {
+  @apply absolute top-full right-0 z-20 mt-2 flex w-65 max-w-[calc(100vw-1.75rem)] flex-col rounded-(--radius-18) border border-solid border-(--line) bg-(--surface) p-2 shadow-lg;
+}
+
+.new-card-menu__list[hidden] {
+  @apply hidden;
+}
+
+.new-card-menu__item {
+  @apply flex min-h-11 w-full cursor-pointer items-center gap-2.5 rounded-(--radius-14) border-0 bg-transparent px-3.5 text-left text-[15px] font-semibold text-(--ink);
+  transition: var(--hover-transition);
+}
+
+.new-card-menu__item:focus-visible {
+  @apply outline-3 outline-offset-0 outline-(--focus-ring) outline-solid;
+}
+
+@media (hover: hover) {
+  .new-card-menu__item:hover {
+    @apply bg-(--surface-muted) text-(--indigo);
+  }
+}
+
+@media (min-width: 761px) {
+  .new-card-menu .new-card-menu__trigger {
+    @apply h-auto min-h-13 w-auto gap-2 pr-4.5 pl-4;
+  }
+
+  .new-card-menu__label {
+    @apply inline;
+  }
+
+  .new-card-menu__chevron {
+    @apply block;
+  }
+}

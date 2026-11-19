@@ -14,8 +14,8 @@ const ICON_SHAPES = {
   ),
   stack: (
     <>
-      <rect x="3" y="6" width="14" height="15" rx="2" />
-      <path d="M7 3h12a2 2 0 0 1 2 2v13" />
+      <rect x="3" y="6" width="13" height="15" rx="2" />
+      <path d="M8 3h11a2 2 0 0 1 2 2v12" />
     </>
   ),
   back: <path d="M15 6l-6 6 6 6" />,

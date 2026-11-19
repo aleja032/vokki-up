@@ -1,0 +1,32 @@
+@reference 'tailwindcss';
+
+.select-field {
+  @apply relative flex min-h-12 min-w-0 cursor-pointer items-center gap-2 rounded-2xl border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[13.5px] text-(--ink-soft);
+  transition: var(--hover-transition);
+}
+
+.select-field__label {
+  @apply shrink-0;
+}
+
+.select-field__control {
+  @apply min-w-0 flex-1 cursor-pointer appearance-none border-0 bg-transparent py-3 pr-6 text-[14.5px] font-extrabold text-(--ink) outline-none;
+}
+
+.select-field__control option {
+  @apply bg-(--surface) text-(--ink);
+}
+
+.select-field__icon {
+  @apply pointer-events-none absolute right-4 shrink-0 text-(--ink-soft);
+}
+
+.select-field:focus-within {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+@media (hover: hover) {
+  .select-field:hover {
+    border-color: var(--hover-accent);
+  }
+}

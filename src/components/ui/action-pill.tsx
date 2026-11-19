@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import './action-pill.css';
 
-type ActionPillVariant = 'brand' | 'outline' | 'cta' | 'mint';
+type ActionPillVariant = 'brand' | 'outline' | 'cta' | 'mint' | 'line';
 
 type ActionPillBaseProps = {
   children: ReactNode;
@@ -11,6 +11,8 @@ type ActionPillBaseProps = {
   /** `sm` is the 44px compact size used inside lists and empty states. */
   size?: 'md' | 'sm';
   icon?: ReactNode;
+  /** Trailing icon, e.g. the chevron of a menu button. */
+  iconEnd?: ReactNode;
   className?: string;
   'aria-label'?: string;
 };
@@ -22,6 +24,10 @@ type ActionPillButtonProps = ActionPillBaseProps & {
   onClick?: () => void;
   type?: 'button' | 'submit';
   disabled?: boolean;
+  /** Set on buttons that open a menu. */
+  'aria-haspopup'?: 'menu';
+  'aria-expanded'?: boolean;
+  'aria-controls'?: string;
 };
 
 type ActionPillProps = ActionPillLinkProps | ActionPillButtonProps;
@@ -34,6 +40,7 @@ export function ActionPill(props: ActionPillProps) {
     variant = 'outline',
     size = 'md',
     icon,
+    iconEnd,
     className,
     'aria-label': ariaLabel
   } = props;
@@ -52,6 +59,11 @@ export function ActionPill(props: ActionPillProps) {
         </span>
       ) : null}
       {children}
+      {iconEnd ? (
+        <span aria-hidden="true" className="action-pill__icon">
+          {iconEnd}
+        </span>
+      ) : null}
     </>
   );
 
@@ -64,6 +76,9 @@ export function ActionPill(props: ActionPillProps) {
 
   return (
     <button
+      aria-controls={props['aria-controls']}
+      aria-expanded={props['aria-expanded']}
+      aria-haspopup={props['aria-haspopup']}
       aria-label={ariaLabel}
       className={classes}
       disabled={props.disabled}

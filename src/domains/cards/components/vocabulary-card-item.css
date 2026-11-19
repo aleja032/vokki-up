@@ -2,7 +2,7 @@
 
 /*
  * Vocabulary card tile (proposal D, Mi mazo). The border and the due label
- * follow the memory strength; the three subgrid rows (top, body, footer) keep
+ * follow the memory strength (in the violet palette the amber tone is violet); the three subgrid rows (top, body, footer) keep
  * tiles of one grid row aligned.
  */
 
@@ -70,10 +70,6 @@
 
 .deck-card__state {
   @apply shrink-0 text-[10.5px] tracking-[1px] text-(--indigo);
-}
-
-.deck-card[data-state='learning'] .deck-card__state {
-  @apply text-(--amber-ink);
 }
 
 .deck-card[data-state='mastered'] .deck-card__state {

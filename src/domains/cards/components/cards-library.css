@@ -1,62 +1,54 @@
 @reference 'tailwindcss';
 
 /*
- * Mi mazo library (proposal D): toolbar with group chips and search, category
- * chips, then the card grid. Mobile first; two tile columns on phones.
+ * Mi mazo library (proposal D): one violet-outlined panel with the status
+ * filter, the type select, the search and the manage button on top, then the
+ * card grid. Mobile first; two tile columns on phones.
  */
 
 .deck-library {
   --selection-dock-gap: 1rem;
-  @apply flex min-w-0 flex-1 flex-col gap-4;
+  @apply flex min-w-0 flex-1 flex-col gap-3 rounded-(--card-radius) border-2 border-solid border-(--brand) bg-(--surface) p-3.5;
 }
 
-.deck-library__tools {
-  @apply flex min-w-0 flex-col gap-3;
-}
-
+/* Phones: status filter and manage button on the first row, search and type on the second. */
 .deck-library__toolbar {
-  @apply flex min-w-0 flex-col gap-3;
+  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2.5;
+  grid-template-areas:
+    'status manage'
+    'search type';
 }
 
-/* Phones put the search field above the group chips, like the proposal. */
-.deck-library__search {
-  @apply order-first;
-}
-
-.deck-filters {
-  @apply -mr-3.5 flex gap-2 overflow-x-auto pr-3.5;
-
-  scrollbar-width: none;
-}
-
-.deck-filters::-webkit-scrollbar {
-  @apply hidden;
-}
-
-.deck-library__heading {
-  @apply flex min-h-11 items-center justify-between gap-3;
-}
-
-.deck-library h2 {
-  @apply m-0 text-[18px] font-extrabold;
-}
-
-.deck-library__title-wide {
-  @apply hidden;
+.deck-library__status {
+  grid-area: status;
 }
 
 .deck-library__manage {
-  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4.5 text-[14px] font-bold text-(--ink);
+  @apply inline-flex size-11 cursor-pointer items-center justify-center gap-2 rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-(--surface) p-0 text-[14px] font-bold text-(--ink);
+  grid-area: manage;
   transition: var(--hover-transition);
 }
 
-/* The entry button keeps its slot while managing so the heading never shifts. */
+.deck-library__manage-label {
+  @apply sr-only;
+}
+
+/* The entry button keeps its slot while managing so the toolbar never shifts. */
 .deck-library__manage[inert] {
   @apply invisible;
 }
 
 .deck-library__manage:disabled {
   @apply cursor-not-allowed opacity-50;
+}
+
+.deck-library__search {
+  grid-area: search;
+}
+
+.deck-library__type {
+  @apply w-34.5;
+  grid-area: type;
 }
 
 .deck-library__group-actions {
@@ -98,39 +90,36 @@
 
 @media (min-width: 761px) {
   .deck-library {
-    @apply gap-5;
+    @apply gap-4.5 rounded-(--radius-28) p-5.5;
   }
 
-  .deck-library__tools {
-    @apply gap-3;
-  }
-
+  /* Wide screens: one wrapping row, the status filter first and the rest pushed right. */
   .deck-library__toolbar {
-    @apply flex-row flex-wrap items-center justify-between gap-x-2 gap-y-3;
+    @apply flex flex-wrap gap-3;
+  }
+
+  .deck-library__status {
+    @apply mr-auto;
   }
 
   .deck-library__search {
-    @apply order-none w-auto flex-[0_1_300px];
+    @apply w-auto max-w-65 flex-[1_1_200px];
   }
 
-  .deck-filters {
-    @apply mr-0 flex-wrap overflow-visible pr-0;
+  .deck-library__type {
+    @apply w-auto;
   }
 
-  .deck-library h2 {
-    @apply text-[20px];
+  .deck-library__manage {
+    @apply size-auto min-h-11 px-4.5;
   }
 
-  .deck-library__title-compact {
-    @apply hidden;
-  }
-
-  .deck-library__title-wide {
-    @apply inline;
+  .deck-library__manage-label {
+    @apply not-sr-only;
   }
 
   .deck-library__grid {
-    @apply grid-cols-[repeat(auto-fill,minmax(min(220px,100%),1fr))] gap-4;
+    @apply grid-cols-[repeat(auto-fill,minmax(min(210px,100%),1fr))] gap-4;
   }
 
   .deck-library__empty {
