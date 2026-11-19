@@ -1,0 +1,55 @@
+@reference 'tailwindcss';
+
+/* Desktop header (761px and up). Phones use the app header and bottom nav. */
+
+.app-topbar {
+  @apply hidden border-b border-b-(--line) bg-(--nav);
+}
+
+.app-topbar__inner {
+  @apply mx-auto flex max-w-300 flex-wrap items-center gap-x-7 gap-y-3 px-6 py-3.5;
+}
+
+.app-topbar__brand {
+  @apply gap-2 text-(--ink);
+}
+
+.top-nav {
+  @apply flex min-w-0 flex-1 flex-wrap gap-1;
+}
+
+.top-nav__item {
+  @apply flex min-h-11 items-center rounded-(--radius-pill) px-4.5 text-[15px] font-semibold text-(--ink-soft);
+  transition:
+    background-color var(--hover-duration) var(--ease-out),
+    color var(--hover-duration) var(--ease-out);
+}
+
+.top-nav__item[aria-current='page'] {
+  @apply bg-(--indigo-soft) font-extrabold text-(--indigo);
+}
+
+.app-topbar__actions {
+  @apply flex min-w-0 items-center gap-2.5;
+}
+
+/* Name and level stay available to assistive tech; the avatar is the visible account. */
+.app-topbar .app-sidebar__profile-copy {
+  @apply sr-only;
+}
+
+@media (min-width: 761px) {
+  .app-topbar {
+    @apply block;
+  }
+}
+
+@media (hover: hover) {
+  .top-nav__item:not([aria-current='page']):hover {
+    @apply bg-(--surface-muted) text-(--ink);
+  }
+}
+
+.top-nav__item:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}

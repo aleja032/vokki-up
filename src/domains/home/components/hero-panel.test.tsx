@@ -26,12 +26,11 @@ describe('HeroPanel', () => {
     expect(html).toContain('Empezar ronda');
   });
 
-  it('keeps the pending, new and minutes chips', () => {
+  it('no longer renders info chips', () => {
     const html = renderToStaticMarkup(<HeroPanel data={session} />);
 
-    expect(html).toContain('3 por repasar');
-    expect(html).toContain('2 nuevas');
-    expect(html).toContain('~3 min');
+    expect(html).not.toContain('hero-panel__chips');
+    expect(html).not.toContain('~3 min');
   });
 
   it('falls back to the caught-up title and hides the bubble', () => {

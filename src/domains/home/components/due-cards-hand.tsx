@@ -18,10 +18,18 @@ const TILTS: Record<number, number[]> = {
 interface DueCardsHandProps {
   hand: DueWord[];
   totalDue: number;
+  newCount: number;
+  estimatedMinutes: number;
   href: string;
 }
 
-export function DueCardsHand({ hand, totalDue, href }: DueCardsHandProps) {
+export function DueCardsHand({
+  hand,
+  totalDue,
+  newCount,
+  estimatedMinutes,
+  href
+}: DueCardsHandProps) {
   const tilts = TILTS[hand.length] ?? [];
 
   return (
@@ -35,7 +43,12 @@ export function DueCardsHand({ hand, totalDue, href }: DueCardsHandProps) {
         pixel
         title={copy.handHeading}
       />
-      <p className="due-hand__hint">{copy.handHint}</p>
+      <p className="due-hand__hint">
+        {copy.handHint}
+        {totalDue > 0
+          ? ` · ${copy.newChip(newCount)} · ${copy.minutesChip(estimatedMinutes)}`
+          : null}
+      </p>
       {hand.length > 0 ? (
         <ul className="due-hand__fan">
           {hand.map((word, index) => (

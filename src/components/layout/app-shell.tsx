@@ -1,13 +1,13 @@
 import type { ReactNode } from 'react';
 import { AppHeader } from './app-header';
-import { AppSidebar } from './app-sidebar';
+import { AppTopbar } from './app-topbar';
 import { BottomNavigation } from './bottom-navigation';
 import './app-shell.css';
 
 export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="app-shell">
-      <AppSidebar />
+      <AppTopbar />
       <div className="app-shell__content">
         <AppHeader />
         <main className="app-main">

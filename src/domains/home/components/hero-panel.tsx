@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Play } from 'lucide-react';
 import { PixelLabel } from '@/components/ui/pixel-label';
-import { Pill } from '@/components/ui/pill';
 import { homeDashboardData } from '../data';
 import type { HomeDashboardData } from '../types';
 import './hero-panel.css';
@@ -68,17 +67,6 @@ export function HeroPanel({
           )}
         </h1>
         <p className="hero-panel__lead">{copy.nextSessionDescription}</p>
-        <ul className="hero-panel__chips">
-          <li>
-            <Pill>{copy.pendingChip(data.pendingCount)}</Pill>
-          </li>
-          <li>
-            <Pill>{copy.newChip(data.newCount)}</Pill>
-          </li>
-          <li>
-            <Pill>{copy.minutesChip(data.estimatedMinutes)}</Pill>
-          </li>
-        </ul>
         <Link className="hero-panel__cta motion-cta-pulse" href={data.href}>
           <Play aria-hidden="true" fill="currentColor" size={18} />
           {copy.startRound}

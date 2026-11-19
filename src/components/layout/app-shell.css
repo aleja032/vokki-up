@@ -1,12 +1,10 @@
 @reference 'tailwindcss';
 
 /*
- * Application shell, mobile first.
- * - up to 760px: header with brand, connection pill and avatar + bottom navigation.
- *   The proposal sets height 76px + 1px top border (content-box) = 77px.
- * - 761px and up: sidebar rail (92px). Tablet always uses the rail.
- * - 1101px and up: expanded 272px sidebar unless the user collapsed it
- *   (the proposal uses 240px; widened on request so it does not feel cramped).
+ * Application shell, mobile first (proposal D).
+ * - up to 760px: header with brand, streak, connection pill and avatar, plus a
+ *   floating bottom navigation with a raised "start round" action.
+ * - 761px and up: top header (see app-topbar.css); no bottom navigation.
  */
 
 .app-shell {
@@ -20,21 +18,17 @@
 /* Brand */
 
 .brand {
-  @apply inline-flex items-center gap-2 font-[family-name:var(--font-display),Georgia,serif] text-[28px] leading-[normal] font-semibold tracking-[-0.5px] whitespace-nowrap text-(--ink);
+  @apply inline-flex items-center gap-2 font-[family-name:var(--font-ui),sans-serif] text-[24px] leading-[normal] font-extrabold tracking-[-0.5px] whitespace-nowrap text-(--ink);
 }
 
 .brand__mark {
   @apply block shrink-0;
 }
 
-.brand__accent {
-  @apply text-(--indigo) italic;
-}
-
 /* Avatar */
 
 .user-avatar {
-  @apply flex size-11 shrink-0 items-center justify-center rounded-full bg-(--brand) text-[15px] font-bold text-(--on-indigo);
+  @apply flex size-11 shrink-0 items-center justify-center rounded-full bg-(--brand) text-[16px] font-extrabold text-(--on-indigo);
 }
 
 /* Connection pill */
@@ -58,11 +52,11 @@
 /* Mobile header */
 
 .app-header {
-  @apply flex items-center justify-between px-6 pt-[max(20px,env(safe-area-inset-top))] pb-1;
+  @apply flex items-center justify-between px-4.5 pt-[max(16px,env(safe-area-inset-top))] pb-1.5;
 }
 
 .app-header .brand {
-  @apply text-[26px];
+  @apply text-[21px];
 }
 
 .app-header__brand {
@@ -80,7 +74,7 @@
   }
 
   .app-header .brand {
-    @apply gap-1 text-[21px];
+    @apply gap-1 text-[18px];
   }
 
   .app-header__brand .brand__mark {
@@ -99,8 +93,9 @@
   @apply w-full min-w-0 flex-1 px-6 pt-3 pb-[calc(77px+32px+env(safe-area-inset-bottom))];
 }
 
+/* 1200px frame minus the 24px gutters, the same content width as the header. */
 .app-main__inner {
-  @apply mx-auto max-w-280;
+  @apply mx-auto max-w-288;
 }
 
 /* Route content fades in. Opacity only: a transform here would re-anchor the
@@ -153,20 +148,6 @@
   transition: transform var(--hover-duration) var(--ease-out);
 }
 
-@media (hover: hover) {
-  .bottom-navigation__fab:hover .bottom-navigation__fab-icon {
-    transform: translateY(var(--lift-2));
-  }
-}
-
-.bottom-navigation__pill {
-  transition: background-color var(--hover-duration) var(--ease-out);
-}
-
-.bottom-navigation__item {
-  transition: color var(--hover-duration) var(--ease-out);
-}
-
 .user-avatar {
   transition:
     background-color var(--hover-duration) var(--ease-out),
@@ -174,7 +155,15 @@
     transform var(--hover-duration) var(--ease-out);
 }
 
+.bottom-navigation__item {
+  transition: color var(--hover-duration) var(--ease-out);
+}
+
 @media (hover: hover) {
+  .bottom-navigation__fab:hover .bottom-navigation__fab-icon {
+    transform: translateY(var(--lift-2));
+  }
+
   .bottom-navigation__item:not([aria-current='page']):hover {
     @apply text-(--mint);
   }
@@ -186,235 +175,23 @@
   }
 }
 
-/* Sidebar: hidden on mobile */
-
-.app-sidebar {
-  @apply hidden;
-}
+/* Desktop: top header replaces the phone header and bottom navigation. */
 
 @media (min-width: 761px) {
-  .app-shell {
-    @apply grid grid-cols-[92px_minmax(0,1fr)];
-  }
-
   .app-header,
   .bottom-navigation {
     @apply hidden;
   }
 
   .app-main {
-    @apply px-[clamp(20px,4vw,56px)] pt-10 pb-16;
-  }
-
-  /* Rail (also the tablet layout). */
-  .app-sidebar {
-    @apply sticky top-0 flex h-dvh min-h-140 flex-col gap-9 border-r border-r-(--line) bg-(--surface) px-4 py-8;
-  }
-
-  .app-sidebar__header {
-    @apply flex min-h-11 items-center justify-center gap-2;
-  }
-
-  .app-sidebar__brand {
-    @apply flex size-11 items-center justify-center p-0;
-  }
-
-  .app-sidebar__brand .brand__wordmark {
-    @apply sr-only;
-  }
-
-  .sidebar-toggle {
-    @apply hidden size-11 shrink-0 items-center justify-center rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) text-(--ink-soft);
-  }
-
-  .sidebar-nav {
-    @apply flex flex-col gap-1.5;
-  }
-
-  .sidebar-nav__item {
-    @apply flex h-12 items-center justify-center gap-3 rounded-[14px] text-[15px] font-medium text-(--ink-soft);
-    transition:
-      background-color var(--hover-duration) var(--ease-out),
-      color var(--hover-duration) var(--ease-out);
-  }
-
-  .sidebar-toggle {
-    transition:
-      background-color var(--hover-duration) var(--ease-out),
-      border-color var(--hover-duration) var(--ease-out),
-      color var(--hover-duration) var(--ease-out);
-  }
-
-  @media (hover: hover) {
-    .sidebar-toggle:hover {
-      @apply border-(--indigo) bg-(--indigo-soft) text-(--indigo);
-    }
-  }
-
-  @media (hover: hover) {
-    .sidebar-nav__item:not([aria-current='page']):hover {
-      @apply bg-(--indigo-soft) text-(--indigo);
-    }
-  }
-
-  .sidebar-nav__item[aria-current='page'] {
-    @apply bg-(--indigo-soft) font-bold text-(--indigo-strong);
-  }
-
-  .app-sidebar__label,
-  .app-sidebar .connection-status__label,
-  .app-sidebar__profile-copy {
-    @apply sr-only;
-  }
-
-  .app-sidebar__footer {
-    @apply mt-auto flex flex-col items-center gap-4;
-  }
-
-  .app-sidebar .connection-status {
-    @apply justify-center px-3 py-1.5;
-  }
-
-  .app-sidebar__profile {
-    @apply flex min-w-0 flex-col items-center gap-3;
-  }
-
-  .app-sidebar__profile-action {
-    @apply flex shrink-0 items-center justify-center;
-  }
-
-  /* Rail: the guest button stacks icon over a two-line label inside the 60px inner width. */
-  .app-sidebar__profile-action .signin-login-cta {
-    @apply h-auto w-15 flex-col gap-0.5 rounded-[14px] px-1 py-1.5 text-[11px] leading-[1.1] whitespace-normal;
-  }
-
-  .app-sidebar__profile-action .signin-login-cta__label {
-    @apply overflow-visible text-center text-clip whitespace-normal;
-  }
-
-  .app-sidebar__profile-copy {
-    @apply min-w-0 flex-col;
-  }
-
-  .app-sidebar__profile-copy strong {
-    @apply truncate text-[14px] leading-[normal] font-semibold;
-  }
-
-  .app-sidebar__profile-copy span {
-    @apply truncate text-[12px] leading-[normal] text-(--ink-soft);
-  }
-
-  .user-avatar {
-    @apply size-10 text-[16px];
-  }
-}
-
-/* Expanded sidebar: wide screens when not collapsed by the user. */
-@media (min-width: 1101px) {
-  .app-shell {
-    @apply grid-cols-[272px_minmax(0,1fr)];
-  }
-
-  .app-shell:has(> .app-sidebar[data-collapsed='true']) {
-    @apply grid-cols-[92px_minmax(0,1fr)];
-  }
-
-  .sidebar-toggle {
-    @apply flex;
-  }
-
-  .app-sidebar[data-collapsed='false'] {
-    @apply px-5;
-  }
-
-  .app-sidebar[data-collapsed='false'] .app-sidebar__header {
-    @apply justify-between;
-  }
-
-  .app-sidebar[data-collapsed='false'] .app-sidebar__brand {
-    @apply flex h-11 w-auto justify-start gap-2 px-3;
-  }
-
-  .app-sidebar[data-collapsed='false'] .app-sidebar__brand .brand__wordmark {
-    @apply not-sr-only;
-  }
-
-  .app-sidebar[data-collapsed='true'] .app-sidebar__header {
-    @apply justify-center gap-1;
-  }
-
-  .app-sidebar[data-collapsed='true'] .app-sidebar__brand {
-    @apply size-6;
-  }
-
-  .app-sidebar[data-collapsed='true'] .app-sidebar__brand .brand__mark {
-    width: 24px;
-    height: 24px;
-  }
-
-  .app-sidebar[data-collapsed='true'] .sidebar-toggle {
-    @apply size-8;
-  }
-
-  .app-sidebar[data-collapsed='false'] .sidebar-nav__item {
-    @apply justify-start px-4;
-  }
-
-  .app-sidebar[data-collapsed='false'] .app-sidebar__label,
-  .app-sidebar[data-collapsed='false'] .connection-status__label {
-    @apply not-sr-only;
-  }
-
-  .app-sidebar[data-collapsed='false'] .app-sidebar__footer {
-    @apply items-stretch px-2;
-  }
-
-  .app-sidebar[data-collapsed='false'] .connection-status {
-    @apply gap-1.5 self-start px-3 py-1.5 text-[13px];
-  }
-
-  .app-sidebar[data-collapsed='false'] .app-sidebar__profile {
-    @apply flex-row;
-  }
-
-  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-copy {
-    @apply not-sr-only flex;
-  }
-
-  .app-sidebar[data-collapsed='false'] .app-sidebar__profile-action {
-    @apply ml-auto;
-  }
-
-  .app-sidebar[data-collapsed='false']
-    .app-sidebar__profile-action:has(> .signin-login-cta) {
-    @apply ml-0 flex-1;
-  }
-
-  .app-sidebar[data-collapsed='false']
-    .app-sidebar__profile-action
-    .signin-login-cta {
-    @apply h-9 w-full flex-row gap-1.5 rounded-full px-3 py-0 text-[13px] leading-[normal] whitespace-nowrap;
-  }
-
-  .app-sidebar[data-collapsed='false']
-    .app-sidebar__profile-action
-    .signin-login-cta__label {
-    @apply truncate;
-  }
-
-  /* Reserve the guest button width while the session loads (no layout shift). */
-  .app-sidebar[data-collapsed='false']
-    .app-sidebar__profile-action
-    .signin-logout[aria-hidden='true'] {
-    @apply h-9 w-32;
+    @apply px-6 pt-2 pb-16;
   }
 }
 
 /* Focus */
 
-.sidebar-toggle:focus-visible,
-.sidebar-nav__item:focus-visible,
 .bottom-navigation__item:focus-visible,
+.bottom-navigation__fab:focus-visible,
 .user-avatar:focus-visible,
 .brand:focus-visible {
   @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;

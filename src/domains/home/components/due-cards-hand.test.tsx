@@ -18,6 +18,8 @@ describe('DueCardsHand', () => {
   it('renders one linked card per word with term, phonetics and memory', () => {
     const html = renderToStaticMarkup(
       <DueCardsHand
+        estimatedMinutes={5}
+        newCount={3}
         hand={[word('borrow'), word('lend', { memoryLevel: 4, tone: 'mint' })]}
         href="/review"
         totalDue={9}
@@ -34,6 +36,8 @@ describe('DueCardsHand', () => {
   it('labels new words and offers the full list link', () => {
     const html = renderToStaticMarkup(
       <DueCardsHand
+        estimatedMinutes={5}
+        newCount={3}
         hand={[word('fresh', { isNew: true, memoryLevel: 0, tone: 'brand' })]}
         href="/review"
         totalDue={9}
@@ -48,6 +52,8 @@ describe('DueCardsHand', () => {
   it('fans the cards with a tilt that depends on the hand size', () => {
     const html = renderToStaticMarkup(
       <DueCardsHand
+        estimatedMinutes={5}
+        newCount={3}
         hand={[word('a'), word('b'), word('c'), word('d')]}
         href="/review"
         totalDue={4}
@@ -58,9 +64,30 @@ describe('DueCardsHand', () => {
     expect(html).toContain('data-tilt="6"');
   });
 
+  it('keeps the new count and the estimated minutes in the subtitle', () => {
+    const html = renderToStaticMarkup(
+      <DueCardsHand
+        estimatedMinutes={5}
+        hand={[word('a')]}
+        href="/review"
+        newCount={3}
+        totalDue={9}
+      />
+    );
+
+    expect(html).toContain('3 nuevas');
+    expect(html).toContain('~5 min');
+  });
+
   it('shows an empty message and no link when nothing is due', () => {
     const html = renderToStaticMarkup(
-      <DueCardsHand hand={[]} href="/review" totalDue={0} />
+      <DueCardsHand
+        estimatedMinutes={0}
+        hand={[]}
+        href="/review"
+        newCount={0}
+        totalDue={0}
+      />
     );
 
     expect(html).toContain('Tu mano de hoy está vacía.');

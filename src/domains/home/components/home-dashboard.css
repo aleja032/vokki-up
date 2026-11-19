@@ -6,8 +6,9 @@
  * goal and the week beside today's activity from tablet width.
  */
 
+/* Phones: the proposal uses 14px gutters; the shell gives 24px, so pull in 10px. */
 .home-dashboard {
-  @apply flex min-w-0 flex-col gap-5;
+  @apply -mx-2.5 flex min-w-0 flex-col gap-5;
 }
 
 .home-dashboard__hand-row {
@@ -20,7 +21,7 @@
 
 @media (min-width: 768px) {
   .home-dashboard {
-    @apply gap-7;
+    @apply mx-0 gap-7;
   }
 
   .home-dashboard__hand-row {

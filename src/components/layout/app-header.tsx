@@ -21,8 +21,7 @@ export function AppHeader() {
       >
         <VokkiLogo className="brand__mark" size={28} />
         <span className="brand__wordmark">
-          <span>{siteConfig.brandPrimary}</span>{' '}
-          <span className="brand__accent">{siteConfig.brandAccent}</span>
+          {siteConfig.brandPrimary} {siteConfig.brandAccent}
         </span>
       </Link>
       <div className="app-header__actions">

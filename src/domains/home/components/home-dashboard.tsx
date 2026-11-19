@@ -34,6 +34,8 @@ export function HomeDashboard({ summary }: HomeDashboardProps) {
         <DueCardsHand
           hand={dueHand}
           href={nextSession.href}
+          estimatedMinutes={nextSession.estimatedMinutes}
+          newCount={nextSession.newCount}
           totalDue={nextSession.pendingCount + nextSession.newCount}
         />
         <GoalChestCard progress={progress} />

@@ -78,14 +78,6 @@
   @apply m-0 max-w-md text-[15px] text-(--hero-text-soft);
 }
 
-.hero-panel__chips {
-  @apply m-0 flex list-none flex-wrap gap-2 p-0;
-}
-
-.hero-panel__chips .pill {
-  @apply bg-white/12 text-white;
-}
-
 .hero-panel__cta {
   @apply mt-1 inline-flex min-h-14 w-full items-center justify-center gap-2.5 rounded-(--radius-pill) px-8 text-[17px] font-extrabold text-(--cta-ink);
   background: var(--cta-gradient);
