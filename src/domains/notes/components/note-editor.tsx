@@ -1,5 +1,6 @@
 'use client';
 import { Check, FileText } from 'lucide-react';
+import { ActionPill } from '@/components/ui/action-pill';
 import { translateText } from '@/lib/i18n/locale';
 import { useNoteFormatting } from '../hooks/use-note-formatting';
 import { useNoteSubmit } from '../hooks/use-note-submit';
@@ -86,9 +87,13 @@ export function NoteEditor({
       />
       <div className="notes-form__footer">
         <span className="notes-form__hint">{messages.footerHint}</span>
-        <button className="notes-form__submit" type="submit">
-          <Check aria-hidden="true" size={16} /> {messages.submit}
-        </button>
+        <ActionPill
+          icon={<Check size={16} strokeWidth={2.6} />}
+          type="submit"
+          variant="brand"
+        >
+          {messages.submit}
+        </ActionPill>
       </div>
     </form>
   );

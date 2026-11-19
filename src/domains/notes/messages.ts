@@ -2,7 +2,6 @@ import { createLocalizedMessages } from '@/lib/i18n/locale';
 export const notesMessages = createLocalizedMessages({
   page: {
     title: 'Notas',
-    mobileSubtitle: 'Tus apuntes, sin tarjetas',
     desktopSubtitle:
       'Expresiones, reglas y observaciones. Separadas de tus tarjetas.',
     newNote: 'Nueva nota',
@@ -34,15 +33,15 @@ export const notesMessages = createLocalizedMessages({
   },
   detail: {
     label: 'Nota abierta',
-    meta: (category: string, updatedAt: string) =>
-      `${category} · editada el ${updatedAt}`,
+    edited: (updatedAt: string) => `Editada el ${updatedAt}`,
     markFavorite: 'Marcar como favorita',
     unmarkFavorite: 'Quitar de favoritas',
     edit: 'Editar nota',
     moreActions: 'Más opciones de la nota',
     delete: 'Eliminar nota',
     deleteTitle: (title: string) => `¿Eliminar “${title}”?`,
-    deleteBody: 'Esta nota se eliminará de tu biblioteca y no se puede recuperar.',
+    deleteBody:
+      'Esta nota se eliminará de tu biblioteca y no se puede recuperar.',
     cancel: 'Cancelar',
     confirmDelete: 'Eliminar nota'
   },

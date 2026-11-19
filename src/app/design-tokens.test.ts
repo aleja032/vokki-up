@@ -128,7 +128,14 @@ const designFixed: Record<string, string> = {
   '--chart-line': '#2a8f6c',
   '--chart-vein': '#138a66',
   '--chart-area-top': 'rgb(47 203 155 / 0.28)',
-  '--chart-today-fill': 'rgb(47 203 155 / 0.25)'
+  '--chart-today-fill': 'rgb(47 203 155 / 0.25)',
+  // Notes and settings: dialog backdrop/shadow and the theme preview swatches
+  // (they show the real light and dark grounds whatever the active theme is).
+  '--scrim': 'rgb(20 20 22 / 0.42)',
+  '--shadow-dialog': 'rgb(20 20 22 / 0.28)',
+  '--theme-light': '#f7f4ee',
+  '--theme-dark': '#0c1118',
+  '--theme-accent': '#6ee7be'
 };
 
 function declared(source: string, token: string): string | undefined {

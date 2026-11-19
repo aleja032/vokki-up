@@ -1,0 +1,25 @@
+@reference 'tailwindcss';
+
+.segmented-toggle {
+  @apply flex max-w-full gap-1.5 self-start rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-(--surface-muted) p-1.25;
+}
+
+.segmented-toggle__option {
+  @apply min-h-11 min-w-0 cursor-pointer truncate rounded-(--radius-pill) border-0 bg-transparent px-5 text-[15px] font-extrabold text-(--ink-soft);
+  transition: var(--hover-transition);
+}
+
+.segmented-toggle__option[aria-pressed='true'] {
+  @apply bg-(--indigo-soft) text-(--indigo);
+  box-shadow: inset 0 0 0 2px var(--brand);
+}
+
+.segmented-toggle__option:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+@media (hover: hover) {
+  .segmented-toggle__option[aria-pressed='false']:hover {
+    color: var(--indigo);
+  }
+}

@@ -4,18 +4,21 @@ type SettingsIconName =
   | 'check'
   | 'warning'
   | 'trash'
-  | 'download';
+  | 'download'
+  | 'bolt';
 
 interface SettingsIconProps {
   name: SettingsIconName;
   size?: number;
   className?: string;
+  strokeWidth?: number;
 }
 
 export function SettingsIcon({
   name,
   size = 20,
-  className
+  className,
+  strokeWidth = 1.8
 }: SettingsIconProps) {
   return (
     <svg
@@ -26,7 +29,7 @@ export function SettingsIcon({
       stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeWidth={1.8}
+      strokeWidth={strokeWidth}
       viewBox="0 0 24 24"
       width={size}
     >
@@ -50,6 +53,7 @@ export function SettingsIcon({
         </>
       )}
       {name === 'trash' && <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" />}
+      {name === 'bolt' && <path d="M13 2L4 14h7l-1 8 9-12h-7z" />}
       {name === 'download' && (
         <>
           <path d="M12 4v12M7 11l5 5 5-5" />

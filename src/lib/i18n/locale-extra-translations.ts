@@ -461,6 +461,7 @@ export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
     '$1 valid rows reviewed locally. They are not saved or added to the global deck.'
   ],
   [/^Página (\d+) de (\d+)$/, 'Page $1 of $2'],
+  [/^Editada el (.+)$/, 'Edited on $1'],
   [/^(\d+) KB · lista para analizar$/, '$1 KB · ready to analyze'],
   [/^(\d+) seleccionadas · (\d+) encontradas$/, '$1 selected · $2 found'],
   [/^(\d+) pendientes de revisar$/, '$1 left to review'],

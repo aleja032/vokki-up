@@ -1,5 +1,6 @@
 import { translateText } from '@/lib/i18n/locale';
 import { getNotePreview } from '../note-content.util';
+import { getNoteCategoryTone } from '../note-category-tone.util';
 import { notesMessages } from '../messages';
 import type { Note } from '../types';
 import { StarIcon } from './note-icons';
@@ -30,6 +31,7 @@ export function NoteList({
             className="note-card"
             data-favorite={isFavorite}
             data-selected={note.id === selectedNoteId}
+            data-tone={getNoteCategoryTone(note.category)}
             key={note.id}
           >
             <button
@@ -38,19 +40,23 @@ export function NoteList({
               onClick={() => onSelect(note.id)}
               type="button"
             >
-              <span className="note-card__title" title={title}>
-                {title}
-              </span>
-              <span className="note-card__preview">
-                {getNotePreview(note.body) || ' '}
-              </span>
-              <span className="note-card__meta">
-                <span className="note-card__type" data-category={note.category}>
-                  {translateText(note.category)}
+              <span aria-hidden="true" className="note-card__bar" />
+              <span className="note-card__copy">
+                <span className="note-card__title" title={title}>
+                  {title}
                 </span>
-                <time className="note-card__date" title={note.updatedAt}>
-                  {note.updatedAt}
-                </time>
+                <span className="note-card__preview">
+                  {getNotePreview(note.body) || ' '}
+                </span>
+                <span className="note-card__meta">
+                  <span className="note-card__type">
+                    {translateText(note.category)}
+                  </span>
+                  <span aria-hidden="true">·</span>
+                  <time className="note-card__date" title={note.updatedAt}>
+                    {note.updatedAt}
+                  </time>
+                </span>
               </span>
             </button>
             <button
@@ -64,7 +70,7 @@ export function NoteList({
               onClick={() => onToggleFavorite(note.id)}
               type="button"
             >
-              <StarIcon filled={isFavorite} size={18} />
+              <StarIcon filled={isFavorite} size={20} />
             </button>
           </article>
         );

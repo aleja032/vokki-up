@@ -13,7 +13,8 @@
   @apply min-w-0 truncate;
 }
 
-.chip[aria-pressed='true'] {
+.chip[aria-pressed='true'],
+.chip[aria-selected='true'] {
   @apply border-2 border-transparent bg-(--indigo-soft) font-extrabold text-(--indigo);
   box-shadow: inset 0 0 0 2px var(--brand);
 }
@@ -23,7 +24,7 @@
 }
 
 @media (hover: hover) {
-  .chip:not([aria-pressed='true']):hover {
+  .chip:not([aria-pressed='true'], [aria-selected='true']):hover {
     border-color: var(--hover-accent);
     color: var(--indigo);
   }

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import './action-pill.css';
 
-type ActionPillVariant = 'brand' | 'outline' | 'cta';
+type ActionPillVariant = 'brand' | 'outline' | 'cta' | 'mint';
 
 type ActionPillBaseProps = {
   children: ReactNode;

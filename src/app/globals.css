@@ -91,6 +91,11 @@
   --cta-glow-ring: rgb(47 203 155 / 0.5);
   --cta-glow: rgb(47 203 155 / 0.35);
   --cta-fab-glow: rgb(47 203 155 / 0.4);
+  --scrim: rgb(20 20 22 / 0.42);
+  --shadow-dialog: rgb(20 20 22 / 0.28);
+  --theme-light: #f7f4ee;
+  --theme-dark: #0c1118;
+  --theme-accent: #6ee7be;
   --radius-14: 14px;
   --radius-18: 18px;
   --radius-22: 22px;

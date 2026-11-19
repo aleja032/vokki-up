@@ -42,4 +42,21 @@ describe('Chip', () => {
     expect(html).toContain('aria-label="Nuevo grupo"');
     expect(html).not.toContain('chip__label');
   });
+
+  it('renders tab semantics with aria-selected instead of aria-pressed', () => {
+    const html = renderToStaticMarkup(
+      <Chip
+        onClick={() => undefined}
+        tab={{ id: 'tab-profile', controls: 'panel-profile', selected: true }}
+      >
+        Perfil
+      </Chip>
+    );
+
+    expect(html).toContain('role="tab"');
+    expect(html).toContain('aria-selected="true"');
+    expect(html).toContain('aria-controls="panel-profile"');
+    expect(html).toContain('id="tab-profile"');
+    expect(html).not.toContain('aria-pressed');
+  });
 });

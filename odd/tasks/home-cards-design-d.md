@@ -31,6 +31,7 @@ Design source: Artifact `claude.ai/artifact/3a7006b7-7d22-4861-9760-c4398e2bae6f
 - [x] T3 (merged into T4) Data contracts in `src/app` container: due-cards hand, accuracy, notes count; keep existing summary fields.
 - [x] T4 Home layout (see Progress for omissions): header streak pill, hero with CTA, due-cards hand, daily goal with chest, stats, week chart, today activity; mobile stacked + bottom nav FAB; every current action preserved.
 - [x] T5 Cards (Mi mazo) layout per `VokkiDMazo*`; all current actions preserved (groups, add hub, library, delete, manage, review).
+- [x] T8 Notes and settings restyled to D (web and mobile), same routes.
 - [ ] T7 Mundos: blocked until the user defines the domain (worlds vs groups).
 
 ## Acceptance
@@ -50,3 +51,5 @@ Omitted (no honest data): difficulty diamonds, hero kicker "MUNDO · DÍA A DÍA
 T5 (delegated direct): Mi mazo restyled to D (header with mascot, group chips, search, tiles with memory bar and tone borders, group detail with StatCard/ProgressBar/CTA, shared ActionPill/Chip/SearchField). vitest 96 files / 546 tests, tsc/eslint/prettier clean, browser 1280/1024/768/390 light+dark Spanish only (English not verifiable in the Playwright browser; covered by coverage tests). Omitted: difficulty diamonds, FUERTE label. Nav label now "Mi mazo". Next: T6 review round + results; Mundos page still blocked on user decision.
 
 T6 (delegated direct): review round and results restyled to D (existing completion screen kept; combo and memory gains from real data). vitest 102 files / 590 tests, tsc/eslint/prettier clean, browser 1280/1024/768/390 light+dark Spanish. Omitted: difficulty diamonds, world label, chest pill (cross-domain), fourth rating "Otra vez" (app has three). OPEN: English never switched in the Playwright browser in T4, T5 and T6 runs; to verify manually.
+
+T8 (delegated direct, one writer): Notas and Ajustes restyled to D. New shared: SegmentedToggle, ActionPill mint variant + disabled brand, Chip tab semantics; notes: NoteCategoryManager, category tone util; settings: SettingsThemePicker. Tokens added: --scrim, --shadow-dialog, --theme-light/dark/accent. vitest 104 files / 602 tests, tsc/eslint/prettier clean, browser 1280/1024/768/390 light+dark no overflow, English verified. Omitted: convert-to-card buttons, Practicalo escribiendo box, PROPUESTA DE DISENO badges (no feature behind). Palette note: Notas/Ajustes artboards use an older purple palette; mapped to the app navy tokens used by the other D screens.

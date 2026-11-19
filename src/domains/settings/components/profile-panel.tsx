@@ -1,4 +1,7 @@
-import Link from 'next/link';
+import { useId } from 'react';
+import { ActionPill } from '@/components/ui/action-pill';
+import { Chip } from '@/components/ui/chip';
+import { SegmentedToggle } from '@/components/ui/segmented-toggle';
 import { APP_LANGUAGES, LEARNING_LEVELS } from '../data';
 import { settingsMessages } from '../messages';
 import { FEATURES } from '@/config/features';
@@ -10,11 +13,15 @@ import { SettingsIcon } from './settings-icon';
 import { SettingsSaveState } from './settings-save-state';
 import { SettingsStepper } from './settings-stepper';
 import { SettingsSwitch } from './settings-switch';
-
-const THEME_OPTIONS: AppTheme[] = ['light', 'dark', 'system'];
+import { SettingsThemePicker } from './settings-theme-picker';
 
 type AppLanguage = (typeof APP_LANGUAGES)[number];
 type LearningLevel = (typeof LEARNING_LEVELS)[number];
+
+const LANGUAGE_OPTIONS = APP_LANGUAGES.map(value => ({
+  value,
+  label: value
+}));
 
 interface ProfilePanelProps {
   dailyGoal: number;
@@ -37,6 +44,10 @@ interface ProfilePanelProps {
 
 export function ProfilePanel(props: ProfilePanelProps) {
   const copy = settingsMessages.profile;
+  const ids = useId();
+  const languageLabelId = `${ids}-language`;
+  const levelLabelId = `${ids}-level`;
+  const themeLabelId = `${ids}-theme`;
   const { session, isLoading } = useAuthSession();
   const isAuthenticated = session?.status === 'authenticated';
   const visible = getVisibleProfileSections(
@@ -59,7 +70,9 @@ export function ProfilePanel(props: ProfilePanelProps) {
       id="settings-profile"
       role="tabpanel"
     >
-      <div className="prefs-card">
+      <div className="prefs-card prefs-card--profile">
+        <h2 className="prefs-card__heading">{settingsMessages.tabs.profile}</h2>
+
         {visible.account && isAuthenticated ? (
           <div className="prefs-account">
             <div className="prefs-account__identity">
@@ -81,43 +94,39 @@ export function ProfilePanel(props: ProfilePanelProps) {
           </div>
         ) : null}
 
-        <div className="prefs-fields">
-          <div className="prefs-field">
-            <label className="prefs-label" htmlFor="settings-language">
-              {copy.languageLabel}
-            </label>
-            <select
-              className="prefs-input prefs-input--select"
-              id="settings-language"
-              onChange={event =>
-                props.onLanguageChange(event.target.value as AppLanguage)
-              }
-              value={props.language}
-            >
-              {APP_LANGUAGES.map(value => (
-                <option key={value}>{value}</option>
-              ))}
-            </select>
-          </div>
+        <div className="prefs-field">
+          <span className="prefs-label" id={languageLabelId}>
+            {copy.languageLabel}
+          </span>
+          <SegmentedToggle
+            labelledBy={languageLabelId}
+            onChange={props.onLanguageChange}
+            options={LANGUAGE_OPTIONS}
+            value={props.language}
+          />
         </div>
 
         {visible.level ? (
-          <fieldset className="prefs-group">
-            <legend className="prefs-legend">{copy.levelLabel}</legend>
-            <div className="prefs-levels">
+          <div className="prefs-field">
+            <span className="prefs-label" id={levelLabelId}>
+              {copy.levelLabel}
+            </span>
+            <div
+              aria-labelledby={levelLabelId}
+              className="prefs-levels"
+              role="group"
+            >
               {LEARNING_LEVELS.map(value => (
-                <button
-                  aria-pressed={props.level === value}
-                  className="prefs-level"
+                <Chip
                   key={value}
                   onClick={() => props.onLevelChange(value)}
-                  type="button"
+                  pressed={props.level === value}
                 >
                   {value}
-                </button>
+                </Chip>
               ))}
             </div>
-          </fieldset>
+          </div>
         ) : null}
 
         {visible.dailyGoal || visible.reminder ? (
@@ -165,35 +174,26 @@ export function ProfilePanel(props: ProfilePanelProps) {
           </div>
         ) : null}
 
-        <fieldset className="prefs-group">
-          <legend className="prefs-legend">{copy.themeLabel}</legend>
-          <div className="prefs-themes">
-            {THEME_OPTIONS.map(value => (
-              <button
-                aria-pressed={props.theme === value}
-                className="prefs-theme"
-                key={value}
-                onClick={() => props.onThemeChange(value)}
-                type="button"
-              >
-                {settingsMessages.themes[value]}
-              </button>
-            ))}
-          </div>
-        </fieldset>
+        <div className="prefs-field">
+          <span className="prefs-label" id={themeLabelId}>
+            {copy.themeLabel}
+          </span>
+          <SettingsThemePicker
+            labelledBy={themeLabelId}
+            onChange={props.onThemeChange}
+            theme={props.theme}
+          />
+        </div>
 
-        <footer className="prefs-footer prefs-footer--profile">
-          <div className="prefs-footer__actions">
-            <SettingsSaveState isSaved={props.isSaved} />
-            <button
-              className="prefs-button prefs-button--primary"
-              disabled={props.isSaved}
-              onClick={props.onSave}
-              type="button"
-            >
-              {copy.save}
-            </button>
-          </div>
+        <footer className="prefs-footer">
+          <SettingsSaveState isSaved={props.isSaved} />
+          <ActionPill
+            disabled={props.isSaved}
+            onClick={props.onSave}
+            variant="brand"
+          >
+            {copy.save}
+          </ActionPill>
         </footer>
       </div>
 
@@ -204,13 +204,13 @@ export function ProfilePanel(props: ProfilePanelProps) {
               {copy.dataTitle}
             </h2>
             <p className="prefs-data__summary">{copy.dataSummary}</p>
-            <Link className="prefs-action" href="/import-export">
-              <span>
-                <span className="prefs-narrow-only">{copy.exportNarrow}</span>
-                <span className="prefs-wide-only">{copy.exportWide}</span>
-              </span>
-              <SettingsIcon name="download" size={18} />
-            </Link>
+            <ActionPill
+              href="/import-export"
+              icon={<SettingsIcon name="download" size={18} />}
+            >
+              <span className="prefs-narrow-only">{copy.exportNarrow}</span>
+              <span className="prefs-wide-only">{copy.exportWide}</span>
+            </ActionPill>
           </section>
         </aside>
       ) : null}

@@ -1,5 +1,8 @@
 'use client';
 
+import { ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Chip } from '@/components/ui/chip';
 import { PROVIDER_OPTIONS } from '../data';
 import { useSettingsPreferences } from '../hooks/use-settings-preferences';
 import { settingsMessages } from '../messages';
@@ -23,6 +26,7 @@ export function SettingsWorkspace({
   connectionTest = 'idle',
   initialTab = 'profile'
 }: SettingsWorkspaceProps) {
+  const router = useRouter();
   const preferences = useSettingsPreferences(initialTab);
   const { activeTab } = preferences;
 
@@ -30,6 +34,14 @@ export function SettingsWorkspace({
     <div className="prefs">
       <header className="prefs__header">
         <div className="prefs__heading">
+          <button
+            aria-label={settingsMessages.back}
+            className="prefs__back"
+            onClick={() => router.back()}
+            type="button"
+          >
+            <ArrowLeft aria-hidden="true" size={20} />
+          </button>
           <h1 className="prefs__title">{settingsMessages.title}</h1>
         </div>
         <div
@@ -38,19 +50,18 @@ export function SettingsWorkspace({
           role="tablist"
         >
           {TABS.map(tab => (
-            <button
-              aria-controls={`settings-${tab}`}
-              aria-selected={activeTab === tab}
+            <Chip
               className="prefs-tab"
-              data-tab={tab}
-              id={`settings-tab-${tab}`}
               key={tab}
               onClick={() => preferences.setActiveTab(tab)}
-              role="tab"
-              type="button"
+              tab={{
+                id: `settings-tab-${tab}`,
+                controls: `settings-${tab}`,
+                selected: activeTab === tab
+              }}
             >
               {settingsMessages.tabs[tab]}
-            </button>
+            </Chip>
           ))}
         </div>
       </header>

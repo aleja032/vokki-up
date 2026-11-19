@@ -17,6 +17,10 @@
   @apply bg-(--brand) text-(--on-indigo);
 }
 
+.action-pill--mint {
+  @apply bg-(--mint-soft) text-(--mint);
+}
+
 .action-pill--cta {
   @apply px-6.5 py-3.5 text-[16px] text-(--cta-ink);
   background: var(--cta-gradient);
@@ -30,6 +34,11 @@
   @apply cursor-not-allowed opacity-50;
 }
 
+/* A disabled primary action reads as an inert track, like in the proposal. */
+.action-pill--brand:disabled {
+  @apply bg-(--track) text-(--ink-soft) opacity-100;
+}
+
 @media (hover: hover) {
   .action-pill--outline:not(:disabled):hover {
     border-color: var(--hover-accent);
@@ -38,6 +47,7 @@
   }
 
   .action-pill--brand:not(:disabled):hover,
+  .action-pill--mint:not(:disabled):hover,
   .action-pill--cta:not(:disabled):hover {
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-1));

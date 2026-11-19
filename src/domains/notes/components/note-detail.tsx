@@ -1,8 +1,13 @@
 import { MoreHorizontal, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
+import { ActionPill } from '@/components/ui/action-pill';
 import { translateText } from '@/lib/i18n/locale';
 import { groupNoteSections } from '../note-content.util';
+import {
+  getNoteCategoryTone,
+  getNoteSectionTone
+} from '../note-category-tone.util';
 import { notesMessages } from '../messages';
 import type { Note } from '../types';
 import { StarIcon } from './note-icons';
@@ -29,14 +34,21 @@ export function NoteDetail({
   const isFavorite = note.favorite === true;
 
   return (
-    <article className="note-detail" aria-label={messages.label}>
+    <article
+      className="note-detail"
+      aria-label={messages.label}
+      data-tone={getNoteCategoryTone(note.category)}
+    >
       <div className="note-detail__header">
         <div className="note-detail__heading">
+          <span className="note-detail__tag">
+            {translateText(note.category)}
+          </span>
           <h2 className="note-detail__title">
             {note.title || notesMessages.list.untitled}
           </h2>
           <span className="note-detail__meta">
-            {messages.meta(translateText(note.category), note.updatedAt)}
+            {messages.edited(note.updatedAt)}
           </span>
         </div>
         <div className="note-detail__actions">
@@ -89,7 +101,11 @@ export function NoteDetail({
       />
       <div className="note-detail__body">
         {groupNoteSections(note.body).map((section, sectionIndex) => (
-          <div className="note-detail__section" key={sectionIndex}>
+          <div
+            className="note-detail__section"
+            data-tone={getNoteSectionTone(sectionIndex)}
+            key={sectionIndex}
+          >
             {section.heading && (
               <h3 className="note-detail__section-title">{section.heading}</h3>
             )}
@@ -111,9 +127,9 @@ export function NoteDetail({
           </div>
         ))}
       </div>
-      <button className="note-detail__edit" onClick={onEdit} type="button">
+      <ActionPill className="note-detail__edit" onClick={onEdit} size="sm">
         {messages.edit}
-      </button>
+      </ActionPill>
     </article>
   );
 }

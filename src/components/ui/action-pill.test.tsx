@@ -25,7 +25,7 @@ describe('ActionPill', () => {
     expect(html).toContain('motion-cta-pulse');
   });
 
-  it.each(['brand', 'outline', 'cta'] as const)(
+  it.each(['brand', 'outline', 'cta', 'mint'] as const)(
     'applies the %s variant modifier',
     variant => {
       expect(

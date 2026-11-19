@@ -5,6 +5,7 @@ import type { AiProvider, AppTheme } from './types';
 export const settingsMessages = createLocalizedMessages({
   title: 'Ajustes',
   tabsLabel: 'Secciones de ajustes',
+  back: 'Volver',
   tabs: {
     profile: 'Perfil',
     provider: 'Proveedor IA'

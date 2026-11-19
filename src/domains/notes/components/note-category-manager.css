@@ -1,0 +1,77 @@
+@reference 'tailwindcss';
+
+.note-categories {
+  @apply flex flex-col gap-2;
+}
+
+.note-categories__toggle,
+.note-categories__link {
+  @apply min-h-11 w-fit cursor-pointer rounded-(--radius-14) border-0 bg-transparent px-1 text-[15px] font-bold text-(--mint);
+  text-decoration: underline transparent;
+  text-underline-offset: 3px;
+  transition:
+    var(--hover-transition),
+    text-decoration-color var(--hover-duration) var(--ease-out);
+}
+
+.note-categories__link {
+  @apply text-[14px];
+}
+
+.note-categories__panel {
+  @apply flex flex-col gap-3.5 rounded-(--radius-26) border border-solid border-(--line) bg-(--surface-muted) p-4.5;
+}
+
+.note-categories__form {
+  @apply flex flex-col gap-2 text-[14px] font-extrabold text-(--ink);
+}
+
+.note-categories__field {
+  @apply flex flex-wrap items-center gap-2;
+}
+
+.note-categories__field input {
+  @apply h-12 min-w-0 flex-1 rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-(--surface) px-5 text-[15px] font-medium text-(--ink);
+}
+
+.note-categories__field input:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+.note-categories__hint,
+.note-categories__error {
+  @apply m-0 text-[13px] text-(--ink-soft);
+}
+
+.note-categories__error {
+  @apply font-bold text-(--coral);
+}
+
+.note-categories__list {
+  @apply m-0 flex list-none flex-col gap-1 border-t border-dashed border-t-(--line) p-0 pt-3 text-[15px] font-semibold text-(--ink);
+}
+
+.note-categories__list li,
+.note-categories__actions {
+  @apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.note-categories__actions {
+  @apply justify-end;
+}
+
+.note-categories__default {
+  @apply text-[13px] font-medium text-(--ink-soft);
+}
+
+.note-categories__toggle:focus-visible,
+.note-categories__link:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+@media (hover: hover) {
+  .note-categories__toggle:hover,
+  .note-categories__link:hover {
+    text-decoration-color: currentColor;
+  }
+}

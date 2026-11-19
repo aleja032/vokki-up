@@ -36,11 +36,12 @@ export function ApiKeyField({
         </a>
       </div>
       <div className="prefs-key__field">
+        <SettingsIcon className="prefs-key__lock" name="lock" size={18} />
         <input
           aria-describedby="settings-api-key-privacy"
           aria-invalid={hasError}
           autoComplete="off"
-          className="prefs-input prefs-input--key"
+          className="prefs-key__input"
           id="settings-api-key"
           onChange={event => onApiKeyChange(event.target.value)}
           placeholder={hasSavedCredential ? (maskedKey ?? '') : ''}
@@ -57,8 +58,7 @@ export function ApiKeyField({
           <SettingsIcon name="eye" />
         </button>
       </div>
-      <span className="prefs-key__privacy" id="settings-api-key-privacy">
-        <SettingsIcon className="prefs-key__lock" name="lock" size={16} />
+      <span className="prefs-hint" id="settings-api-key-privacy">
         {copy.apiKeyPrivacy(providerName, isAuthenticated)}
       </span>
     </div>

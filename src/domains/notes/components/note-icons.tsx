@@ -22,23 +22,6 @@ function IconFrame({ size = 20, filled = false, children }: IconFrameProps) {
   );
 }
 
-export function SearchIcon(props: NoteIconProps) {
-  return (
-    <IconFrame {...props}>
-      <circle cx="11" cy="11" r="7" />
-      <path d="M20 20l-4-4" />
-    </IconFrame>
-  );
-}
-
-export function PlusIcon(props: NoteIconProps) {
-  return (
-    <IconFrame {...props}>
-      <path d="M12 5v14M5 12h14" />
-    </IconFrame>
-  );
-}
-
 export function StarIcon(props: NoteIconProps) {
   return (
     <IconFrame {...props}>
