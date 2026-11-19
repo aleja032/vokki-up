@@ -1,0 +1,146 @@
+@reference 'tailwindcss';
+
+/*
+ * Folder list. Phones: a scrolling row of pills (the selected one inverted)
+ * with a round dashed add chip. From 761px: a sticky side card with a title,
+ * a search field, a scrolling list and a dashed add button.
+ */
+
+.folder-list {
+  /* relative: the screen-reader-only add label must stay inside the scroller. */
+  @apply relative -mx-3.5 flex items-center gap-2 overflow-x-auto px-3.5 py-0.5;
+
+  scrollbar-width: none;
+}
+
+.folder-list::-webkit-scrollbar {
+  @apply hidden;
+}
+
+.folder-list__head,
+.folder-list__search {
+  @apply hidden;
+}
+
+.folder-list__scroller {
+  @apply contents;
+}
+
+.folder-list__nav {
+  @apply flex shrink-0 items-center gap-2;
+}
+
+.folder-list__icon {
+  @apply hidden shrink-0 text-(--ink-soft);
+}
+
+.folder-list__item {
+  @apply flex min-h-11 shrink-0 cursor-pointer items-center gap-2 rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[15px] font-semibold whitespace-nowrap text-(--ink);
+  transition: var(--hover-transition);
+}
+
+.folder-list__item[aria-pressed='true'] {
+  @apply border-(--ink) bg-(--ink) font-extrabold text-(--ground);
+}
+
+.folder-list__label {
+  @apply min-w-0 truncate;
+}
+
+.folder-list__count {
+  @apply text-[13px] font-semibold opacity-65;
+}
+
+.folder-list__empty {
+  @apply m-0 px-3.5 py-3 text-[14px] text-(--ink-soft);
+}
+
+.folder-list__add {
+  @apply flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-(--radius-pill) border-[1.5px] border-dashed border-(--line) bg-transparent p-0 text-(--ink-soft);
+  transition: var(--hover-transition);
+}
+
+.folder-list__add-label {
+  @apply sr-only;
+}
+
+.folder-list__item:focus-visible,
+.folder-list__add:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+@media (hover: hover) {
+  .folder-list__item[aria-pressed='false']:hover,
+  .folder-list__add:hover {
+    border-color: var(--hover-accent);
+    color: var(--indigo);
+  }
+}
+
+@media (min-width: 761px) {
+  .folder-list {
+    @apply sticky top-5 m-0 w-70 shrink-0 flex-col items-stretch gap-3 overflow-visible rounded-(--card-radius) border border-solid border-(--line) bg-(--surface) p-4;
+  }
+
+  .folder-list__head {
+    @apply flex items-center justify-between px-1 py-0.5;
+  }
+
+  .folder-list__head h2 {
+    @apply m-0 text-[16px] tracking-[-0.2px];
+  }
+
+  .folder-list__total {
+    @apply text-[13px] text-(--ink-soft);
+  }
+
+  .folder-list__search {
+    @apply flex min-h-11;
+  }
+
+  .folder-list__scroller {
+    @apply relative block;
+  }
+
+  /* A soft fade tells the list can scroll. */
+  .folder-list__scroller::after {
+    @apply pointer-events-none absolute inset-x-0 bottom-0 h-9 content-[''];
+    background: linear-gradient(180deg, transparent, var(--surface));
+  }
+
+  .folder-list__nav {
+    @apply flex max-h-115 flex-col items-stretch gap-0.5 overflow-y-auto pr-0.5;
+  }
+
+  .folder-list__icon {
+    @apply block;
+  }
+
+  .folder-list__item {
+    @apply relative min-h-11 w-full justify-start gap-2.5 rounded-(--radius-14) border-0 bg-transparent py-0 pr-3.5 pl-4.5 text-[15px] font-semibold;
+  }
+
+  .folder-list__item[aria-pressed='true'] {
+    @apply bg-(--indigo-soft) font-extrabold text-(--indigo);
+  }
+
+  .folder-list__item[aria-pressed='true']::before {
+    @apply absolute inset-y-2.5 left-0 w-1 rounded-full bg-(--brand-line) content-[''];
+  }
+
+  .folder-list__label {
+    @apply flex-1 text-left;
+  }
+
+  .folder-list__count {
+    @apply text-[13px] font-bold text-(--ink-soft) opacity-100;
+  }
+
+  .folder-list__add {
+    @apply min-h-11.5 w-full gap-2 rounded-(--radius-14) font-extrabold text-(--indigo);
+  }
+
+  .folder-list__add-label {
+    @apply not-sr-only;
+  }
+}

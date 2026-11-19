@@ -49,7 +49,12 @@ export function DeckPageHeader({
           icon={<Play size={18} strokeWidth={2.4} />}
           variant="cta"
         >
-          {messages.reviewShort(dueCount)}
+          <span className="deck-header__cta-wide">
+            {messages.reviewShort(dueCount)}
+          </span>
+          <span className="deck-header__cta-compact">
+            {messages.reviewToday(dueCount)}
+          </span>
         </ActionPill>
       </div>
     </header>

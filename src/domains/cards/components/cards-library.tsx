@@ -1,6 +1,12 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, ListChecks, Trash2 } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Folder,
+  ListChecks,
+  Trash2
+} from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
 import { SearchField } from '@/components/ui/search-field';
@@ -11,7 +17,7 @@ import {
   type CardStatusCounts,
   type CardStatusFilter
 } from '../card-status';
-import { paginateItems } from '../hooks/pagination';
+import { getPageNumbers, paginateItems } from '../hooks/pagination';
 import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
@@ -24,27 +30,18 @@ import { translateText } from '@/lib/i18n/locale';
 import './cards-library.css';
 
 const messages = cardsMessages.overview;
-const CARDS_PAGE_SIZE = 9;
+const CARDS_PAGE_SIZE = 12;
 
-// Dot colors follow the card tile: coral is due, violet is in progress, mint is
-// mastered. Read at render time so the labels follow the selected language.
+// Dot colors follow the due dot of the cards: coral is due today, violet is
+// due this week, mint is safe. Read at render time so the labels follow the
+// selected language.
 function getStatusOptions(counts: CardStatusCounts) {
   const labels = messages.statusFilters;
   return [
     { value: 'all', label: labels.all, count: counts.all },
     { value: 'due', label: labels.due, count: counts.due, dot: 'coral' },
-    {
-      value: 'learning',
-      label: labels.learning,
-      count: counts.learning,
-      dot: 'brand'
-    },
-    {
-      value: 'mastered',
-      label: labels.mastered,
-      count: counts.mastered,
-      dot: 'mint'
-    }
+    { value: 'week', label: labels.week, count: counts.week, dot: 'brand' },
+    { value: 'safe', label: labels.safe, count: counts.safe, dot: 'mint' }
   ] as const satisfies readonly {
     value: CardStatusFilter;
     label: string;
@@ -70,6 +67,8 @@ type CardsLibraryProps = {
   onStatusChange: (status: CardStatusFilter) => void;
   onDeleteCards: (cardIds: readonly string[]) => void;
   onAddCard: () => void;
+  /** Opens the screen of the active folder (rename, recolor, delete, review). */
+  onOpenGroup: (groupId: string) => void;
 };
 
 export function CardsLibrary({
@@ -88,7 +87,8 @@ export function CardsLibrary({
   onCategoryChange,
   onStatusChange,
   onDeleteCards,
-  onAddCard
+  onAddCard,
+  onOpenGroup
 }: CardsLibraryProps) {
   const [requestedPage, setRequestedPage] = useState({ key: '', page: 1 });
   const [isManaging, setIsManaging] = useState(false);
@@ -111,6 +111,12 @@ export function CardsLibrary({
     searchText.trim() === '' &&
     activeStatus === ALL_CARD_STATUSES &&
     activeCategory === messages.allCategories;
+  const groupTitle = activeGroup
+    ? getGroupDisplayName(activeGroup)
+    : messages.allGroups;
+  const firstShown =
+    cards.length === 0 ? 0 : (page.page - 1) * CARDS_PAGE_SIZE + 1;
+  const lastShown = firstShown + page.items.length - 1;
   const hasSelection = activeSelection.length > 0;
   const isAllSelected =
     cards.length > 0 && activeSelection.length === cards.length;
@@ -163,11 +169,33 @@ export function CardsLibrary({
       aria-labelledby="deck-library-title"
       data-managing={isManaging}
     >
-      <h2 className="sr-only" id="deck-library-title">
-        {activeGroup
-          ? messages.libraryTitleGroup(getGroupDisplayName(activeGroup))
-          : messages.libraryTitleAll}
-      </h2>
+      <div className="deck-library__head">
+        <Folder
+          aria-hidden="true"
+          className="deck-library__crumb-icon"
+          size={18}
+        />
+        <span className="deck-library__crumb">{messages.groupsTitle}</span>
+        <span aria-hidden="true" className="deck-library__crumb-sep">
+          /
+        </span>
+        <h2 id="deck-library-title">{groupTitle}</h2>
+        <span className="deck-library__meta deck-library__meta--wide">
+          {messages.cardCount(statusCounts.all)}
+        </span>
+        <span className="deck-library__meta deck-library__meta--compact">
+          {messages.groupMeta(statusCounts.all, statusCounts.due)}
+        </span>
+        {activeGroup && (
+          <button
+            className="deck-library__open"
+            onClick={() => onOpenGroup(activeGroup.id)}
+            type="button"
+          >
+            {messages.openFolder}
+          </button>
+        )}
+      </div>
       <div className="deck-library__toolbar">
         <SegmentedToggle
           ariaLabel={messages.statusFiltersLabel}
@@ -196,7 +224,11 @@ export function CardsLibrary({
           id="deck-search-input"
           label={messages.searchLabel}
           onChange={changeSearch}
-          placeholder={messages.searchPlaceholder}
+          placeholder={
+            activeGroup
+              ? messages.searchInGroup(groupTitle)
+              : messages.searchPlaceholder
+          }
           shape="soft"
           value={searchText}
         />
@@ -248,39 +280,66 @@ export function CardsLibrary({
           <p className="deck-library__empty">{messages.emptyFilter}</p>
         ))}
       {page.pageCount > 1 && (
-        <nav className="deck-pagination" aria-label={messages.pagination.label}>
-          <button
-            aria-label={messages.pagination.previousLabel}
-            className="deck-pagination__button"
-            disabled={page.page === 1}
-            onClick={() =>
-              setRequestedPage({ key: pageContextKey, page: page.page - 1 })
-            }
-            type="button"
-          >
-            <ChevronLeft aria-hidden="true" size={18} />
-            <span>{messages.pagination.previous}</span>
-          </button>
+        <div className="deck-pagination">
           <span
             className="deck-pagination__status"
             aria-live="polite"
             aria-atomic="true"
           >
-            {messages.pagination.status(page.page, page.pageCount)}
+            {messages.pagination.showing(firstShown, lastShown, cards.length)}
           </span>
-          <button
-            aria-label={messages.pagination.nextLabel}
-            className="deck-pagination__button"
-            disabled={page.page === page.pageCount}
-            onClick={() =>
-              setRequestedPage({ key: pageContextKey, page: page.page + 1 })
-            }
-            type="button"
+          <nav
+            className="deck-pagination__pages"
+            aria-label={messages.pagination.label}
           >
-            <span>{messages.pagination.next}</span>
-            <ChevronRight aria-hidden="true" size={18} />
-          </button>
-        </nav>
+            <button
+              aria-label={messages.pagination.previousLabel}
+              className="deck-pagination__button"
+              disabled={page.page === 1}
+              onClick={() =>
+                setRequestedPage({ key: pageContextKey, page: page.page - 1 })
+              }
+              type="button"
+            >
+              <ChevronLeft aria-hidden="true" size={18} />
+            </button>
+            {getPageNumbers(page.page, page.pageCount).map((item, index) =>
+              item === 'gap' ? (
+                <span
+                  aria-hidden="true"
+                  className="deck-pagination__gap"
+                  key={`gap-${index}`}
+                >
+                  …
+                </span>
+              ) : (
+                <button
+                  aria-current={item === page.page ? 'page' : undefined}
+                  aria-label={messages.pagination.pageLabel(item)}
+                  className="deck-pagination__button"
+                  key={item}
+                  onClick={() =>
+                    setRequestedPage({ key: pageContextKey, page: item })
+                  }
+                  type="button"
+                >
+                  {item}
+                </button>
+              )
+            )}
+            <button
+              aria-label={messages.pagination.nextLabel}
+              className="deck-pagination__button"
+              disabled={page.page === page.pageCount}
+              onClick={() =>
+                setRequestedPage({ key: pageContextKey, page: page.page + 1 })
+              }
+              type="button"
+            >
+              <ChevronRight aria-hidden="true" size={18} />
+            </button>
+          </nav>
+        </div>
       )}
       {isManaging && (
         <SelectionActionBar

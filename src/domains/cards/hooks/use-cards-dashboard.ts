@@ -66,6 +66,7 @@ export function useCardsDashboard() {
   const [activeStatus, setActiveStatus] =
     useState<CardStatusFilter>(ALL_CARD_STATUSES);
   const [searchText, setSearchText] = useState('');
+  const [groupSearchText, setGroupSearchText] = useState('');
   const [groupView, setGroupView] = useState<GroupView>('overview');
   // The open group detail is independent from the library filter above.
   const [openGroupId, setOpenGroupId] = useState<string | undefined>();
@@ -270,6 +271,7 @@ export function useCardsDashboard() {
     activeCategory,
     activeStatus,
     searchText,
+    groupSearchText,
     groupView,
     isEditorOpen,
     editorKey,
@@ -278,6 +280,7 @@ export function useCardsDashboard() {
     setActiveCategory,
     setActiveStatus,
     setSearchText,
+    setGroupSearchText,
     setGroupView,
     openEditor,
     closeEditor,

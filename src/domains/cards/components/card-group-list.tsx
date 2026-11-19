@@ -1,15 +1,10 @@
 'use client';
 
-import { FolderTile } from '@/components/ui/folder-tile';
+import { FolderList } from '@/components/ui/folder-list';
 import { ALL_GROUPS_ID } from '../hooks/use-cards-dashboard';
-import {
-  getGroupDisplayDescription,
-  getGroupDisplayName
-} from '../group-display';
+import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardGroup } from '../types';
-import { DeckIcon } from './deck-icon';
-import './card-group-list.css';
 
 const messages = cardsMessages.overview;
 
@@ -24,61 +19,61 @@ type CardGroupListProps = {
   totalCards: number;
   totalDue: number;
   activeGroupId: string;
-  onSelectAll: () => void;
-  onOpenGroup: (groupId: string) => void;
+  searchText: string;
+  onSearchChange: (value: string) => void;
+  onSelectGroup: (groupId: string) => void;
   onAddGroup: () => void;
 };
 
-// Group folders (proposal D): "Todas" filters the library below, a group
-// folder opens that group's own screen, and the dashed folder starts a new
-// group.
+// Folders of the deck (proposal D): "Todas" and each group filter the library
+// next to the list; the last button starts a new group. The search narrows the
+// list of folders by name.
 export function CardGroupList({
   tiles,
   totalCards,
   totalDue,
   activeGroupId,
-  onSelectAll,
-  onOpenGroup,
+  searchText,
+  onSearchChange,
+  onSelectGroup,
   onAddGroup
 }: CardGroupListProps) {
+  const query = searchText.trim().toLocaleLowerCase();
+  const visibleTiles = tiles.filter(
+    ({ group }) =>
+      !query || getGroupDisplayName(group).toLocaleLowerCase().includes(query)
+  );
+
   return (
-    <section className="deck-groups" aria-labelledby="deck-groups-title">
-      <h2 className="sr-only" id="deck-groups-title">
-        {messages.groupsTitle}
-      </h2>
-      <div
-        aria-label={messages.groupsLabel}
-        className="deck-groups__list"
-        role="group"
-      >
-        <FolderTile
-          aria-label={`${messages.allGroups} · ${messages.groupMeta(totalCards, totalDue)}`}
-          count={totalCards}
-          icon={<DeckIcon name="stack" size={24} />}
-          onClick={onSelectAll}
-          pressed={activeGroupId === ALL_GROUPS_ID}
-          subtitle={messages.allGroupsHint}
-          title={messages.allGroups}
-        />
-        {tiles.map(({ group, cardCount, dueCount }) => (
-          <FolderTile
-            aria-label={`${getGroupDisplayName(group)} · ${messages.groupMeta(cardCount, dueCount)}`}
-            count={cardCount}
-            icon={<DeckIcon name="stack" size={24} />}
-            key={group.id}
-            onClick={() => onOpenGroup(group.id)}
-            subtitle={getGroupDisplayDescription(group) || undefined}
-            title={getGroupDisplayName(group)}
-            tone={group.tone}
-          />
-        ))}
-        <FolderTile
-          icon={<DeckIcon name="plus" size={26} />}
-          onClick={onAddGroup}
-          title={messages.newGroup}
-          variant="add"
-        />
-      </div>
-    </section>
+    <FolderList
+      addLabel={messages.newGroup}
+      emptyLabel={messages.noFolders}
+      isEmpty={query !== '' && visibleTiles.length === 0}
+      items={[
+        {
+          id: ALL_GROUPS_ID,
+          label: messages.allGroups,
+          count: totalCards,
+          pressed: activeGroupId === ALL_GROUPS_ID,
+          ariaLabel: `${messages.allGroups} · ${messages.groupMeta(totalCards, totalDue)}`,
+          onSelect: () => onSelectGroup(ALL_GROUPS_ID)
+        },
+        ...visibleTiles.map(({ group, cardCount, dueCount }) => ({
+          id: group.id,
+          label: getGroupDisplayName(group),
+          count: cardCount,
+          pressed: activeGroupId === group.id,
+          ariaLabel: `${getGroupDisplayName(group)} · ${messages.groupMeta(cardCount, dueCount)}`,
+          onSelect: () => onSelectGroup(group.id)
+        }))
+      ]}
+      listLabel={messages.groupsLabel}
+      onAdd={onAddGroup}
+      onSearchChange={onSearchChange}
+      searchLabel={messages.folderSearchLabel}
+      searchValue={searchText}
+      title={messages.groupsTitle}
+      total={tiles.length}
+    />
   );
 }

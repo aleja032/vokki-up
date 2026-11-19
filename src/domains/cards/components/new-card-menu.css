@@ -7,7 +7,7 @@
 }
 
 .new-card-menu .new-card-menu__trigger {
-  @apply size-12 min-h-12 gap-0 p-0;
+  @apply size-12 min-h-12 gap-0 border-[1.5px] p-0;
 }
 
 .new-card-menu__label,
@@ -41,6 +41,10 @@
 @media (min-width: 761px) {
   .new-card-menu .new-card-menu__trigger {
     @apply h-auto min-h-13 w-auto gap-2 pr-4.5 pl-4;
+  }
+
+  .new-card-menu__chevron {
+    @apply text-(--ink-soft);
   }
 
   .new-card-menu__label {

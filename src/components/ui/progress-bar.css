@@ -44,6 +44,10 @@
   --bar-fill: var(--urgency-coral);
 }
 
+.progress-bar--muted {
+  --bar-fill: var(--ink-soft);
+}
+
 .progress-bar--brand {
   --bar-fill: var(--brand);
 }

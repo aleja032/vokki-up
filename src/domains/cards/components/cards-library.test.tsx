@@ -32,14 +32,15 @@ function render(
       categories: ['Todas'],
       activeCategory: 'Todas',
       activeStatus: options.activeStatus ?? 'all',
-      statusCounts: { all: 46, due: 12, learning: 11, mastered: 23 },
+      statusCounts: { all: 46, due: 12, week: 19, safe: 15 },
       searchText: options.searchText ?? '',
       canDeleteCards: true,
       onSearchChange: () => undefined,
       onCategoryChange: () => undefined,
       onStatusChange: () => undefined,
       onDeleteCards: () => undefined,
-      onAddCard: () => undefined
+      onAddCard: () => undefined,
+      onOpenGroup: () => undefined
     })
   );
 }
@@ -57,15 +58,31 @@ describe('CardsLibrary toolbar', () => {
 
   it('shows the status filter with a count per status and one pressed', () => {
     const html = render([card], { activeStatus: 'due' });
-    expect(html).toContain('aria-label="Filtrar por estado"');
-    for (const label of ['Todas', 'Para hoy', 'En curso', 'Dominadas'])
+    expect(html).toContain('aria-label="Filtrar por próximo repaso"');
+    for (const label of ['Todas', 'Hoy', 'Esta semana', 'Seguras'])
       expect(html).toContain(label);
-    for (const total of ['>46<', '>12<', '>11<', '>23<'])
+    for (const total of ['>46<', '>12<', '>19<', '>15<'])
       expect(html).toContain(total);
     expect(html.match(/aria-pressed="true"/g)).toHaveLength(1);
-    expect(html).toMatch(
-      /aria-pressed="true"[^>]*><span[^>]*><\/span>Para hoy/
-    );
+    expect(html).toMatch(/aria-pressed="true"[^>]*><span[^>]*><\/span>Hoy/);
+  });
+
+  it('names the open folder in the head and offers to open its screen', () => {
+    const html = render([card], { activeGroup: group });
+    expect(html).toContain('<h2 id="deck-library-title">Trabajo</h2>');
+    expect(html).toContain('>Abrir carpeta<');
+    expect(render([card])).not.toContain('>Abrir carpeta<');
+  });
+
+  it('shows the visible range and a numbered pager when there are many cards', () => {
+    const many = Array.from({ length: 30 }, (_, index) => ({
+      ...card,
+      id: `c${index}`
+    }));
+    const html = render(many);
+    expect(html).toContain('Mostrando 1–12 de 30 tarjetas');
+    expect(html).toContain('aria-current="page"');
+    expect(html).toContain('aria-label="Página 3"');
   });
 });
 

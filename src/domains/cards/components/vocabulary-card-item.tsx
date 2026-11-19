@@ -103,12 +103,17 @@ export function VocabularyCardItem({
             label={overview.memoryLabel(memory.level)}
             max={MAX_CARD_MEMORY}
             segments={MAX_CARD_MEMORY}
-            tone={memory.tone}
+            tone={memory.level >= MAX_CARD_MEMORY ? 'mint' : 'muted'}
             value={memory.level}
           />
-          <PixelLabel className="deck-card__due">
-            {formatDueLabel(schedule, now)}
-          </PixelLabel>
+          <span className="deck-card__due">
+            <span
+              aria-hidden="true"
+              className="deck-card__dot"
+              data-tone={memory.tone}
+            />
+            <PixelLabel>{formatDueLabel(schedule, now)}</PixelLabel>
+          </span>
         </div>
       </div>
     </article>

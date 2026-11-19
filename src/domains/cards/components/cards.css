@@ -177,7 +177,7 @@
 }
 
 .deck-page__workspace {
-  @apply flex flex-col;
+  @apply flex flex-col gap-4;
 }
 
 @media (min-width: 761px) {
@@ -190,12 +190,12 @@
   }
 
   .deck-page__workspace {
-    @apply flex-row flex-wrap items-start gap-8;
+    @apply flex-row flex-wrap items-start gap-6;
   }
 
   /* An open add hub replaces the page content on wide screens. */
   .deck-page:has(.addhub[data-open='true']) > .deck-header,
-  .deck-page:has(.addhub[data-open='true']) > .deck-groups,
+  .deck-page:has(.addhub[data-open='true']) .folder-list,
   .deck-page:has(.addhub[data-open='true']) .deck-library {
     @apply hidden;
   }

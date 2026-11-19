@@ -16,7 +16,17 @@ type CardsDashboardProps = {
   renderAddPanel?: (api: CardsAddPanelApi) => ReactNode;
 };
 
-export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
+// The accent-violet class re-skins only the accents of the page (globals.css);
+// the ground, surfaces and shell keep following the app theme, like home.
+export function CardsDashboard(props: CardsDashboardProps) {
+  return (
+    <div className="accent-violet">
+      <CardsDashboardView {...props} />
+    </div>
+  );
+}
+
+function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
   const dashboard = useCardsDashboard();
   const {
     cards,
@@ -79,17 +89,17 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
         onAddCard={dashboard.openEditor}
       />
 
-      <CardGroupList
-        tiles={groupTiles}
-        totalCards={cards.length}
-        totalDue={dueCount}
-        activeGroupId={activeGroupId}
-        onSelectAll={() => dashboard.setActiveGroupId(ALL_GROUPS_ID)}
-        onOpenGroup={dashboard.openGroupById}
-        onAddGroup={dashboard.startGroupCreation}
-      />
-
       <div className="deck-page__workspace">
+        <CardGroupList
+          tiles={groupTiles}
+          totalCards={cards.length}
+          totalDue={dueCount}
+          activeGroupId={activeGroupId}
+          searchText={dashboard.groupSearchText}
+          onSearchChange={dashboard.setGroupSearchText}
+          onSelectGroup={dashboard.setActiveGroupId}
+          onAddGroup={dashboard.startGroupCreation}
+        />
         <CardsLibrary
           cards={dashboard.filteredCards}
           groups={groups}
@@ -107,6 +117,7 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
           onStatusChange={dashboard.setActiveStatus}
           onDeleteCards={dashboard.deleteCards}
           onAddCard={dashboard.openEditor}
+          onOpenGroup={dashboard.openGroupById}
         />
         {renderAddPanel ? (
           renderAddPanel(addPanelApi)

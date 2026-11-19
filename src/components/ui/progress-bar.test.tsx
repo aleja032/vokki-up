@@ -86,4 +86,10 @@ describe('ProgressBar', () => {
     expect(html).not.toContain('progress-bar--blocks');
     expect(html).not.toContain('data-current');
   });
+
+  it('supports the neutral muted tone', () => {
+    expect(
+      renderToStaticMarkup(<ProgressBar label="x" tone="muted" value={1} />)
+    ).toContain('progress-bar--muted');
+  });
 });

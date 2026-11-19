@@ -12,7 +12,7 @@
 }
 
 .deck-header__mascot {
-  @apply hidden h-19 w-auto;
+  @apply hidden h-17 w-auto;
 }
 
 .deck-header__copy {
@@ -20,11 +20,11 @@
 }
 
 .deck-header h1 {
-  @apply m-0 text-[28px] leading-[1.1] font-bold tracking-[-0.8px] wrap-anywhere;
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[36px] leading-[1.1] font-bold tracking-[-0.8px] wrap-anywhere;
 }
 
 .deck-header__summary {
-  @apply m-0 text-[13px] text-(--ink-soft);
+  @apply m-0 mt-1 text-[14.5px] text-(--ink-soft);
 }
 
 /* The actions wrapper dissolves on phones so the plus button joins the title row. */
@@ -34,6 +34,10 @@
 
 .deck-header__cta {
   @apply col-span-full text-[17px];
+}
+
+.deck-header__cta-wide {
+  @apply hidden;
 }
 
 @media (min-width: 761px) {
@@ -46,11 +50,11 @@
   }
 
   .deck-header h1 {
-    @apply text-[40px] leading-[1.05] tracking-[-1.2px];
+    @apply font-[family-name:var(--font-ui),sans-serif] text-[38px] leading-[1.05] tracking-[-1.1px];
   }
 
   .deck-header__summary {
-    @apply text-[15px];
+    @apply mt-0 text-[15px];
   }
 
   .deck-header__actions {
@@ -59,5 +63,13 @@
 
   .deck-header__cta {
     @apply col-auto text-[16px];
+  }
+
+  .deck-header__cta-wide {
+    @apply inline;
+  }
+
+  .deck-header__cta-compact {
+    @apply hidden;
   }
 }

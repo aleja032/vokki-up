@@ -13,24 +13,30 @@ export const cardsMessages = createLocalizedMessages({
     createCard: 'Crear tarjeta',
     addFromLibrary: 'Agregar desde la biblioteca',
     reviewShort: (due: number) => `Repasar ${due}`,
+    reviewToday: (due: number) => `Repasar ${due} para hoy`,
     memoryLabel: (level: number) => `Memoria ${level} de 5`,
-    groupsTitle: 'Grupos',
-    groupsLabel: 'Grupos de tarjetas',
+    groupsTitle: 'Carpetas',
+    groupsLabel: 'Carpetas de tarjetas',
     allGroups: 'Todas',
-    allGroupsHint: 'Todo tu mazo',
-    newGroup: 'Nuevo grupo',
+    newGroup: 'Nueva carpeta',
+    folderSearchLabel: 'Buscar carpeta',
+    noFolders: 'No hay carpetas con ese nombre.',
+    openFolder: 'Abrir carpeta',
     groupMeta: (cards: number, due: number) =>
       `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} · ${due} hoy`,
-    libraryTitleAll: 'Todas mis tarjetas',
-    libraryTitleGroup: (name: string) => `Tarjetas de ${name}`,
+    cardCount: (cards: number) =>
+      `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')}`,
+    libraryTitleAll: 'Todas',
+    libraryTitleGroup: (name: string) => name,
     searchLabel: 'Buscar tarjetas',
-    searchPlaceholder: 'Buscar palabra o significado…',
-    statusFiltersLabel: 'Filtrar por estado',
+    searchPlaceholder: 'Buscar tarjetas',
+    searchInGroup: (name: string) => `Buscar en ${name}`,
+    statusFiltersLabel: 'Filtrar por próximo repaso',
     statusFilters: {
       all: 'Todas',
-      due: 'Para hoy',
-      learning: 'En curso',
-      mastered: 'Dominadas'
+      due: 'Hoy',
+      week: 'Esta semana',
+      safe: 'Seguras'
     },
     typeLabel: 'Tipo',
     allTypes: 'Todos',
@@ -41,10 +47,9 @@ export const cardsMessages = createLocalizedMessages({
       label: 'Paginación de tarjetas',
       previousLabel: 'Página anterior',
       nextLabel: 'Página siguiente',
-      previous: 'Anterior',
-      next: 'Siguiente',
-      status: (page: number, pageCount: number) =>
-        `Página ${page} de ${pageCount}`
+      pageLabel: (page: number) => `Página ${page}`,
+      showing: (from: number, to: number, total: number) =>
+        `Mostrando ${from}–${to} de ${total} ${pluralize(total, 'tarjeta', 'tarjetas')}`
     },
     manageCards: 'Gestionar',
     cardSelectLabel: (term: string) => `Seleccionar ${term}`,

@@ -25,7 +25,7 @@ describe('ActionPill', () => {
     expect(html).toContain('motion-cta-pulse');
   });
 
-  it.each(['brand', 'outline', 'cta', 'mint', 'line'] as const)(
+  it.each(['brand', 'outline', 'cta', 'mint'] as const)(
     'applies the %s variant modifier',
     variant => {
       expect(
@@ -62,7 +62,7 @@ describe('ActionPill', () => {
         aria-expanded={false}
         aria-haspopup="menu"
         iconEnd={<svg data-end />}
-        variant="line"
+        variant="outline"
       >
         Nueva
       </ActionPill>

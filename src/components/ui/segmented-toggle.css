@@ -14,9 +14,10 @@
   box-shadow: inset 0 0 0 2px var(--brand);
 }
 
-/* Filter variant: status filter with a colored dot and a count per option. */
+/* Filter variant: status filter with a colored dot and a count per option.
+   Phones: underlined tabs without counts. From 761px: pills with counts. */
 .segmented-toggle--filter {
-  @apply gap-1 overflow-x-auto bg-(--surface) p-1.25;
+  @apply w-full gap-4 self-auto overflow-x-auto rounded-none border-0 border-b border-solid border-b-(--line) bg-transparent p-0;
 
   scrollbar-width: none;
 }
@@ -26,16 +27,16 @@
 }
 
 .segmented-toggle--filter .segmented-toggle__option {
-  @apply flex shrink-0 items-center gap-2 px-3.5 text-[13.5px] whitespace-nowrap text-(--ink);
+  @apply flex shrink-0 items-center gap-1.75 rounded-none px-1 text-[14.5px] font-semibold whitespace-nowrap text-(--ink-soft);
 }
 
 .segmented-toggle--filter .segmented-toggle__option[aria-pressed='true'] {
-  @apply text-(--indigo);
-  box-shadow: inset 0 0 0 2px var(--brand-line);
+  @apply bg-transparent font-extrabold text-(--ink);
+  box-shadow: inset 0 -2px 0 var(--ink);
 }
 
 .segmented-toggle__dot {
-  @apply size-[9px] shrink-0 rounded-full bg-(--brand);
+  @apply size-2 shrink-0 rounded-full bg-(--brand);
 }
 
 .segmented-toggle__dot[data-dot='coral'] {
@@ -47,7 +48,7 @@
 }
 
 .segmented-toggle__count {
-  @apply font-bold opacity-75;
+  @apply hidden font-bold opacity-75;
 }
 
 .segmented-toggle__option:focus-visible {
@@ -55,8 +56,25 @@
 }
 
 @media (min-width: 761px) {
+  .segmented-toggle--filter {
+    @apply w-auto max-w-full gap-1 self-start rounded-(--radius-pill) border-[1.5px] border-(--line) bg-(--surface) p-1.25;
+  }
+
   .segmented-toggle--filter .segmented-toggle__option {
-    @apply px-4.5 text-[14.5px];
+    @apply gap-2 rounded-(--radius-pill) px-4.5 font-extrabold text-(--ink);
+  }
+
+  .segmented-toggle--filter .segmented-toggle__option[aria-pressed='true'] {
+    @apply bg-(--indigo-soft) text-(--indigo);
+    box-shadow: inset 0 0 0 2px var(--brand-line);
+  }
+
+  .segmented-toggle__dot {
+    @apply size-[9px];
+  }
+
+  .segmented-toggle__count {
+    @apply inline;
   }
 }
 

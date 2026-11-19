@@ -8,7 +8,8 @@ type ProgressBarProps = {
   label: string;
   value: number;
   max?: number;
-  tone?: Tone;
+  /** `muted` is the neutral fill of the Mi mazo memory bars. */
+  tone?: Tone | 'muted';
   /** When set, renders N discrete segments instead of a continuous fill. */
   segments?: number;
   /** Segment corner style: `pill` (default) or squared `blocks`. */

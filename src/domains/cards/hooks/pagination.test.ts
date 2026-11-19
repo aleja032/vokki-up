@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { paginateItems } from './pagination';
+import { getPageNumbers, paginateItems } from './pagination';
 
 describe('paginateItems', () => {
   it('returns a stable slice for the requested page', () => {
@@ -24,5 +24,21 @@ describe('paginateItems', () => {
       pageCount: 1,
       items: []
     });
+  });
+});
+
+describe('getPageNumbers', () => {
+  it('lists every page when there are few', () => {
+    expect(getPageNumbers(2, 4)).toEqual([1, 2, 3, 4]);
+  });
+
+  it('keeps the first and last page and the neighbours of the current one', () => {
+    expect(getPageNumbers(1, 9)).toEqual([1, 2, 'gap', 9]);
+    expect(getPageNumbers(5, 9)).toEqual([1, 'gap', 4, 5, 6, 'gap', 9]);
+    expect(getPageNumbers(9, 9)).toEqual([1, 'gap', 8, 9]);
+  });
+
+  it('does not add a gap between consecutive pages', () => {
+    expect(getPageNumbers(3, 9)).toEqual([1, 2, 3, 4, 'gap', 9]);
   });
 });

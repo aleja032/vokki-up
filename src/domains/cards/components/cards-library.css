@@ -1,22 +1,47 @@
 @reference 'tailwindcss';
 
 /*
- * Mi mazo library (proposal D): one violet-outlined panel with the status
- * filter, the type select, the search and the manage button on top, then the
- * card grid. Mobile first; two tile columns on phones.
+ * Mi mazo library (proposal D), on the page ground: a head with the open
+ * folder, a toolbar (status filter, type select, search, manage) and the
+ * cards. Phones: a compact list in one rounded container with the search on
+ * top and underlined status tabs below. From 761px: a grid of neutral tiles
+ * and a numbered pager.
  */
 
 .deck-library {
   --selection-dock-gap: 1rem;
-  @apply flex min-w-0 flex-1 flex-col gap-3 rounded-(--card-radius) border-2 border-solid border-(--brand) bg-(--surface) p-3.5;
+  @apply flex min-w-0 flex-1 flex-col gap-3;
 }
 
-/* Phones: status filter and manage button on the first row, search and type on the second. */
+.deck-library__head {
+  @apply flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1;
+}
+
+.deck-library__head h2 {
+  @apply m-0 text-[22px] leading-tight font-extrabold tracking-[-0.4px];
+}
+
+.deck-library__crumb-icon,
+.deck-library__crumb,
+.deck-library__crumb-sep,
+.deck-library__meta--wide {
+  @apply hidden;
+}
+
+.deck-library__meta {
+  @apply text-[13.5px] text-(--ink-soft);
+}
+
+.deck-library__open {
+  @apply min-h-9 cursor-pointer border-0 bg-transparent p-0 text-[14px] font-bold text-(--ink) underline underline-offset-3;
+}
+
+/* Phones: search and type on the first row, status tabs and manage on the second. */
 .deck-library__toolbar {
-  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2.5;
+  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2.5 gap-y-1;
   grid-template-areas:
-    'status manage'
-    'search type';
+    'search type'
+    'status manage';
 }
 
 .deck-library__status {
@@ -56,7 +81,7 @@
 }
 
 .deck-library__grid {
-  @apply grid grid-cols-2 gap-2.5;
+  @apply grid grid-cols-1 overflow-hidden rounded-(--radius-22) border border-solid border-(--line) bg-(--surface);
 }
 
 .deck-library__empty {
@@ -64,25 +89,38 @@
 }
 
 .deck-pagination {
-  @apply flex flex-wrap items-center justify-between gap-3 border-t border-solid border-(--line) pt-3;
+  @apply flex flex-col items-center gap-3 pt-1;
+}
+
+.deck-pagination__pages {
+  @apply flex flex-wrap items-center justify-center gap-2;
 }
 
 .deck-pagination__button {
-  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-1.5 rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-sm font-bold text-(--ink);
+  @apply inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-(--radius-14) border-[1.5px] border-solid border-(--line) bg-(--surface) px-3 text-[14.5px] font-bold text-(--ink);
   transition: var(--hover-transition);
 }
 
+.deck-pagination__button[aria-current='page'] {
+  @apply border-transparent bg-(--indigo-soft) font-extrabold text-(--indigo);
+  box-shadow: inset 0 0 0 2px var(--brand-line);
+}
+
 .deck-pagination__button:disabled {
-  @apply cursor-not-allowed opacity-45;
+  @apply cursor-default opacity-40;
+}
+
+.deck-pagination__gap {
+  @apply px-0.5 text-(--ink-soft);
 }
 
 .deck-pagination__status {
-  @apply text-sm text-(--ink-soft) tabular-nums;
+  @apply text-[13px] text-(--ink-soft) tabular-nums;
 }
 
 @media (hover: hover) {
   .deck-library__manage:not(:disabled, [inert]):hover,
-  .deck-pagination__button:not(:disabled):hover {
+  .deck-pagination__button:not(:disabled, [aria-current='page']):hover {
     border-color: var(--hover-accent);
     color: var(--indigo);
   }
@@ -90,7 +128,37 @@
 
 @media (min-width: 761px) {
   .deck-library {
-    @apply gap-4.5 rounded-(--radius-28) p-5.5;
+    @apply flex-[1_1_560px] gap-4.5;
+  }
+
+  .deck-library__head {
+    @apply flex-nowrap items-center justify-start gap-2.5 text-[14px] text-(--ink-soft);
+  }
+
+  .deck-library__head h2 {
+    @apply text-[20px] tracking-[-0.3px] text-(--ink);
+  }
+
+  .deck-library__crumb-icon,
+  .deck-library__crumb,
+  .deck-library__crumb-sep {
+    @apply inline-flex;
+  }
+
+  .deck-library__meta--wide {
+    @apply ml-1.5 inline;
+  }
+
+  .deck-library__meta--compact {
+    @apply hidden;
+  }
+
+  .deck-library__meta {
+    @apply text-[14px];
+  }
+
+  .deck-library__open {
+    @apply ml-auto;
   }
 
   /* Wide screens: one wrapping row, the status filter first and the rest pushed right. */
@@ -103,7 +171,7 @@
   }
 
   .deck-library__search {
-    @apply w-auto max-w-65 flex-[1_1_200px];
+    @apply w-auto max-w-60 flex-[1_1_200px];
   }
 
   .deck-library__type {
@@ -119,7 +187,7 @@
   }
 
   .deck-library__grid {
-    @apply grid-cols-[repeat(auto-fill,minmax(min(210px,100%),1fr))] gap-4;
+    @apply grid-cols-[repeat(auto-fill,minmax(min(210px,100%),1fr))] gap-4 overflow-visible rounded-none border-0 bg-transparent;
   }
 
   .deck-library__empty {
@@ -127,6 +195,10 @@
   }
 
   .deck-pagination {
-    @apply justify-end;
+    @apply flex-row flex-wrap justify-between gap-3 pt-1.5;
+  }
+
+  .deck-pagination__status {
+    @apply text-[14px];
   }
 }

@@ -253,99 +253,37 @@ a:focus-visible {
 }
 
 /*
- * Violet palette (Mi mazo artboards). Scoped override of the themed tokens
- * above: put `palette-violet` on a shell and everything inside re-skins with
- * the same token names, so components never branch on the palette. Light and
- * dark values are copied from the theme objects of VokkiDMazo.dc.html.
- * Fixed tokens kept out of scope: the CTA mint gradient and the hero family.
+ * Violet accents (Mi mazo artboards). Scoped override of the accent tokens
+ * only: put the accent-violet class on a page and its accents (brand, rings, hover,
+ * tone dots) take the violet of VokkiDMazo.dc.html. Grounds, surfaces, lines,
+ * ink and the shell keep following the app theme, so the page matches home.
+ * Light and dark values are copied from the theme objects of the artboard.
  */
-.palette-violet {
-  --ground: #f7f4ee;
-  --surface: #ffffff;
-  --surface-muted: #f1ede6;
-  --line: #e6e1d8;
-  --rule: #f1ede6;
-  --track: #e6e1d8;
-  --nav: #ffffff;
-  --ink: #1b1a2e;
-  --ink-soft: #5b5873;
-  --ink-faint: var(--ink-soft);
+.accent-violet {
   --indigo: #5b3fe0;
   --indigo-soft: #ede8ff;
-  --on-indigo: #ffffff;
   --brand: #7456ff;
   --brand-line: #7456ff;
-  --green: #0b6e55;
-  --green-soft: #ddf8ef;
-  --mint: #0b6e55;
-  --mint-soft: #ddf8ef;
-  --coral: #b5402d;
-  --coral-soft: #ffe8e3;
-  --red-soft: #ffe8e3;
-  --red-ink: #b5402d;
-  --amber-soft: #ffe8e3;
-  --amber-ink: #b5402d;
   --urgency-coral: #ff846f;
   --urgency-amber: var(--brand);
   --urgency-green: #6ee7c2;
   --hover-accent: #7456ff;
   --hover-accent-glow: rgb(116 86 255 / 0.22);
   --focus-ring: var(--indigo);
-
-  background: var(--ground);
-  color: var(--ink);
 }
 
-:root[data-theme='dark'] .palette-violet,
-.dark .palette-violet {
-  --ground: #0f0d16;
-  --surface: #1a1724;
-  --surface-muted: #221e2f;
-  --line: #2f2a3f;
-  --rule: #2f2a3f;
-  --track: #2f2a3f;
-  --nav: #14111c;
-  --ink: #f4f1fa;
-  --ink-soft: #a8a2bd;
+:root[data-theme='dark'] .accent-violet,
+.dark .accent-violet {
   --indigo: #c3b4ff;
   --indigo-soft: #2b2350;
   --brand-line: #a99bff;
-  --green: #6ee7c2;
-  --green-soft: #102e29;
-  --mint: #6ee7c2;
-  --mint-soft: #102e29;
-  --coral: #ffab9c;
-  --coral-soft: #36202a;
-  --red-soft: #36202a;
-  --red-ink: #ffab9c;
-  --amber-soft: #36202a;
-  --amber-ink: #ffab9c;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .palette-violet {
-    --ground: #0f0d16;
-    --surface: #1a1724;
-    --surface-muted: #221e2f;
-    --line: #2f2a3f;
-    --rule: #2f2a3f;
-    --track: #2f2a3f;
-    --nav: #14111c;
-    --ink: #f4f1fa;
-    --ink-soft: #a8a2bd;
+  :root:not([data-theme='light']) .accent-violet {
     --indigo: #c3b4ff;
     --indigo-soft: #2b2350;
     --brand-line: #a99bff;
-    --green: #6ee7c2;
-    --green-soft: #102e29;
-    --mint: #6ee7c2;
-    --mint-soft: #102e29;
-    --coral: #ffab9c;
-    --coral-soft: #36202a;
-    --red-soft: #36202a;
-    --red-ink: #ffab9c;
-    --amber-soft: #36202a;
-    --amber-ink: #ffab9c;
   }
 }
 
