@@ -1,0 +1,108 @@
+@reference 'tailwindcss';
+
+/* Group detail screen: tone hero with stats, review action and card rows. */
+
+.deck-menu {
+  @apply absolute top-[72px] right-6 z-10 flex w-[238px] max-w-[calc(100vw-3rem)] flex-col rounded-(--radius-18) border border-solid border-(--line) bg-(--surface) p-2 shadow-lg;
+}
+
+.deck-menu button {
+  @apply h-11 rounded-(--radius-14) px-3.5 text-left text-[15px] font-medium text-(--ink) hover:bg-(--surface-muted);
+}
+
+.deck-menu button:disabled {
+  @apply cursor-not-allowed opacity-50 hover:bg-transparent;
+}
+
+.deck-menu__hint {
+  @apply px-3.5 pt-1 pb-2 text-[13px] leading-[1.4] text-(--ink-soft);
+}
+
+.deck-menu .deck-menu__danger {
+  @apply font-semibold text-(--red-ink);
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .deck-menu .deck-menu__danger:not(:disabled):hover {
+    background-color: var(--red-soft);
+  }
+}
+
+.deck-hero {
+  @apply flex flex-col gap-4 rounded-(--radius-26) bg-(--tone-soft) p-5;
+}
+
+.deck-hero__identity {
+  @apply flex items-center gap-3.5;
+}
+
+.deck-hero__identity > div {
+  @apply flex min-w-0 flex-col gap-0.5;
+}
+
+.deck-hero__icon {
+  @apply flex size-13 shrink-0 items-center justify-center rounded-(--radius-18) bg-(--surface) text-(--tone-strong);
+}
+
+.deck-hero h1 {
+  @apply m-0 text-[28px] leading-[1.05] font-extrabold tracking-[-0.8px] wrap-anywhere;
+}
+
+.deck-hero__identity span:not(.deck-hero__icon) {
+  @apply text-[14px] wrap-anywhere text-(--ink-soft);
+}
+
+.deck-hero__stats {
+  @apply grid grid-cols-3 gap-2.5;
+}
+
+.deck-hero__stats .stat-tile {
+  @apply p-3;
+}
+
+.deck-hero__stats .stat-tile__value {
+  @apply text-[22px];
+}
+
+.deck-hero__stats .stat-tile__label {
+  @apply text-[12px] wrap-normal;
+}
+
+.deck-hero__review {
+  @apply w-full;
+}
+
+.deck-screen__list-heading {
+  @apply flex flex-wrap items-center justify-between gap-3;
+}
+
+.deck-screen__list-heading h2 {
+  @apply m-0 min-w-0 truncate text-[18px] font-extrabold;
+}
+
+.deck-group-cards {
+  @apply flex flex-col gap-3;
+}
+
+.deck-group-card {
+  @apply flex min-w-0 items-center justify-between gap-3 rounded-(--radius-22) border-2 border-solid border-(--line) bg-(--surface) px-5 py-4;
+}
+
+.deck-group-card__copy {
+  @apply flex min-w-0 flex-col gap-0.5;
+}
+
+.deck-group-card__copy > span:first-child {
+  @apply line-clamp-2 text-[18px] leading-[1.1] font-extrabold tracking-[-0.3px] wrap-anywhere;
+}
+
+.deck-group-card__copy > span:last-child {
+  @apply line-clamp-2 text-[14px] font-bold wrap-anywhere text-(--mint);
+}
+
+@media (min-width: 761px) {
+  .deck-menu {
+    @apply top-14 right-0;
+  }
+}

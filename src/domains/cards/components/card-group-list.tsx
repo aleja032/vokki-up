@@ -1,12 +1,12 @@
 'use client';
 
-import Link from 'next/link';
-import { Library } from 'lucide-react';
+import { Plus } from 'lucide-react';
+import { Chip } from '@/components/ui/chip';
 import { ALL_GROUPS_ID } from '../hooks/use-cards-dashboard';
 import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardGroup } from '../types';
-import { DeckIcon } from './deck-icon';
+import './card-group-list.css';
 
 const messages = cardsMessages.overview;
 
@@ -26,6 +26,8 @@ type CardGroupListProps = {
   onAddGroup: () => void;
 };
 
+// Group chips (proposal D): "Todas" filters the library below, a group chip
+// opens that group's own screen, and the dashed chip starts a new group.
 export function CardGroupList({
   tiles,
   totalCards,
@@ -37,74 +39,37 @@ export function CardGroupList({
 }: CardGroupListProps) {
   return (
     <section className="deck-groups" aria-labelledby="deck-groups-title">
-      <div className="deck-groups__heading">
-        <h2 id="deck-groups-title">{messages.groupsTitle}</h2>
-        <div className="deck-groups__actions">
-          <Link className="deck-link-button" href="/cards/word-library">
-            <Library size={16} aria-hidden="true" />
-            {messages.addFromLibrary}
-          </Link>
-          <button
-            className="deck-groups__add deck-groups__add--compact"
-            type="button"
-            onClick={onAddGroup}
-          >
-            <DeckIcon name="plus" size={16} />
-            {messages.newGroup}
-          </button>
-        </div>
-      </div>
+      <h2 className="sr-only" id="deck-groups-title">
+        {messages.groupsTitle}
+      </h2>
       <div
         aria-label={messages.groupsLabel}
         className="deck-groups__list"
         role="group"
       >
-        <button
-          className="deck-group"
-          data-tone="neutral"
-          type="button"
-          aria-pressed={activeGroupId === ALL_GROUPS_ID}
+        <Chip
           onClick={onSelectAll}
+          pressed={activeGroupId === ALL_GROUPS_ID}
+          title={messages.groupMeta(totalCards, totalDue)}
         >
-          <span className="deck-group__icon">
-            <span className="deck-group__icon-folder">
-              <DeckIcon name="folder" size={18} />
-            </span>
-            <span className="deck-group__icon-stack">
-              <DeckIcon name="stack" size={20} />
-            </span>
-          </span>
-          <span className="deck-group__copy">
-            <strong>{messages.allGroups}</strong>
-            <span>{messages.groupMeta(totalCards, totalDue)}</span>
-          </span>
-        </button>
+          {`${messages.allGroups} · ${totalCards}`}
+        </Chip>
         {tiles.map(({ group, cardCount, dueCount }) => (
-          <button
-            className="deck-group"
-            data-tone={group.tone}
-            type="button"
+          <Chip
             key={group.id}
-            title={getGroupDisplayName(group)}
             onClick={() => onOpenGroup(group.id)}
+            title={`${getGroupDisplayName(group)} · ${messages.groupMeta(cardCount, dueCount)}`}
           >
-            <span className="deck-group__icon">
-              <DeckIcon name="folder" size={18} />
-            </span>
-            <span className="deck-group__copy">
-              <strong>{getGroupDisplayName(group)}</strong>
-              <span>{messages.groupMeta(cardCount, dueCount)}</span>
-            </span>
-          </button>
+            {`${getGroupDisplayName(group)} · ${cardCount}`}
+          </Chip>
         ))}
-        <button
-          className="deck-group deck-group--add"
-          type="button"
+        <Chip
+          aria-label={messages.newGroup}
+          icon={<Plus size={18} strokeWidth={2.6} />}
           onClick={onAddGroup}
-        >
-          <DeckIcon name="plus" size={18} />
-          {messages.newGroup}
-        </button>
+          title={messages.newGroup}
+          variant="add"
+        />
       </div>
     </section>
   );

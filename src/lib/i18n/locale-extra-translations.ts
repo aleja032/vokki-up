@@ -354,11 +354,19 @@ export const extraTranslations: Record<string, string> = {
   Ronda: 'Round',
   Mundos: 'Worlds',
   'En curso': 'In progress',
-  'Sin empezar': 'Not started'
+  'Sin empezar': 'Not started',
+
+  // Mi mazo (cards overview, proposal D)
+  'Mi mazo': 'My deck'
 };
 
 // Interpolated messages: [Spanish pattern, English replacement].
 export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
+  [
+    /^(\d+) tarjetas? · (\d+) para repasar hoy · (\d+) dominadas?$/,
+    '$1 cards · $2 to review today · $3 mastered'
+  ],
+  [/^Repasar (\d+)$/, 'Review $1'],
   [/^de (\d+) hoy$/, 'of $1 today'],
   [/^(\d+) \/ (\d+) palabras o frases$/, '$1 / $2 words or phrases'],
   [/^Repasar este grupo · (\d+)$/, 'Review this group · $1'],

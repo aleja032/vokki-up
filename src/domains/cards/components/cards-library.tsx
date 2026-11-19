@@ -1,21 +1,23 @@
 'use client';
 
 import { ChevronLeft, ChevronRight, ListChecks, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
+import { Chip } from '@/components/ui/chip';
+import { SearchField } from '@/components/ui/search-field';
 import { paginateItems } from '../hooks/pagination';
 import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
-import { DeckIcon } from './deck-icon';
 import { GroupAddActions } from './group-add-actions';
+import { GroupEmptyState } from './group-empty-state';
 import { SelectionActionBar } from './selection-action-bar';
 import { VocabularyCardItem } from './vocabulary-card-item';
 import { translateText } from '@/lib/i18n/locale';
+import './cards-library.css';
 
 const messages = cardsMessages.overview;
-const groupMessages = cardsMessages.groupDetail;
 const CARDS_PAGE_SIZE = 9;
 
 type CardsLibraryProps = {
@@ -32,6 +34,8 @@ type CardsLibraryProps = {
   onCategoryChange: (category: string) => void;
   onDeleteCards: (cardIds: readonly string[]) => void;
   onAddCard: () => void;
+  /** Group chips rendered in the toolbar, next to the search field. */
+  groupFilters?: ReactNode;
 };
 
 export function CardsLibrary({
@@ -47,7 +51,8 @@ export function CardsLibrary({
   onSearchChange,
   onCategoryChange,
   onDeleteCards,
-  onAddCard
+  onAddCard,
+  groupFilters
 }: CardsLibraryProps) {
   const [requestedPage, setRequestedPage] = useState({ key: '', page: 1 });
   const [isManaging, setIsManaging] = useState(false);
@@ -115,6 +120,35 @@ export function CardsLibrary({
       aria-labelledby="deck-library-title"
       data-managing={isManaging}
     >
+      <div className="deck-library__tools">
+        <div className="deck-library__toolbar">
+          {groupFilters}
+          <SearchField
+            className="deck-library__search"
+            id="deck-search-input"
+            label={messages.searchLabel}
+            onChange={changeSearch}
+            placeholder={messages.searchPlaceholder}
+            value={searchText}
+          />
+        </div>
+        <div
+          className="deck-filters"
+          role="group"
+          aria-label={messages.filtersLabel}
+        >
+          {categories.map(category => (
+            <Chip
+              key={category}
+              onClick={() => changeCategory(category)}
+              pressed={activeCategory === category}
+              title={translateText(category)}
+            >
+              {translateText(category)}
+            </Chip>
+          ))}
+        </div>
+      </div>
       <div className="deck-library__heading">
         <h2 id="deck-library-title">
           <span className="deck-library__title-compact">
@@ -151,41 +185,6 @@ export function CardsLibrary({
           <GroupAddActions variant="header" onAdd={onAddCard} />
         </div>
       )}
-      <div className="deck-library__tools">
-        <div className="deck-search">
-          <label className="sr-only" htmlFor="deck-search-input">
-            {messages.searchLabel}
-          </label>
-          <span className="deck-search__icon">
-            <DeckIcon name="search" />
-          </span>
-          <input
-            id="deck-search-input"
-            type="search"
-            placeholder={messages.searchPlaceholder}
-            value={searchText}
-            onChange={event => changeSearch(event.target.value)}
-          />
-        </div>
-        <div
-          className="deck-filters"
-          role="group"
-          aria-label={messages.filtersLabel}
-        >
-          {categories.map(category => (
-            <button
-              className="deck-filter"
-              type="button"
-              key={category}
-              title={translateText(category)}
-              aria-pressed={activeCategory === category}
-              onClick={() => changeCategory(category)}
-            >
-              {translateText(category)}
-            </button>
-          ))}
-        </div>
-      </div>
       <div className="deck-library__grid">
         {page.items.map(card => (
           <VocabularyCardItem
@@ -202,12 +201,7 @@ export function CardsLibrary({
       </div>
       {cards.length === 0 &&
         (isUnfilteredGroup ? (
-          <div className="deck-group-empty">
-            <DeckIcon name="folder" size={23} />
-            <h3>{groupMessages.emptyTitle}</h3>
-            <p>{groupMessages.emptyBody}</p>
-            <GroupAddActions variant="empty" onAdd={onAddCard} />
-          </div>
+          <GroupEmptyState onAdd={onAddCard} />
         ) : (
           <p className="deck-library__empty">{messages.emptyFilter}</p>
         ))}

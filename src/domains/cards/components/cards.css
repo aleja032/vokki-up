@@ -1,146 +1,55 @@
 @reference 'tailwindcss';
 
 /*
- * Cards module, mobile first (proposal artboards: Tarjetas, Nueva tarjeta,
- * Errores de validacion, Nuevo grupo, Grupo, Tarjetas escritorio).
- * - up to 760px: header-less overview, group scroller, full-screen editor and
- *   group screens.
- * - 761px and up: group grid, card grid with the "Nueva tarjeta" panel beside it.
+ * Cards module shared styles (proposal D). The overview, library, card tile,
+ * group chips, page header and group detail own their stylesheets next to
+ * their components; this file keeps the shared palette aliases, the editor,
+ * form fields and group screens.
  */
 
-/* Palette: proposal values for the light theme, existing dark tokens otherwise. */
+/* Palette: every value resolves to a themed design token (globals.css), so the
+   light and dark themes switch in one place. */
 
 :root {
-  --deck-edge: #d3cdc0;
-  --deck-dashed: #b9b3a6;
-  --deck-ghost: #b9b3a6;
-  --deck-danger: #c2452d;
-  --deck-danger-ink: #7e2a17;
-  --deck-danger-edge: #e3a99a;
-  --deck-disabled: #a9a3dd;
-  --deck-green-ink: #1a6b47;
-  --deck-on-indigo: #ffffff;
-  --deck-action-icon: #5d4fd6;
-  --deck-action-hint: #d9d4ff;
+  --deck-edge: var(--line);
+  --deck-dashed: var(--line);
+  --deck-ghost: var(--ink-faint);
+  --deck-danger: var(--red-ink);
+  --deck-danger-ink: var(--red-ink);
+  --deck-danger-edge: var(--urgency-coral);
+  --deck-disabled: color-mix(in srgb, var(--brand) 45%, var(--surface));
+  --deck-green-ink: var(--green);
+  --deck-on-indigo: var(--on-indigo);
   --deck-font-ipa: var(--font-ipa), 'Noto Sans', sans-serif;
 
-  --deck-indigo-soft: #e9e6fb;
-  --deck-indigo-strong: #4a3ac9;
-  --deck-green-soft: #ddf2e7;
-  --deck-green-strong: #1f7a52;
-  --deck-amber-soft: #fcebc4;
-  --deck-amber-strong: #9a6200;
-  --deck-teal-soft: #d9eef2;
-  --deck-teal-strong: #1b7f92;
-  --deck-coral-soft: #fbe4dd;
-  --deck-coral-strong: #c2452d;
-  --deck-gray-soft: #efebe3;
-  --deck-gray-strong: #5b5870;
+  --deck-indigo-soft: var(--indigo-soft);
+  --deck-indigo-strong: var(--brand);
+  --deck-green-soft: var(--green-soft);
+  --deck-green-strong: var(--green);
+  --deck-amber-soft: var(--amber-soft);
+  --deck-amber-strong: var(--amber-ink);
+  --deck-teal-soft: var(--blue-soft);
+  --deck-teal-strong: var(--blue);
+  --deck-coral-soft: var(--coral-soft);
+  --deck-coral-strong: var(--coral);
+  --deck-gray-soft: var(--surface-muted);
+  --deck-gray-strong: var(--ink-soft);
 
-  --deck-noun-soft: #e9e6fb;
-  --deck-noun-ink: #3a2cb0;
-  --deck-noun-edge: #4a3ac9;
-  --deck-verb-soft: #ddf2e7;
-  --deck-verb-ink: #1a6b47;
-  --deck-verb-edge: #1f7a52;
-  --deck-adjective-soft: #fcebc4;
-  --deck-adjective-ink: #7a4f00;
-  --deck-adjective-edge: #c98a0b;
-  --deck-adverb-soft: #d9eef2;
-  --deck-adverb-ink: #135f6e;
-  --deck-adverb-edge: #1b7f92;
-  --deck-phrase-soft: #fbe4dd;
-  --deck-phrase-ink: #a8381f;
-  --deck-phrase-edge: #c2452d;
-}
-
-:root[data-theme='dark'],
-:root.dark {
-  --deck-edge: #4a4a52;
-  --deck-dashed: #5a5a63;
-  --deck-ghost: #5a5a63;
-  --deck-danger: #e0705a;
-  --deck-danger-ink: #f4b3a0;
-  --deck-danger-edge: #7a4034;
-  --deck-disabled: #4d4a7a;
-  --deck-green-ink: #67bd91;
-  --deck-on-indigo: #141416;
-  --deck-action-icon: #b0a9fa;
-  --deck-action-hint: #302d4c;
-
-  --deck-indigo-soft: #302d4c;
-  --deck-indigo-strong: #9a91f5;
-  --deck-green-soft: #1e3429;
-  --deck-green-strong: #67bd91;
-  --deck-amber-soft: #3b3020;
-  --deck-amber-strong: #e3b25a;
-  --deck-teal-soft: #1d3439;
-  --deck-teal-strong: #72bac6;
-  --deck-coral-soft: #422821;
-  --deck-coral-strong: #f09a7e;
-  --deck-gray-soft: #26262b;
-  --deck-gray-strong: #a6a3ad;
-
-  --deck-noun-soft: #302d4c;
-  --deck-noun-ink: #b0a9fa;
-  --deck-noun-edge: #9a91f5;
-  --deck-verb-soft: #1e3429;
-  --deck-verb-ink: #67bd91;
-  --deck-verb-edge: #67bd91;
-  --deck-adjective-soft: #3b3020;
-  --deck-adjective-ink: #e3b25a;
-  --deck-adjective-edge: #e3b25a;
-  --deck-adverb-soft: #1d3439;
-  --deck-adverb-ink: #72bac6;
-  --deck-adverb-edge: #72bac6;
-  --deck-phrase-soft: #422821;
-  --deck-phrase-ink: #f09a7e;
-  --deck-phrase-edge: #f09a7e;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --deck-edge: #4a4a52;
-    --deck-dashed: #5a5a63;
-    --deck-ghost: #5a5a63;
-    --deck-danger: #e0705a;
-    --deck-danger-ink: #f4b3a0;
-    --deck-danger-edge: #7a4034;
-    --deck-disabled: #4d4a7a;
-    --deck-green-ink: #67bd91;
-    --deck-on-indigo: #141416;
-    --deck-action-icon: #b0a9fa;
-    --deck-action-hint: #302d4c;
-
-    --deck-indigo-soft: #302d4c;
-    --deck-indigo-strong: #9a91f5;
-    --deck-green-soft: #1e3429;
-    --deck-green-strong: #67bd91;
-    --deck-amber-soft: #3b3020;
-    --deck-amber-strong: #e3b25a;
-    --deck-teal-soft: #1d3439;
-    --deck-teal-strong: #72bac6;
-    --deck-coral-soft: #422821;
-    --deck-coral-strong: #f09a7e;
-    --deck-gray-soft: #26262b;
-    --deck-gray-strong: #a6a3ad;
-
-    --deck-noun-soft: #302d4c;
-    --deck-noun-ink: #b0a9fa;
-    --deck-noun-edge: #9a91f5;
-    --deck-verb-soft: #1e3429;
-    --deck-verb-ink: #67bd91;
-    --deck-verb-edge: #67bd91;
-    --deck-adjective-soft: #3b3020;
-    --deck-adjective-ink: #e3b25a;
-    --deck-adjective-edge: #e3b25a;
-    --deck-adverb-soft: #1d3439;
-    --deck-adverb-ink: #72bac6;
-    --deck-adverb-edge: #72bac6;
-    --deck-phrase-soft: #422821;
-    --deck-phrase-ink: #f09a7e;
-    --deck-phrase-edge: #f09a7e;
-  }
+  --deck-noun-soft: var(--indigo-soft);
+  --deck-noun-ink: var(--indigo-strong);
+  --deck-noun-edge: var(--brand);
+  --deck-verb-soft: var(--green-soft);
+  --deck-verb-ink: var(--green);
+  --deck-verb-edge: var(--green);
+  --deck-adjective-soft: var(--amber-soft);
+  --deck-adjective-ink: var(--amber-ink);
+  --deck-adjective-edge: var(--urgency-amber);
+  --deck-adverb-soft: var(--blue-soft);
+  --deck-adverb-ink: var(--blue);
+  --deck-adverb-edge: var(--blue);
+  --deck-phrase-soft: var(--coral-soft);
+  --deck-phrase-ink: var(--coral);
+  --deck-phrase-edge: var(--urgency-coral);
 }
 
 /* Group tones (data-tone) and part-of-speech colors (data-category). */
@@ -208,37 +117,31 @@
 }
 
 /* Fallback for categories outside the five proposal ones. */
-.deck-card__category,
 .deck-preview__category {
   --cat-soft: var(--deck-gray-soft);
   --cat-ink: var(--deck-gray-strong);
 }
 
-.deck-card__category[data-category='Sustantivo'],
 .deck-preview__category[data-category='Sustantivo'] {
   --cat-soft: var(--deck-noun-soft);
   --cat-ink: var(--deck-noun-ink);
 }
 
-.deck-card__category[data-category='Verbo'],
 .deck-preview__category[data-category='Verbo'] {
   --cat-soft: var(--deck-verb-soft);
   --cat-ink: var(--deck-verb-ink);
 }
 
-.deck-card__category[data-category='Adjetivo'],
 .deck-preview__category[data-category='Adjetivo'] {
   --cat-soft: var(--deck-adjective-soft);
   --cat-ink: var(--deck-adjective-ink);
 }
 
-.deck-card__category[data-category='Adverbio'],
 .deck-preview__category[data-category='Adverbio'] {
   --cat-soft: var(--deck-adverb-soft);
   --cat-ink: var(--deck-adverb-ink);
 }
 
-.deck-card__category[data-category='Expresión'],
 .deck-preview__category[data-category='Expresión'] {
   --cat-soft: var(--deck-phrase-soft);
   --cat-ink: var(--deck-phrase-ink);
@@ -254,7 +157,8 @@
   stroke-linejoin: round;
 }
 
-/* Shell adjustments: the proposal Tarjetas page has no brand header on mobile. */
+/* Shell adjustments: the proposal Mi mazo page has no brand header on mobile
+   (its own title row carries the streak pill). */
 
 @media (max-width: 760px) {
   .app-shell:has(.deck-page) .app-header {
@@ -262,41 +166,14 @@
   }
 
   .app-main:has(.deck-page) {
-    @apply pt-7 pb-[calc(76px+40px+env(safe-area-inset-bottom))];
-  }
-}
-
-@media (min-width: 761px) {
-  .app-main__inner:has(.deck-page) {
-    max-width: 1240px;
+    @apply px-3.5 pt-4 pb-[calc(77px+40px+env(safe-area-inset-bottom))];
   }
 }
 
 /* Page */
 
 .deck-page {
-  @apply flex flex-col gap-7 leading-[normal];
-}
-
-.deck-page__heading {
-  @apply flex flex-col gap-1;
-}
-
-.deck-page__title {
-  @apply flex flex-col gap-1;
-}
-
-.deck-page__title h1 {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[32px] font-semibold tracking-[-0.5px] wrap-anywhere;
-}
-
-.deck-page__summary {
-  @apply m-0 text-[15px] text-(--ink-soft);
-}
-
-.deck-page__summary--wide,
-.deck-page__review-button {
-  @apply hidden;
+  @apply flex flex-col gap-3.5 leading-[normal];
 }
 
 .deck-page__workspace {
@@ -304,568 +181,26 @@
 }
 
 @media (min-width: 761px) {
+  .app-main:has(.deck-page) {
+    @apply pt-7;
+  }
+
   .deck-page {
-    @apply gap-8;
-  }
-
-  .deck-page__heading {
-    @apply flex-row flex-wrap items-end justify-between gap-5;
-  }
-
-  .deck-page__title {
-    @apply gap-1.5;
-  }
-
-  .deck-page__title h1 {
-    @apply text-[42px] tracking-[-0.8px];
-  }
-
-  .deck-page__summary {
-    @apply text-[17px];
-  }
-
-  .deck-page__summary--compact {
-    @apply hidden;
-  }
-
-  .deck-page__summary--wide {
-    @apply block;
-  }
-
-  .deck-page__review-button {
-    @apply inline-flex h-[50px] items-center gap-2.5 rounded-[14px] bg-(--indigo-soft) px-6 text-[15px] font-bold text-(--indigo-strong);
+    @apply gap-5.5;
   }
 
   .deck-page__workspace {
     @apply flex-row flex-wrap items-start gap-8;
   }
-}
 
-/* Mobile action tiles */
-
-.deck-actions {
-  @apply grid grid-cols-2 gap-3;
-}
-
-.deck-action {
-  @apply flex flex-col gap-3.5 rounded-[22px] p-5 text-left;
-}
-
-.deck-action--primary {
-  @apply bg-(--indigo) text-(--deck-on-indigo);
-}
-
-.deck-action--review {
-  @apply bg-(--indigo-soft) text-(--ink);
-}
-
-.deck-action__icon {
-  @apply flex size-11 items-center justify-center rounded-[14px];
-}
-
-.deck-action--primary .deck-action__icon {
-  @apply bg-(--deck-action-icon);
-}
-
-.deck-action--review .deck-action__icon {
-  @apply bg-(--surface) text-(--indigo);
-}
-
-.deck-action__copy {
-  @apply flex flex-col gap-1;
-}
-
-.deck-action__copy strong {
-  @apply text-[17px] font-bold;
-}
-
-.deck-action__copy span {
-  @apply text-[13px] text-(--ink-soft);
-}
-
-.deck-action--primary .deck-action__copy span {
-  @apply text-(--deck-action-hint);
-}
-
-@media (min-width: 761px) {
-  .deck-actions {
-    @apply flex;
-  }
-
-  .deck-action--primary {
-    @apply w-fit flex-row items-center gap-3 rounded-[16px] border border-solid border-(--line) bg-(--surface) px-4 py-3 text-(--ink);
-  }
-
-  .deck-action--primary .deck-action__icon {
-    @apply size-10 bg-(--indigo-soft) text-(--indigo);
-  }
-
-  .deck-action--primary .deck-action__copy span {
-    @apply text-(--ink-soft);
-  }
-
-  .deck-action--review {
-    @apply hidden;
-  }
-
-  .deck-page:has(.addhub[data-open='true']) > .deck-page__heading,
-  .deck-page:has(.addhub[data-open='true']) > .deck-actions,
-  .deck-page:has(.addhub[data-open='true']) > .deck-groups,
+  /* An open add hub replaces the page content on wide screens. */
+  .deck-page:has(.addhub[data-open='true']) > .deck-header,
   .deck-page:has(.addhub[data-open='true']) .deck-library {
     @apply hidden;
   }
 
   .deck-page:has(.addhub[data-open='true']) {
     @apply gap-0;
-  }
-}
-
-/* Groups */
-
-.deck-groups {
-  @apply flex flex-col gap-3.5;
-}
-
-.deck-groups__heading {
-  @apply flex flex-wrap items-center justify-between gap-3;
-}
-
-.deck-groups__actions {
-  @apply ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2;
-}
-
-.deck-groups__heading h2,
-.deck-library h2,
-.deck-screen__list-heading h2 {
-  @apply m-0 text-[18px] font-bold;
-}
-
-.deck-groups__add,
-.deck-screen__list-heading button {
-  @apply inline-flex h-11 items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-[14px] font-semibold text-(--ink);
-}
-
-.deck-groups__list {
-  @apply -mx-6 flex gap-3 overflow-x-auto px-6 pt-0.5 pb-2;
-
-  scrollbar-width: thin;
-  scrollbar-color: var(--line) transparent;
-}
-
-.deck-group {
-  @apply flex min-w-0 flex-[0_0_148px] flex-col gap-3 rounded-[20px] border-2 border-solid border-(--line) bg-(--surface) p-4 text-left font-[family-name:var(--font-ui),sans-serif] text-(--ink);
-  --press-scale: 0.99;
-}
-
-.deck-group[aria-pressed='true'] {
-  @apply border-(--tone-strong);
-}
-
-.deck-group[data-tone='neutral'] {
-  --tone-strong: var(--ink);
-}
-
-.deck-group__icon {
-  @apply flex size-9 shrink-0 items-center justify-center rounded-[12px] bg-(--tone-soft) text-(--tone-strong);
-}
-
-.deck-group[data-tone='neutral'] .deck-group__icon {
-  @apply bg-(--surface-muted);
-}
-
-.deck-group__icon-folder,
-.deck-group__icon-stack {
-  @apply flex;
-}
-
-.deck-group__icon-stack {
-  @apply hidden;
-}
-
-.deck-group__copy {
-  @apply flex min-w-0 flex-col gap-0.5;
-}
-
-.deck-group__copy strong {
-  @apply line-clamp-2 text-[15px] font-bold wrap-anywhere;
-}
-
-.deck-group__copy span {
-  @apply text-[12px] wrap-anywhere text-(--ink-soft);
-}
-
-.deck-group--add {
-  @apply hidden;
-}
-
-@media (min-width: 761px) {
-  .deck-groups {
-    @apply gap-4;
-  }
-
-  .deck-groups__heading h2,
-  .deck-library h2 {
-    @apply text-[20px];
-  }
-
-  .deck-groups__add--compact {
-    @apply hidden;
-  }
-
-  .deck-groups__list {
-    @apply mx-0 grid grid-cols-[repeat(auto-fill,minmax(min(210px,100%),1fr))] gap-4 overflow-visible p-0;
-  }
-
-  .deck-group {
-    @apply flex-none flex-row items-center gap-3.5 p-4.5;
-  }
-
-  .deck-group__icon {
-    @apply size-[42px];
-  }
-
-  .deck-group__icon .deck-icon {
-    @apply size-5;
-  }
-
-  .deck-group__icon-folder {
-    @apply hidden;
-  }
-
-  .deck-group__icon-stack {
-    @apply flex;
-  }
-
-  .deck-group--add {
-    @apply flex min-h-[82px] items-center justify-center gap-2 rounded-[20px] border-[1.5px] border-dashed border-(--deck-dashed) bg-transparent p-4.5 text-[15px] font-semibold text-(--indigo);
-  }
-}
-
-/* Library: search, filters and cards */
-
-.deck-library {
-  @apply flex min-w-0 flex-col gap-4;
-}
-
-.deck-library__heading {
-  @apply flex items-center justify-between gap-3;
-}
-
-.deck-library__manage {
-  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-sm font-semibold text-(--ink);
-}
-
-/* The entry button keeps its slot while managing so the heading never shifts. */
-.deck-library__manage[inert] {
-  @apply invisible;
-}
-
-.deck-library__manage:disabled {
-  @apply cursor-not-allowed opacity-50;
-}
-
-.deck-library__manage:focus-visible,
-.deck-card__select:focus-visible {
-  outline: 2px solid var(--indigo);
-  outline-offset: 3px;
-}
-
-.deck-library {
-  --selection-dock-gap: 1rem;
-}
-
-.deck-card__select {
-  @apply absolute inset-0 z-10 m-0 cursor-pointer rounded-[inherit] border-0 bg-transparent p-0;
-}
-
-.deck-card__check {
-  @apply pointer-events-none absolute -top-2 -right-2 z-10 flex size-6 items-center justify-center rounded-full border-2 border-solid border-(--deck-edge) bg-(--surface) text-transparent;
-}
-
-.deck-card[data-selected='true'] {
-  @apply border-(--indigo);
-  box-shadow: 0 0 0 1px var(--indigo);
-}
-
-.deck-card[data-selected='true'] .deck-card__check {
-  @apply border-(--indigo) bg-(--indigo) text-(--on-indigo);
-}
-
-.deck-card[data-managing='true'],
-.deck-card__check {
-  transition: var(--hover-transition);
-}
-
-@media (hover: hover) {
-  .deck-card[data-managing='true']:not([data-selected='true']):hover {
-    @apply border-(--deck-edge);
-  }
-}
-
-.deck-library__title-wide {
-  @apply hidden;
-}
-
-.deck-library__tools {
-  @apply flex flex-col gap-4;
-}
-
-.deck-search {
-  @apply relative min-w-0;
-}
-
-.deck-search__icon {
-  @apply absolute top-[15px] left-4 flex text-(--ink-soft);
-}
-
-.deck-search input {
-  @apply h-[50px] w-full rounded-[14px] border-[1.5px] border-solid border-(--line) bg-(--surface) pr-4 pl-[46px] text-[15px] text-(--ink) placeholder:text-(--ink-faint) focus:outline-2 focus:outline-offset-2 focus:outline-(--indigo);
-}
-
-.deck-filters {
-  @apply flex gap-2.5 overflow-x-auto pb-1;
-}
-
-.deck-filter {
-  @apply h-10 max-w-[min(18rem,100%)] shrink-0 truncate rounded-full border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold whitespace-nowrap text-(--ink-soft);
-}
-
-.deck-filter[aria-pressed='true'] {
-  @apply border-(--ink) bg-(--ink) text-(--ground);
-}
-
-.deck-library__grid {
-  @apply flex flex-col gap-3.5;
-}
-
-.deck-library__empty {
-  @apply m-0 px-4 py-8 text-center text-[14px] text-(--ink-soft);
-}
-
-.deck-pagination {
-  @apply flex flex-wrap items-center justify-between gap-3 border-t border-solid border-(--line) pt-3;
-}
-
-.deck-pagination__button {
-  @apply inline-flex min-h-10 items-center justify-center gap-1.5 rounded-[10px] border border-solid border-(--line) bg-(--surface) px-3 text-sm font-semibold text-(--ink);
-}
-
-.deck-pagination__button:disabled {
-  @apply cursor-not-allowed opacity-45;
-}
-
-.deck-pagination__button:focus-visible {
-  @apply outline-2 outline-offset-2 outline-(--indigo);
-}
-
-.deck-pagination__status {
-  @apply text-sm text-(--ink-soft) tabular-nums;
-}
-
-@media (min-width: 761px) {
-  .deck-library {
-    @apply flex-[999_1_520px] gap-5;
-  }
-
-  .deck-library__title-compact {
-    @apply hidden;
-  }
-
-  .deck-library__title-wide {
-    @apply inline;
-  }
-
-  .deck-library__tools {
-    @apply flex-row flex-wrap items-center;
-  }
-
-  .deck-search {
-    @apply flex-[1_1_260px];
-  }
-
-  .deck-filters {
-    @apply flex-wrap overflow-visible pb-0;
-  }
-
-  .deck-library__grid {
-    @apply grid grid-cols-[repeat(auto-fill,minmax(min(280px,100%),1fr))] gap-5;
-  }
-
-  .deck-library__empty {
-    @apply py-10 text-[15px];
-  }
-
-  .deck-pagination {
-    @apply justify-end;
-  }
-}
-
-/* Vocabulary card */
-
-.deck-card {
-  @apply relative flex min-w-0 flex-col gap-3 rounded-[20px] border border-solid border-(--line) bg-(--surface) p-5;
-
-  animation: enter-rise var(--enter-duration) var(--ease-out)
-    var(--enter-delay, 0ms) backwards;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .deck-card {
-    animation: none;
-  }
-}
-
-.deck-card:nth-child(2) {
-  --enter-delay: 30ms;
-}
-
-.deck-card:nth-child(3) {
-  --enter-delay: 60ms;
-}
-
-.deck-card:nth-child(4) {
-  --enter-delay: 90ms;
-}
-
-.deck-card:nth-child(n + 5) {
-  --enter-delay: 120ms;
-}
-
-.deck-card__top {
-  @apply flex items-start justify-between gap-3;
-}
-
-.deck-card__title {
-  @apply flex min-w-0 flex-col gap-1;
-}
-
-.deck-card__title h3 {
-  @apply m-0 line-clamp-2 font-[family-name:var(--font-display),Georgia,serif] text-[23px] leading-[1.15] font-semibold wrap-anywhere;
-}
-
-.deck-card__title span {
-  @apply line-clamp-2 font-[family-name:var(--deck-font-ipa)] text-[14px] wrap-anywhere text-(--ink-soft);
-}
-
-.deck-card__category {
-  @apply max-w-[45%] shrink-0 rounded-full bg-(--cat-soft) px-3 py-1.5 text-[12px] font-semibold text-(--cat-ink);
-  overflow-wrap: anywhere;
-}
-
-.deck-card__body {
-  @apply flex min-w-0 flex-col gap-3;
-}
-
-.deck-card__meaning {
-  @apply m-0 line-clamp-3 text-[15px] leading-[1.45] wrap-anywhere;
-}
-
-.deck-card__example-text {
-  @apply m-0;
-}
-
-.deck-card__example .es-toggle__sentence {
-  font-size: 14px;
-}
-
-.deck-card__example {
-  @apply m-0 hidden rounded-[12px] bg-(--ground) px-3.5 py-2.5 text-[14px] leading-normal wrap-anywhere text-(--ink-soft) italic;
-}
-
-.deck-card__footer {
-  @apply flex min-w-0 items-center gap-3 pt-1;
-}
-
-.deck-card__group-name {
-  @apply min-w-0 truncate;
-}
-
-.deck-card__group {
-  @apply inline-flex max-w-[40%] min-w-0 items-center gap-1.5 text-[12px] font-semibold text-(--ink-soft);
-}
-
-.deck-card__group::before {
-  @apply size-2 shrink-0 rounded-full bg-(--tone-strong);
-
-  content: '';
-}
-
-.deck-card__bar {
-  @apply h-1.5 flex-1 rounded-full bg-(--surface-muted);
-}
-
-.deck-card__bar::after {
-  @apply block h-full rounded-full bg-(--deck-state-bar);
-
-  content: '';
-  width: var(--deck-progress);
-}
-
-.deck-card__bar[data-state='new'] {
-  --deck-state-bar: var(--indigo);
-}
-
-.deck-card__bar[data-state='learning'] {
-  --deck-state-bar: var(--amber);
-}
-
-.deck-card__bar[data-state='mastered'] {
-  --deck-state-bar: var(--green);
-}
-
-.deck-card__state {
-  @apply shrink-0 text-[12px] font-semibold whitespace-nowrap;
-}
-
-.deck-card__state[data-state='new'] {
-  @apply text-(--indigo-strong);
-}
-
-.deck-card__state[data-state='learning'] {
-  @apply text-(--amber-ink);
-}
-
-.deck-card__state[data-state='mastered'] {
-  @apply text-(--deck-green-ink);
-}
-
-.deck-card__due {
-  @apply hidden shrink-0 text-[12px] whitespace-nowrap text-(--ink-soft);
-}
-
-@media (min-width: 761px) {
-  /* Cards in one grid row share three subgrid rows (heading, body, footer),
-     so a two-line title or a longer body never shifts a neighbor. */
-  .deck-card {
-    @apply row-span-3 grid grid-rows-subgrid gap-3.5 rounded-[22px] p-5.5;
-  }
-
-  .deck-card__body {
-    @apply gap-3.5;
-  }
-
-  .deck-card__title h3 {
-    @apply text-[24px];
-  }
-
-  .deck-card__example {
-    @apply block;
-  }
-
-  .deck-card__example-text {
-    @apply line-clamp-2;
-  }
-
-  .deck-card__footer {
-    @apply mt-auto;
-  }
-
-  .deck-card__group {
-    @apply hidden;
-  }
-
-  .deck-card__due {
-    @apply inline;
   }
 }
 
@@ -904,7 +239,7 @@
 }
 
 .deck-field__input {
-  @apply h-[52px] w-full rounded-[14px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[15px] text-(--ink) placeholder:text-(--ink-faint) focus:outline-2 focus:outline-offset-2 focus:outline-(--indigo);
+  @apply h-[52px] w-full rounded-(--radius-14) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[15px] text-(--ink) placeholder:text-(--ink-faint) focus:outline-2 focus:outline-offset-2 focus:outline-(--indigo);
 }
 
 .deck-field__input[aria-invalid='true'] {
@@ -941,7 +276,7 @@
 }
 
 .deck-field__error-box {
-  @apply flex min-w-0 flex-col gap-2.5 rounded-[14px] border border-solid border-(--deck-danger-edge) bg-(--surface) px-4 py-3.5;
+  @apply flex min-w-0 flex-col gap-2.5 rounded-(--radius-14) border border-solid border-(--deck-danger-edge) bg-(--surface) px-4 py-3.5;
 }
 
 .deck-field__error-box .deck-field__error {
@@ -949,7 +284,7 @@
 }
 
 .deck-field__link {
-  @apply inline-flex h-9 items-center self-start rounded-[10px] bg-(--ground) px-3.5 text-[13px] font-semibold text-(--indigo);
+  @apply inline-flex h-9 items-center self-start rounded-(--radius-14) bg-(--ground) px-3.5 text-[13px] font-semibold text-(--indigo);
 }
 
 .deck-choice {
@@ -969,7 +304,7 @@
 }
 
 .deck-choice__group {
-  @apply inline-flex h-10 max-w-full items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
+  @apply inline-flex h-11 max-w-full items-center gap-2 rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
 }
 
 .deck-choice__group > span:first-child {
@@ -981,7 +316,7 @@
 }
 
 .deck-choice__add {
-  @apply inline-flex h-[43px] items-center gap-1.5 rounded-[12px] border-[1.5px] border-dashed border-(--deck-dashed) bg-transparent px-3.5 text-[14px] font-semibold text-(--indigo);
+  @apply inline-flex h-[43px] items-center gap-1.5 rounded-(--radius-14) border-[1.5px] border-dashed border-(--deck-dashed) bg-transparent px-3.5 text-[14px] font-semibold text-(--indigo);
 }
 
 .deck-choice__category {
@@ -993,7 +328,7 @@
 }
 
 .deck-choice__tag {
-  @apply inline-flex h-9 max-w-full items-center gap-1.5 rounded-[10px] bg-(--surface-muted) px-3.5 text-[13px] font-semibold text-(--ink-soft);
+  @apply inline-flex h-9 max-w-full items-center gap-1.5 rounded-(--radius-pill) bg-(--surface-muted) px-3.5 text-[13px] font-semibold text-(--ink-soft);
 }
 
 .deck-choice__tag[aria-pressed='true'] {
@@ -1031,7 +366,7 @@
 .deck-editor__back,
 .deck-screen__back,
 .deck-screen__icon-button {
-  @apply flex size-11 shrink-0 items-center justify-center rounded-[14px] border border-solid border-(--line) bg-(--surface) text-(--ink);
+  @apply flex size-11 shrink-0 items-center justify-center rounded-(--radius-14) border border-solid border-(--line) bg-(--surface) text-(--ink);
 }
 
 /* The proposal back control is a link: 44px content box plus its 1px border. */
@@ -1062,23 +397,23 @@
 }
 
 .deck-modes {
-  @apply grid grid-cols-2 gap-1.5 rounded-[16px] bg-(--surface-muted) p-1.5;
+  @apply grid grid-cols-2 gap-1.5 rounded-(--radius-18) bg-(--surface-muted) p-1.5;
 }
 
 .deck-modes__tab {
-  @apply flex h-11 items-center justify-center gap-2 rounded-[12px] px-4 text-[15px] font-semibold text-(--ink-soft);
+  @apply flex h-11 items-center justify-center gap-2 rounded-(--radius-14) px-4 text-[15px] font-semibold text-(--ink-soft);
 }
 
 .deck-modes__tab[aria-selected='true'] {
-  @apply bg-(--surface) font-bold text-(--ink) shadow-[0_1px_2px_rgba(27,26,46,0.08)];
+  @apply bg-(--surface) font-bold text-(--ink) shadow-sm;
 }
 
 .deck-modes__badge {
-  @apply rounded-[6px] bg-(--indigo-soft) px-1.5 py-0.5 text-[11px] font-extrabold text-(--indigo);
+  @apply rounded-(--radius-14) bg-(--indigo-soft) px-1.5 py-0.5 text-[11px] font-extrabold text-(--indigo);
 }
 
 .deck-summary {
-  @apply flex items-start gap-3.5 rounded-[18px] bg-(--red-soft) px-5 py-4.5 text-(--deck-danger-ink);
+  @apply flex items-start gap-3.5 rounded-(--radius-18) bg-(--red-soft) px-5 py-4.5 text-(--deck-danger-ink);
 }
 
 .deck-summary .deck-icon {
@@ -1106,7 +441,7 @@
 }
 
 .deck-preview__card {
-  @apply flex min-w-0 flex-col gap-3.5 rounded-[24px] border border-solid border-(--line) bg-(--surface) p-6 wrap-anywhere shadow-[0_6px_18px_rgba(27,26,46,0.06)];
+  @apply flex min-w-0 flex-col gap-3.5 rounded-(--card-radius) border border-solid border-(--line) bg-(--surface) p-6 wrap-anywhere shadow-md;
 }
 
 .deck-preview__top {
@@ -1154,7 +489,7 @@
 }
 
 .deck-preview__example {
-  @apply rounded-[12px] bg-(--ground) px-3.5 py-2.5 text-[14px] leading-normal text-(--ink-soft) italic;
+  @apply rounded-(--radius-14) bg-(--ground) px-3.5 py-2.5 text-[14px] leading-normal text-(--ink-soft) italic;
 }
 
 .deck-section {
@@ -1186,7 +521,7 @@
 }
 
 .deck-editor__ai {
-  @apply mt-1.5 inline-flex h-10 items-center gap-2 self-start rounded-[12px] border border-dashed border-(--deck-dashed) bg-transparent px-4 text-[13px] font-medium text-(--ink-soft);
+  @apply mt-1.5 inline-flex h-10 items-center gap-2 self-start rounded-(--radius-14) border border-dashed border-(--deck-dashed) bg-transparent px-4 text-[13px] font-medium text-(--ink-soft);
 }
 
 .deck-editor__ai strong {
@@ -1201,7 +536,7 @@
 .deck-editor__cancel,
 .deck-editor__clear,
 .deck-screen__cancel {
-  @apply flex h-[55px] items-center justify-center rounded-[14px] border-[1.5px] border-solid border-(--deck-edge) px-4 text-[15px] font-semibold text-(--ink);
+  @apply flex h-13 items-center justify-center rounded-(--radius-pill) border-2 border-solid border-(--line) bg-(--surface) px-4 text-[15px] font-extrabold text-(--ink);
 }
 
 .deck-editor__clear {
@@ -1210,7 +545,7 @@
 
 .deck-editor__submit,
 .deck-screen__submit {
-  @apply flex h-[52px] items-center justify-center gap-2 rounded-[14px] bg-(--indigo) px-4 text-[15px] font-bold text-(--deck-on-indigo);
+  @apply flex h-13 items-center justify-center gap-2 rounded-(--radius-pill) bg-(--brand) px-4 text-[15px] font-extrabold text-(--on-indigo);
 }
 
 .deck-editor__submit[aria-disabled='true'],
@@ -1221,7 +556,7 @@
 @media (min-width: 761px) {
   .deck-editor,
   .deck-editor[data-open='true'] {
-    @apply static box-content block min-w-0 flex-[1_1_360px] rounded-[26px] border border-solid border-(--line) bg-(--surface) p-7;
+    @apply static box-content block min-w-0 flex-[1_1_360px] rounded-(--radius-26) border border-solid border-(--line) bg-(--surface) p-7;
   }
 
   .deck-editor__form {
@@ -1271,7 +606,7 @@
   }
 
   .deck-preview__card {
-    @apply gap-2.5 rounded-[20px] border-0 bg-(--ground) p-5 shadow-none;
+    @apply gap-2.5 rounded-(--radius-22) border-0 bg-(--ground) p-5 shadow-none;
   }
 
   .deck-preview__label {
@@ -1367,15 +702,15 @@
 }
 
 .deck-group-preview {
-  @apply flex justify-center rounded-[24px] bg-(--surface-muted) p-6;
+  @apply flex justify-center rounded-(--card-radius) bg-(--surface-muted) p-6;
 }
 
 .deck-group-preview__card {
-  @apply flex w-[220px] max-w-full flex-col gap-3.5 rounded-[20px] border-2 border-solid border-(--tone-strong) bg-(--surface) p-4.5;
+  @apply flex w-[220px] max-w-full flex-col gap-3.5 rounded-(--radius-22) border-2 border-solid border-(--tone-strong) bg-(--surface) p-4.5;
 }
 
 .deck-group-preview__icon {
-  @apply flex size-10 items-center justify-center rounded-[12px] bg-(--tone-soft) text-(--tone-strong);
+  @apply flex size-10 items-center justify-center rounded-(--radius-14) bg-(--tone-soft) text-(--tone-strong);
 }
 
 .deck-group-preview__copy {
@@ -1411,7 +746,7 @@
 }
 
 .deck-colors__option {
-  @apply flex h-[52px] items-center justify-center rounded-[14px] border-[3px] border-solid border-transparent bg-(--tone-soft) p-0;
+  @apply flex h-[52px] items-center justify-center rounded-(--radius-14) border-[3px] border-solid border-transparent bg-(--tone-soft) p-0;
 }
 
 .deck-colors__option > span {
@@ -1420,156 +755,6 @@
 
 .deck-colors__option[aria-pressed='true'] {
   @apply border-(--tone-strong);
-}
-
-/* Group detail */
-
-.deck-menu {
-  @apply absolute top-[72px] right-6 z-10 flex w-[238px] max-w-[calc(100vw-3rem)] flex-col rounded-[16px] border border-solid border-(--line) bg-(--surface) p-2 shadow-[0_12px_32px_rgba(27,26,46,0.16)];
-}
-
-.deck-menu button {
-  @apply h-11 rounded-[10px] px-3.5 text-left text-[15px] font-medium text-(--ink) hover:bg-(--surface-muted);
-}
-
-.deck-menu button:disabled {
-  @apply cursor-not-allowed opacity-50 hover:bg-transparent;
-}
-
-.deck-menu__hint {
-  @apply px-3.5 pt-1 pb-2 text-[13px] leading-[1.4] text-(--ink-soft);
-}
-
-.deck-menu .deck-menu__danger {
-  @apply font-semibold text-(--red-ink);
-}
-
-.deck-hero {
-  @apply flex flex-col gap-4.5 rounded-[26px] bg-(--tone-soft) p-6;
-}
-
-.deck-hero__identity {
-  @apply flex items-center gap-3.5;
-}
-
-.deck-hero__identity > div {
-  @apply flex min-w-0 flex-col gap-0.5;
-}
-
-.deck-hero__icon {
-  @apply flex size-[52px] shrink-0 items-center justify-center rounded-[16px] bg-(--surface) text-(--tone-strong);
-}
-
-.deck-hero h1 {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-[1.05] font-semibold wrap-anywhere;
-}
-
-.deck-hero__identity span:not(.deck-hero__icon) {
-  @apply text-[14px] wrap-anywhere text-(--ink-soft);
-}
-
-.deck-hero__stats {
-  @apply grid grid-cols-3 gap-2.5;
-}
-
-.deck-hero__stats > div {
-  @apply flex min-w-0 flex-col gap-0.5 rounded-[14px] bg-(--surface) px-3.5 py-3;
-}
-
-.deck-hero__stats strong {
-  @apply truncate text-[20px] font-bold;
-}
-
-.deck-hero__stats span {
-  @apply text-[12px] wrap-anywhere text-(--ink-soft);
-}
-
-.deck-hero__review {
-  @apply mt-1.5 flex h-[52px] items-center justify-center gap-2.5 rounded-[14px] bg-(--indigo) px-6 text-[16px] font-bold text-(--deck-on-indigo);
-}
-
-.deck-screen__list-heading {
-  @apply flex flex-wrap items-center justify-between gap-3;
-}
-
-.deck-screen__list-heading h2 {
-  @apply min-w-0 truncate;
-}
-
-.deck-screen__list-heading button {
-  @apply shrink-0;
-}
-
-.deck-group-cards {
-  @apply flex flex-col gap-3;
-}
-
-.deck-group-card {
-  @apply flex min-w-0 items-center justify-between gap-3 rounded-[18px] border border-solid border-(--line) bg-(--surface) px-5 py-4.5;
-}
-
-.deck-group-card__copy {
-  @apply flex min-w-0 flex-col gap-1;
-}
-
-.deck-group-card__copy > span:first-child {
-  @apply line-clamp-2 font-[family-name:var(--font-display),Georgia,serif] text-[20px] font-semibold wrap-anywhere;
-}
-
-.deck-group-card__copy > span:last-child {
-  @apply line-clamp-2 text-[14px] wrap-anywhere text-(--ink-soft);
-}
-
-.deck-group-card__state {
-  @apply shrink-0 rounded-full px-3 py-[5px] text-[12px] font-semibold;
-}
-
-.deck-group-card__state[data-state='new'] {
-  @apply bg-(--indigo-soft) text-(--indigo-strong);
-}
-
-.deck-group-card__state[data-state='learning'] {
-  @apply bg-(--amber-soft) text-(--amber-ink);
-}
-
-.deck-group-card__state[data-state='mastered'] {
-  @apply bg-(--green-soft) text-(--deck-green-ink);
-}
-
-.deck-group-empty {
-  @apply flex flex-col items-center gap-2 rounded-[18px] border border-dashed border-(--deck-dashed) px-6 py-8 text-center text-(--ink-soft);
-}
-
-.deck-group-empty h3 {
-  @apply m-0 text-[16px] font-bold text-(--ink);
-}
-
-.deck-group-empty p {
-  @apply m-0 text-[14px];
-}
-
-.deck-library__group-actions {
-  @apply flex justify-end;
-}
-
-.deck-group-empty__actions {
-  @apply mt-2 flex flex-wrap items-center justify-center gap-2;
-}
-
-.deck-group-empty .deck-group-empty__actions button {
-  @apply mt-0 h-11;
-}
-
-.deck-screen__list-actions {
-  @apply ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2;
-}
-
-.deck-link-button {
-  @apply inline-flex h-11 items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-[14px] font-semibold whitespace-nowrap text-(--ink) no-underline;
-}
-
-.deck-group-empty button {
-  @apply mt-2 inline-flex h-10 items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--deck-edge) bg-(--surface) px-3.5 text-[14px] font-semibold text-(--ink);
 }
 
 @media (min-width: 761px) {
@@ -1605,10 +790,6 @@
   .deck-screen__footer {
     @apply border-t-0 bg-transparent p-0;
   }
-
-  .deck-menu {
-    @apply top-14 right-0;
-  }
 }
 
 /* AI autofill under the meaning field */
@@ -1627,11 +808,11 @@
 }
 
 .deck-autofill__message {
-  @apply m-0 min-w-0 rounded-[12px] bg-(--red-soft) px-3.5 py-2.5 text-[13px] leading-[1.45] wrap-anywhere text-(--deck-danger-ink);
+  @apply m-0 min-w-0 rounded-(--radius-14) bg-(--red-soft) px-3.5 py-2.5 text-[13px] leading-[1.45] wrap-anywhere text-(--deck-danger-ink);
 }
 
 .deck-autofill__confirm {
-  @apply flex min-w-0 flex-col gap-2.5 rounded-[12px] bg-(--indigo-soft) px-3.5 py-3 text-[13px] leading-[1.45] wrap-anywhere;
+  @apply flex min-w-0 flex-col gap-2.5 rounded-(--radius-14) bg-(--indigo-soft) px-3.5 py-3 text-[13px] leading-[1.45] wrap-anywhere;
 }
 
 .deck-autofill__actions {
@@ -1639,7 +820,7 @@
 }
 
 .deck-autofill__actions button {
-  @apply h-9 rounded-[10px] border border-solid border-(--indigo) bg-(--surface) px-3 text-[13px] font-semibold text-(--indigo-strong);
+  @apply h-9 rounded-(--radius-14) border border-solid border-(--indigo) bg-(--surface) px-3 text-[13px] font-semibold text-(--indigo-strong);
 }
 
 /* Inside the add hub (desktop) the hub owns the card chrome, header and mode selector. */
@@ -1684,15 +865,8 @@
 
 /* Hover feedback: buttons, links, tabs and chips */
 
-.deck-hero__review,
 .deck-editor__submit,
-.deck-screen__submit {
-  transition: var(--hover-transition);
-}
-
-.deck-groups__add,
-.deck-screen__list-heading button,
-.deck-pagination__button,
+.deck-screen__submit,
 .deck-editor__cancel,
 .deck-editor__clear,
 .deck-screen__cancel,
@@ -1702,304 +876,40 @@
 .deck-screen__icon-button,
 .deck-choice__add,
 .deck-editor__ai,
-.deck-page__review-button,
 .deck-modes__tab,
-.deck-filter,
 .deck-choice__category,
 .deck-choice__tag,
-.deck-choice__group {
-  transition: var(--hover-transition);
-}
-
-.deck-menu__danger {
-  transition: var(--hover-transition);
-}
-
+.deck-choice__group,
 .deck-colors__option {
   transition: var(--hover-transition);
 }
 
 @media (hover: hover) {
-  .deck-hero__review:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-editor__submit:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-screen__submit:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover {
-    background-color: var(--indigo-strong);
+  .deck-editor__submit:not(:disabled, [aria-disabled='true']):hover,
+  .deck-screen__submit:not(:disabled, [aria-disabled='true']):hover {
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-1));
   }
 
-  .deck-groups__add:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-screen__list-heading
-    button:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-pagination__button:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-editor__cancel:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-editor__clear:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-screen__cancel:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-field__link:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-editor__back:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-screen__back:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-screen__icon-button:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-choice__add:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-editor__ai:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-page__review-button:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-modes__tab:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-filter:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-choice__category:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-choice__tag:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
-  .deck-choice__group:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover {
-    border-color: var(--indigo);
+  .deck-editor__cancel:hover,
+  .deck-editor__clear:hover,
+  .deck-screen__cancel:hover,
+  .deck-field__link:hover,
+  .deck-editor__back:hover,
+  .deck-screen__back:hover,
+  .deck-screen__icon-button:hover,
+  .deck-choice__add:hover,
+  .deck-editor__ai:not(:disabled):hover,
+  .deck-modes__tab[aria-selected='false']:hover,
+  .deck-choice__category[aria-pressed='false']:hover,
+  .deck-choice__tag[aria-pressed='false']:hover,
+  .deck-choice__group[aria-pressed='false']:hover {
+    border-color: var(--hover-accent);
     background-color: var(--indigo-soft);
     color: var(--indigo);
   }
 
-  .deck-menu__danger:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover {
-    background-color: var(--red-soft);
-  }
-
-  .deck-colors__option:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover {
+  .deck-colors__option[aria-pressed='false']:hover {
     border-color: color-mix(in srgb, var(--tone-strong) 45%, transparent);
-  }
-
-  .deck-hero__review:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):active,
-  .deck-editor__submit:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):active,
-  .deck-screen__submit:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):active {
-    box-shadow: none;
-    transform: none;
-  }
-}
-
-/* Hover feedback: clickable surfaces */
-
-.deck-group {
-  transition: var(--hover-transition);
-}
-
-.deck-action--review {
-  transition: var(--hover-transition);
-}
-
-.deck-action--primary {
-  transition: var(--hover-transition);
-}
-
-@media (hover: hover) {
-  .deck-group:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover {
-    border-color: color-mix(in srgb, var(--line) 40%, var(--indigo));
-    box-shadow: var(--hover-shadow);
-    transform: translateY(var(--lift-2));
-  }
-
-  .deck-action--review:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover {
-    box-shadow: var(--hover-shadow);
-    transform: translateY(var(--lift-2));
-  }
-
-  .deck-action--primary:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover {
-    background-color: var(--indigo-strong);
-    box-shadow: var(--hover-shadow);
-    transform: translateY(var(--lift-2));
   }
 }

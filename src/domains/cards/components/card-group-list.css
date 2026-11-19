@@ -1,0 +1,23 @@
+@reference 'tailwindcss';
+
+/* Group chips: one scrolling row on phones, wrapping from 761px. */
+
+.deck-groups {
+  @apply min-w-0 flex-1;
+}
+
+.deck-groups__list {
+  @apply -mr-3.5 flex items-center gap-2 overflow-x-auto pr-3.5;
+
+  scrollbar-width: none;
+}
+
+.deck-groups__list::-webkit-scrollbar {
+  @apply hidden;
+}
+
+@media (min-width: 761px) {
+  .deck-groups__list {
+    @apply mr-0 flex-wrap overflow-visible pr-0;
+  }
+}

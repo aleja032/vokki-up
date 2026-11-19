@@ -1,4 +1,4 @@
-import { createElement } from 'react';
+import { createElement, type ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import type { CardGroup, VocabularyCard } from '../types';
@@ -15,10 +15,15 @@ const card = {
 
 function render(
   cards: VocabularyCard[],
-  options: { activeGroup?: CardGroup; searchText?: string } = {}
+  options: {
+    activeGroup?: CardGroup;
+    searchText?: string;
+    groupFilters?: ReactNode;
+  } = {}
 ) {
   return renderToStaticMarkup(
     createElement(CardsLibrary, {
+      groupFilters: options.groupFilters,
       cards,
       groups: [group],
       schedules: {},
@@ -37,6 +42,17 @@ function render(
 }
 
 const count = (html: string, text: string) => html.split(text).length - 1;
+
+describe('CardsLibrary toolbar', () => {
+  it('renders the group filters slot next to the search and category chips', () => {
+    const html = render([card], {
+      groupFilters: createElement('div', { 'data-slot': 'groups' })
+    });
+    expect(html).toContain('data-slot="groups"');
+    expect(html).toContain('id="deck-search-input"');
+    expect(html).toContain('aria-pressed="true"');
+  });
+});
 
 describe('CardsLibrary group add actions', () => {
   it('offers the primary add action and the library link for an empty group', () => {

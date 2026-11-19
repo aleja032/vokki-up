@@ -1,0 +1,18 @@
+@reference 'tailwindcss';
+
+.search-field {
+  @apply flex min-h-12 w-full min-w-0 items-center gap-2.5 rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4.5 text-(--ink-soft);
+  transition: var(--hover-transition);
+}
+
+.search-field__icon {
+  @apply shrink-0;
+}
+
+.search-field__input {
+  @apply min-w-0 flex-1 border-0 bg-transparent text-[15px] text-(--ink) outline-none placeholder:text-(--ink-soft);
+}
+
+.search-field:focus-within {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}

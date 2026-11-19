@@ -1,8 +1,13 @@
 'use client';
 
-import Link from 'next/link';
+import { ArrowRight, Folder } from 'lucide-react';
+import { ActionPill } from '@/components/ui/action-pill';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
+import { Pill } from '@/components/ui/pill';
+import { ProgressBar } from '@/components/ui/progress-bar';
+import { StatCard } from '@/components/ui/stat-card';
 import { getCardLearningState } from '../card-learning-state';
+import type { CardLearningState } from '../card-learning-state';
 import { canDeleteGroup } from '../delete-group';
 import { useGroupActionsMenu } from '../hooks/use-group-actions-menu';
 import {
@@ -14,9 +19,17 @@ import type { CardScheduleMap } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
 import { DeckIcon } from './deck-icon';
 import { GroupAddActions } from './group-add-actions';
+import { GroupEmptyState } from './group-empty-state';
+import './group-detail.css';
 
 const messages = cardsMessages.groupDetail;
 const stateMessages = cardsMessages.learningState;
+
+const STATE_TONE = {
+  new: 'brand',
+  learning: 'amber',
+  mastered: 'mint'
+} as const satisfies Record<CardLearningState, string>;
 
 type GroupDetailProps = {
   group: CardGroup;
@@ -109,7 +122,7 @@ export function GroupDetail({
         <section className="deck-hero" data-tone={group.tone}>
           <div className="deck-hero__identity">
             <span className="deck-hero__icon">
-              <DeckIcon name="folder" size={26} />
+              <Folder aria-hidden="true" size={26} />
             </span>
             <div>
               <h1 id="group-detail-title">{getGroupDisplayName(group)}</h1>
@@ -119,26 +132,31 @@ export function GroupDetail({
             </div>
           </div>
           <div className="deck-hero__stats">
-            <div>
-              <strong>{cards.length}</strong>
-              <span>{messages.statCards(cards.length)}</span>
-            </div>
-            <div>
-              <strong>{dueCount}</strong>
-              <span>{messages.statDue}</span>
-            </div>
-            <div>
-              <strong>{masteredPercent}%</strong>
-              <span>{messages.statMastered}</span>
-            </div>
+            <StatCard
+              label={messages.statCards(cards.length)}
+              tone="brand"
+              value={cards.length}
+            />
+            <StatCard label={messages.statDue} tone="amber" value={dueCount} />
+            <StatCard
+              label={messages.statMastered}
+              tone="mint"
+              value={`${masteredPercent}%`}
+            />
           </div>
-          <Link
+          <ProgressBar
+            label={messages.statMastered}
+            tone="mint"
+            value={masteredPercent}
+          />
+          <ActionPill
             className="deck-hero__review"
             href={`/review?groupId=${encodeURIComponent(group.id)}&from=cards`}
+            icon={<ArrowRight size={18} strokeWidth={2.4} />}
+            variant="cta"
           >
             {messages.review(dueCount)}
-            <DeckIcon name="arrowRight" size={18} />
-          </Link>
+          </ActionPill>
         </section>
         <div className="deck-screen__list-heading">
           <h2>{messages.listTitle}</h2>
@@ -156,23 +174,15 @@ export function GroupDetail({
                     <span title={card.term}>{card.term}</span>
                     <span title={card.meaning}>{card.meaning}</span>
                   </span>
-                  <span
-                    className="deck-group-card__state"
-                    data-state={learningState}
-                  >
+                  <Pill tone={STATE_TONE[learningState]}>
                     {stateMessages[learningState]}
-                  </span>
+                  </Pill>
                 </article>
               );
             })}
           </div>
         ) : (
-          <div className="deck-group-empty">
-            <DeckIcon name="folder" size={23} />
-            <h3>{messages.emptyTitle}</h3>
-            <p>{messages.emptyBody}</p>
-            <GroupAddActions variant="empty" onAdd={onAddCard} />
-          </div>
+          <GroupEmptyState onAdd={onAddCard} />
         )}
       </div>
       <ConfirmDialog

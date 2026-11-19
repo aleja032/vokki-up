@@ -10,7 +10,7 @@
 }
 
 .selection-bar {
-  @apply absolute inset-x-0 bottom-0 flex flex-col gap-3 rounded-[18px] border border-solid border-(--line) bg-(--surface) p-3 shadow-[0_12px_32px_rgba(20,20,22,0.18)];
+  @apply absolute inset-x-0 bottom-0 flex flex-col gap-3 rounded-(--radius-22) border-2 border-solid border-(--line) bg-(--surface) p-3 shadow-lg;
   animation: selection-bar-in 200ms var(--ease-out);
 }
 
@@ -26,7 +26,7 @@
 }
 
 .selection-bar__toggle {
-  @apply min-h-11 shrink-0 cursor-pointer rounded-[10px] border-0 bg-transparent px-1.5 text-[13px] font-semibold whitespace-nowrap text-(--indigo-strong);
+  @apply min-h-11 shrink-0 cursor-pointer rounded-(--radius-14) border-0 bg-transparent px-1.5 text-[13px] font-semibold whitespace-nowrap text-(--indigo-strong);
 }
 
 .selection-bar__toggle:disabled {
@@ -39,11 +39,11 @@
 
 .selection-bar__cancel,
 .selection-bar__primary {
-  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-[12px] border-[1.5px] border-solid bg-(--surface) px-3.5 text-sm font-semibold text-(--ink);
+  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-(--radius-pill) border-2 border-solid border-(--line) bg-(--surface) px-4.5 text-sm font-extrabold text-(--ink);
 }
 
 .selection-bar__primary {
-  @apply border-0 bg-(--indigo-strong) font-bold text-(--on-indigo);
+  @apply border-0 bg-(--brand) font-extrabold text-(--on-indigo);
 }
 
 .selection-bar__primary--danger {
@@ -99,10 +99,4 @@
   .selection-bar {
     animation: none;
   }
-}
-
-/* --deck-edge is defined by the cards stylesheet; fall back to the line token
-   on routes that do not load it. */
-.selection-bar__cancel {
-  border-color: var(--deck-edge, var(--line));
 }

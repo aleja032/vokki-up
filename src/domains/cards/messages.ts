@@ -5,19 +5,14 @@ function pluralize(count: number, singular: string, plural: string) {
 
 export const cardsMessages = createLocalizedMessages({
   overview: {
-    title: 'Tarjetas',
-    summaryCompact: (cards: number, groups: number, due: number) =>
-      `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} en ${groups} ${pluralize(groups, 'grupo', 'grupos')} · ${due} para hoy`,
-    summaryWide: (cards: number, due: number) =>
-      `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} en tu mazo · ${due} para repasar hoy`,
+    title: 'Mi mazo',
+    summary: (cards: number, due: number, mastered: number) =>
+      `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} · ${due} para repasar hoy · ${mastered} ${pluralize(mastered, 'dominada', 'dominadas')}`,
     newCardTitle: 'Nueva tarjeta',
-    newCardHint: 'Con IA o manual',
     addFromLibrary: 'Agregar desde la biblioteca',
-    reviewTitle: 'Repasar',
-    reviewPending: (due: number) =>
-      `${due} ${pluralize(due, 'pendiente', 'pendientes')} hoy`,
-    reviewWide: (due: number) =>
-      `Repasar ${due} ${pluralize(due, 'tarjeta', 'tarjetas')}`,
+    addFromLibraryShort: 'Biblioteca',
+    reviewShort: (due: number) => `Repasar ${due}`,
+    memoryLabel: (level: number) => `Memoria ${level} de 5`,
     groupsTitle: 'Grupos',
     groupsLabel: 'Grupos de tarjetas',
     allGroups: 'Todas',

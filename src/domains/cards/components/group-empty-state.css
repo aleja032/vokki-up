@@ -1,0 +1,17 @@
+@reference 'tailwindcss';
+
+.group-empty {
+  @apply flex flex-col items-center gap-2 rounded-(--card-radius) border-2 border-dashed border-(--line) bg-(--surface) px-6 py-9 text-center text-(--ink-soft);
+}
+
+.group-empty__icon {
+  @apply flex size-12 items-center justify-center rounded-(--radius-18) bg-(--indigo-soft) text-(--indigo);
+}
+
+.group-empty h3 {
+  @apply m-0 mt-1 text-[18px] font-extrabold text-(--ink);
+}
+
+.group-empty p {
+  @apply m-0 max-w-[44ch] text-[14px];
+}

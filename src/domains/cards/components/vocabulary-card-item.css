@@ -1,0 +1,207 @@
+@reference 'tailwindcss';
+
+/*
+ * Vocabulary card tile (proposal D, Mi mazo). The border and the due label
+ * follow the memory strength; the three subgrid rows (top, body, footer) keep
+ * tiles of one grid row aligned.
+ */
+
+.deck-card {
+  --card-accent: var(--brand);
+  --card-due: var(--indigo);
+  @apply relative flex min-w-0 flex-col gap-1.25 rounded-(--card-radius) border-2 border-solid border-(--card-accent) p-3.25 text-(--ink);
+  background: linear-gradient(
+    180deg,
+    var(--surface-muted) 0%,
+    var(--surface) 100%
+  );
+  animation: enter-rise var(--enter-duration) var(--ease-out)
+    var(--enter-delay, 0ms) backwards;
+  transition:
+    translate 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out);
+}
+
+.deck-card[data-tone='coral'] {
+  --card-accent: var(--urgency-coral);
+  --card-due: var(--coral);
+}
+
+.deck-card[data-tone='amber'] {
+  --card-accent: var(--urgency-amber);
+  --card-due: var(--amber-ink);
+}
+
+.deck-card[data-tone='mint'] {
+  --card-accent: var(--line);
+  --card-due: var(--mint);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-card {
+    animation: none;
+  }
+}
+
+.deck-card:nth-child(2) {
+  --enter-delay: 30ms;
+}
+
+.deck-card:nth-child(3) {
+  --enter-delay: 60ms;
+}
+
+.deck-card:nth-child(4) {
+  --enter-delay: 90ms;
+}
+
+.deck-card:nth-child(n + 5) {
+  --enter-delay: 120ms;
+}
+
+.deck-card__top {
+  @apply flex items-center justify-between gap-2;
+}
+
+.deck-card__category {
+  @apply min-w-0 truncate text-[10.5px] tracking-[1px] text-(--indigo);
+}
+
+.deck-card__state {
+  @apply shrink-0 text-[10.5px] tracking-[1px] text-(--indigo);
+}
+
+.deck-card[data-state='learning'] .deck-card__state {
+  @apply text-(--amber-ink);
+}
+
+.deck-card[data-state='mastered'] .deck-card__state {
+  @apply text-(--mint);
+}
+
+.deck-card__body {
+  @apply flex min-w-0 flex-col gap-1.25;
+}
+
+.deck-card__term {
+  @apply m-0 mt-1 line-clamp-2 text-[18px] leading-[1.1] font-extrabold tracking-[-0.5px] wrap-anywhere;
+}
+
+.deck-card__meaning {
+  @apply m-0 line-clamp-3 text-[13px] leading-snug font-bold wrap-anywhere text-(--mint);
+}
+
+.deck-card__ipa {
+  @apply line-clamp-2 font-[family-name:var(--deck-font-ipa)] text-[12px] wrap-anywhere text-(--ink-soft);
+}
+
+.deck-card__example {
+  @apply m-0 hidden rounded-(--radius-14) bg-(--ground) px-3.5 py-2.5 text-[13px] leading-normal wrap-anywhere text-(--ink-soft) italic;
+}
+
+.deck-card__example .es-toggle__sentence {
+  font-size: 13px;
+}
+
+.deck-card__example-text {
+  @apply m-0;
+}
+
+.deck-card__footer {
+  @apply mt-1.5 flex min-w-0 flex-col gap-1.5;
+}
+
+.deck-card__group {
+  @apply inline-flex max-w-full min-w-0 items-center gap-1.5 text-[12px] font-semibold text-(--ink-soft);
+}
+
+.deck-card__group::before {
+  @apply size-2 shrink-0 rounded-full bg-(--tone-strong);
+
+  content: '';
+}
+
+.deck-card__group-name {
+  @apply min-w-0 truncate;
+}
+
+.deck-card__memory-row {
+  @apply flex items-center justify-between gap-1.5;
+}
+
+.deck-card__memory {
+  @apply h-[9px] w-[52px] flex-none gap-[3px];
+}
+
+.deck-card__memory .progress-bar__segment {
+  @apply rounded-[3px];
+}
+
+.deck-card__due {
+  @apply text-[10.5px] tracking-[1px] whitespace-nowrap text-(--card-due);
+}
+
+@media (hover: hover) {
+  .deck-card:hover {
+    translate: 0 var(--hover-lift);
+    border-color: var(--hover-accent);
+    box-shadow: 0 14px 30px var(--hover-accent-glow);
+  }
+}
+
+/* Manage mode: the whole tile is one checkbox. */
+
+.deck-card__select {
+  @apply absolute inset-0 z-10 m-0 cursor-pointer rounded-[inherit] border-0 bg-transparent p-0;
+}
+
+.deck-card__select:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+.deck-card__check {
+  @apply pointer-events-none absolute -top-2 -right-2 z-10 flex size-6 items-center justify-center rounded-full border-2 border-solid border-(--line) bg-(--surface) text-transparent;
+  transition: var(--hover-transition);
+}
+
+.deck-card[data-selected='true'] {
+  @apply border-(--brand);
+  box-shadow: 0 0 0 1px var(--brand);
+}
+
+.deck-card[data-selected='true'] .deck-card__check {
+  @apply border-(--brand) bg-(--brand) text-(--on-indigo);
+}
+
+@media (min-width: 761px) {
+  /* Tiles of one grid row share three subgrid rows (top, body, footer), so a
+     two-line title or a longer body never shifts a neighbor. */
+  .deck-card {
+    @apply row-span-3 grid grid-rows-subgrid p-4;
+  }
+
+  .deck-card__term {
+    @apply text-[22px];
+  }
+
+  .deck-card__meaning {
+    @apply text-[14px];
+  }
+
+  .deck-card__example {
+    @apply block;
+  }
+
+  .deck-card__example-text {
+    @apply line-clamp-2;
+  }
+
+  .deck-card__footer {
+    @apply mt-auto;
+  }
+
+  .deck-card__memory {
+    @apply w-[67px];
+  }
+}

@@ -1,15 +1,21 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import type { CardGroup } from '../types';
 import { CardGroupList } from './card-group-list';
 
-function render(tiles: Parameters<typeof CardGroupList>[0]['tiles']) {
+const group = { id: 'g1', name: 'Trabajo', tone: 'indigo' } as CardGroup;
+
+function render(
+  tiles: Parameters<typeof CardGroupList>[0]['tiles'],
+  activeGroupId = 'all'
+) {
   return renderToStaticMarkup(
     createElement(CardGroupList, {
       tiles,
-      totalCards: 0,
-      totalDue: 0,
-      activeGroupId: 'all',
+      totalCards: 46,
+      totalDue: 12,
+      activeGroupId,
       onSelectAll: () => undefined,
       onOpenGroup: () => undefined,
       onAddGroup: () => undefined
@@ -17,10 +23,26 @@ function render(tiles: Parameters<typeof CardGroupList>[0]['tiles']) {
   );
 }
 
-describe('CardGroupList library action', () => {
-  it('links to the word library once next to the add group control', () => {
+describe('CardGroupList chips', () => {
+  it('shows the all chip with the total and marks it pressed', () => {
     const html = render([]);
-    expect(html.split('href="/cards/word-library"').length - 1).toBe(1);
-    expect(html).toContain('Agregar desde la biblioteca');
+    expect(html).toContain('Todas · 46');
+    expect(html).toContain('aria-pressed="true"');
+  });
+
+  it('shows one chip per group with its card count and no pressed state', () => {
+    const html = render([{ group, cardCount: 17, dueCount: 3 }]);
+    expect(html).toContain('Trabajo · 17');
+    expect(html).toContain('Trabajo · 17 tarjetas · 3 hoy');
+    expect(html.split('aria-pressed').length - 1).toBe(1);
+  });
+
+  it('keeps a labelled control to create a group', () => {
+    const html = render([]);
+    expect(html).toContain('aria-label="Nuevo grupo"');
+  });
+
+  it('no longer carries the library link (it lives in the page header)', () => {
+    expect(render([])).not.toContain('word-library');
   });
 });

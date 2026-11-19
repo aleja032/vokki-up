@@ -1,0 +1,45 @@
+@reference 'tailwindcss';
+
+.action-pill {
+  @apply inline-flex min-h-13 cursor-pointer items-center justify-center gap-2 rounded-(--radius-pill) border-2 border-solid border-transparent px-5.5 text-[15px] leading-tight font-extrabold no-underline;
+  transition: var(--hover-transition);
+}
+
+.action-pill__icon {
+  @apply inline-flex shrink-0 items-center justify-center;
+}
+
+.action-pill--outline {
+  @apply border-(--line) bg-(--surface) text-(--ink);
+}
+
+.action-pill--brand {
+  @apply bg-(--brand) text-(--on-indigo);
+}
+
+.action-pill--cta {
+  @apply px-6.5 py-3.5 text-[16px] text-(--cta-ink);
+  background: var(--cta-gradient);
+}
+
+.action-pill--sm {
+  @apply min-h-11 px-4.5 py-0 text-[14px];
+}
+
+.action-pill:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+@media (hover: hover) {
+  .action-pill--outline:not(:disabled):hover {
+    border-color: var(--hover-accent);
+    box-shadow: 0 8px 20px var(--hover-accent-glow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .action-pill--brand:not(:disabled):hover,
+  .action-pill--cta:not(:disabled):hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+  }
+}

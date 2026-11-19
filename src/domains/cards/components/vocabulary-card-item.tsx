@@ -1,17 +1,16 @@
 import { Check } from 'lucide-react';
-import type { CSSProperties } from 'react';
-import {
-  LEARNING_STATE_PROGRESS,
-  getCardLearningState,
-  getDueDayOffset
-} from '../card-learning-state';
+import { PixelLabel } from '@/components/ui/pixel-label';
+import { ProgressBar } from '@/components/ui/progress-bar';
+import { translateText } from '@/lib/i18n/locale';
+import { getCardLearningState, getDueDayOffset } from '../card-learning-state';
+import { getCardMemory, MAX_CARD_MEMORY } from '../card-memory';
 import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardSchedule } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
 import { getExampleEs } from '../word-library/example-es';
 import { ExampleEsToggle } from './example-es-toggle';
-import { translateText } from '@/lib/i18n/locale';
+import './vocabulary-card-item.css';
 
 const { learningState: stateMessages, dueLabel, overview } = cardsMessages;
 
@@ -42,28 +41,24 @@ export function VocabularyCardItem({
   onToggleSelect
 }: VocabularyCardItemProps) {
   const learningState = getCardLearningState(schedule);
-  const progressStyle = {
-    '--deck-progress': `${LEARNING_STATE_PROGRESS[learningState]}%`
-  } as CSSProperties;
+  const memory = getCardMemory(schedule);
+  const groupName = group ? getGroupDisplayName(group) : overview.noGroup;
 
   return (
     <article
       className="deck-card"
       data-managing={isManaging}
       data-selected={isSelected}
+      data-state={learningState}
+      data-tone={memory.tone}
     >
       <div className="deck-card__top">
-        <div className="deck-card__title">
-          <h3 title={card.term}>{card.term}</h3>
-          {card.phonetics && <span>{card.phonetics}</span>}
-        </div>
-        <span
-          className="deck-card__category"
-          data-category={card.partOfSpeech}
-          title={translateText(card.partOfSpeech)}
-        >
+        <PixelLabel className="deck-card__category">
           {translateText(card.partOfSpeech)}
-        </span>
+        </PixelLabel>
+        <PixelLabel className="deck-card__state">
+          {stateMessages[learningState]}
+        </PixelLabel>
       </div>
       {isManaging && (
         <>
@@ -81,7 +76,13 @@ export function VocabularyCardItem({
         </>
       )}
       <div className="deck-card__body">
+        <h3 className="deck-card__term" title={card.term}>
+          {card.term}
+        </h3>
         <p className="deck-card__meaning">{card.meaning}</p>
+        {card.phonetics && (
+          <span className="deck-card__ipa">{card.phonetics}</span>
+        )}
         {card.example && (
           <div className="deck-card__example">
             <ExampleEsToggle key={card.id} sentence={getExampleEs(card)}>
@@ -92,24 +93,23 @@ export function VocabularyCardItem({
       </div>
       <div className="deck-card__footer">
         <span className="deck-card__group" data-tone={group?.tone ?? 'neutral'}>
-          <span
-            className="deck-card__group-name"
-            title={group ? getGroupDisplayName(group) : overview.noGroup}
-          >
-            {group ? getGroupDisplayName(group) : overview.noGroup}
+          <span className="deck-card__group-name" title={groupName}>
+            {groupName}
           </span>
         </span>
-        <div
-          className="deck-card__bar"
-          data-state={learningState}
-          style={progressStyle}
-        />
-        <span className="deck-card__state" data-state={learningState}>
-          {stateMessages[learningState]}
-        </span>
-        <span className="deck-card__due">
-          · {formatDueLabel(schedule, now)}
-        </span>
+        <div className="deck-card__memory-row">
+          <ProgressBar
+            className="deck-card__memory"
+            label={overview.memoryLabel(memory.level)}
+            max={MAX_CARD_MEMORY}
+            segments={MAX_CARD_MEMORY}
+            tone={memory.tone}
+            value={memory.level}
+          />
+          <PixelLabel className="deck-card__due">
+            {formatDueLabel(schedule, now)}
+          </PixelLabel>
+        </div>
       </div>
     </article>
   );

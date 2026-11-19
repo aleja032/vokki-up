@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+.group-add-actions {
+  @apply ml-auto flex min-w-0 flex-wrap items-center justify-end gap-2;
+}
+
+.group-add-actions--empty {
+  @apply mx-0 mt-2 justify-center;
+}

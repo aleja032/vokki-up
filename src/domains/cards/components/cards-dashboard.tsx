@@ -1,19 +1,16 @@
 'use client';
 
-import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { ALL_GROUPS_ID, useCardsDashboard } from '../hooks/use-cards-dashboard';
-import { cardsMessages } from '../messages';
+import { isMastered } from '../scheduling/mastery';
 import { CardEditor } from './card-editor';
 import type { CardsAddPanelApi } from './cards-add-panel.types';
 import { CardGroupList } from './card-group-list';
 import { CardsLibrary } from './cards-library';
-import { DeckIcon } from './deck-icon';
+import { DeckPageHeader } from './deck-page-header';
 import { GroupCreateForm } from './group-create-form';
 import { GroupDetail } from './group-detail';
 import './cards.css';
-
-const messages = cardsMessages.overview;
 
 type CardsDashboardProps = {
   /** Replaces the manual editor panel (the route layer renders the add hub). */
@@ -73,61 +70,17 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
     onCreateGroup: dashboard.startGroupCreation,
     onViewExisting: dashboard.viewExistingCard
   };
+  const masteredCount = cards.filter(card =>
+    isMastered(schedules[card.id])
+  ).length;
 
   return (
     <div className="deck-page">
-      <header className="deck-page__heading">
-        <div className="deck-page__title">
-          <h1>{messages.title}</h1>
-          <p className="deck-page__summary deck-page__summary--compact">
-            {messages.summaryCompact(cards.length, groups.length, dueCount)}
-          </p>
-          <p className="deck-page__summary deck-page__summary--wide">
-            {messages.summaryWide(cards.length, dueCount)}
-          </p>
-        </div>
-        <Link className="deck-page__review-button" href="/review?from=cards">
-          <DeckIcon name="stack" size={18} />
-          {messages.reviewWide(dueCount)}
-        </Link>
-      </header>
-
-      <div className="deck-actions">
-        <button
-          className="deck-action deck-action--primary"
-          type="button"
-          onClick={dashboard.openEditor}
-        >
-          <span className="deck-action__icon">
-            <DeckIcon name="plus" size={22} />
-          </span>
-          <span className="deck-action__copy">
-            <strong>{messages.newCardTitle}</strong>
-            <span>{messages.newCardHint}</span>
-          </span>
-        </button>
-        <Link
-          className="deck-action deck-action--review"
-          href="/review?from=cards"
-        >
-          <span className="deck-action__icon">
-            <DeckIcon name="stack" size={22} />
-          </span>
-          <span className="deck-action__copy">
-            <strong>{messages.reviewTitle}</strong>
-            <span>{messages.reviewPending(dueCount)}</span>
-          </span>
-        </Link>
-      </div>
-
-      <CardGroupList
-        tiles={groupTiles}
+      <DeckPageHeader
         totalCards={cards.length}
-        totalDue={dueCount}
-        activeGroupId={activeGroupId}
-        onSelectAll={() => dashboard.setActiveGroupId(ALL_GROUPS_ID)}
-        onOpenGroup={dashboard.openGroupById}
-        onAddGroup={dashboard.startGroupCreation}
+        dueCount={dueCount}
+        masteredCount={masteredCount}
+        onAddCard={dashboard.openEditor}
       />
 
       <div className="deck-page__workspace">
@@ -145,6 +98,17 @@ export function CardsDashboard({ renderAddPanel }: CardsDashboardProps) {
           onCategoryChange={dashboard.setActiveCategory}
           onDeleteCards={dashboard.deleteCards}
           onAddCard={dashboard.openEditor}
+          groupFilters={
+            <CardGroupList
+              tiles={groupTiles}
+              totalCards={cards.length}
+              totalDue={dueCount}
+              activeGroupId={activeGroupId}
+              onSelectAll={() => dashboard.setActiveGroupId(ALL_GROUPS_ID)}
+              onOpenGroup={dashboard.openGroupById}
+              onAddGroup={dashboard.startGroupCreation}
+            />
+          }
         />
         {renderAddPanel ? (
           renderAddPanel(addPanelApi)

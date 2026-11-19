@@ -21,7 +21,7 @@
 }
 
 .addhub__exit {
-  @apply -ml-2 inline-flex min-h-11 w-fit items-center gap-1.5 rounded-[10px] px-2 text-[14px] font-semibold text-(--ink-soft);
+  @apply -ml-2 inline-flex min-h-11 w-fit items-center gap-1.5 rounded-(--radius-14) px-2 text-[14px] font-semibold text-(--ink-soft);
 }
 
 .addhub__header h2 {
@@ -33,15 +33,15 @@
 }
 
 .addhub__modes {
-  @apply grid grid-cols-3 gap-1.5 rounded-[16px] bg-(--surface-muted) p-1.5;
+  @apply grid grid-cols-3 gap-1.5 rounded-(--radius-18) bg-(--surface-muted) p-1.5;
 }
 
 .addhub__mode {
-  @apply flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-[12px] border border-solid border-transparent px-1.5 py-2 text-center text-(--ink-soft);
+  @apply flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-(--radius-14) border border-solid border-transparent px-1.5 py-2 text-center text-(--ink-soft);
 }
 
 .addhub__mode[aria-selected='true'] {
-  @apply border-(--line) bg-(--surface) text-(--ink) shadow-[0_1px_2px_rgba(27,26,46,0.08)];
+  @apply border-(--line) bg-(--surface) text-(--ink) shadow-sm;
 }
 
 .addhub__mode[aria-disabled='true'] {
@@ -49,7 +49,7 @@
 }
 
 .addhub__mode-icon {
-  @apply flex size-7 shrink-0 items-center justify-center rounded-[8px] text-(--ink-soft);
+  @apply flex size-7 shrink-0 items-center justify-center rounded-(--radius-14) text-(--ink-soft);
 }
 
 .addhub__mode[aria-selected='true'] .addhub__mode-icon {
@@ -82,7 +82,7 @@
 }
 
 .addhub__locked {
-  @apply flex min-w-0 flex-col items-start gap-1.5 rounded-[14px] bg-(--surface-muted) px-4 py-3 text-[14px] text-(--ink-soft);
+  @apply flex min-w-0 flex-col items-start gap-1.5 rounded-(--radius-14) bg-(--surface-muted) px-4 py-3 text-[14px] text-(--ink-soft);
 }
 
 .addhub__locked strong {
@@ -102,11 +102,11 @@
 }
 
 .addhub__resume {
-  @apply flex min-w-0 flex-wrap items-center justify-between gap-3 rounded-[14px] bg-(--indigo-soft) px-4 py-3 text-[14px] text-(--ink);
+  @apply flex min-w-0 flex-wrap items-center justify-between gap-3 rounded-(--radius-14) bg-(--indigo-soft) px-4 py-3 text-[14px] text-(--ink);
 }
 
 .addhub__resume button {
-  @apply min-h-11 rounded-[10px] bg-(--indigo) px-3.5 text-[13px] font-semibold text-(--surface);
+  @apply min-h-11 rounded-(--radius-14) bg-(--indigo) px-3.5 text-[13px] font-semibold text-(--surface);
 }
 
 .addhub__progress {
@@ -143,7 +143,7 @@
 }
 
 .addhub__capture-summary {
-  @apply flex min-w-0 rounded-[14px] border border-solid border-(--line) bg-(--surface-muted) px-4 py-3;
+  @apply flex min-w-0 rounded-(--radius-14) border border-solid border-(--line) bg-(--surface-muted) px-4 py-3;
 }
 
 .addhub__capture-details {
@@ -170,7 +170,7 @@
 }
 
 .addhub__back {
-  @apply inline-flex h-11 shrink-0 items-center gap-1.5 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-3.5 text-[14px] font-semibold text-(--ink);
+  @apply inline-flex h-11 shrink-0 items-center gap-1.5 rounded-(--radius-14) border-[1.5px] border-solid border-(--line) bg-(--surface) px-3.5 text-[14px] font-semibold text-(--ink);
 }
 
 .addhub__result-title {
@@ -187,7 +187,7 @@
 
 @media (min-width: 761px) {
   .addhub {
-    @apply box-content flex min-w-0 flex-[1_1_360px] flex-col gap-6 rounded-[26px] border border-solid border-(--line) bg-(--surface) p-7;
+    @apply box-content flex min-w-0 flex-[1_1_360px] flex-col gap-6 rounded-(--radius-26) border border-solid border-(--line) bg-(--surface) p-7;
   }
 
   .addhub:not([data-open='true']) {
@@ -208,7 +208,7 @@
   }
 
   .addhub__modes {
-    @apply grid-cols-1 gap-1.5 rounded-[18px];
+    @apply grid-cols-1 gap-1.5 rounded-(--radius-18);
   }
 
   /* The expanded hub is wide: the selector becomes a row. */
@@ -218,11 +218,11 @@
   }
 
   .addhub__mode {
-    @apply min-h-0 flex-row justify-start gap-2.5 rounded-[14px] px-3 py-2.5 text-left;
+    @apply min-h-0 flex-row justify-start gap-2.5 rounded-(--radius-14) px-3 py-2.5 text-left;
   }
 
   .addhub__mode-icon {
-    @apply size-9 rounded-[10px] bg-(--surface);
+    @apply size-9 rounded-(--radius-14) bg-(--surface);
   }
 
   .addhub__mode-copy {
@@ -238,7 +238,7 @@
   }
 
   .addhub__badge {
-    @apply block shrink-0 rounded-[6px] bg-(--indigo-soft) px-1.5 py-0.5 text-[10px] font-extrabold text-(--indigo);
+    @apply block shrink-0 rounded-(--radius-14) bg-(--indigo-soft) px-1.5 py-0.5 text-[10px] font-extrabold text-(--indigo);
   }
 
   .addhub__resume button {
