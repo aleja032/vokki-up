@@ -8,12 +8,17 @@ import {
   useRef,
   useSyncExternalStore
 } from 'react';
+import { ActionPill } from '@/components/ui/action-pill';
+import { PixelLabel } from '@/components/ui/pixel-label';
 import { cardsMessages } from '../messages';
 import type { CardRating, VocabularyCard } from '../types';
-import { REVIEW_RATINGS } from '../hooks/use-card-review';
+import type { CardMemory } from '../card-memory';
 import { getExampleEs } from '../word-library/example-es';
 import { ExampleEsToggle } from './example-es-toggle';
+import { ReviewCompanion, ReviewCompanionBadge } from './review-companion';
 import { ReviewIcon } from './review-icon';
+import { ReviewMemoryFooter } from './review-memory-footer';
+import { ReviewRatingButtons } from './review-rating-buttons';
 import { normalizePronunciationLocale, translateText } from '@/lib/i18n/locale';
 
 const messages = cardsMessages.review;
@@ -21,6 +26,10 @@ const messages = cardsMessages.review;
 type ReviewCardScreenProps = {
   card: VocabularyCard;
   isRevealed: boolean;
+  /** Memory strength of the card; the footer is omitted without it. */
+  memory?: CardMemory;
+  /** Current run of recalled cards; a run of two or more is cheered. */
+  combo?: number;
   getIntervalLabel: (rating: CardRating) => string;
   onReveal: () => void;
   onRate: (rating: CardRating) => void;
@@ -122,6 +131,8 @@ function splitExample(example: string, term: string) {
 export function ReviewCardScreen({
   card,
   isRevealed,
+  memory,
+  combo = 0,
   getIntervalLabel,
   onReveal,
   onRate
@@ -196,134 +207,116 @@ export function ReviewCardScreen({
     startSpeechAttempt
   ]);
 
+  const topLabel = [card.tags[0], translateText(card.partOfSpeech)]
+    .filter(Boolean)
+    .join(' · ');
+
   return (
     <>
-      <section
-        className="drill-card"
-        aria-labelledby="review-term"
-        data-revealed={isRevealed || undefined}
-      >
-        <div className="drill-card__meta">
-          <span
-            className="drill-card__category"
-            data-category={card.partOfSpeech}
-            title={translateText(card.partOfSpeech)}
+      <div className="drill-stage">
+        <div className="drill-stage__card">
+          <section
+            className="drill-card"
+            aria-labelledby="review-term"
+            data-revealed={isRevealed || undefined}
           >
-            {translateText(card.partOfSpeech)}
-          </span>
-          {card.tags[0] && (
-            <span className="drill-card__tag" title={card.tags[0]}>
-              # {card.tags[0]}
-            </span>
-          )}
-        </div>
-        <div className="drill-card__term">
-          <h1 className="drill-card__word" id="review-term">
-            {card.term}
-          </h1>
-          <div className="drill-card__pronunciation">
-            {card.phonetics && (
-              <span className="drill-card__ipa">{card.phonetics}</span>
-            )}
-            <button
-              className="drill-card__listen"
-              type="button"
-              aria-label={
-                isSpeechSupported
-                  ? messages.listenLabel
-                  : messages.speechUnavailable
-              }
-              title={
-                isSpeechSupported
-                  ? messages.listenLabel
-                  : messages.speechUnavailable
-              }
-              disabled={!isSpeechSupported}
-              onClick={() =>
-                startSpeechAttempt(isSpeechSupported, card.term, card.example)
-              }
-            >
-              <ReviewIcon name="speaker" size={20} />
-            </button>
-          </div>
-          {!isSpeechSupported && (
-            <p className="drill-card__speech-status" role="status">
-              {messages.speechUnavailable}
-            </p>
-          )}
-          {speechAttempt.failedAttemptId === speechAttempt.activeAttemptId &&
-            speechAttempt.failedAttemptId !== null &&
-            isSpeechSupported && (
-              <p className="drill-card__speech-status" role="status">
-                {messages.speechFailed}
-              </p>
-            )}
-        </div>
-        {isRevealed ? (
-          <div className="drill-card__answer" aria-live="polite">
-            <div className="drill-card__block">
-              <span className="drill-card__label">{messages.meaningLabel}</span>
-              <span className="drill-card__meaning">{card.meaning}</span>
-            </div>
-            {example && (
-              <div className="drill-card__example">
-                <span className="drill-card__label">
-                  {messages.exampleLabel}
-                </span>
-                <ExampleEsToggle key={card.id} sentence={exampleEs}>
-                  <span className="drill-card__sentence">
-                    {example.before}
-                    {example.match && <strong>{example.match}</strong>}
-                    {example.after}
-                  </span>
-                </ExampleEsToggle>
+            <PixelLabel className="drill-card__top">{topLabel}</PixelLabel>
+            <div className="drill-card__term">
+              <h1 className="drill-card__word" id="review-term">
+                {card.term}
+              </h1>
+              <div className="drill-card__pronunciation">
+                {card.phonetics && (
+                  <span className="drill-card__ipa">{card.phonetics}</span>
+                )}
+                <button
+                  className="drill-card__listen"
+                  type="button"
+                  aria-label={
+                    isSpeechSupported
+                      ? messages.listenLabel
+                      : messages.speechUnavailable
+                  }
+                  title={
+                    isSpeechSupported
+                      ? messages.listenLabel
+                      : messages.speechUnavailable
+                  }
+                  disabled={!isSpeechSupported}
+                  onClick={() =>
+                    startSpeechAttempt(
+                      isSpeechSupported,
+                      card.term,
+                      card.example
+                    )
+                  }
+                >
+                  <ReviewIcon name="speaker" size={20} />
+                </button>
               </div>
-            )}
-          </div>
-        ) : (
-          <button className="drill-card__hint" type="button" onClick={onReveal}>
-            <ReviewIcon name="eye" size={24} />
-            {messages.revealHint}
-          </button>
-        )}
-      </section>
-      {isRevealed ? (
-        <div
-          className="drill-ratings"
-          role="group"
-          aria-label={messages.ratingsLabel}
-        >
-          <span className="drill-ratings__prompt">{messages.ratingPrompt}</span>
-          <div className="drill-ratings__grid">
-            {REVIEW_RATINGS.map(rating => (
+              {!isSpeechSupported && (
+                <p className="drill-card__speech-status" role="status">
+                  {messages.speechUnavailable}
+                </p>
+              )}
+              {speechAttempt.failedAttemptId ===
+                speechAttempt.activeAttemptId &&
+                speechAttempt.failedAttemptId !== null &&
+                isSpeechSupported && (
+                  <p className="drill-card__speech-status" role="status">
+                    {messages.speechFailed}
+                  </p>
+                )}
+            </div>
+            {isRevealed ? (
+              <div className="drill-card__answer" aria-live="polite">
+                <span className="sr-only">{messages.meaningLabel}</span>
+                <span className="drill-card__meaning">{card.meaning}</span>
+                {example && (
+                  <div className="drill-card__example">
+                    <span className="sr-only">{messages.exampleLabel}</span>
+                    <ExampleEsToggle key={card.id} sentence={exampleEs}>
+                      <span className="drill-card__sentence">
+                        {example.before}
+                        {example.match && <strong>{example.match}</strong>}
+                        {example.after}
+                      </span>
+                    </ExampleEsToggle>
+                  </div>
+                )}
+              </div>
+            ) : (
               <button
-                className="drill-rating"
-                data-tone={rating}
+                className="drill-card__hint"
                 type="button"
-                key={rating}
-                onClick={() => onRate(rating)}
+                onClick={onReveal}
               >
-                <span className="drill-rating__label">
-                  {messages.ratings[rating]}
-                </span>
-                <span className="drill-rating__hint">
-                  {getIntervalLabel(rating)}
-                </span>
+                <ReviewIcon name="eye" size={24} />
+                {messages.revealHint}
               </button>
-            ))}
-          </div>
+            )}
+            {memory && <ReviewMemoryFooter memory={memory} />}
+          </section>
+          <ReviewCompanionBadge />
         </div>
-      ) : (
-        <div className="drill-reveal">
-          <button
-            className="drill-reveal__action"
-            type="button"
+        <ReviewCompanion combo={combo} />
+      </div>
+      <div className="drill-actions">
+        {isRevealed ? (
+          <ReviewRatingButtons
+            getIntervalLabel={getIntervalLabel}
+            onRate={onRate}
+          />
+        ) : (
+          <ActionPill
+            className="drill-actions__reveal"
             onClick={onReveal}
+            variant="brand"
           >
             {messages.revealAction}
-          </button>
-        </div>
-      )}
+          </ActionPill>
+        )}
+      </div>
     </>
   );
 }

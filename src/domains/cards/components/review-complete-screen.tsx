@@ -1,6 +1,12 @@
-import Link from 'next/link';
+import Image from 'next/image';
+import { ActionPill } from '@/components/ui/action-pill';
+import { Pill } from '@/components/ui/pill';
+import { PixelLabel } from '@/components/ui/pixel-label';
+import { StatCard } from '@/components/ui/stat-card';
 import { cardsMessages } from '../messages';
-import { ReviewIcon } from './review-icon';
+import type { MemoryGain } from '../review-memory-gains';
+import { ReviewMemoryGains } from './review-memory-gains';
+import './review-results.css';
 
 const messages = cardsMessages.review;
 
@@ -10,31 +16,77 @@ type ReviewCompleteScreenProps = {
   good: number;
   easy: number;
   streakDays: number;
+  bestCombo: number;
+  memoryGains: MemoryGain[];
   onRestart: () => void;
   exitHref: string;
   exitTarget: 'cards' | 'home';
 };
 
+// Round results (proposal D). Every number comes from the finished round:
+// recalled = rated good or easy, best combo = longest run of recalled cards,
+// streak = the real streak derived from the review events.
 export function ReviewCompleteScreen({
   reviewed,
   hard,
   good,
   easy,
   streakDays,
+  bestCombo,
+  memoryGains,
   onRestart,
   exitHref,
   exitTarget
 }: ReviewCompleteScreenProps) {
+  const recalled = good + easy;
+
   return (
-    <section className="drill-done" aria-labelledby="review-done-title">
-      <div className="drill-done__body">
-        <span className="drill-done__icon">
-          <ReviewIcon name="check" size={44} />
-        </span>
-        <h1 className="drill-done__title" id="review-done-title">
-          {messages.done.title}
-        </h1>
-        <p className="drill-done__text">
+    <section className="round-results" aria-labelledby="review-done-title">
+      <div className="round-results__stage">
+        <span aria-hidden="true" className="round-results__glow" />
+        <Image
+          alt=""
+          aria-hidden="true"
+          className="round-results__pet motion-mascot-bob"
+          height={587}
+          src="/images/noma.png"
+          width={700}
+        />
+      </div>
+      <div className="round-results__body">
+        <header className="round-results__heading">
+          <PixelLabel className="round-results__kicker">
+            {messages.done.title}
+          </PixelLabel>
+          <h1 className="round-results__title" id="review-done-title">
+            {messages.done.rescued(reviewed)}
+          </h1>
+        </header>
+        <div className="round-results__stats">
+          <StatCard
+            label={messages.done.accuracyLabel}
+            tone="mint"
+            value={messages.done.accuracyValue(recalled, reviewed)}
+            variant="soft"
+          />
+          {bestCombo > 0 && (
+            <StatCard
+              label={messages.done.bestComboLabel}
+              tone="amber"
+              value={messages.done.bestComboValue(bestCombo)}
+              variant="soft"
+            />
+          )}
+          {streakDays > 0 && (
+            <StatCard
+              label={messages.done.streakLabel}
+              tone="coral"
+              value={messages.done.streakDays(streakDays)}
+              variant="soft"
+            />
+          )}
+        </div>
+        <p className="round-results__text">
           {messages.done.reviewed(reviewed)}
           {streakDays > 0 && (
             <>
@@ -45,37 +97,35 @@ export function ReviewCompleteScreen({
           )}{' '}
           {messages.done.nextReturn}
         </p>
-        <div className="drill-done__chips">
-          <span className="drill-done__chip" data-tone="again">
-            {messages.done.hardChip(hard)}
-          </span>
-          <span className="drill-done__chip" data-tone="good">
-            {messages.done.goodChip(good)}
-          </span>
-          <span className="drill-done__chip" data-tone="easy">
-            {messages.done.easyChip(easy)}
-          </span>
+        <div className="round-results__chips">
+          <Pill tone="coral">{messages.done.hardChip(hard)}</Pill>
+          <Pill tone="brand">{messages.done.goodChip(good)}</Pill>
+          <Pill tone="mint">{messages.done.easyChip(easy)}</Pill>
         </div>
+        <ReviewMemoryGains gains={memoryGains} />
+        <div className="round-results__actions">
+          <ActionPill
+            className="round-results__primary"
+            href={exitHref}
+            variant="cta"
+          >
+            {exitTarget === 'cards'
+              ? messages.done.backCards
+              : messages.done.backHome}
+          </ActionPill>
+          <ActionPill
+            className="round-results__repeat"
+            onClick={onRestart}
+            size="sm"
+          >
+            {messages.done.repeat}
+            <span className="round-results__repeat-suffix">
+              {messages.done.repeatSuffix}
+            </span>
+          </ActionPill>
+        </div>
+        <p className="round-results__note">{messages.done.repeatNote}</p>
       </div>
-      <div className="drill-done__actions">
-        <button
-          className="drill-done__repeat"
-          type="button"
-          onClick={onRestart}
-        >
-          {messages.done.repeat}
-          <span className="drill-done__repeat-suffix">
-            {' '}
-            {messages.done.repeatSuffix}
-          </span>
-        </button>
-        <Link className="drill-done__primary" href={exitHref}>
-          {exitTarget === 'cards'
-            ? messages.done.backCards
-            : messages.done.backHome}
-        </Link>
-      </div>
-      <p className="drill-done__note">{messages.done.repeatNote}</p>
     </section>
   );
 }

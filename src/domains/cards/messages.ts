@@ -213,8 +213,29 @@ export const cardsMessages = createLocalizedMessages({
       oneDay: '1 día',
       days: (days: number) => `${days} días`
     },
+    status: {
+      combo: (count: number) => `COMBO x${count}`,
+      accuracy: (correct: number, reviewed: number) =>
+        `${correct} de ${reviewed} ${pluralize(reviewed, 'acierto', 'aciertos')}`,
+      comboBubble: (count: number) => `¡Combo x${count}! Vas sin fallar.`
+    },
+    memory: {
+      new: 'Palabra nueva',
+      low: 'Memoria baja',
+      medium: 'Memoria media',
+      high: 'Memoria alta'
+    },
     done: {
-      title: 'Sesión completa',
+      title: 'Ronda completada',
+      rescued: (count: number) =>
+        `¡Rescataste ${count} ${pluralize(count, 'palabra', 'palabras')}!`,
+      accuracyLabel: 'Aciertos',
+      accuracyValue: (correct: number, reviewed: number) =>
+        `${correct} / ${reviewed}`,
+      bestComboLabel: 'Mejor combo',
+      bestComboValue: (count: number) => `x${count}`,
+      streakLabel: 'Racha',
+      gainsTitle: 'Subieron de memoria',
       reviewed: (count: number) =>
         `${count} ${pluralize(count, 'tarjeta repasada', 'tarjetas repasadas')}.`,
       streakPrefix: 'Tu racha sube a',

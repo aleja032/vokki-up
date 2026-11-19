@@ -357,7 +357,18 @@ export const extraTranslations: Record<string, string> = {
   'Sin empezar': 'Not started',
 
   // Mi mazo (cards overview, proposal D)
-  'Mi mazo': 'My deck'
+  'Mi mazo': 'My deck',
+
+  // Review round and results (proposal D)
+  'Palabra nueva': 'New word',
+  'Memoria baja': 'Low memory',
+  'Memoria media': 'Medium memory',
+  'Memoria alta': 'High memory',
+  'Ronda completada': 'Round complete',
+  Aciertos: 'Correct',
+  'Mejor combo': 'Best combo',
+  Racha: 'Streak',
+  'Subieron de memoria': 'Memory went up'
 };
 
 // Interpolated messages: [Spanish pattern, English replacement].
@@ -457,5 +468,9 @@ export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
   [/^Ver todas \((\d+)\)$/, 'See all ($1)'],
   [/^Memoria (\d+) de 5$/, 'Memory $1 of 5'],
   [/^Racha de (\d+) días$/, '$1-day streak'],
-  [/^(\d+) \/ (\d+) tarjetas$/, '$1 / $2 cards']
+  [/^(\d+) \/ (\d+) tarjetas$/, '$1 / $2 cards'],
+  [/^(\d+) de (\d+) aciertos?$/, '$1 of $2 correct'],
+  [/^¡Combo x(\d+)! Vas sin fallar\.$/, 'Combo x$1! No misses so far.'],
+  [/^¡Rescataste 1 palabra!$/, 'You rescued 1 word!'],
+  [/^¡Rescataste (\d+) palabras!$/, 'You rescued $1 words!']
 ];

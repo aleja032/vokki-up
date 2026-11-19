@@ -1,0 +1,30 @@
+@reference 'tailwindcss';
+
+.review-memory {
+  --memory-ink: var(--ink-soft);
+  @apply flex items-center justify-between gap-3;
+}
+
+.review-memory[data-tone='brand'] {
+  --memory-ink: var(--indigo);
+}
+
+.review-memory[data-tone='coral'] {
+  --memory-ink: var(--coral);
+}
+
+.review-memory[data-tone='amber'] {
+  --memory-ink: var(--amber-ink);
+}
+
+.review-memory[data-tone='mint'] {
+  --memory-ink: var(--mint);
+}
+
+.review-memory .review-memory__label {
+  @apply text-xs text-(--memory-ink);
+}
+
+.review-memory__bar {
+  @apply w-30.5 flex-none gap-[3px];
+}

@@ -24,6 +24,14 @@
   @apply bg-(--bar-fill);
 }
 
+.progress-bar__segment[data-current='true'] {
+  @apply bg-(--mint);
+}
+
+.progress-bar--blocks .progress-bar__segment {
+  @apply rounded-[3px];
+}
+
 .progress-bar--mint {
   --bar-fill: var(--urgency-green);
 }

@@ -31,7 +31,7 @@ Design source: Artifact `claude.ai/artifact/3a7006b7-7d22-4861-9760-c4398e2bae6f
 - [x] T3 (merged into T4) Data contracts in `src/app` container: due-cards hand, accuracy, notes count; keep existing summary fields.
 - [x] T4 Home layout (see Progress for omissions): header streak pill, hero with CTA, due-cards hand, daily goal with chest, stats, week chart, today activity; mobile stacked + bottom nav FAB; every current action preserved.
 - [x] T5 Cards (Mi mazo) layout per `VokkiDMazo*`; all current actions preserved (groups, add hub, library, delete, manage, review).
-- [ ] T6 Mundos: blocked until the user defines the domain (worlds vs groups).
+- [ ] T7 Mundos: blocked until the user defines the domain (worlds vs groups).
 
 ## Acceptance
 
@@ -48,3 +48,5 @@ T3+T4 (delegated direct, one writer, merged to deliver something visible): vites
 Omitted (no honest data): difficulty diamonds, hero kicker "MUNDO · DÍA A DÍA · BÁSICO" (kept "Tu próxima sesión"), per-card due-day labels (New / Fading today / Review today instead), unread favorite notes count (static copy), Escribir card (flag). Shell: desktop keeps the sidebar (D top pill nav not applied); logo wordmark stays Fraunces; world cards are not links (no Mundos page). Browser gap: Spanish rendering not seen in browser (locale cookie did not switch), unit tests only.
 
 T5 (delegated direct): Mi mazo restyled to D (header with mascot, group chips, search, tiles with memory bar and tone borders, group detail with StatCard/ProgressBar/CTA, shared ActionPill/Chip/SearchField). vitest 96 files / 546 tests, tsc/eslint/prettier clean, browser 1280/1024/768/390 light+dark Spanish only (English not verifiable in the Playwright browser; covered by coverage tests). Omitted: difficulty diamonds, FUERTE label. Nav label now "Mi mazo". Next: T6 review round + results; Mundos page still blocked on user decision.
+
+T6 (delegated direct): review round and results restyled to D (existing completion screen kept; combo and memory gains from real data). vitest 102 files / 590 tests, tsc/eslint/prettier clean, browser 1280/1024/768/390 light+dark Spanish. Omitted: difficulty diamonds, world label, chest pill (cross-domain), fourth rating "Otra vez" (app has three). OPEN: English never switched in the Playwright browser in T4, T5 and T6 runs; to verify manually.

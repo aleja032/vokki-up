@@ -38,6 +38,41 @@ describe('ReviewCardScreen', () => {
   );
 });
 
+describe('ReviewCardScreen D layout', () => {
+  function renderWith(extra: Record<string, unknown>, isRevealed = false) {
+    return renderToStaticMarkup(
+      createElement(ReviewCardScreen, {
+        card,
+        isRevealed,
+        getIntervalLabel: () => '1 día',
+        onReveal: () => undefined,
+        onRate: () => undefined,
+        ...extra
+      })
+    );
+  }
+
+  it('shows the memory footer with the real level', () => {
+    const html = renderWith({ memory: { level: 1, tone: 'coral' } });
+    expect(html).toContain('Memoria baja');
+    expect(html).toContain('aria-label="Memoria 1 de 5"');
+  });
+
+  it('cheers a running combo beside the card', () => {
+    expect(renderWith({ combo: 3 })).toContain('¡Combo x3! Vas sin fallar.');
+    expect(renderWith({ combo: 1 })).not.toContain('Combo');
+  });
+
+  it('offers the reveal action before the answer and ratings after it', () => {
+    const hidden = renderWith({});
+    expect(hidden).toContain('Mostrar significado');
+    expect(hidden).not.toContain('data-tone="again"');
+    const revealed = renderWith({}, true);
+    expect(revealed).toContain('data-tone="again"');
+    expect(revealed).not.toContain('Mostrar significado');
+  });
+});
+
 describe('ReviewCardScreen Spanish example', () => {
   const withExample = {
     ...card,

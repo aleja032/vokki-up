@@ -36,6 +36,15 @@ describe('StatCard', () => {
     }
   );
 
+  it('adds the soft variant modifier only when requested', () => {
+    expect(
+      renderToStaticMarkup(<StatCard label="x" value="1" variant="soft" />)
+    ).toContain('stat-tile--soft');
+    expect(
+      renderToStaticMarkup(<StatCard label="x" value="1" />)
+    ).not.toContain('stat-tile--soft');
+  });
+
   it('defaults to the brand tone', () => {
     expect(renderToStaticMarkup(<StatCard label="x" value="1" />)).toContain(
       'stat-tile--brand'

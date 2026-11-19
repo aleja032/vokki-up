@@ -1,130 +1,26 @@
 @reference 'tailwindcss';
 
 /*
- * Review module, mobile first (proposal artboards: Repasar tarjetas 430px and
- * Repaso escritorio 1440px). The route is full screen, without the app shell.
- * - up to 760px: close button + progress header, card fills the screen,
- *   reveal and rating buttons stacked below it.
- * - 761px and up: white header with exit pill, progress and offline notice,
- *   centered 760px column.
+ * Review round (proposal D "Ronda de repaso", web and mobile). The route is
+ * full screen, without the app shell. Mobile first: the card sits on top, the
+ * reveal or rating buttons are pinned to the bottom; from 768px the card gets
+ * Noma beside it and the content stays in a 900px column.
  */
 
 :root {
-  --drill-edge: #d3cdc0;
-  --drill-green-ink: #1a6b47;
-  --drill-on-indigo: #ffffff;
   --drill-font-ipa: var(--font-ipa), 'Noto Sans', sans-serif;
-
-  --drill-noun-soft: #e9e6fb;
-  --drill-noun-ink: #3a2cb0;
-  --drill-verb-soft: #ddf2e7;
-  --drill-verb-ink: #1a6b47;
-  --drill-adjective-soft: #fcebc4;
-  --drill-adjective-ink: #7a4f00;
-  --drill-adverb-soft: #d9eef2;
-  --drill-adverb-ink: #135f6e;
-  --drill-phrase-soft: #fbe4dd;
-  --drill-phrase-ink: #a8381f;
-  --drill-gray-soft: #efebe3;
-  --drill-gray-ink: #5b5870;
-}
-
-:root[data-theme='dark'],
-:root.dark {
-  --drill-edge: #4a4a52;
-  --drill-green-ink: #67bd91;
-  --drill-on-indigo: #141416;
-
-  --drill-noun-soft: #302d4c;
-  --drill-noun-ink: #b0a9fa;
-  --drill-verb-soft: #1e3429;
-  --drill-verb-ink: #67bd91;
-  --drill-adjective-soft: #3b3020;
-  --drill-adjective-ink: #e3b25a;
-  --drill-adverb-soft: #1d3439;
-  --drill-adverb-ink: #72bac6;
-  --drill-phrase-soft: #422821;
-  --drill-phrase-ink: #f09a7e;
-  --drill-gray-soft: #26262b;
-  --drill-gray-ink: #a6a3ad;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --drill-edge: #4a4a52;
-    --drill-green-ink: #67bd91;
-    --drill-on-indigo: #141416;
-
-    --drill-noun-soft: #302d4c;
-    --drill-noun-ink: #b0a9fa;
-    --drill-verb-soft: #1e3429;
-    --drill-verb-ink: #67bd91;
-    --drill-adjective-soft: #3b3020;
-    --drill-adjective-ink: #e3b25a;
-    --drill-adverb-soft: #1d3439;
-    --drill-adverb-ink: #72bac6;
-    --drill-phrase-soft: #422821;
-    --drill-phrase-ink: #f09a7e;
-    --drill-gray-soft: #26262b;
-    --drill-gray-ink: #a6a3ad;
-  }
-}
-
-/* Rating tones shared by the rating buttons and the summary chips. */
-
-[class*='drill-'][data-tone='again'] {
-  --tone-soft: var(--red-soft);
-  --tone-ink: var(--red-ink);
-}
-
-[class*='drill-'][data-tone='good'] {
-  --tone-soft: var(--indigo-soft);
-  --tone-ink: var(--indigo-strong);
-}
-
-[class*='drill-'][data-tone='easy'] {
-  --tone-soft: var(--green-soft);
-  --tone-ink: var(--drill-green-ink);
-}
-
-/* Part-of-speech chip colors. */
-
-.drill-card__category {
-  --cat-soft: var(--drill-gray-soft);
-  --cat-ink: var(--drill-gray-ink);
-}
-
-.drill-card__category[data-category='Sustantivo'] {
-  --cat-soft: var(--drill-noun-soft);
-  --cat-ink: var(--drill-noun-ink);
-}
-
-.drill-card__category[data-category='Verbo'] {
-  --cat-soft: var(--drill-verb-soft);
-  --cat-ink: var(--drill-verb-ink);
-}
-
-.drill-card__category[data-category='Adjetivo'] {
-  --cat-soft: var(--drill-adjective-soft);
-  --cat-ink: var(--drill-adjective-ink);
-}
-
-.drill-card__category[data-category='Adverbio'] {
-  --cat-soft: var(--drill-adverb-soft);
-  --cat-ink: var(--drill-adverb-ink);
-}
-
-.drill-card__category[data-category='Expresión'] {
-  --cat-soft: var(--drill-phrase-soft);
-  --cat-ink: var(--drill-phrase-ink);
 }
 
 /* Page */
 
 .drill-page {
-  @apply flex min-h-dvh min-w-0 flex-col gap-6 bg-(--ground) px-6 pt-6 pb-8 text-(--ink);
+  @apply flex min-h-dvh min-w-0 flex-col bg-(--ground) px-4 pt-4 pb-5.5 text-(--ink) md:px-6 md:pt-7 md:pb-10;
 
   line-height: normal;
+}
+
+.drill-shell {
+  @apply mx-auto flex min-h-0 w-full max-w-225 min-w-0 flex-1 flex-col gap-3.5 md:gap-5.5;
 }
 
 .drill-loading {
@@ -140,452 +36,144 @@
 }
 
 .drill-main {
-  @apply flex min-h-0 min-w-0 flex-1 flex-col gap-6;
+  @apply flex min-h-0 min-w-0 flex-1 flex-col gap-3.5 md:gap-5.5;
 }
 
-/* Header */
+/* Stage: card plus Noma (beside it on wide screens) */
 
-.drill-header {
-  @apply flex items-center gap-3;
+.drill-stage {
+  @apply relative mt-8 flex flex-wrap items-center justify-center gap-7.5 md:mt-1.5 md:py-2.5;
 }
 
-.drill-header__close {
-  @apply inline-flex size-[46px] shrink-0 items-center justify-center rounded-[14px] border border-(--line) bg-(--surface) text-(--ink);
+.drill-stage__card {
+  @apply relative flex w-full max-w-82.5 justify-center md:max-w-100 md:flex-[1_1_340px];
 }
 
-.drill-header__exit {
-  @apply hidden;
-}
-
-.drill-header__progress {
-  @apply flex min-w-0 flex-1 items-center gap-3;
-}
-
-.drill-header__track {
-  @apply h-2 flex-1 overflow-hidden rounded-full bg-(--line);
-}
-
-.drill-header__fill {
-  @apply h-full rounded-full bg-(--amber);
-}
-
-.drill-header__count {
-  @apply min-w-11 shrink-0 text-right text-sm font-bold whitespace-nowrap;
-}
-
-.drill-header__offline {
-  @apply hidden;
-}
-
-/* Card */
+/* Card face */
 
 .drill-card {
-  @apply flex min-h-0 min-w-0 flex-1 flex-col gap-[18px] rounded-[28px] border border-(--line) bg-(--surface) p-6;
+  @apply relative box-border flex w-full min-w-0 flex-col gap-3 rounded-(--radius-36) border-2 border-solid border-(--line) p-5 md:gap-4.5 md:p-6.5;
+
+  background: linear-gradient(
+    180deg,
+    var(--surface-muted) 0%,
+    var(--surface) 100%
+  );
+  box-shadow:
+    0 26px 50px var(--shadow-bubble),
+    0 0 0 5px var(--ground);
 }
 
-.drill-card__meta {
-  @apply flex items-center justify-between gap-3;
-}
-
-.drill-card__category {
-  @apply max-w-[60%] shrink-0 truncate rounded-full bg-(--cat-soft) px-3 py-1.5 text-[13px] font-semibold text-(--cat-ink);
-}
-
-.drill-card__tag {
-  @apply min-w-0 truncate text-[13px] text-(--ink-soft);
+.drill-card .drill-card__top {
+  @apply max-w-full truncate text-xs text-(--indigo);
 }
 
 .drill-card__term {
-  @apply mt-5 flex min-w-0 flex-col gap-2;
+  @apply flex min-w-0 flex-col items-center gap-2.5 py-0.5 text-center md:py-2.5;
 }
 
 .drill-card__word {
-  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[42px] leading-[1.05] font-semibold tracking-[-0.5px];
+  @apply m-0 max-w-full text-[44px] leading-none font-extrabold tracking-[-1.5px] wrap-anywhere md:text-[56px];
 }
 
 .drill-card__pronunciation {
-  @apply flex min-w-0 items-center gap-2.5;
+  @apply flex min-w-0 items-center justify-center gap-2 text-[15px] text-(--ink-soft);
 }
 
 .drill-card__ipa {
-  @apply min-w-0 wrap-anywhere font-[family-name:var(--drill-font-ipa)] text-lg text-(--ink-soft);
+  @apply min-w-0 font-[family-name:var(--drill-font-ipa)] wrap-anywhere;
 }
 
 .drill-card__listen {
-  @apply flex size-11 shrink-0 items-center justify-center rounded-full border-0 bg-(--indigo-soft) p-0 text-(--indigo) disabled:cursor-not-allowed;
+  @apply flex size-11 shrink-0 items-center justify-center rounded-full border-0 bg-(--mint-soft) p-0 text-(--mint) disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.drill-card__speech-status {
+  @apply m-0 text-[13px] text-(--ink-soft);
 }
 
 .drill-card__answer {
-  @apply flex min-w-0 flex-col gap-4 wrap-anywhere border-t border-t-(--rule) pt-[18px];
-}
-
-.drill-card__block {
-  @apply flex flex-col gap-1;
-}
-
-.drill-card__label {
-  @apply text-xs tracking-[1.5px] text-(--ink-soft) uppercase;
+  @apply flex min-w-0 flex-col gap-1.5 border-t-[1.5px] border-dashed border-t-(--line) pt-3.5 wrap-anywhere;
 }
 
 .drill-card__meaning {
-  @apply text-lg leading-[1.4] font-semibold;
+  @apply text-xl leading-snug font-extrabold text-(--mint) md:text-[22px];
 }
 
 .drill-card__example {
-  @apply flex flex-col gap-1 rounded-2xl bg-(--ground) px-4 py-3.5;
-}
-
-.drill-card__example {
-  --es-c: 12px;
+  --es-c: 11px;
+  @apply text-sm text-(--ink-soft);
 }
 
 .drill-card__sentence {
-  @apply text-base leading-normal italic;
+  @apply text-sm leading-normal text-(--ink-soft);
+}
+
+.drill-card__sentence::before {
+  content: '“';
+}
+
+.drill-card__sentence::after {
+  content: '”';
 }
 
 .drill-card__sentence strong {
-  @apply font-bold text-(--indigo) not-italic;
-}
-
-.drill-card__hint {
-  @apply flex min-h-[120px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-[20px] border-[1.5px] border-dashed border-(--drill-edge) bg-(--ground) p-0 text-[15px] font-medium text-(--ink-soft);
-}
-
-/* Reveal action */
-
-.drill-reveal {
-  @apply flex flex-col items-stretch gap-3;
-}
-
-.drill-reveal__action {
-  @apply h-14 rounded-2xl border-0 bg-(--indigo) px-6 text-base font-bold text-(--drill-on-indigo);
-}
-
-/* Ratings */
-
-.drill-ratings {
-  @apply flex flex-col gap-2;
-}
-
-.drill-ratings__prompt {
-  @apply text-center text-[13px] text-(--ink-soft);
-}
-
-.drill-ratings__grid {
-  @apply grid grid-cols-3 gap-2.5;
-}
-
-.drill-rating {
-  @apply flex h-16 flex-col items-center justify-center gap-0.5 rounded-2xl border-0 bg-(--tone-soft) p-0 text-(--tone-ink);
-}
-
-.drill-rating__label {
-  @apply text-base font-bold;
-}
-
-.drill-rating__hint {
-  @apply text-xs;
-}
-
-/* Session summary and empty state */
-
-.drill-done {
-  @apply flex flex-1 flex-col gap-6;
-}
-
-.drill-done__body {
-  @apply flex min-w-0 flex-1 flex-col items-center justify-center gap-4 px-3 text-center;
-}
-
-.drill-done__icon {
-  @apply relative flex size-22 items-center justify-center rounded-[28px] bg-(--green-soft) text-(--drill-green-ink);
-}
-
-.drill-done__icon svg {
-  @apply size-11;
-}
-
-.drill-done__title {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[32px] font-semibold;
-}
-
-.drill-done__text {
-  @apply m-0 text-[15px] wrap-anywhere leading-normal text-(--ink-soft);
-}
-
-.drill-done__text strong {
   @apply font-bold text-(--ink);
 }
 
-.drill-done__chips {
-  @apply mt-2 flex max-w-full flex-wrap justify-center gap-2;
-}
+/* Unrevealed card on phones: tapping the dashed area shows the answer. */
 
-.drill-done__chip {
-  @apply max-w-full truncate rounded-full bg-(--tone-soft) px-3 py-1.5 text-[13px] font-semibold text-(--tone-ink);
-}
-
-.drill-done__actions {
-  @apply flex flex-col-reverse gap-3 pt-2;
-}
-
-.drill-done__primary {
-  @apply flex h-[52px] items-center justify-center rounded-[14px] bg-(--indigo) px-6 text-base font-bold text-(--drill-on-indigo);
-}
-
-.drill-done__repeat {
-  @apply h-12 cursor-pointer rounded-[14px] border-[1.5px] border-(--drill-edge) bg-transparent px-5 text-[15px] font-semibold text-(--ink);
-}
-
-.drill-done__note {
-  @apply hidden;
-}
-
-/* Desktop and tablet */
-
-@media (min-width: 761px) {
-  .drill-page {
-    @apply gap-0 p-0;
-  }
-
-  .drill-header {
-    @apply flex-wrap gap-5 border-b border-b-(--line) bg-(--surface) px-[clamp(20px,4vw,56px)] py-6;
-  }
-
-  .drill-header__close {
-    @apply h-[46px] w-auto gap-2 rounded-xl border-[1.5px] px-4 text-sm font-semibold;
-  }
-
-  .drill-header__exit {
-    @apply inline;
-  }
-
-  .drill-header__progress {
-    @apply flex-[1_1_240px] gap-4;
-  }
-
-  .drill-header__track {
-    @apply h-2.5 bg-(--rule);
-  }
-
-  .drill-header__count {
-    @apply min-w-0 text-[15px] whitespace-nowrap;
-  }
-
-  .drill-header__offline {
-    @apply inline-flex items-center gap-1.5 rounded-full bg-(--surface-muted) px-3 py-1.5 text-[13px] font-medium text-(--ink-soft);
-  }
-
-  .drill-main {
-    @apply mx-auto w-full max-w-[760px] gap-7 px-5 pt-12 pb-16;
-  }
-
-  .drill-card {
-    @apply min-h-[380px] flex-none gap-7 rounded-[32px] p-[clamp(28px,5vw,48px)];
-  }
-
-  .drill-card__tag {
-    @apply text-sm;
-  }
-
-  .drill-card__category {
-    @apply px-3.5 py-[7px];
-  }
-
-  .drill-card__term {
-    @apply mt-0 items-center gap-3 py-2 text-center;
-  }
-
-  .drill-card__word {
-    @apply text-[clamp(40px,6vw,60px)] tracking-[-1px];
-  }
-
-  .drill-card__pronunciation {
-    @apply gap-3;
-  }
-
-  .drill-card__ipa {
-    @apply text-xl;
-  }
-
-  .drill-card__listen {
-    @apply size-12;
-  }
-
-  .drill-card__listen svg {
-    @apply size-[22px];
-  }
-
-  .drill-card__answer {
-    @apply gap-[18px] pt-6;
-  }
-
-  .drill-card__block {
-    @apply gap-1.5;
-  }
-
-  .drill-card__meaning {
-    @apply text-[21px];
-  }
-
-  .drill-card__example {
-    @apply gap-1.5 rounded-[18px] px-5 py-[18px];
-  }
-
-  .drill-card__example {
-    --es-c: 14px;
-  }
-
-  .drill-card__sentence {
-    @apply text-lg;
-  }
-
-  .drill-card__hint {
-    @apply hidden;
-  }
-
-  .drill-reveal {
-    @apply items-center;
-  }
-
-  .drill-reveal__action {
-    @apply h-[58px] w-full max-w-[420px];
-  }
-
-  .drill-ratings {
-    @apply gap-3.5;
-  }
-
-  .drill-ratings__prompt {
-    @apply text-[15px];
-  }
-
-  .drill-ratings__grid {
-    @apply gap-3.5;
-  }
-
-  .drill-rating {
-    @apply h-[84px] gap-1 rounded-[18px] px-3;
-  }
-
-  .drill-rating__label {
-    @apply text-[17px];
-  }
-
-  .drill-rating__hint {
-    @apply text-[13px];
-  }
-
-  .drill-done {
-    @apply flex-none items-center gap-5 rounded-[32px] border border-(--line) bg-(--surface) p-[clamp(28px,5vw,56px)] text-center;
-  }
-
-  .drill-done__body {
-    @apply contents;
-  }
-
-  .drill-done__icon {
-    @apply size-24 rounded-[30px];
-  }
-
-  .drill-done__icon svg {
-    @apply size-12;
-  }
-
-  .drill-done__title {
-    @apply text-[40px];
-  }
-
-  .drill-done__text {
-    @apply max-w-[440px] text-[17px];
-  }
-
-  .drill-done__chips {
-    @apply mt-0 flex-wrap justify-center gap-2.5;
-  }
-
-  .drill-done__chip {
-    @apply px-3.5 py-2 text-sm;
-  }
-
-  .drill-done__actions {
-    @apply mt-2 flex-row flex-wrap justify-center pt-0;
-  }
-
-  .drill-done__primary {
-    @apply inline-flex px-7 text-[15px];
-  }
-
-  .drill-done__repeat {
-    @apply h-[52px] bg-(--surface) px-6;
-  }
-
-  .drill-done__repeat-suffix {
-    @apply hidden;
-  }
-
-  .drill-done__note {
-    @apply m-0 block text-[13px] text-(--ink-soft);
-  }
-}
-
-/* Hover feedback: buttons and rating controls */
-
-.drill-reveal__action,
-.drill-done__primary {
-  transition: var(--hover-transition);
-}
-
-.drill-done__repeat,
-.drill-header__close,
 .drill-card__hint {
-  transition: var(--hover-transition);
-}
-
-.drill-card__listen {
-  transition: var(--hover-transition);
-}
-
-.drill-rating {
+  @apply flex min-h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded-(--radius-22) border-[1.5px] border-dashed border-(--line) bg-transparent p-0 text-[15px] font-medium text-(--ink-soft) md:hidden;
   transition: var(--hover-transition);
 }
 
 @media (hover: hover) {
-  .drill-reveal__action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .drill-done__primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
-    background-color: var(--indigo-strong);
-    box-shadow: var(--hover-shadow);
-    transform: translateY(var(--lift-1));
-  }
-
-  .drill-done__repeat:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .drill-header__close:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .drill-card__hint:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
-    border-color: var(--indigo);
-    background-color: var(--indigo-soft);
+  .drill-card__hint:hover {
+    border-color: var(--hover-accent);
     color: var(--indigo);
   }
 
-  .drill-card__listen:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
-    background-color: var(--indigo);
-    color: var(--drill-on-indigo);
+  .drill-card__listen:not(:disabled):hover {
+    background-color: var(--mint);
+    color: var(--mint-soft);
   }
+}
 
-  .drill-rating:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
-    box-shadow: var(--hover-shadow);
-    transform: translateY(var(--lift-1));
-  }
+.drill-card__listen {
+  transition: var(--hover-transition);
+}
 
-  .drill-reveal__action:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
-  .drill-done__primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
-    box-shadow: none;
-    transform: none;
-  }
+/* Noma: perched on the card on phones, beside it on wider screens */
 
-  .drill-rating:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
-    box-shadow: none;
-    transform: none;
-  }
+.review-companion__badge {
+  @apply pointer-events-none absolute -top-7.5 -right-1.5 h-22.5 w-auto md:hidden;
+
+  filter: drop-shadow(0 12px 18px var(--shadow-mascot-soft));
+}
+
+.review-companion {
+  @apply hidden max-w-xs flex-[1_1_260px] flex-col items-center gap-4.5 md:flex;
+}
+
+.review-companion__bubble {
+  @apply relative m-0 rounded-[24px_24px_24px_8px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4.5 py-3 text-base leading-snug font-extrabold;
+}
+
+.review-companion__pet {
+  @apply pointer-events-none h-47.5 w-auto;
+
+  filter: drop-shadow(0 16px 24px var(--shadow-mascot-soft));
+}
+
+/* Reveal and rating area */
+
+.drill-actions {
+  @apply mt-auto flex flex-col gap-3 md:mt-0;
+}
+
+.drill-actions .drill-actions__reveal {
+  @apply h-14 w-full text-base md:mx-auto md:h-14.5 md:max-w-105;
 }
 
 /* Reveal: the answer side swings in from edge-on (rotateY) around the stable card; no rotation under reduced motion. */
@@ -612,57 +200,8 @@
   animation: drill-card-flip 450ms var(--ease-out) backwards;
 }
 
-/* Completion: the badge pops in once and a soft ring pulses outward (the single focal moment). */
-
-@keyframes drill-done-pop {
-  from {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-
-  60% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-}
-
-@keyframes drill-done-ring {
-  from {
-    opacity: 0.55;
-    transform: scale(1);
-  }
-
-  to {
-    opacity: 0;
-    transform: scale(1.7);
-  }
-}
-
-.drill-done__icon {
-  animation: drill-done-pop 600ms var(--ease-out) backwards;
-}
-
-.drill-done__icon::after {
-  position: absolute;
-  inset: 0;
-  border: 2px solid var(--green);
-  border-radius: inherit;
-  content: '';
-  opacity: 0;
-  pointer-events: none;
-  animation: drill-done-ring 800ms var(--ease-out) 350ms backwards;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .drill-card[data-revealed] {
     animation: drill-card-fade 150ms linear backwards;
-  }
-
-  .drill-done__icon {
-    animation: drill-card-fade 200ms linear backwards;
-  }
-
-  .drill-done__icon::after {
-    animation: none;
   }
 }

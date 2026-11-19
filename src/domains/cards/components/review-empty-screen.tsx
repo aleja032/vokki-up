@@ -1,25 +1,34 @@
-import Link from 'next/link';
+import { ActionPill } from '@/components/ui/action-pill';
 import { cardsMessages } from '../messages';
 import { ReviewIcon } from './review-icon';
+import './review-results.css';
 
 const messages = cardsMessages.review.empty;
 
 export function ReviewEmptyScreen() {
   return (
-    <section className="drill-done" aria-labelledby="review-empty-title">
-      <div className="drill-done__body">
-        <span className="drill-done__icon">
+    <section className="round-results" aria-labelledby="review-empty-title">
+      <div className="round-results__stage">
+        <span aria-hidden="true" className="round-results__badge">
           <ReviewIcon name="check" size={44} />
         </span>
-        <h1 className="drill-done__title" id="review-empty-title">
-          {messages.title}
-        </h1>
-        <p className="drill-done__text">{messages.body}</p>
       </div>
-      <div className="drill-done__actions">
-        <Link className="drill-done__primary" href="/cards">
-          {messages.action}
-        </Link>
+      <div className="round-results__body">
+        <header className="round-results__heading">
+          <h1 className="round-results__title" id="review-empty-title">
+            {messages.title}
+          </h1>
+        </header>
+        <p className="round-results__text">{messages.body}</p>
+        <div className="round-results__actions">
+          <ActionPill
+            className="round-results__primary"
+            href="/cards"
+            variant="cta"
+          >
+            {messages.action}
+          </ActionPill>
+        </div>
       </div>
     </section>
   );

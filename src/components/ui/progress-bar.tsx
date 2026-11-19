@@ -11,6 +11,10 @@ type ProgressBarProps = {
   tone?: Tone;
   /** When set, renders N discrete segments instead of a continuous fill. */
   segments?: number;
+  /** Segment corner style: `pill` (default) or squared `blocks`. */
+  shape?: 'pill' | 'blocks';
+  /** Segmented only: index of the segment being worked on right now. */
+  currentIndex?: number;
   className?: string;
 };
 
@@ -25,6 +29,8 @@ export function ProgressBar({
   max = 100,
   tone = 'brand',
   segments,
+  shape = 'pill',
+  currentIndex,
   className
 }: ProgressBarProps) {
   const safeMax = max > 0 ? max : 100;
@@ -43,6 +49,7 @@ export function ProgressBar({
         'progress-bar',
         `progress-bar--${tone}`,
         isSegmented && 'progress-bar--segmented',
+        isSegmented && shape === 'blocks' && 'progress-bar--blocks',
         className
       )}
       role="progressbar"
@@ -51,6 +58,7 @@ export function ProgressBar({
         Array.from({ length: segments }, (_, index) => (
           <span
             className="progress-bar__segment"
+            data-current={index === currentIndex || undefined}
             data-filled={index < filled}
             key={index}
           />

@@ -1,0 +1,18 @@
+@reference 'tailwindcss';
+
+.review-status {
+  @apply flex flex-wrap items-center gap-2.5;
+}
+
+/* Doubled classes: win over the shared pill rules whatever the load order. */
+.review-status .review-status__chip {
+  @apply px-3.5 py-2 leading-normal font-extrabold;
+}
+
+.review-status .review-status__combo {
+  @apply px-3.5 py-2 font-(family-name:--font-pixel) text-sm leading-normal tracking-[0.06em];
+}
+
+.review-status .review-status__offline {
+  @apply ml-auto bg-(--surface) font-bold text-(--ink-soft);
+}

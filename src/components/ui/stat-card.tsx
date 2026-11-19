@@ -8,6 +8,8 @@ type StatCardProps = {
   label: string;
   icon?: ReactNode;
   tone?: Tone;
+  /** `soft` is the borderless tinted tile used on the round results. */
+  variant?: 'outline' | 'soft';
   className?: string;
 };
 
@@ -16,10 +18,18 @@ export function StatCard({
   label,
   icon,
   tone = 'brand',
+  variant = 'outline',
   className
 }: StatCardProps) {
   return (
-    <article className={cn('stat-tile', `stat-tile--${tone}`, className)}>
+    <article
+      className={cn(
+        'stat-tile',
+        `stat-tile--${tone}`,
+        variant === 'soft' && 'stat-tile--soft',
+        className
+      )}
+    >
       {icon ? (
         <span aria-hidden="true" className="stat-tile__icon">
           {icon}

@@ -1,0 +1,55 @@
+@reference 'tailwindcss';
+
+.review-ratings {
+  @apply flex flex-col gap-2.5;
+}
+
+.review-ratings__prompt {
+  @apply text-center text-[13px] text-(--ink-soft) md:text-sm;
+}
+
+.review-ratings__grid {
+  @apply grid grid-cols-3 gap-2.5;
+}
+
+.review-rating {
+  --rating-ink: var(--indigo);
+  --rating-soft: var(--indigo-soft);
+  @apply flex min-h-16 min-w-0 flex-col items-center justify-center gap-px rounded-(--radius-22) border-2 border-solid border-(--rating-ink) bg-(--rating-soft) px-1.5 py-2 text-(--rating-ink);
+  transition: var(--hover-transition);
+}
+
+.review-rating[data-tone='again'] {
+  --rating-ink: var(--coral);
+  --rating-soft: var(--coral-soft);
+}
+
+.review-rating[data-tone='good'] {
+  --rating-ink: var(--mint);
+  --rating-soft: var(--mint-soft);
+}
+
+.review-rating[data-tone='easy'] {
+  --rating-ink: var(--indigo);
+  --rating-soft: var(--indigo-soft);
+}
+
+.review-rating__label {
+  @apply text-base leading-snug font-extrabold wrap-anywhere;
+}
+
+.review-rating__hint {
+  @apply text-xs font-semibold opacity-90;
+}
+
+@media (hover: hover) {
+  .review-rating:hover {
+    box-shadow: var(--hover-shadow);
+    transform: translateY(var(--lift-1));
+  }
+
+  .review-rating:active {
+    box-shadow: none;
+    transform: none;
+  }
+}

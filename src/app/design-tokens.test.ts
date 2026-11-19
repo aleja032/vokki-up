@@ -119,6 +119,7 @@ const designFixed: Record<string, string> = {
   '--cta-glow': 'rgb(47 203 155 / 0.35)',
   '--cta-fab-glow': 'rgb(47 203 155 / 0.4)',
   '--shadow-mascot': 'rgb(0 0 0 / 0.5)',
+  '--shadow-mascot-soft': 'rgb(0 0 0 / 0.4)',
   '--shadow-bubble': 'rgb(0 0 0 / 0.3)',
   '--shadow-card': 'rgb(0 0 0 / 0.28)',
   '--shadow-nav': 'rgb(0 0 0 / 0.3)',

@@ -20,6 +20,19 @@
   @apply text-[13px] leading-snug font-semibold wrap-anywhere text-(--ink-soft);
 }
 
+/* Borderless tinted tile (round results): value and label share the tone ink. */
+.stat-tile--soft {
+  @apply gap-0 rounded-(--radius-26) border-transparent bg-(--stat-bg) px-3.5 py-3 text-(--stat-fg) md:px-5 md:py-4.5;
+}
+
+.stat-tile--soft .stat-tile__value {
+  @apply text-2xl leading-[1.05] tracking-[-1px] text-(--stat-fg) md:text-[32px];
+}
+
+.stat-tile--soft .stat-tile__label {
+  @apply font-bold text-(--stat-fg);
+}
+
 .stat-tile--mint {
   --stat-bg: var(--mint-soft);
   --stat-fg: var(--mint);

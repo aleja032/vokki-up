@@ -1,0 +1,22 @@
+@reference 'tailwindcss';
+
+.review-header {
+  @apply flex flex-wrap items-center gap-3 md:gap-5;
+}
+
+/* Doubled class: wins over the shared pill rules whatever the load order. */
+.review-header .review-header__exit {
+  @apply border-[1.5px] bg-(--surface) px-3 text-[15px] font-bold md:px-4.5;
+}
+
+.review-header__exit-text {
+  @apply hidden md:inline;
+}
+
+.review-header__progress {
+  @apply min-w-0 flex-1;
+}
+
+.review-header__count {
+  @apply text-sm font-extrabold whitespace-nowrap;
+}

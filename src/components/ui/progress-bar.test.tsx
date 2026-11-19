@@ -61,4 +61,29 @@ describe('ProgressBar', () => {
     expect(html).not.toContain('progress-bar__fill');
     expect(html).not.toContain('style=');
   });
+
+  it('marks the current segment and the squared blocks shape', () => {
+    const html = renderToStaticMarkup(
+      <ProgressBar
+        currentIndex={1}
+        label="Ronda"
+        max={4}
+        segments={4}
+        shape="blocks"
+        value={2}
+      />
+    );
+
+    expect(html.match(/data-current="true"/g)).toHaveLength(1);
+    expect(html).toContain('progress-bar--blocks');
+  });
+
+  it('ignores shape and current segment when continuous', () => {
+    const html = renderToStaticMarkup(
+      <ProgressBar currentIndex={0} label="x" shape="blocks" value={1} />
+    );
+
+    expect(html).not.toContain('progress-bar--blocks');
+    expect(html).not.toContain('data-current');
+  });
 });

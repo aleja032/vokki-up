@@ -1,0 +1,146 @@
+@reference 'tailwindcss';
+
+/*
+ * Round results (proposal D "Resultados", web and mobile) and the empty state
+ * that reuses the same frame. Mobile: stacked and centered, the main action
+ * pinned to the bottom. From 768px: Noma on the left, content on the right.
+ */
+
+.round-results {
+  @apply mx-auto flex w-full max-w-240 flex-1 flex-col items-center gap-4 md:my-auto md:flex-none md:flex-row md:flex-wrap md:justify-center md:gap-9 md:py-4;
+}
+
+.round-results__stage {
+  @apply relative flex flex-col items-center gap-1.5 md:flex-[1_1_300px] md:gap-2;
+}
+
+.round-results__glow {
+  @apply pointer-events-none absolute -top-5 size-70 md:size-90;
+
+  background: radial-gradient(circle, var(--hero-glow), transparent 66%);
+}
+
+.round-results__pet {
+  @apply pointer-events-none relative h-42.5 w-auto md:h-62.5;
+
+  filter: drop-shadow(0 20px 30px var(--shadow-mascot-soft));
+}
+
+.round-results__body {
+  @apply flex w-full min-w-0 flex-1 flex-col gap-4 md:flex-[1_1_420px] md:gap-5.5;
+}
+
+.round-results__heading {
+  @apply text-center md:text-left;
+}
+
+.round-results .round-results__kicker {
+  @apply text-xs text-(--indigo) md:text-[13px];
+}
+
+.round-results__title {
+  @apply m-0 mt-0.5 text-[30px] leading-[1.08] font-bold tracking-[-0.9px] wrap-anywhere md:text-[44px] md:leading-[1.05] md:tracking-[-1.4px];
+}
+
+.round-results__stats {
+  @apply flex gap-2 md:flex-wrap md:gap-3;
+}
+
+.round-results__stats > * {
+  @apply min-w-0 flex-1 md:basis-37.5;
+}
+
+.round-results__text {
+  @apply m-0 text-center text-[15px] leading-normal wrap-anywhere text-(--ink-soft) md:text-left;
+}
+
+.round-results__text strong {
+  @apply font-bold text-(--ink);
+}
+
+.round-results__chips {
+  @apply flex flex-wrap justify-center gap-2 md:justify-start;
+}
+
+.round-results__actions {
+  @apply mt-auto flex flex-col-reverse items-stretch gap-3 md:mt-0 md:flex-row md:flex-wrap md:items-center md:gap-4;
+}
+
+.round-results .round-results__primary {
+  @apply w-full px-7.5 py-4.5 text-lg md:w-auto md:self-start;
+}
+
+.round-results__repeat-suffix {
+  @apply md:hidden;
+}
+
+.round-results__note {
+  @apply m-0 hidden text-[13px] text-(--ink-soft) md:block;
+}
+
+/* Empty state badge */
+
+.round-results__badge {
+  @apply relative flex size-22 items-center justify-center rounded-(--radius-28) bg-(--mint-soft) text-(--mint) md:size-24 md:rounded-(--radius-30);
+}
+
+.round-results__badge svg {
+  @apply size-11 md:size-12;
+}
+
+/* The badge pops in once and a soft ring pulses outward (the single focal moment). */
+
+@keyframes round-badge-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes round-badge-ring {
+  from {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+@keyframes round-badge-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.round-results__badge {
+  animation: round-badge-pop 600ms var(--ease-out) backwards;
+}
+
+.round-results__badge::after {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--urgency-green);
+  border-radius: inherit;
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+  animation: round-badge-ring 800ms var(--ease-out) 350ms backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .round-results__badge {
+    animation: round-badge-fade 200ms linear backwards;
+  }
+
+  .round-results__badge::after {
+    animation: none;
+  }
+}

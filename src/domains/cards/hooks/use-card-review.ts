@@ -29,6 +29,12 @@ import { serializeSyncPayload } from '@/lib/sync/change-builders';
 import { writeBrowserValue } from '@/lib/storage/browser-storage';
 import { cardsMessages } from '../messages';
 import { resolveReviewExit } from '../review-exit';
+import { getCardMemory } from '../card-memory';
+import {
+  recordMemoryGain,
+  selectMemoryGains,
+  type MemoryGain
+} from '../review-memory-gains';
 
 export type ReviewRating = Exclude<CardRating, 'hard'>;
 
@@ -111,6 +117,8 @@ export function useCardReview() {
     good: 0,
     easy: 0
   });
+  const [combo, setCombo] = useState({ current: 0, best: 0 });
+  const [memoryGains, setMemoryGains] = useState<MemoryGain[]>([]);
   const card: VocabularyCard | undefined = queue[index];
 
   useEffect(() => {
@@ -162,6 +170,19 @@ export function useCardReview() {
         rating,
         reviewedAt
       });
+      const isRecalled = rating === 'good' || rating === 'easy';
+      setCombo(current => {
+        const next = isRecalled ? current.current + 1 : 0;
+        return { current: next, best: Math.max(current.best, next) };
+      });
+      setMemoryGains(current =>
+        recordMemoryGain(current, {
+          cardId: card.id,
+          term: card.term,
+          from: getCardMemory(schedules[card.id]).level,
+          to: getCardMemory(schedule).level
+        })
+      );
       setSchedules(current => ({ ...current, [card.id]: schedule }));
       enqueueLocalSyncOperation({
         entityType: 'card-schedule',
@@ -274,6 +295,8 @@ export function useCardReview() {
     setQueue(sessionCards);
     setIndex(0);
     setRatings({ again: 0, hard: 0, good: 0, easy: 0 });
+    setCombo({ current: 0, best: 0 });
+    setMemoryGains([]);
     setIsRevealed(false);
   }
 
@@ -309,6 +332,10 @@ export function useCardReview() {
       card
         ? getNextIntervalLabel(card, rating, schedules[card.id])
         : intervalMessages.again,
+    memory: card ? getCardMemory(schedules[card.id]) : undefined,
+    combo: combo.current,
+    bestCombo: combo.best,
+    memoryGains: selectMemoryGains(memoryGains),
     results: {
       reviewed: reviewedCount,
       hard: ratings.again + ratings.hard,

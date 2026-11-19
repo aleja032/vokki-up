@@ -1,0 +1,37 @@
+@reference 'tailwindcss';
+
+.memory-gains {
+  @apply flex flex-col gap-2;
+}
+
+.memory-gains__title {
+  @apply m-0 text-sm font-semibold;
+}
+
+.memory-gains .memory-gains__label {
+  @apply text-sm text-(--indigo);
+}
+
+.memory-gains__list {
+  @apply m-0 flex list-none flex-col gap-2 p-0;
+}
+
+.memory-gains__item {
+  @apply flex items-center justify-between gap-3 rounded-[20px] bg-(--surface-muted) px-4 py-3;
+}
+
+.memory-gains__term {
+  @apply min-w-0 text-base font-extrabold wrap-anywhere;
+}
+
+.memory-gains__levels {
+  @apply flex shrink-0 items-center gap-2 text-(--ink-soft);
+}
+
+.memory-gains__bar {
+  @apply h-[9px] w-14.5 flex-none gap-0.5;
+}
+
+.memory-gains__arrow {
+  @apply shrink-0;
+}

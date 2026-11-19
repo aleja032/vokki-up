@@ -6,6 +6,7 @@ import { ReviewCardScreen } from './review-card-screen';
 import { ReviewCompleteScreen } from './review-complete-screen';
 import { ReviewEmptyScreen } from './review-empty-screen';
 import { ReviewHeader } from './review-header';
+import { ReviewStatusChips } from './review-status-chips';
 import './review.css';
 
 export function CardReview() {
@@ -21,38 +22,57 @@ export function CardReview() {
     );
   }
 
+  const isReviewing = review.status === 'reviewing';
+  const isComplete = review.status === 'complete';
+  const { results } = review;
+
   return (
     <div className="drill-page">
-      <ReviewHeader
-        position={review.position}
-        total={review.total}
-        progress={review.status === 'reviewing' ? review.progress : 100}
-        exitHref={review.reviewExit.href}
-      />
-      <main className="drill-main">
-        {review.status === 'empty' && <ReviewEmptyScreen />}
-        {review.status === 'complete' && (
-          <ReviewCompleteScreen
-            reviewed={review.results.reviewed}
-            hard={review.results.hard}
-            good={review.results.good}
-            easy={review.results.easy}
-            streakDays={review.streakDays}
-            onRestart={review.restart}
+      <div className="drill-shell">
+        {!isComplete && (
+          <ReviewHeader
+            position={review.position}
+            total={review.total}
+            isReviewing={isReviewing}
             exitHref={review.reviewExit.href}
-            exitTarget={review.reviewExit.target}
           />
         )}
-        {review.status === 'reviewing' && review.card && (
-          <ReviewCardScreen
-            card={review.card}
-            isRevealed={review.isRevealed}
-            getIntervalLabel={review.getIntervalLabel}
-            onReveal={review.reveal}
-            onRate={review.rate}
+        {isReviewing && (
+          <ReviewStatusChips
+            combo={review.combo}
+            correct={results.good + results.easy}
+            reviewed={results.reviewed}
           />
         )}
-      </main>
+        <main className="drill-main">
+          {review.status === 'empty' && <ReviewEmptyScreen />}
+          {isComplete && (
+            <ReviewCompleteScreen
+              reviewed={results.reviewed}
+              hard={results.hard}
+              good={results.good}
+              easy={results.easy}
+              streakDays={review.streakDays}
+              bestCombo={review.bestCombo}
+              memoryGains={review.memoryGains}
+              onRestart={review.restart}
+              exitHref={review.reviewExit.href}
+              exitTarget={review.reviewExit.target}
+            />
+          )}
+          {isReviewing && review.card && (
+            <ReviewCardScreen
+              card={review.card}
+              isRevealed={review.isRevealed}
+              memory={review.memory}
+              combo={review.combo}
+              getIntervalLabel={review.getIntervalLabel}
+              onReveal={review.reveal}
+              onRate={review.rate}
+            />
+          )}
+        </main>
+      </div>
     </div>
   );
 }
