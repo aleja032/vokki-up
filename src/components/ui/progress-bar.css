@@ -1,0 +1,48 @@
+@reference 'tailwindcss';
+
+.progress-bar {
+  --bar-fill: var(--brand);
+  @apply flex h-2.5 w-full gap-1 overflow-hidden rounded-(--radius-pill) bg-(--track);
+}
+
+.progress-bar__fill {
+  @apply block h-full rounded-(--radius-pill) bg-(--bar-fill);
+  width: calc(var(--progress, 0) * 1%);
+  transition: width 400ms var(--ease-out);
+}
+
+.progress-bar--segmented {
+  @apply overflow-visible bg-transparent;
+}
+
+.progress-bar__segment {
+  @apply h-full flex-1 rounded-(--radius-pill) bg-(--track);
+  transition: background-color 200ms var(--ease-out);
+}
+
+.progress-bar__segment[data-filled='true'] {
+  @apply bg-(--bar-fill);
+}
+
+.progress-bar--mint {
+  --bar-fill: var(--urgency-green);
+}
+
+.progress-bar--amber {
+  --bar-fill: var(--urgency-amber);
+}
+
+.progress-bar--coral {
+  --bar-fill: var(--urgency-coral);
+}
+
+.progress-bar--brand {
+  --bar-fill: var(--brand);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-bar__fill,
+  .progress-bar__segment {
+    transition: none;
+  }
+}

@@ -1,0 +1,5 @@
+@reference 'tailwindcss';
+
+.pixel-label {
+  @apply font-(family-name:--font-pixel) text-[11px] leading-none tracking-[0.08em] text-(--ink-soft) uppercase;
+}

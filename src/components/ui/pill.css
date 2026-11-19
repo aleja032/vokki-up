@@ -1,0 +1,29 @@
+@reference 'tailwindcss';
+
+.pill {
+  @apply inline-flex min-h-7 items-center gap-1.5 rounded-(--radius-pill) px-3 text-[13px] leading-none font-bold whitespace-nowrap;
+}
+
+.pill__icon {
+  @apply inline-flex shrink-0 items-center justify-center;
+}
+
+.pill--neutral {
+  @apply bg-(--surface-muted) text-(--ink-soft);
+}
+
+.pill--mint {
+  @apply bg-(--mint-soft) text-(--mint);
+}
+
+.pill--amber {
+  @apply bg-(--amber-soft) text-(--amber-ink);
+}
+
+.pill--coral {
+  @apply bg-(--coral-soft) text-(--coral);
+}
+
+.pill--brand {
+  @apply bg-(--indigo-soft) text-(--brand);
+}

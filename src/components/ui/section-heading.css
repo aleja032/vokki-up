@@ -1,0 +1,17 @@
+@reference 'tailwindcss';
+
+.section-title {
+  @apply flex items-end justify-between gap-3;
+}
+
+.section-title__copy {
+  @apply flex min-w-0 flex-col gap-1.5;
+}
+
+.section-title__text {
+  @apply m-0 text-[19px] leading-tight font-extrabold wrap-anywhere text-(--ink);
+}
+
+.section-title__action {
+  @apply inline-flex min-h-11 shrink-0 items-center text-[13px] font-semibold text-(--brand);
+}

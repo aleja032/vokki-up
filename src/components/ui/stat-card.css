@@ -1,0 +1,41 @@
+@reference 'tailwindcss';
+
+/* Named `stat-tile`: the legacy global `.stat-card` rules in the home domain
+   must keep working unchanged until it migrates to this component. */
+.stat-tile {
+  --stat-bg: var(--indigo-soft);
+  --stat-fg: var(--brand);
+  @apply flex min-w-0 flex-col gap-1 rounded-(--radius-22) border border-solid border-(--line) bg-(--surface) p-4;
+}
+
+.stat-tile__icon {
+  @apply mb-2 flex size-10 items-center justify-center rounded-(--radius-14) bg-(--stat-bg) text-(--stat-fg);
+}
+
+.stat-tile__value {
+  @apply text-[26px] leading-none font-extrabold wrap-anywhere text-(--ink) tabular-nums;
+}
+
+.stat-tile__label {
+  @apply text-[13px] leading-snug font-semibold wrap-anywhere text-(--ink-soft);
+}
+
+.stat-tile--mint {
+  --stat-bg: var(--mint-soft);
+  --stat-fg: var(--mint);
+}
+
+.stat-tile--amber {
+  --stat-bg: var(--amber-soft);
+  --stat-fg: var(--amber-ink);
+}
+
+.stat-tile--coral {
+  --stat-bg: var(--coral-soft);
+  --stat-fg: var(--coral);
+}
+
+.stat-tile--brand {
+  --stat-bg: var(--indigo-soft);
+  --stat-fg: var(--brand);
+}

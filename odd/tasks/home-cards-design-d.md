@@ -27,7 +27,7 @@ Design source: Artifact `claude.ai/artifact/3a7006b7-7d22-4861-9760-c4398e2bae6f
 ## Tasks
 
 - [x] T1 Foundations: D palettes (light and dark) as semantic tokens, radii scale, urgency/mint/coral families, Plus Jakarta Sans + Pixelify Sans via next/font, motion keyframes with reduced-motion fallbacks.
-- [ ] T2 Shared atoms/molecules in `src/components`: progress bar (continuous and segmented), stat card, section heading, pixel label, pill; tests.
+- [x] T2 Shared atoms/molecules in `src/components`: progress bar (continuous and segmented), stat card, section heading, pixel label, pill; tests.
 - [ ] T3 Data contracts in `src/app` container: due-cards hand, accuracy, notes count; keep existing summary fields.
 - [ ] T4 Home layout: header streak pill, hero with CTA, due-cards hand, daily goal with chest, stats, week chart, today activity; mobile stacked + bottom nav FAB; every current action preserved.
 - [ ] T5 Cards (Mi mazo) layout per `VokkiDMazo*`; all current actions preserved (groups, add hub, library, delete, manage, review).
