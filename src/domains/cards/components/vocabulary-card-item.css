@@ -164,7 +164,7 @@
 
 @media (min-width: 761px) {
   .deck-card {
-    @apply row-span-3 grid grid-rows-subgrid items-start gap-1.25 rounded-(--card-radius) border-[1.5px] bg-(--surface) px-4 pt-4.5 pb-4;
+    @apply row-span-6 grid grid-rows-subgrid items-start gap-1.25 rounded-(--card-radius) border-[1.5px] bg-(--surface) px-4 pt-4.5 pb-4;
     transition:
       translate 180ms var(--ease-out),
       border-color 180ms var(--ease-out),
@@ -179,24 +179,43 @@
     @apply flex;
   }
 
+  /* The body dissolves so term, meaning, IPA and example each take their own
+     shared subgrid row (top 1, term 2, meaning 3, IPA 4, example 5, footer 6). */
+  .deck-card__top {
+    grid-row: 1;
+  }
+
   .deck-card__body {
-    @apply gap-1.25;
+    @apply contents;
   }
 
   .deck-card__term {
     @apply mt-1 line-clamp-2 text-[22px] leading-[1.1] tracking-[-0.5px];
+    grid-row: 2;
   }
 
   .deck-card__meaning {
     @apply line-clamp-3 text-[14px] leading-snug font-bold text-(--ink);
+    grid-row: 3;
   }
 
   .deck-card__ipa {
     @apply line-clamp-2 block;
+    grid-row: 4;
   }
 
   .deck-card__example {
-    @apply block;
+    @apply block self-stretch;
+    grid-row: 5;
+  }
+
+  /* The eye toggle sits centered under the example instead of floating right. */
+  .deck-card__example .es-toggle__row {
+    @apply flex-col items-stretch gap-0;
+  }
+
+  .deck-card__example .es-toggle__button {
+    @apply mx-auto mt-1 mb-0;
   }
 
   .deck-card__example-text {
@@ -205,6 +224,7 @@
 
   .deck-card__footer {
     @apply mt-auto items-stretch gap-1.5 pt-2;
+    grid-row: 6;
   }
 
   .deck-card__group {
