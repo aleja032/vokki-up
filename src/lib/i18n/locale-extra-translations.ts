@@ -336,7 +336,25 @@ export const extraTranslations: Record<string, string> = {
   // Home
   días: 'days',
   'Todo al día': 'All caught up',
-  'Empezar ahora': 'Start now'
+  'Empezar ahora': 'Start now',
+  'palabras por': 'words to',
+  'palabra por': 'word to',
+  rescatar: 'rescue',
+  'Tu mano de hoy ya está lista.': 'Your hand for today is ready.',
+  'Noma, tu compañera de repaso': 'Noma, your review companion',
+  'Por repasar · tu mano de hoy': 'To review · your hand for today',
+  'Mientras más baja la barra de memoria, más urgente.':
+    'The lower the memory bar, the more urgent.',
+  'Tu mano de hoy está vacía.': 'Your hand for today is empty.',
+  'Se olvida hoy': 'Fading today',
+  'Repasa hoy': 'Review today',
+  '¡Meta cumplida! Abriste el cofre.': 'Goal reached! You opened the chest.',
+  'Aciertos esta semana': 'Accuracy this week',
+  'Empezar ronda': 'Start round',
+  Ronda: 'Round',
+  Mundos: 'Worlds',
+  'En curso': 'In progress',
+  'Sin empezar': 'Not started'
 };
 
 // Interpolated messages: [Spanish pattern, English replacement].
@@ -427,5 +445,9 @@ export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
   [/^(\d+) KB · lista para analizar$/, '$1 KB · ready to analyze'],
   [/^(\d+) seleccionadas · (\d+) encontradas$/, '$1 selected · $2 found'],
   [/^(\d+) pendientes de revisar$/, '$1 left to review'],
-  [/^(\d+) pendientes · disponible offline$/, '$1 pending · available offline']
+  [/^(\d+) pendientes · disponible offline$/, '$1 pending · available offline'],
+  [/^Ver todas \((\d+)\)$/, 'See all ($1)'],
+  [/^Memoria (\d+) de 5$/, 'Memory $1 of 5'],
+  [/^Racha de (\d+) días$/, '$1-day streak'],
+  [/^(\d+) \/ (\d+) tarjetas$/, '$1 / $2 cards']
 ];

@@ -13,7 +13,10 @@ const summary: HomeSummary = {
   wordsSeen: 10,
   masteredWords: 4,
   weeklyMinutes: 12,
-  weeklyActivity: []
+  weeklyActivity: [],
+  dueHand: [],
+  weeklyAccuracy: null,
+  worlds: []
 };
 
 describe('HomeDashboard intro action', () => {

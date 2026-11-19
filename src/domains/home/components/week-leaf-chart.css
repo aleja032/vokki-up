@@ -1,0 +1,93 @@
+@reference 'tailwindcss';
+
+.week-leaf {
+  @apply flex min-w-0 flex-col gap-4 rounded-(--radius-36) border border-solid border-(--line) bg-(--surface) p-5;
+}
+
+.week-leaf .section-title__text--pixel {
+  @apply text-(--indigo);
+}
+
+.week-leaf__caption {
+  @apply m-0 text-[13px] text-(--ink-soft);
+}
+
+.week-leaf__chart {
+  @apply block h-auto w-full overflow-visible;
+}
+
+.week-leaf__stop--top {
+  stop-color: var(--urgency-green);
+  stop-opacity: 0.28;
+}
+
+.week-leaf__stop--bottom {
+  stop-color: var(--urgency-green);
+  stop-opacity: 0;
+}
+
+.week-leaf__area {
+  fill: url(#week-leaf-fill);
+}
+
+.week-leaf__baseline {
+  fill: none;
+  stroke: var(--track);
+  stroke-width: 2;
+  stroke-dasharray: 2 7;
+  stroke-linecap: round;
+}
+
+.week-leaf__line {
+  fill: none;
+  stroke: var(--mint);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+
+.week-leaf__leaf {
+  fill: var(--urgency-green);
+}
+
+.week-leaf__leaf[data-today='true'] {
+  fill: color-mix(in srgb, var(--urgency-green) 25%, transparent);
+  stroke: var(--urgency-green);
+  stroke-width: 2.2;
+  stroke-dasharray: 4 3;
+}
+
+.week-leaf__vein {
+  fill: none;
+  stroke: var(--mint);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.week-leaf__empty {
+  fill: var(--surface);
+  stroke: var(--ink-soft);
+  stroke-width: 2.5;
+}
+
+.week-leaf__count,
+.week-leaf__day {
+  fill: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  text-anchor: middle;
+}
+
+.week-leaf__count {
+  font-weight: 800;
+}
+
+.week-leaf__day[data-today='true'] {
+  fill: var(--mint);
+  font-weight: 800;
+}
+
+@media (min-width: 768px) {
+  .week-leaf {
+    @apply p-6.5;
+  }
+}

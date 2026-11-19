@@ -1,0 +1,81 @@
+import Image from 'next/image';
+import Link from 'next/link';
+import { Play } from 'lucide-react';
+import { PixelLabel } from '@/components/ui/pixel-label';
+import { Pill } from '@/components/ui/pill';
+import { homeDashboardData } from '../data';
+import type { HomeDashboardData } from '../types';
+import './hero-panel.css';
+
+const { copy } = homeDashboardData;
+
+export function HeroPanel({
+  data
+}: {
+  data: HomeDashboardData['nextSession'];
+}) {
+  const dueCount = data.pendingCount + data.newCount;
+
+  return (
+    <section aria-labelledby="hero-title" className="hero-panel">
+      <div aria-hidden="true" className="hero-panel__backdrop">
+        <span className="hero-panel__scene">
+          <Image
+            alt=""
+            className="hero-panel__world"
+            fill
+            sizes="(min-width: 768px) 60vw, 100vw"
+            src="/images/world-daily.png"
+            unoptimized
+          />
+        </span>
+        <span className="hero-panel__shade" />
+        <span className="hero-panel__glow" />
+        <span className="hero-panel__star motion-twinkle" />
+      </div>
+      <Image
+        alt={copy.heroMascotAlt}
+        className="hero-panel__mascot motion-mascot-bob"
+        height={587}
+        priority
+        src="/images/noma.png"
+        width={700}
+      />
+      {dueCount > 0 ? (
+        <p className="hero-panel__bubble">{copy.heroBubble}</p>
+      ) : null}
+      <div className="hero-panel__copy">
+        <PixelLabel className="hero-panel__kicker">
+          {copy.nextSessionHeading}
+        </PixelLabel>
+        <h1 className="hero-panel__title" id="hero-title">
+          {dueCount > 0 ? (
+            <>
+              {dueCount} {copy.heroTitleLead(dueCount)}{' '}
+              <span className="hero-panel__accent">{copy.heroTitleAccent}</span>{' '}
+              {copy.heroTitleTail}
+            </>
+          ) : (
+            data.title
+          )}
+        </h1>
+        <p className="hero-panel__lead">{copy.nextSessionDescription}</p>
+        <ul className="hero-panel__chips">
+          <li>
+            <Pill>{copy.pendingChip(data.pendingCount)}</Pill>
+          </li>
+          <li>
+            <Pill>{copy.newChip(data.newCount)}</Pill>
+          </li>
+          <li>
+            <Pill>{copy.minutesChip(data.estimatedMinutes)}</Pill>
+          </li>
+        </ul>
+        <Link className="hero-panel__cta motion-cta-pulse" href={data.href}>
+          <Play aria-hidden="true" fill="currentColor" size={18} />
+          {copy.startRound}
+        </Link>
+      </div>
+    </section>
+  );
+}

@@ -8,6 +8,8 @@ type SectionHeadingProps = {
   kicker?: string;
   action?: ReactNode;
   as?: 'h2' | 'h3';
+  /** Sets the title in the pixel font, uppercase, like a game label. */
+  pixel?: boolean;
   className?: string;
 };
 
@@ -18,13 +20,21 @@ export function SectionHeading({
   kicker,
   action,
   as: Heading = 'h2',
+  pixel = false,
   className
 }: SectionHeadingProps) {
   return (
     <header className={cn('section-title', className)}>
       <div className="section-title__copy">
         {kicker ? <PixelLabel>{kicker}</PixelLabel> : null}
-        <Heading className="section-title__text">{title}</Heading>
+        <Heading
+          className={cn(
+            'section-title__text',
+            pixel && 'section-title__text--pixel'
+          )}
+        >
+          {title}
+        </Heading>
       </div>
       {action ? <div className="section-title__action">{action}</div> : null}
     </header>

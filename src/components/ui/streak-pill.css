@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+.streak-pill {
+  @apply inline-flex;
+}
+
+.streak-pill .pill {
+  @apply min-h-9 px-3.5 text-[14px] font-extrabold;
+}

@@ -1,0 +1,55 @@
+@reference 'tailwindcss';
+
+/* Greeting row above the hero. The library action only shows on wide screens;
+   phones reach the library from the navigation. */
+
+.home-intro {
+  @apply mt-2 flex flex-wrap items-center justify-between gap-4;
+}
+
+.home-intro__copy {
+  @apply m-0 flex min-w-0 flex-col text-[14px] wrap-anywhere text-(--ink-soft);
+}
+
+.home-intro__greeting {
+  @apply text-[20px] leading-tight font-extrabold text-(--ink);
+}
+
+.home-intro__support--wide,
+.home-intro__actions {
+  @apply hidden;
+}
+
+.home-intro__action {
+  transition: var(--hover-transition);
+}
+
+@media (min-width: 761px) {
+  .home-intro__actions {
+    @apply flex items-center gap-3;
+  }
+
+  .home-intro__copy {
+    @apply text-[15px];
+  }
+
+  .home-intro:has(.home-intro__support--wide) .home-intro__support--light {
+    @apply hidden;
+  }
+
+  .home-intro:has(.home-intro__support--wide) .home-intro__support--wide {
+    @apply inline;
+  }
+
+  .home-intro__action {
+    @apply inline-flex min-h-11 items-center gap-2 rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-(--surface) px-5 text-[14px] font-bold text-(--ink);
+  }
+}
+
+@media (hover: hover) {
+  .home-intro__action:hover {
+    border-color: var(--brand);
+    background-color: var(--indigo-soft);
+    color: var(--brand);
+  }
+}

@@ -1,0 +1,36 @@
+@reference 'tailwindcss';
+
+.worlds-row {
+  @apply flex min-w-0 flex-col gap-3;
+}
+
+.worlds-row__title {
+  @apply m-0 flex items-center gap-2 px-1 text-[21px] font-extrabold tracking-[-0.02em] text-(--ink);
+}
+
+.worlds-row__title svg {
+  @apply text-(--mint);
+}
+
+/* Phones: one row you scroll sideways. */
+.worlds-row__list {
+  @apply -mr-3.5 flex snap-x gap-3 overflow-x-auto pt-1 pr-3.5 pb-2.5;
+}
+
+.worlds-row__list > * {
+  @apply snap-start;
+}
+
+@media (min-width: 768px) {
+  .worlds-row {
+    @apply gap-4.5;
+  }
+
+  .worlds-row__title {
+    @apply text-[26px];
+  }
+
+  .worlds-row__list {
+    @apply mr-0 grid grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] gap-5.5 overflow-visible p-0;
+  }
+}

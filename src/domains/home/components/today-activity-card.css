@@ -1,0 +1,71 @@
+@reference 'tailwindcss';
+
+.today-activity {
+  @apply flex min-w-0 flex-col gap-3 rounded-(--radius-36) border border-solid border-(--line) bg-(--surface) p-5;
+}
+
+.today-activity .section-title__text--pixel {
+  @apply text-(--indigo);
+}
+
+.activity-list {
+  @apply flex flex-col gap-2.5;
+}
+
+.activity-item {
+  @apply flex min-h-14 items-center gap-3.5 rounded-(--radius-22) bg-(--surface-muted) px-4 py-3.5 text-(--ink);
+  --press-scale: 0.99;
+  transition: var(--hover-transition);
+}
+
+.activity-item__icon {
+  @apply flex size-11 flex-none items-center justify-center rounded-(--radius-14);
+}
+
+.activity-item__icon[data-icon='cards'] {
+  @apply bg-(--coral-soft) text-(--coral);
+}
+
+.activity-item__icon[data-icon='writing'] {
+  @apply bg-(--amber-soft) text-(--amber-ink);
+}
+
+.activity-item__icon[data-icon='notes'] {
+  @apply bg-(--indigo-soft) text-(--indigo);
+}
+
+.activity-item__copy {
+  @apply flex min-w-0 flex-1 flex-col;
+}
+
+.activity-item__copy strong {
+  @apply text-[15px] font-bold wrap-anywhere;
+}
+
+.activity-item__copy > span {
+  @apply text-[13px] wrap-anywhere text-(--ink-soft);
+}
+
+.activity-item__arrow {
+  @apply flex-none text-(--ink-soft);
+}
+
+@media (min-width: 768px) {
+  .today-activity {
+    @apply p-6.5;
+  }
+}
+
+@media (hover: hover) {
+  .activity-item:hover {
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--line) 40%, var(--brand)),
+      var(--hover-shadow);
+    transform: translateY(var(--lift-2));
+  }
+
+  .activity-item:active {
+    box-shadow: none;
+    transform: none;
+  }
+}

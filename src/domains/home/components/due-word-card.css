@@ -1,0 +1,90 @@
+@reference 'tailwindcss';
+
+.due-card {
+  --due-accent: var(--brand);
+  @apply relative box-border flex h-51.5 w-35.5 flex-none flex-col justify-between rounded-(--radius-26) border-2 border-solid border-(--due-accent) px-4 pt-4 pb-4.5 text-(--ink);
+  background: linear-gradient(
+    180deg,
+    var(--surface-muted) 0%,
+    var(--surface) 100%
+  );
+  box-shadow:
+    0 14px 28px color-mix(in srgb, var(--ink) 18%, transparent),
+    0 0 0 3px var(--ground);
+  transition:
+    translate 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out),
+    border-color 180ms var(--ease-out);
+}
+
+.due-card[data-tone='coral'] {
+  --due-accent: var(--urgency-coral);
+}
+
+.due-card[data-tone='amber'] {
+  --due-accent: var(--urgency-amber);
+}
+
+.due-card[data-tone='mint'] {
+  --due-accent: var(--urgency-green);
+}
+
+.due-card__tag {
+  @apply text-(--indigo);
+}
+
+.due-card__word {
+  @apply flex min-w-0 flex-col items-center gap-1 text-center;
+}
+
+.due-card__term {
+  @apply max-w-full text-[20px] leading-[1.1] font-extrabold tracking-[-0.02em] wrap-anywhere;
+}
+
+.due-card__ipa {
+  @apply max-w-full text-[12px] wrap-anywhere text-(--ink-soft);
+}
+
+.due-card__footer {
+  @apply flex flex-col items-center gap-1.5;
+}
+
+.due-card__memory {
+  @apply w-20;
+}
+
+.due-card__memory .progress-bar__segment {
+  @apply rounded-[3px];
+}
+
+.due-card__due {
+  @apply text-[11px] text-(--ink-soft);
+}
+
+.due-card[data-tone='coral'] .due-card__due {
+  @apply text-(--coral);
+}
+
+.due-card[data-tone='amber'] .due-card__due {
+  @apply text-(--amber-ink);
+}
+
+.due-card[data-tone='brand'] .due-card__due {
+  @apply text-(--indigo);
+}
+
+@media (hover: hover) {
+  .due-card:hover {
+    translate: 0 var(--hover-lift);
+    border-color: var(--brand);
+    box-shadow:
+      0 14px 30px color-mix(in srgb, var(--brand) 25%, transparent),
+      0 0 0 3px var(--ground);
+  }
+}
+
+@media (min-width: 768px) {
+  .due-card {
+    @apply h-56 w-40;
+  }
+}

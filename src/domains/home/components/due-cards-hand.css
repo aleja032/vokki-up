@@ -1,0 +1,91 @@
+@reference 'tailwindcss';
+
+.due-hand {
+  @apply flex min-w-0 flex-col gap-1.5 overflow-hidden rounded-(--radius-34) border border-solid border-(--line) bg-(--surface) py-5.5;
+}
+
+.due-hand > .section-title,
+.due-hand__hint,
+.due-hand__empty {
+  @apply px-5;
+}
+
+.due-hand .section-title__text--pixel {
+  @apply text-[15px] text-(--coral);
+}
+
+.due-hand .section-title__action {
+  @apply text-[13px] font-bold text-(--mint);
+}
+
+.due-hand__hint {
+  @apply m-0 text-[13.5px] text-(--ink-soft);
+}
+
+.due-hand__empty {
+  @apply m-0 py-8 text-center text-(--ink-soft);
+}
+
+/* The hand fans out in a sideways-scrolling row on phones, centered on desktop. */
+.due-hand__fan {
+  @apply m-0 flex snap-x list-none gap-0 overflow-x-auto px-8 pt-5 pb-4;
+}
+
+.due-hand__item {
+  @apply -ml-3.5 flex-none snap-center first:ml-0;
+  transform: translateY(var(--drop, 0)) rotate(var(--tilt, 0deg));
+}
+
+.due-hand__item[data-tilt='-6'] {
+  --tilt: -6deg;
+  --drop: 16px;
+}
+
+.due-hand__item[data-tilt='-4'] {
+  --tilt: -4deg;
+  --drop: 10px;
+}
+
+.due-hand__item[data-tilt='-2'] {
+  --tilt: -2deg;
+  --drop: 4px;
+}
+
+.due-hand__item[data-tilt='2'] {
+  --tilt: 2deg;
+  --drop: 4px;
+}
+
+.due-hand__item[data-tilt='4'] {
+  --tilt: 4deg;
+  --drop: 10px;
+}
+
+.due-hand__item[data-tilt='6'] {
+  --tilt: 6deg;
+  --drop: 16px;
+}
+
+@media (min-width: 768px) {
+  .due-hand {
+    @apply gap-1.5 rounded-(--radius-40) py-7;
+  }
+
+  .due-hand > .section-title,
+  .due-hand__hint,
+  .due-hand__empty {
+    @apply px-7;
+  }
+
+  .due-hand .section-title__text--pixel {
+    @apply text-[18px];
+  }
+
+  .due-hand__fan {
+    @apply justify-center overflow-visible px-4 pt-6;
+  }
+
+  .due-hand__item {
+    @apply -ml-8;
+  }
+}

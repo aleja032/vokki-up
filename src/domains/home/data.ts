@@ -35,14 +35,34 @@ export const homeDashboardData = createLocalizedMessages<HomeDashboardData>({
       streakDays: 'Racha actual',
       wordsSeen: 'Palabras vistas',
       masteredWords: 'Palabras dominadas',
-      weeklyMinutes: 'Estudiados esta semana'
+      weeklyMinutes: 'Estudiados esta semana',
+      accuracy: 'Aciertos esta semana'
     },
     statisticsSectionLabel: 'Tu progreso',
     statisticsUnits: {
       streakDays: 'días',
       weeklyMinutes: 'min'
     },
-    todayActivityHeading: 'Actividad de hoy'
+    todayActivityHeading: 'Actividad de hoy',
+    heroTitleLead: count => (count === 1 ? 'palabra por' : 'palabras por'),
+    heroTitleAccent: 'rescatar',
+    heroTitleTail: 'hoy',
+    heroBubble: 'Tu mano de hoy ya está lista.',
+    heroMascotAlt: 'Noma, tu compañera de repaso',
+    handHeading: 'Por repasar · tu mano de hoy',
+    handHint: 'Mientras más baja la barra de memoria, más urgente.',
+    handViewAll: count => `Ver todas (${count})`,
+    handEmpty: 'Tu mano de hoy está vacía.',
+    dueNewLabel: 'Nueva',
+    dueForgettingLabel: 'Se olvida hoy',
+    dueTodayLabel: 'Repasa hoy',
+    memoryLabel: level => `Memoria ${level} de 5`,
+    goalCount: (completed, target) => `${completed} / ${target} tarjetas`,
+    goalDone: '¡Meta cumplida! Abriste el cofre.',
+    startRound: 'Empezar ronda',
+    worldsHeading: 'Mundos',
+    worldActive: 'En curso',
+    worldNew: 'Sin empezar'
   },
   nextSession: {
     title: 'Repasar 10 tarjetas',
@@ -69,8 +89,11 @@ export const homeDashboardData = createLocalizedMessages<HomeDashboardData>({
     streakDays: 12,
     wordsSeen: 48,
     masteredWords: 12,
-    weeklyMinutes: 64
+    weeklyMinutes: 64,
+    accuracy: null
   },
+  dueHand: [],
+  worlds: [],
   activities: [
     {
       title: 'Repasar tarjetas',

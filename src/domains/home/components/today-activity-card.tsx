@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { BookOpen, ChevronRight, FileText, PenLine } from 'lucide-react';
+import { SectionHeading } from '@/components/ui/section-heading';
 import type { HomeActivity } from '../types';
 import { homeDashboardData } from '../data';
+import './today-activity-card.css';
 
 const activityIcons = {
   cards: BookOpen,
@@ -16,14 +18,13 @@ export function TodayActivityCard({
 }) {
   return (
     <section
-      aria-labelledby="today-activity-title"
-      className="today-activity card-surface"
+      aria-label={homeDashboardData.copy.todayActivityHeading}
+      className="today-activity"
     >
-      <div className="section-heading">
-        <h2 id="today-activity-title">
-          {homeDashboardData.copy.todayActivityHeading}
-        </h2>
-      </div>
+      <SectionHeading
+        pixel
+        title={homeDashboardData.copy.todayActivityHeading}
+      />
       <div className="activity-list">
         {activities.map(activity => {
           const Icon = activityIcons[activity.icon];
@@ -39,7 +40,7 @@ export function TodayActivityCard({
                 className="activity-item__icon"
                 data-icon={activity.icon}
               >
-                <Icon size={20} strokeWidth={1.8} />
+                <Icon size={22} strokeWidth={2} />
               </span>
               <span className="activity-item__copy">
                 <strong>{activity.title}</strong>

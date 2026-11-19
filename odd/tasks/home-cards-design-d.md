@@ -28,8 +28,8 @@ Design source: Artifact `claude.ai/artifact/3a7006b7-7d22-4861-9760-c4398e2bae6f
 
 - [x] T1 Foundations: D palettes (light and dark) as semantic tokens, radii scale, urgency/mint/coral families, Plus Jakarta Sans + Pixelify Sans via next/font, motion keyframes with reduced-motion fallbacks.
 - [x] T2 Shared atoms/molecules in `src/components`: progress bar (continuous and segmented), stat card, section heading, pixel label, pill; tests.
-- [ ] T3 Data contracts in `src/app` container: due-cards hand, accuracy, notes count; keep existing summary fields.
-- [ ] T4 Home layout: header streak pill, hero with CTA, due-cards hand, daily goal with chest, stats, week chart, today activity; mobile stacked + bottom nav FAB; every current action preserved.
+- [x] T3 (merged into T4) Data contracts in `src/app` container: due-cards hand, accuracy, notes count; keep existing summary fields.
+- [x] T4 Home layout (see Progress for omissions): header streak pill, hero with CTA, due-cards hand, daily goal with chest, stats, week chart, today activity; mobile stacked + bottom nav FAB; every current action preserved.
 - [ ] T5 Cards (Mi mazo) layout per `VokkiDMazo*`; all current actions preserved (groups, add hub, library, delete, manage, review).
 - [ ] T6 Mundos: blocked until the user defines the domain (worlds vs groups).
 
@@ -41,3 +41,8 @@ Design source: Artifact `claude.ai/artifact/3a7006b7-7d22-4861-9760-c4398e2bae6f
 ## Progress
 
 T1 (route: delegated direct, one writer; 3 files). Observed: vitest 74 files / 381 tests pass (new design-tokens test RED 32/32 then green), tsc clean, eslint and prettier clean (writer), parent spot check repeated vitest and tsc. New tokens: --track, --nav, --brand, --mint(-soft), --coral(-soft), urgency/hero/CTA fixed tokens, radius-d-* scale, --hover-lift, motion classes with own reduced-motion fallback, Tailwind `@theme inline` block. Fonts: Plus Jakarta Sans replaces DM Sans on --font-ui, Pixelify Sans on --font-pixel, Fraunces kept (11 uses). Dark palette is now D navy. Gap: `.csv-validation` keeps one hex outside the tokens (pre-existing).
+
+T2 (delegated direct): src/components/ui ProgressBar, StatCard, SectionHeading, PixelLabel, Pill; 409 tests, tsc clean. Commit d03cdc5.
+
+T3+T4 (delegated direct, one writer, merged to deliver something visible): vitest 90 files / 446 tests, tsc and eslint clean, prettier clean, browser 1280/390 light+dark with 0 overflow and 0 console errors (writer). Parent spot check: vitest + tsc. New: HeroPanel, DueCardsHand/DueWordCard, GoalChestCard, StatisticsStrip (on StatCard), WeekLeafChart (leaf-curve.ts), WorldsRow/WorldArchCard, HomeIntro, StreakPill, header streak pill, floating bottom nav with raised Round FAB; contracts in src/lib/home (dueHand, weeklyAccuracy, worlds, streak) composed in the container. Removed: next-session-card, today-goal-card, week-overview-card, weekly-progress-card, progress-ring (everything they showed is covered). Tokens verified against D: no mismatch; text-on-soft uses --indigo, not --brand.
+Omitted (no honest data): difficulty diamonds, hero kicker "MUNDO · DÍA A DÍA · BÁSICO" (kept "Tu próxima sesión"), per-card due-day labels (New / Fading today / Review today instead), unread favorite notes count (static copy), Escribir card (flag). Shell: desktop keeps the sidebar (D top pill nav not applied); logo wordmark stays Fraunces; world cards are not links (no Mundos page). Browser gap: Spanish rendering not seen in browser (locale cookie did not switch), unit tests only.

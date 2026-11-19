@@ -21,6 +21,8 @@ export const siteMessages = createLocalizedMessages({
   navigationLabel: 'Navegación principal',
   sectionLabel: 'Principal',
   settings: 'Ajustes',
+  startRound: 'Empezar ronda',
+  roundShort: 'Ronda',
   settingsLinkLabel: 'Ajustes y perfil',
   toggleCollapsed: 'Contraer menú',
   toggleExpanded: 'Expandir menú',

@@ -119,11 +119,12 @@
 /* Bottom navigation (mobile) */
 
 .bottom-navigation {
-  @apply fixed inset-x-0 bottom-0 z-10 grid h-[calc(77px+env(safe-area-inset-bottom))] auto-cols-fr grid-flow-col border-t border-t-(--line) bg-(--surface) px-2 pt-0 pb-[env(safe-area-inset-bottom)];
+  @apply fixed inset-x-3 bottom-[max(14px,env(safe-area-inset-bottom))] z-10 grid auto-cols-fr grid-flow-col items-end rounded-(--radius-pill) border border-solid border-(--line) bg-(--nav) px-1.5 pt-2 pb-2.5;
+  box-shadow: 0 12px 30px color-mix(in srgb, black 30%, transparent);
 }
 
 .bottom-navigation__item {
-  @apply flex min-w-0 flex-col items-center justify-center gap-1 text-[12px] leading-[normal] font-medium text-(--ink-soft);
+  @apply flex min-w-0 flex-col items-center justify-center gap-0.5 pt-2 pb-1 text-[11px] leading-[normal] font-semibold text-(--ink-soft);
 }
 
 .bottom-navigation__item > span:last-child {
@@ -131,15 +132,31 @@
 }
 
 .bottom-navigation__pill {
-  @apply flex h-7.5 w-14 items-center justify-center rounded-full;
+  @apply flex h-7 w-14 items-center justify-center rounded-full;
 }
 
 .bottom-navigation__item[aria-current='page'] {
-  @apply font-bold text-(--indigo);
+  @apply font-extrabold text-(--mint);
 }
 
-.bottom-navigation__item[aria-current='page'] .bottom-navigation__pill {
-  @apply bg-(--indigo-soft);
+/* Raised center action: starts a review round. */
+.bottom-navigation__fab {
+  @apply flex min-w-0 flex-col items-center gap-1 text-[11px] font-extrabold text-(--ink);
+}
+
+.bottom-navigation__fab-icon {
+  @apply -mt-7 flex size-14 items-center justify-center rounded-full text-(--cta-ink);
+  background: var(--cta-gradient);
+  box-shadow:
+    0 0 0 5px var(--nav),
+    0 8px 18px color-mix(in srgb, var(--cta-to) 40%, transparent);
+  transition: transform var(--hover-duration) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .bottom-navigation__fab:hover .bottom-navigation__fab-icon {
+    transform: translateY(var(--lift-2));
+  }
 }
 
 .bottom-navigation__pill {
@@ -159,12 +176,7 @@
 
 @media (hover: hover) {
   .bottom-navigation__item:not([aria-current='page']):hover {
-    @apply text-(--indigo);
-  }
-
-  .bottom-navigation__item:not([aria-current='page']):hover
-    .bottom-navigation__pill {
-    @apply bg-(--indigo-soft);
+    @apply text-(--mint);
   }
 
   a.user-avatar:hover {

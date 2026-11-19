@@ -31,8 +31,11 @@ export function deriveHomeDashboardData(
       streakDays: summary.streakDays,
       wordsSeen: summary.wordsSeen,
       masteredWords: summary.masteredWords,
-      weeklyMinutes: summary.weeklyMinutes
+      weeklyMinutes: summary.weeklyMinutes,
+      accuracy: summary.weeklyAccuracy
     },
+    dueHand: summary.dueHand,
+    worlds: summary.worlds,
     nextSession: {
       ...homeDashboardData.nextSession,
       title: translateText(

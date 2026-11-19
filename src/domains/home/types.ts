@@ -1,3 +1,5 @@
+import type { DueWord, WorldProgress } from '@/lib/home/home-hand.types';
+
 export type HomeActivity = {
   title: string;
   description: string;
@@ -47,6 +49,7 @@ export type HomeDashboardData = {
       wordsSeen: string;
       masteredWords: string;
       weeklyMinutes: string;
+      accuracy: string;
     };
     statisticsSectionLabel: string;
     statisticsUnits: {
@@ -54,6 +57,25 @@ export type HomeDashboardData = {
       weeklyMinutes: string;
     };
     todayActivityHeading: string;
+    heroTitleLead: (count: number) => string;
+    heroTitleAccent: string;
+    heroTitleTail: string;
+    heroBubble: string;
+    heroMascotAlt: string;
+    handHeading: string;
+    handHint: string;
+    handViewAll: (count: number) => string;
+    handEmpty: string;
+    dueNewLabel: string;
+    dueForgettingLabel: string;
+    dueTodayLabel: string;
+    memoryLabel: (level: number) => string;
+    goalCount: (completed: number, target: number) => string;
+    goalDone: string;
+    startRound: string;
+    worldsHeading: string;
+    worldActive: string;
+    worldNew: string;
   };
   nextSession: {
     title: string;
@@ -73,6 +95,9 @@ export type HomeDashboardData = {
     wordsSeen: number | null;
     masteredWords: number;
     weeklyMinutes: number;
+    accuracy: number | null;
   };
+  dueHand: DueWord[];
+  worlds: WorldProgress[];
   activities: HomeActivity[];
 };

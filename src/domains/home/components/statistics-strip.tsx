@@ -1,56 +1,64 @@
 'use client';
 
-import { BookOpenCheck, Clock3, Eye, Flame } from 'lucide-react';
-import type { HomeDashboardData } from '../types';
+import {
+  BookOpenCheck,
+  Clock3,
+  Eye,
+  Flame,
+  Target,
+  type LucideIcon
+} from 'lucide-react';
+import { StatCard } from '@/components/ui/stat-card';
+import type { Tone } from '@/components/ui/tone.types';
 import { useCountUp } from '@/lib/motion/use-count-up';
 import { homeDashboardData } from '../data';
+import type { HomeDashboardData } from '../types';
+import './statistics-strip.css';
 
-const statistics = [
-  {
-    key: 'streakDays',
-    labelKey: 'streakDays',
-    unitKey: 'streakDays',
-    icon: Flame,
-    tone: 'amber'
-  },
-  {
-    key: 'wordsSeen',
-    labelKey: 'wordsSeen',
-    unitKey: null,
-    icon: Eye,
-    tone: 'indigo'
-  },
-  {
-    key: 'masteredWords',
-    labelKey: 'masteredWords',
-    unitKey: null,
-    icon: BookOpenCheck,
-    tone: 'green'
-  },
+type StatKey = keyof HomeDashboardData['stats'];
+
+const statistics: {
+  key: StatKey;
+  unitKey: 'streakDays' | 'weeklyMinutes' | null;
+  suffix?: string;
+  icon: LucideIcon;
+  tone: Tone;
+}[] = [
+  { key: 'wordsSeen', unitKey: null, icon: Eye, tone: 'brand' },
+  { key: 'masteredWords', unitKey: null, icon: BookOpenCheck, tone: 'mint' },
+  { key: 'accuracy', unitKey: null, suffix: '%', icon: Target, tone: 'amber' },
+  { key: 'streakDays', unitKey: 'streakDays', icon: Flame, tone: 'coral' },
   {
     key: 'weeklyMinutes',
-    labelKey: 'weeklyMinutes',
     unitKey: 'weeklyMinutes',
     icon: Clock3,
-    tone: 'blue'
+    tone: 'brand'
   }
-] as const;
+];
 
-function StatValue({ value, unit }: { value: number | null; unit: string }) {
+function StatValue({
+  value,
+  unit,
+  suffix = ''
+}: {
+  value: number | null;
+  unit: string;
+  suffix?: string;
+}) {
   const animated = useCountUp(value ?? 0);
 
   return (
-    <strong className="stat-card__value">
+    <>
       <span className="sr-only">
         {value === null
           ? 'Dato no disponible'
-          : `${value}${unit ? ` ${unit}` : ''}`}
+          : `${value}${suffix}${unit ? ` ${unit}` : ''}`}
       </span>
       <span aria-hidden="true">
-        {value === null ? '—' : animated}
+        {value === null ? '—' : `${animated}${suffix}`}
         {value !== null && unit && <span> {unit}</span>}
       </span>
-    </strong>
+    </>
   );
 }
 
@@ -59,35 +67,40 @@ export function StatisticsStrip({
 }: {
   stats: HomeDashboardData['stats'];
 }) {
+  const { statisticsLabels, statisticsUnits, statisticsSectionLabel } =
+    homeDashboardData.copy;
+
   return (
     <section
-      aria-label={homeDashboardData.copy.statisticsSectionLabel}
+      aria-label={statisticsSectionLabel}
       className="statistics-strip"
       tabIndex={0}
     >
-      {statistics.map(stat => {
-        const Icon = stat.icon;
-        const value = stats[stat.key];
-        const unit = stat.unitKey
-          ? homeDashboardData.copy.statisticsUnits[stat.unitKey]
-          : '';
+      {statistics
+        // Accuracy only shows once there are reviews to measure.
+        .filter(stat => stat.key !== 'accuracy' || stats.accuracy !== null)
+        .map(stat => {
+          const Icon = stat.icon;
 
-        return (
-          <article className="stat-card card-surface" key={stat.key}>
-            <span
-              aria-hidden="true"
-              className="stat-card__icon"
-              data-tone={stat.tone}
-            >
-              <Icon size={21} strokeWidth={1.8} />
-            </span>
-            <StatValue unit={unit} value={value} />
-            <span className="stat-card__label">
-              {homeDashboardData.copy.statisticsLabels[stat.labelKey]}
-            </span>
-          </article>
-        );
-      })}
+          return (
+            <StatCard
+              className="progress-stat"
+              icon={<Icon size={24} strokeWidth={2} />}
+              key={stat.key}
+              label={
+                statisticsLabels[stat.key as keyof typeof statisticsLabels]
+              }
+              tone={stat.tone}
+              value={
+                <StatValue
+                  suffix={stat.suffix}
+                  unit={stat.unitKey ? statisticsUnits[stat.unitKey] : ''}
+                  value={stats[stat.key]}
+                />
+              }
+            />
+          );
+        })}
     </section>
   );
 }

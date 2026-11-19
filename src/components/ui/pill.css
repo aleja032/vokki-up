@@ -25,5 +25,5 @@
 }
 
 .pill--brand {
-  @apply bg-(--indigo-soft) text-(--brand);
+  @apply bg-(--indigo-soft) text-(--indigo);
 }

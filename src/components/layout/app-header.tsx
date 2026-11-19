@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { VokkiLogo } from '@/components/brand/vokki-logo';
 import { siteConfig, siteMessages } from '@/config/site';
 import { ConnectionStatus } from './connection-status';
+import { HeaderStreakPill } from './header-streak-pill';
 import {
   AuthenticatedOnly,
   AvatarInitialSlot,
@@ -25,6 +26,7 @@ export function AppHeader() {
         </span>
       </Link>
       <div className="app-header__actions">
+        <HeaderStreakPill />
         <AuthenticatedOnly>
           <ConnectionStatus variant="header" />
           <Link

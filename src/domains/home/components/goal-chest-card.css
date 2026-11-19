@@ -1,0 +1,41 @@
+@reference 'tailwindcss';
+
+.goal-chest {
+  @apply flex min-w-0 flex-col justify-center gap-3 rounded-(--radius-30) border border-solid border-(--line) bg-(--surface) p-5.5;
+}
+
+.goal-chest__header {
+  @apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.goal-chest__title {
+  @apply m-0;
+}
+
+.goal-chest__label {
+  @apply text-[14px] text-(--amber-ink);
+}
+
+.goal-chest__count {
+  @apply font-extrabold tabular-nums;
+}
+
+.goal-chest__row {
+  @apply flex items-center gap-3.5;
+}
+
+.goal-chest__bar {
+  @apply h-3.5 min-w-0 flex-1;
+}
+
+.goal-chest__bar .progress-bar__segment {
+  @apply rounded-[3px];
+}
+
+.goal-chest__chest {
+  @apply flex size-13.5 flex-none items-center justify-center rounded-(--radius-18) bg-(--amber-soft) text-(--amber-ink);
+}
+
+.goal-chest__note {
+  @apply m-0 text-[13.5px] text-(--ink-soft);
+}

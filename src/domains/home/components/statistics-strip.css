@@ -1,0 +1,52 @@
+@reference 'tailwindcss';
+
+/* Phones: 2x2 tiles with the icon on top. Wider: one row, icon beside the value. */
+.statistics-strip {
+  @apply grid grid-cols-2 gap-3;
+}
+
+.statistics-strip > :last-child:nth-child(odd) {
+  @apply col-span-2;
+}
+
+.progress-stat {
+  @apply gap-2 rounded-(--radius-26) p-4;
+}
+
+.progress-stat .stat-tile__icon {
+  @apply mb-0 size-10 rounded-(--radius-14);
+}
+
+.progress-stat .stat-tile__value {
+  @apply text-[24px] tracking-[-0.03em];
+}
+
+.progress-stat .stat-tile__label {
+  @apply text-[12.5px] font-medium;
+}
+
+@media (min-width: 768px) {
+  .statistics-strip {
+    @apply grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4.5;
+  }
+
+  .statistics-strip > :last-child:nth-child(odd) {
+    @apply col-auto;
+  }
+
+  .progress-stat {
+    @apply grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-0.5 rounded-(--radius-28) px-5.5 py-5;
+  }
+
+  .progress-stat .stat-tile__icon {
+    @apply row-span-2 size-12 rounded-(--radius-18);
+  }
+
+  .progress-stat .stat-tile__value {
+    @apply self-end text-[28px];
+  }
+
+  .progress-stat .stat-tile__label {
+    @apply self-start text-[13px];
+  }
+}

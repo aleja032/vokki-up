@@ -4,7 +4,7 @@
    must keep working unchanged until it migrates to this component. */
 .stat-tile {
   --stat-bg: var(--indigo-soft);
-  --stat-fg: var(--brand);
+  --stat-fg: var(--indigo);
   @apply flex min-w-0 flex-col gap-1 rounded-(--radius-22) border border-solid border-(--line) bg-(--surface) p-4;
 }
 
@@ -37,5 +37,5 @@
 
 .stat-tile--brand {
   --stat-bg: var(--indigo-soft);
-  --stat-fg: var(--brand);
+  --stat-fg: var(--indigo);
 }

@@ -1,0 +1,161 @@
+@reference 'tailwindcss';
+
+/* The hero keeps the dark game surface in both themes (fixed token). The card
+   itself does not clip, so the mascot can rise above its top edge on phones. */
+
+.hero-panel {
+  @apply relative isolate mt-7 flex flex-col justify-end text-white;
+}
+
+.hero-panel__backdrop {
+  @apply absolute inset-0 -z-10 overflow-hidden rounded-(--radius-34) bg-(--hero-surface);
+}
+
+.hero-panel__scene {
+  @apply absolute inset-x-0 top-0 h-50 opacity-85;
+}
+
+.hero-panel__world {
+  @apply object-cover;
+  image-rendering: pixelated;
+}
+
+.hero-panel__shade {
+  @apply absolute inset-x-0 top-0 h-50;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--hero-surface) 10%, transparent),
+    var(--hero-surface)
+  );
+}
+
+.hero-panel__glow {
+  @apply absolute -top-0 -right-12 size-80 rounded-full;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--brand) 28%, transparent) 0%,
+    transparent 66%
+  );
+}
+
+.hero-panel__star {
+  @apply absolute top-[14%] left-[8%] size-1 bg-(--amber);
+}
+
+.hero-panel__mascot {
+  @apply absolute -top-7 right-3.5 h-42.5 w-auto;
+  filter: drop-shadow(0 14px 20px color-mix(in srgb, black 50%, transparent));
+}
+
+.hero-panel__bubble {
+  @apply absolute top-3 left-4 m-0 max-w-37.5 rounded-tl-[20px] rounded-tr-[20px] rounded-br-[20px] rounded-bl-[6px] bg-white px-3.5 py-2.5 text-[13.5px] leading-tight font-extrabold text-(--hero-surface);
+  box-shadow: 0 12px 26px color-mix(in srgb, black 30%, transparent);
+}
+
+.hero-panel__copy {
+  @apply relative flex flex-col items-start gap-3 px-5.5 pt-38 pb-6;
+}
+
+.hero-panel__kicker {
+  @apply text-[12px] tracking-[0.1em] text-white/75;
+}
+
+.hero-panel__title {
+  @apply m-0 text-[34px] leading-[1.05] font-extrabold tracking-[-0.03em] wrap-anywhere;
+}
+
+.hero-panel__accent {
+  @apply text-(--cta-from);
+}
+
+.hero-panel__lead {
+  @apply m-0 max-w-md text-[15px] text-white/75;
+}
+
+.hero-panel__chips {
+  @apply m-0 flex list-none flex-wrap gap-2 p-0;
+}
+
+.hero-panel__chips .pill {
+  @apply bg-white/12 text-white;
+}
+
+.hero-panel__cta {
+  @apply mt-1 inline-flex min-h-14 w-full items-center justify-center gap-2.5 rounded-(--radius-pill) px-8 text-[17px] font-extrabold text-(--cta-ink);
+  background: var(--cta-gradient);
+  transition: var(--hover-transition);
+}
+
+@media (hover: hover) {
+  .hero-panel__cta:hover {
+    transform: translateY(var(--lift-2));
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-panel {
+    @apply mt-10 min-h-95 justify-center;
+  }
+
+  .hero-panel__backdrop {
+    @apply rounded-(--radius-44);
+  }
+
+  .hero-panel__scene {
+    @apply inset-y-0 right-0 left-auto h-auto w-[56%] opacity-100;
+  }
+
+  .hero-panel__shade {
+    @apply h-full;
+    background: linear-gradient(
+      90deg,
+      var(--hero-surface) 0%,
+      var(--hero-surface) 42%,
+      color-mix(in srgb, var(--hero-surface) 80%, transparent) 54%,
+      transparent 76%
+    );
+  }
+
+  .hero-panel__glow {
+    @apply top-auto right-[4%] -bottom-[30%] size-130;
+  }
+
+  .hero-panel__mascot {
+    @apply top-auto right-[12%] bottom-5.5 h-70;
+  }
+
+  .hero-panel__bubble {
+    @apply top-8.5 right-[4%] left-auto max-w-57.5 rounded-tl-3xl rounded-tr-3xl rounded-br-lg rounded-bl-3xl px-4.5 py-3 text-[16px];
+  }
+
+  .hero-panel__copy {
+    @apply max-w-130 gap-4 px-12 pt-11 pb-16;
+  }
+
+  .hero-panel__kicker {
+    @apply text-[14px] text-(--hero-lavender);
+  }
+
+  .hero-panel__title {
+    @apply text-[50px] tracking-[-0.03em];
+  }
+
+  .hero-panel__lead {
+    @apply text-[17px];
+  }
+
+  .hero-panel__cta {
+    @apply w-auto text-[18px];
+  }
+}
+
+/* Narrow desktops: keep the mascot clear of the copy. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-panel__mascot {
+    @apply right-[3%] h-48;
+  }
+
+  .hero-panel__bubble {
+    @apply hidden;
+  }
+}

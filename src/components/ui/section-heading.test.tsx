@@ -25,6 +25,15 @@ describe('SectionHeading', () => {
     expect(html).toContain('Esta semana');
   });
 
+  it('sets the title in the pixel font on request', () => {
+    const html = renderToStaticMarkup(<SectionHeading pixel title="Hoy" />);
+
+    expect(html).toContain('section-title__text--pixel');
+    expect(renderToStaticMarkup(<SectionHeading title="Hoy" />)).not.toContain(
+      '--pixel'
+    );
+  });
+
   it('omits kicker and action when absent', () => {
     const html = renderToStaticMarkup(<SectionHeading title="Hoy" />);
 

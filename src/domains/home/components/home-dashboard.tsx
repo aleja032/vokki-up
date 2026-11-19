@@ -1,21 +1,18 @@
-import Link from 'next/link';
-import { Library } from 'lucide-react';
-import { homeDashboardData } from '../data';
 import { deriveHomeDashboardData } from '../derive-home-dashboard-data';
 import type { HomeSummary } from '../home-summary.types';
-import { NextSessionCard } from './next-session-card';
+import { DueCardsHand } from './due-cards-hand';
+import { GoalChestCard } from './goal-chest-card';
+import { HeroPanel } from './hero-panel';
+import { HomeIntro } from './home-intro';
 import { StatisticsStrip } from './statistics-strip';
 import { TodayActivityCard } from './today-activity-card';
-import { TodayGoalCard } from './today-goal-card';
-import { WeekOverviewCard } from './week-overview-card';
-import { WeeklyProgressCard } from './weekly-progress-card';
+import { WeekLeafChart } from './week-leaf-chart';
+import { WorldsRow } from './worlds-row';
 import './home-dashboard.css';
 
 interface HomeDashboardProps {
   summary: HomeSummary | null;
 }
-
-const { copy } = homeDashboardData;
 
 export function HomeDashboard({ summary }: HomeDashboardProps) {
   if (!summary) {
@@ -27,40 +24,26 @@ export function HomeDashboard({ summary }: HomeDashboardProps) {
   }
 
   const data = deriveHomeDashboardData(summary);
-  const { nextSession, activities, stats } = data;
-  const streakDays = stats.streakDays;
+  const { nextSession, activities, stats, progress, dueHand } = data;
 
   return (
     <div className="home-dashboard">
-      <header className="home-intro">
-        <div className="home-intro__copy">
-          <h1>{copy.greeting}</h1>
-          <p>
-            <span className="home-intro__support--light">
-              {copy.greetingSupport}
-            </span>
-            {streakDays ? (
-              <span className="home-intro__support--wide">
-                {copy.greetingSupportWide(streakDays)}
-              </span>
-            ) : null}
-          </p>
-        </div>
-        <Link className="home-intro__action" href="/cards/word-library">
-          <Library aria-hidden="true" size={18} strokeWidth={1.8} />
-          {copy.addFromLibrary}
-        </Link>
-      </header>
-      <div className="home-dashboard__featured">
-        <NextSessionCard data={nextSession} />
-        <TodayGoalCard progress={data.progress} />
+      <HomeIntro streakDays={stats.streakDays} />
+      <HeroPanel data={nextSession} />
+      <div className="home-dashboard__hand-row">
+        <DueCardsHand
+          hand={dueHand}
+          href={nextSession.href}
+          totalDue={nextSession.pendingCount + nextSession.newCount}
+        />
+        <GoalChestCard progress={progress} />
       </div>
       <StatisticsStrip stats={stats} />
-      <WeekOverviewCard data={data} />
       <div className="home-dashboard__lower">
+        <WeekLeafChart days={progress.weeklyActivity} />
         <TodayActivityCard activities={activities} />
-        <WeeklyProgressCard data={data} />
       </div>
+      <WorldsRow worlds={data.worlds} />
     </div>
   );
 }

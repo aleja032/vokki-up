@@ -15,3 +15,7 @@
 .section-title__action {
   @apply inline-flex min-h-11 shrink-0 items-center text-[13px] font-semibold text-(--brand);
 }
+
+.section-title__text--pixel {
+  @apply font-(family-name:--font-pixel) text-[16px] font-semibold tracking-[0.06em] text-(--indigo) uppercase;
+}
