@@ -12,9 +12,6 @@ const SPANISH_WORDS =
 function collectHomeStrings(): string[] {
   const { copy, nextSession, activities } = homeDashboardData;
   const strings: string[] = [
-    copy.greeting,
-    copy.greetingSupport,
-    copy.greetingSupportWide(12),
     copy.addFromLibrary,
     copy.nextSessionDescription,
     copy.pendingChip(7),

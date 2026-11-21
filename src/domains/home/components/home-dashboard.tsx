@@ -3,7 +3,6 @@ import type { HomeSummary } from '../home-summary.types';
 import { DueCardsHand } from './due-cards-hand';
 import { GoalChestCard } from './goal-chest-card';
 import { HeroPanel } from './hero-panel';
-import { HomeIntro } from './home-intro';
 import { StatisticsStrip } from './statistics-strip';
 import { TodayActivityCard } from './today-activity-card';
 import { WeekLeafChart } from './week-leaf-chart';
@@ -28,7 +27,6 @@ export function HomeDashboard({ summary }: HomeDashboardProps) {
 
   return (
     <div className="home-dashboard">
-      <HomeIntro streakDays={stats.streakDays} />
       <HeroPanel data={nextSession} />
       <div className="home-dashboard__hand-row">
         <DueCardsHand

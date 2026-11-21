@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Play } from 'lucide-react';
+import { Library, Play } from 'lucide-react';
 import { PixelLabel } from '@/components/ui/pixel-label';
 import { homeDashboardData } from '../data';
 import type { HomeDashboardData } from '../types';
@@ -67,10 +67,16 @@ export function HeroPanel({
           )}
         </h1>
         <p className="hero-panel__lead">{copy.nextSessionDescription}</p>
-        <Link className="hero-panel__cta motion-cta-pulse" href={data.href}>
-          <Play aria-hidden="true" fill="currentColor" size={18} />
-          {copy.startRound}
-        </Link>
+        <div className="hero-panel__actions">
+          <Link className="hero-panel__cta motion-cta-pulse" href={data.href}>
+            <Play aria-hidden="true" fill="currentColor" size={18} />
+            {copy.startRound}
+          </Link>
+          <Link className="hero-panel__secondary" href="/cards/word-library">
+            <Library aria-hidden="true" size={18} strokeWidth={2} />
+            {copy.addFromLibrary}
+          </Link>
+        </div>
       </div>
     </section>
   );

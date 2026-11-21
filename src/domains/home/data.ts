@@ -3,10 +3,6 @@ import type { HomeDashboardData } from './types';
 
 export const homeDashboardData = createLocalizedMessages<HomeDashboardData>({
   copy: {
-    greeting: '¡Hola de nuevo!',
-    greetingSupport: 'Cinco minutos hoy mantienen tu racha.',
-    greetingSupportWide: streakDays =>
-      `Cinco minutos hoy mantienen tu racha de ${streakDays} días.`,
     addFromLibrary: 'Agregar desde la biblioteca',
     nextSessionDescription:
       'Funciona sin conexión. Tu progreso se sincroniza después.',
