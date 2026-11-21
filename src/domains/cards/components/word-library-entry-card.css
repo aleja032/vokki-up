@@ -1,0 +1,38 @@
+@reference 'tailwindcss';
+
+/* A catalog word reuses the Mi mazo tile (`deck-card`). The example stays
+   visible on phones, where the library is one column and has the room. */
+.word-entry .deck-card__example {
+  @apply block;
+}
+
+.word-entry .deck-card__example-text {
+  @apply line-clamp-none;
+}
+
+.word-entry .es-toggle {
+  --es-c: 17px;
+}
+
+.word-entry[data-existing='true'] {
+  @apply bg-(--ground);
+}
+
+.word-entry__state {
+  @apply text-[10.5px] tracking-[1px] text-(--ink-soft);
+}
+
+.word-entry[data-selected='true'] .word-entry__state {
+  @apply text-(--indigo);
+}
+
+.word-entry__existing {
+  @apply m-0 flex items-center gap-1.5 text-[12px] font-bold text-(--indigo);
+}
+
+.word-entry[data-adding='true']:not(
+    [data-existing='true'],
+    [data-selected='true']
+  ) {
+  @apply cursor-pointer;
+}

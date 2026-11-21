@@ -213,6 +213,14 @@ describe('violet accents (Mi mazo)', () => {
     expect(violetLightBlock).not.toContain('--cta-from');
   });
 
+  it('draws the due dots with violet, ink and mint instead of coral or amber', () => {
+    expect(declared(violetLightBlock, '--due-now')).toBe('var(--brand)');
+    expect(declared(violetLightBlock, '--due-soon')).toBe('var(--ink-soft)');
+    expect(declared(violetLightBlock, '--due-safe')).toBe(
+      'var(--urgency-green)'
+    );
+  });
+
   it.each(themeSurfaceTokens)(
     'does not override %s, so the page follows the home theme',
     token => {

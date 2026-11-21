@@ -87,11 +87,25 @@ describe('WordLibraryEntryCard add mode', () => {
         isAdding={props.isAdding}
         isSelected={props.isSelected ?? false}
         isAlreadyAdded={props.isAlreadyAdded ?? false}
-        showLevel
         onToggleSelect={() => undefined}
       />
     );
   }
+
+  it('reuses the Mi mazo tile with level diamonds and an add state', () => {
+    const html = render({ isAdding: false });
+
+    expect(html).toContain('class="deck-card word-entry"');
+    expect(html).toContain('deck-card__term');
+    expect(html).toContain('level-diamonds');
+    expect(html).toContain('Sin agregar');
+  });
+
+  it('shows the selected state label when picked', () => {
+    expect(render({ isAdding: true, isSelected: true })).toContain(
+      'Seleccionada'
+    );
+  });
 
   it('has no selection control outside add mode', () => {
     expect(render({ isAdding: false })).not.toContain('role="checkbox"');

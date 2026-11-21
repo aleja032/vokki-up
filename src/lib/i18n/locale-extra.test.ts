@@ -18,6 +18,20 @@ describe('audit leak translations', () => {
     );
   });
 
+  it('translates the worlds labels', () => {
+    setAppLanguage('English');
+    expect(translateText('Mundos')).toBe('Worlds');
+    expect(translateText('4 mundos')).toBe('4 worlds');
+    expect(translateText('46 en tu mazo')).toBe('46 in your deck');
+    expect(translateText('Nivel 2 de 3')).toBe('Level 2 of 3');
+    expect(translateText('Etapa 1')).toBe('Stage 1');
+    expect(translateText('46 de 800')).toBe('46 of 800');
+    expect(translateText('Sin agregar')).toBe('Not added');
+    expect(translateText('Oficina, reuniones y correos')).toBe(
+      'Office, meetings and emails'
+    );
+  });
+
   it('translates the Mi mazo phone labels', () => {
     setAppLanguage('English');
     expect(translateText('12 para hoy')).toBe('12 for today');

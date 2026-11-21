@@ -1,0 +1,136 @@
+@reference 'tailwindcss';
+
+/* Phones: a row card with an arch thumbnail. From 640px: the tall arch, with
+   the text laid over the art. */
+.arch-card {
+  @apply relative box-border flex min-w-0 items-center gap-4 rounded-(--radius-30) border border-solid border-(--line) bg-(--surface) p-3 text-(--ink) no-underline;
+  transition:
+    translate 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out);
+}
+
+.arch-card__art {
+  @apply relative flex h-26 w-21 flex-none items-center justify-center overflow-hidden rounded-t-(--radius-pill) rounded-b-[20px] border-[1.5px] border-solid border-(--line) bg-(--surface-muted) text-(--indigo);
+}
+
+.arch-card[data-state='active'] .arch-card__art {
+  @apply border-[3px] border-(--brand-line) bg-(--hero-surface);
+}
+
+.arch-card__image {
+  @apply object-cover;
+  image-rendering: pixelated;
+}
+
+.arch-card__shade {
+  @apply hidden;
+}
+
+.arch-card__icon {
+  @apply flex items-center justify-center;
+}
+
+.arch-card__icon svg {
+  @apply size-9;
+}
+
+.arch-card__body {
+  @apply relative flex min-w-0 flex-1 flex-col gap-1;
+}
+
+.arch-card__state {
+  @apply text-[11px];
+}
+
+.arch-card__title {
+  @apply block text-[20px] leading-tight font-extrabold wrap-anywhere;
+}
+
+.arch-card__description {
+  @apply block text-[13px] leading-snug wrap-anywhere text-(--ink-soft);
+}
+
+.arch-card__progress {
+  @apply mt-1 flex items-center gap-2;
+}
+
+.arch-card__bar {
+  @apply h-1.75 min-w-0 flex-1;
+}
+
+.arch-card__count {
+  @apply text-[12px] font-bold tabular-nums;
+}
+
+.arch-card:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+@media (hover: hover) {
+  .arch-card:hover {
+    translate: 0 var(--hover-lift);
+    border-color: var(--hover-accent);
+    box-shadow: 0 14px 30px var(--hover-accent-glow);
+  }
+}
+
+@media (min-width: 640px) {
+  .arch-card {
+    @apply h-100 flex-col justify-end overflow-hidden rounded-t-(--radius-pill) rounded-b-[38px] border-[1.5px] p-0 text-center;
+  }
+
+  .arch-card[data-state='active'] {
+    @apply border-[3px] border-(--brand-line) bg-(--hero-surface) text-white;
+  }
+
+  .arch-card__art,
+  .arch-card[data-state='active'] .arch-card__art {
+    @apply absolute inset-0 size-auto rounded-none border-0 bg-transparent;
+  }
+
+  .arch-card__shade {
+    @apply absolute inset-0 block;
+    background: linear-gradient(0deg, var(--hero-shade-95) 8%, transparent 62%);
+  }
+
+  .arch-card__icon {
+    @apply absolute top-24 left-1/2 -translate-x-1/2;
+  }
+
+  .arch-card__icon svg {
+    @apply size-19;
+  }
+
+  .arch-card__body {
+    @apply w-full flex-none items-center gap-2 px-5.5 pb-6.5 text-center;
+  }
+
+  .arch-card[data-state='active'] .arch-card__state {
+    @apply text-(--hero-lavender);
+  }
+
+  .arch-card__title {
+    @apply text-[28px] tracking-[-0.6px];
+  }
+
+  .arch-card__description {
+    @apply text-[13.5px];
+  }
+
+  .arch-card[data-state='active'] .arch-card__description {
+    @apply text-white/85;
+  }
+
+  .arch-card__bar {
+    @apply h-2 w-30 flex-none;
+  }
+
+  .arch-card[data-state='active'] .arch-card__bar {
+    @apply bg-(--on-hero-track);
+  }
+
+  .arch-card__count {
+    @apply text-[13px];
+  }
+}

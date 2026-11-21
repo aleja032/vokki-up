@@ -1,0 +1,49 @@
+@reference 'tailwindcss';
+
+.world-banner {
+  @apply relative min-h-47.5 overflow-hidden rounded-(--radius-34) bg-(--hero-surface) text-white md:min-h-55;
+}
+
+.world-banner__art {
+  @apply absolute inset-y-0 right-0 flex w-3/5 items-center justify-center text-(--hero-lavender);
+}
+
+.world-banner__image {
+  @apply object-cover;
+  image-rendering: pixelated;
+}
+
+.world-banner__icon {
+  @apply size-28 opacity-70;
+}
+
+.world-banner__shade {
+  @apply absolute inset-0;
+  background: linear-gradient(
+    90deg,
+    var(--hero-surface) 0%,
+    var(--hero-shade-95) 18%,
+    transparent 90%
+  );
+  inset-inline-start: -2px;
+}
+
+.world-banner__content {
+  @apply relative flex max-w-[min(100%,26rem)] min-w-0 flex-col gap-1.5 px-4.5 py-4 md:gap-2 md:px-9 md:py-8;
+}
+
+.world-banner__back {
+  @apply inline-flex min-h-9 w-fit items-center gap-1 text-[14px] font-bold text-(--hero-lavender) no-underline;
+}
+
+.world-banner__back:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+.world-banner__content h1 {
+  @apply m-0 text-[32px] leading-none font-extrabold tracking-[-1px] wrap-anywhere md:text-[48px] md:tracking-[-1.4px];
+}
+
+.world-banner__content p {
+  @apply m-0 text-[13px] text-(--hero-lavender) md:text-[15px];
+}

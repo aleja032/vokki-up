@@ -270,6 +270,11 @@ a:focus-visible {
   --hover-accent: #7456ff;
   --hover-accent-glow: rgb(116 86 255 / 0.22);
   --focus-ring: var(--indigo);
+  /* Due-state dots (folders, status filter, tiles): violet, ink and mint, never
+     coral or amber. The state is also written next to every dot. */
+  --due-now: var(--brand);
+  --due-soon: var(--ink-soft);
+  --due-safe: var(--urgency-green);
 }
 
 :root[data-theme='dark'] .accent-violet,

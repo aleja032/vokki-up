@@ -1,0 +1,57 @@
+@reference 'tailwindcss';
+
+.worlds-hub {
+  @apply mx-auto flex w-full min-w-0 flex-col gap-5 pt-3 md:gap-7 md:pt-5;
+}
+
+.worlds-hub__header {
+  @apply flex min-w-0 flex-wrap items-center justify-between gap-x-5 gap-y-3;
+}
+
+.worlds-hub__heading {
+  @apply min-w-0;
+}
+
+.worlds-hub__heading h1 {
+  @apply m-0 font-(family-name:--font-display) text-[28px] leading-[1.05] font-semibold tracking-[-0.8px] md:text-[40px] md:tracking-[-1.2px];
+}
+
+.worlds-hub__heading p {
+  @apply m-0 mt-1 text-[13.5px] text-(--ink-soft) md:text-[15px];
+}
+
+.worlds-hub__overall {
+  @apply flex min-w-0 basis-full flex-col gap-1.5 md:basis-90;
+}
+
+.worlds-hub__overall-text {
+  @apply flex justify-between gap-3 text-[13px] font-bold;
+}
+
+.worlds-hub__overall-text strong {
+  @apply text-(--indigo);
+}
+
+.worlds-hub__grid {
+  @apply grid grid-cols-1 gap-3 min-[640px]:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] min-[640px]:gap-5.5;
+}
+
+.worlds-hub__levels {
+  @apply flex flex-wrap gap-3 md:gap-4;
+}
+
+.worlds-hub__level {
+  @apply flex min-w-0 flex-[1_1_220px] items-center justify-between gap-3 rounded-(--radius-26) border-[1.5px] border-solid border-(--line) bg-(--surface) px-5 py-4;
+}
+
+.worlds-hub__level-text {
+  @apply flex min-w-0 flex-col gap-1;
+}
+
+.worlds-hub__level-text strong {
+  @apply text-[14px];
+}
+
+.worlds-hub__all {
+  @apply self-start;
+}

@@ -1,0 +1,37 @@
+@reference 'tailwindcss';
+
+.world-stages {
+  @apply flex min-w-0 gap-2.5 overflow-x-auto pb-1 md:grid md:grid-cols-3 md:gap-4 md:overflow-visible;
+}
+
+.world-stages__stage {
+  @apply flex min-w-0 flex-[0_0_190px] flex-col gap-1.5 rounded-[22px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-3.5 py-3 md:flex-auto;
+}
+
+.world-stages__stage[data-active='true'] {
+  @apply border-2 border-(--brand-line);
+}
+
+.world-stages__top {
+  @apply flex items-center justify-between gap-2;
+}
+
+.world-stages__label {
+  @apply text-[12px];
+}
+
+.world-stages__stage[data-active='true'] .world-stages__label {
+  @apply text-(--indigo);
+}
+
+.world-stages__bar {
+  @apply h-1.75;
+}
+
+.world-stages__summary {
+  @apply truncate text-[12.5px] font-bold;
+}
+
+.world-stages {
+  scrollbar-width: none;
+}

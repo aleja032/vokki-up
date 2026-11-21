@@ -357,6 +357,17 @@ export const extraTranslations: Record<string, string> = {
   'En curso': 'In progress',
   'Sin empezar': 'Not started',
 
+  // Worlds (word library catalog by theme, proposal D)
+  'Tu biblioteca': 'Your library',
+  Niveles: 'Levels',
+  'Ver toda la biblioteca': 'View the whole library',
+  'Sin agregar': 'Not added',
+  Seleccionada: 'Selected',
+  'Rutina, casa, compras y calle': 'Routine, home, shopping and the street',
+  'Oficina, reuniones y correos': 'Office, meetings and emails',
+  'Aeropuertos, hoteles y restaurantes': 'Airports, hotels and restaurants',
+  'Expresiones para cualquier momento': 'Expressions for any moment',
+
   // Mi mazo (cards overview, proposal D)
   'Mi mazo': 'My deck',
   'Opciones para agregar tarjetas': 'Options to add cards',
@@ -396,6 +407,10 @@ export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
   [/^(\d+) hoy$/, '$1 today'],
   [/^(\d+) de (\d+) tarjetas?$/, '$1 of $2 cards'],
   [/^Buscar en (.+)$/, 'Search in $1'],
+  [/^(\d+) mundos$/, '$1 worlds'],
+  [/^(\d+) en tu mazo$/, '$1 in your deck'],
+  [/^Nivel (\d+) de 3$/, 'Level $1 of 3'],
+  [/^Etapa (\d+)$/, 'Stage $1'],
   [/^Página (\d+)$/, 'Page $1'],
   [/^Mostrando (\d+)–(\d+) de (\d+) tarjetas?$/, 'Showing $1–$2 of $3 cards'],
   [/^de (\d+) hoy$/, 'of $1 today'],

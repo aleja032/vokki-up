@@ -27,7 +27,7 @@ const stateMessages = cardsMessages.learningState;
 
 const STATE_TONE = {
   new: 'brand',
-  learning: 'amber',
+  learning: 'neutral',
   mastered: 'mint'
 } as const satisfies Record<CardLearningState, string>;
 
@@ -137,7 +137,7 @@ export function GroupDetail({
               tone="brand"
               value={cards.length}
             />
-            <StatCard label={messages.statDue} tone="amber" value={dueCount} />
+            <StatCard label={messages.statDue} tone="brand" value={dueCount} />
             <StatCard
               label={messages.statMastered}
               tone="mint"
