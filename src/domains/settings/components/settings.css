@@ -2,7 +2,7 @@
 
 /*
  * Settings, mobile first (proposal D: Ajustes, Ajustes escritorio).
- * Tabs are chip pills; the profile card has a brand border and a soft gradient, the AI provider card is a plain surface.
+ * Tabs are chip pills; the profile card has a brand border on a plain surface,the AI provider card is a plain surface.
  * 761px and up: the cards sit side by side and wrap. Every color is a token; provider and AI pieces live in settings-provider.css.
  */
 
@@ -52,12 +52,7 @@
 }
 
 .prefs-card--profile {
-  @apply border-(--brand);
-  background: linear-gradient(
-    180deg,
-    var(--indigo-soft) 0%,
-    var(--surface) 32%
-  );
+  @apply border-(--brand) bg-(--surface);
 }
 
 .prefs-card--provider {
