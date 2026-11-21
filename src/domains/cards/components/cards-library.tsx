@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  ChevronLeft,
-  ChevronRight,
-  Folder,
-  ListChecks,
-  Trash2
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, Folder, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
 import { SearchField } from '@/components/ui/search-field';
@@ -18,6 +12,7 @@ import {
   type CardStatusFilter
 } from '../card-status';
 import { getPageNumbers, paginateItems } from '../hooks/pagination';
+import { useCompactViewport } from '../hooks/use-compact-viewport';
 import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
@@ -31,6 +26,9 @@ import './cards-library.css';
 
 const messages = cardsMessages.overview;
 const CARDS_PAGE_SIZE = 12;
+// Phones show a short list that grows by steps instead of numbered pages.
+const COMPACT_INITIAL_COUNT = 4;
+const COMPACT_STEP = 10;
 
 // Dot colors follow the due dot of the cards: coral is due today, violet is
 // due this week, mint is safe. Read at render time so the labels follow the
@@ -90,7 +88,9 @@ export function CardsLibrary({
   onAddCard,
   onOpenGroup
 }: CardsLibraryProps) {
+  const isCompact = useCompactViewport();
   const [requestedPage, setRequestedPage] = useState({ key: '', page: 1 });
+  const [revealed, setRevealed] = useState({ key: '', extra: 0 });
   const [isManaging, setIsManaging] = useState(false);
   const [selectedCardIds, setSelectedCardIds] = useState<string[]>([]);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
@@ -103,6 +103,13 @@ export function CardsLibrary({
   const currentPage =
     requestedPage.key === pageContextKey ? requestedPage.page : 1;
   const page = paginateItems(cards, currentPage, CARDS_PAGE_SIZE);
+  const compactCount = Math.min(
+    cards.length,
+    COMPACT_INITIAL_COUNT +
+      (revealed.key === pageContextKey ? revealed.extra : 0)
+  );
+  const compactRemaining = cards.length - compactCount;
+  const shownCards = isCompact ? cards.slice(0, compactCount) : page.items;
   const visibleIds = new Set(cards.map(card => card.id));
   const activeSelection = selectedCardIds.filter(id => visibleIds.has(id));
   // A group view with no search or category filter: its add actions apply.
@@ -180,21 +187,29 @@ export function CardsLibrary({
           /
         </span>
         <h2 id="deck-library-title">{groupTitle}</h2>
-        <span className="deck-library__meta deck-library__meta--wide">
+        <span className="deck-library__meta">
           {messages.cardCount(statusCounts.all)}
         </span>
-        <span className="deck-library__meta deck-library__meta--compact">
-          {messages.groupMeta(statusCounts.all, statusCounts.due)}
-        </span>
-        {activeGroup && (
+        <div className="deck-library__links">
+          {activeGroup && (
+            <button
+              className="deck-library__link"
+              onClick={() => onOpenGroup(activeGroup.id)}
+              type="button"
+            >
+              {messages.openFolder}
+            </button>
+          )}
           <button
-            className="deck-library__open"
-            onClick={() => onOpenGroup(activeGroup.id)}
+            className="deck-library__link deck-library__manage"
             type="button"
+            disabled={!canDeleteCards || cards.length === 0}
+            inert={isManaging}
+            onClick={startManaging}
           >
-            {messages.openFolder}
+            {messages.manageCards}
           </button>
-        )}
+        </div>
       </div>
       <div className="deck-library__toolbar">
         <SegmentedToggle
@@ -232,18 +247,6 @@ export function CardsLibrary({
           shape="soft"
           value={searchText}
         />
-        <button
-          className="deck-library__manage"
-          type="button"
-          disabled={!canDeleteCards || cards.length === 0}
-          inert={isManaging}
-          onClick={startManaging}
-        >
-          <ListChecks aria-hidden="true" size={18} />
-          <span className="deck-library__manage-label">
-            {messages.manageCards}
-          </span>
-        </button>
       </div>
       <ConfirmDialog
         open={isConfirmingDelete}
@@ -260,7 +263,7 @@ export function CardsLibrary({
         </div>
       )}
       <div className="deck-library__grid">
-        {page.items.map(card => (
+        {shownCards.map(card => (
           <VocabularyCardItem
             key={card.id}
             card={card}
@@ -279,7 +282,34 @@ export function CardsLibrary({
         ) : (
           <p className="deck-library__empty">{messages.emptyFilter}</p>
         ))}
-      {page.pageCount > 1 && (
+      {isCompact && cards.length > 0 && (
+        <div className="deck-library__more">
+          {compactRemaining > 0 && (
+            <button
+              className="deck-library__more-button"
+              onClick={() =>
+                setRevealed({
+                  key: pageContextKey,
+                  extra:
+                    (revealed.key === pageContextKey ? revealed.extra : 0) +
+                    COMPACT_STEP
+                })
+              }
+              type="button"
+            >
+              {messages.showMore(Math.min(COMPACT_STEP, compactRemaining))}
+            </button>
+          )}
+          <span
+            aria-live="polite"
+            aria-atomic="true"
+            className="deck-library__shown"
+          >
+            {messages.shownOfTotal(compactCount, cards.length)}
+          </span>
+        </div>
+      )}
+      {!isCompact && page.pageCount > 1 && (
         <div className="deck-pagination">
           <span
             className="deck-pagination__status"

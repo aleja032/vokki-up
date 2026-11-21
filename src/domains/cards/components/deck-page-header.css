@@ -1,14 +1,14 @@
 @reference 'tailwindcss';
 
-/* Mobile first: title and summary with the round plus button on one row, the
-   review action on its own full-width line below. */
+/* Mobile first: the title, the two action cards and the library row stack with
+   an 18px rhythm; the new card menu and the review pill are wide-screen only. */
 
 .deck-header {
-  @apply grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2.5 gap-y-4;
+  @apply flex flex-col gap-4.5;
 }
 
 .deck-header__identity {
-  @apply flex min-w-0 items-center gap-4;
+  @apply order-1 flex min-w-0 items-center gap-4;
 }
 
 .deck-header__mascot {
@@ -27,22 +27,36 @@
   @apply m-0 mt-1 text-[14.5px] text-(--ink-soft);
 }
 
-/* The actions wrapper dissolves on phones so the plus button joins the title row. */
+.deck-header__quick {
+  @apply order-2 flex gap-3;
+}
+
+/* The actions wrapper dissolves on phones so the library row joins the stack. */
 .deck-header__actions {
   @apply contents;
 }
 
+.deck-header .new-card-menu,
 .deck-header__cta {
-  @apply col-span-full text-[17px];
+  @apply hidden;
 }
 
-.deck-header__cta-wide {
-  @apply hidden;
+/* The library link is a full-width row with a trailing chevron. */
+.deck-header .deck-header__library {
+  @apply order-3 min-h-14 w-full justify-start gap-3 border-[1.5px] px-5 text-[15.5px];
+}
+
+.deck-header__library-label {
+  @apply min-w-0 flex-1 text-left;
+}
+
+.deck-header__library > .action-pill__icon:last-child {
+  @apply text-(--ink-soft);
 }
 
 @media (min-width: 761px) {
   .deck-header {
-    @apply flex flex-wrap justify-between gap-4.5;
+    @apply flex-row flex-wrap items-center justify-between gap-4.5;
   }
 
   .deck-header__mascot {
@@ -57,19 +71,31 @@
     @apply mt-0 text-[15px];
   }
 
+  .deck-header__quick {
+    @apply hidden;
+  }
+
   .deck-header__actions {
-    @apply flex flex-wrap items-center gap-3;
+    @apply order-2 flex flex-wrap items-center gap-3;
+  }
+
+  .deck-header .new-card-menu {
+    @apply block;
   }
 
   .deck-header__cta {
-    @apply col-auto text-[16px];
+    @apply inline-flex text-[16px];
   }
 
-  .deck-header__cta-wide {
-    @apply inline;
+  .deck-header .deck-header__library {
+    @apply order-none min-h-13 w-auto justify-center gap-2 px-5 text-[15px];
   }
 
-  .deck-header__cta-compact {
+  .deck-header__library-label {
+    @apply flex-none;
+  }
+
+  .deck-header__library > .action-pill__icon:last-child {
     @apply hidden;
   }
 }

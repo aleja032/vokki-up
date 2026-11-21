@@ -16,14 +16,18 @@ const items: FolderListItem[] = [
     count: 17,
     pressed: false,
     ariaLabel: 'Trabajo · 17 tarjetas',
+    countLabel: '17 tarjetas',
+    dueLabel: '4 hoy',
     onSelect: () => undefined
   }
 ];
 
-function render(list: readonly FolderListItem[] = items) {
+function render(list: readonly FolderListItem[] = items, expandable = false) {
   return renderToStaticMarkup(
     <FolderList
       addLabel="Nueva carpeta"
+      collapseLabel={expandable ? 'Ver menos' : undefined}
+      expandLabel={expandable ? 'Ver las 12' : undefined}
       emptyLabel="Sin resultados"
       items={list}
       listLabel="Lista de carpetas"
@@ -55,6 +59,25 @@ describe('FolderList', () => {
     expect(html).toContain('aria-label="Trabajo · 17 tarjetas"');
     expect(html.match(/aria-pressed="true"/g)).toHaveLength(1);
     expect(html.match(/aria-pressed="false"/g)).toHaveLength(1);
+  });
+
+  it('shows the long count and the due dot of a folder for the phone cards', () => {
+    const html = render();
+
+    expect(html).toContain('>17 tarjetas<');
+    expect(html).toContain('>4 hoy<');
+    expect(html).toContain('folder-list__dot');
+    // "Todas" has no due label, so only one due block is rendered.
+    expect(html.match(/folder-list__due/g)).toHaveLength(1);
+  });
+
+  it('offers the link that expands the phone list only when it is given', () => {
+    expect(render()).not.toContain('folder-list__toggle');
+
+    const html = render(items, true);
+    expect(html).toContain('>Ver las 12<');
+    expect(html).toContain('aria-expanded="false"');
+    expect(html).toContain('data-expanded="false"');
   });
 
   it('keeps a labelled button to add a folder', () => {

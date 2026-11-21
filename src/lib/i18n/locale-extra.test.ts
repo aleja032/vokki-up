@@ -17,4 +17,16 @@ describe('audit leak translations', () => {
       '3 pending · available offline'
     );
   });
+
+  it('translates the Mi mazo phone labels', () => {
+    setAppLanguage('English');
+    expect(translateText('12 para hoy')).toBe('12 for today');
+    expect(translateText('Ver las 12')).toBe('View all 12');
+    expect(translateText('Ver menos')).toBe('Show less');
+    expect(translateText('Ver 10 más')).toBe('Show 10 more');
+    expect(translateText('8 hoy')).toBe('8 today');
+    expect(translateText('4 de 29 tarjetas')).toBe('4 of 29 cards');
+    expect(translateText('1 de 1 tarjeta')).toBe('1 of 1 cards');
+    expect(translateText('Con IA o manual')).toBe('With AI or manually');
+  });
 });

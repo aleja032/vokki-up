@@ -47,13 +47,19 @@ export function CardGroupList({
   return (
     <FolderList
       addLabel={messages.newGroup}
+      collapseLabel={messages.viewFewerFolders}
       emptyLabel={messages.noFolders}
+      expandLabel={
+        tiles.length > 1 ? messages.viewAllFolders(tiles.length) : undefined
+      }
       isEmpty={query !== '' && visibleTiles.length === 0}
       items={[
         {
           id: ALL_GROUPS_ID,
           label: messages.allGroups,
           count: totalCards,
+          countLabel: messages.cardCount(totalCards),
+          dueLabel: totalDue > 0 ? messages.folderDue(totalDue) : undefined,
           pressed: activeGroupId === ALL_GROUPS_ID,
           ariaLabel: `${messages.allGroups} · ${messages.groupMeta(totalCards, totalDue)}`,
           onSelect: () => onSelectGroup(ALL_GROUPS_ID)
@@ -62,6 +68,8 @@ export function CardGroupList({
           id: group.id,
           label: getGroupDisplayName(group),
           count: cardCount,
+          countLabel: messages.cardCount(cardCount),
+          dueLabel: dueCount > 0 ? messages.folderDue(dueCount) : undefined,
           pressed: activeGroupId === group.id,
           ariaLabel: `${getGroupDisplayName(group)} · ${messages.groupMeta(cardCount, dueCount)}`,
           onSelect: () => onSelectGroup(group.id)

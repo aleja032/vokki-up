@@ -2,10 +2,10 @@
 
 /*
  * Mi mazo library (proposal D), on the page ground: a head with the open
- * folder, a toolbar (status filter, type select, search, manage) and the
- * cards. Phones: a compact list in one rounded container with the search on
- * top and underlined status tabs below. From 761px: a grid of neutral tiles
- * and a numbered pager.
+ * folder and its links, a toolbar (status filter, type select, search) and the
+ * cards. Phones: search and type on top, underlined status tabs, a two-column
+ * grid of tiles and a "show more" step. From 761px: a status pill filter, a
+ * grid of tiles and a numbered pager.
  */
 
 .deck-library {
@@ -18,56 +18,48 @@
 }
 
 .deck-library__head h2 {
-  @apply m-0 text-[22px] leading-tight font-extrabold tracking-[-0.4px];
+  @apply m-0 text-[17px] leading-tight font-bold;
 }
 
 .deck-library__crumb-icon,
 .deck-library__crumb,
 .deck-library__crumb-sep,
-.deck-library__meta--wide {
+.deck-library__meta {
   @apply hidden;
 }
 
-.deck-library__meta {
-  @apply text-[13.5px] text-(--ink-soft);
+.deck-library__links {
+  @apply ml-auto flex items-baseline gap-4;
 }
 
-.deck-library__open {
-  @apply min-h-9 cursor-pointer border-0 bg-transparent p-0 text-[14px] font-bold text-(--ink) underline underline-offset-3;
+.deck-library__link {
+  @apply min-h-11 cursor-pointer border-0 bg-transparent px-0 py-2.5 text-[14px] font-bold text-(--ink) underline underline-offset-3;
 }
 
-/* Phones: search and type on the first row, status tabs and manage on the second. */
-.deck-library__toolbar {
-  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2.5 gap-y-1;
-  grid-template-areas:
-    'search type'
-    'status manage';
+.deck-library__link:disabled {
+  @apply cursor-not-allowed opacity-50;
 }
 
-.deck-library__status {
-  grid-area: status;
-}
-
-.deck-library__manage {
-  @apply inline-flex size-11 cursor-pointer items-center justify-center gap-2 rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-(--surface) p-0 text-[14px] font-bold text-(--ink);
-  grid-area: manage;
-  transition: var(--hover-transition);
-}
-
-.deck-library__manage-label {
-  @apply sr-only;
-}
-
-/* The entry button keeps its slot while managing so the toolbar never shifts. */
+/* The entry button keeps its slot while managing so the head never shifts. */
 .deck-library__manage[inert] {
   @apply invisible;
 }
 
-.deck-library__manage:disabled {
-  @apply cursor-not-allowed opacity-50;
+/* Phones: search and type on the first row, the status tabs below. */
+.deck-library__toolbar {
+  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2.5 gap-y-1;
+  grid-template-areas:
+    'search type'
+    'status status';
+}
+
+.deck-library .deck-library__status {
+  @apply -mx-5 w-auto max-w-none px-5;
+  grid-area: status;
 }
 
 .deck-library__search {
+  @apply min-h-12.5 gap-3;
   grid-area: search;
 }
 
@@ -81,11 +73,24 @@
 }
 
 .deck-library__grid {
-  @apply grid grid-cols-1 overflow-hidden rounded-(--radius-22) border border-solid border-(--line) bg-(--surface);
+  @apply grid grid-cols-2 gap-3;
 }
 
 .deck-library__empty {
   @apply m-0 px-4 py-8 text-center text-[14px] text-(--ink-soft);
+}
+
+.deck-library__more {
+  @apply flex flex-col items-stretch gap-3;
+}
+
+.deck-library__more-button {
+  @apply min-h-12.5 cursor-pointer rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-transparent text-[15px] font-extrabold text-(--ink);
+  transition: var(--hover-transition);
+}
+
+.deck-library__shown {
+  @apply text-center text-[13px] text-(--ink-soft);
 }
 
 .deck-pagination {
@@ -118,10 +123,19 @@
   @apply text-[13px] text-(--ink-soft) tabular-nums;
 }
 
+.deck-library__link:focus-visible,
+.deck-library__more-button:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
 @media (hover: hover) {
-  .deck-library__manage:not(:disabled, [inert]):hover,
+  .deck-library__more-button:hover,
   .deck-pagination__button:not(:disabled, [aria-current='page']):hover {
     border-color: var(--hover-accent);
+    color: var(--indigo);
+  }
+
+  .deck-library__link:not(:disabled, [inert]):hover {
     color: var(--indigo);
   }
 }
@@ -145,20 +159,8 @@
     @apply inline-flex;
   }
 
-  .deck-library__meta--wide {
-    @apply ml-1.5 inline;
-  }
-
-  .deck-library__meta--compact {
-    @apply hidden;
-  }
-
   .deck-library__meta {
-    @apply text-[14px];
-  }
-
-  .deck-library__open {
-    @apply ml-auto;
+    @apply ml-1.5 inline text-[14px];
   }
 
   /* Wide screens: one wrapping row, the status filter first and the rest pushed right. */
@@ -166,28 +168,20 @@
     @apply flex flex-wrap gap-3;
   }
 
-  .deck-library__status {
-    @apply mr-auto;
+  .deck-library .deck-library__status {
+    @apply mr-auto ml-0 max-w-full p-1.25;
   }
 
   .deck-library__search {
-    @apply w-auto max-w-60 flex-[1_1_200px];
+    @apply min-h-12 w-auto flex-[0_1_240px] gap-2.5;
   }
 
   .deck-library__type {
     @apply w-auto;
   }
 
-  .deck-library__manage {
-    @apply size-auto min-h-11 px-4.5;
-  }
-
-  .deck-library__manage-label {
-    @apply not-sr-only;
-  }
-
   .deck-library__grid {
-    @apply grid-cols-[repeat(auto-fill,minmax(min(210px,100%),1fr))] gap-4 overflow-visible rounded-none border-0 bg-transparent;
+    @apply grid-cols-[repeat(auto-fill,minmax(min(210px,100%),1fr))] gap-4;
   }
 
   .deck-library__empty {

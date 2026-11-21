@@ -1,21 +1,21 @@
 @reference 'tailwindcss';
 
 /*
- * Vocabulary card (proposal D, Mi mazo). Phones: a compact list row inside a
- * shared rounded container (term and meaning on the left, due dot and memory
- * bars on the right). From 761px: a neutral tile; the three subgrid rows
- * (top, body, footer) keep tiles of one grid row aligned. The only color on
- * the card is the due dot, which follows the memory strength.
+ * Vocabulary card (proposal D, Mi mazo): a neutral tile. The six subgrid rows
+ * (top, term, meaning, IPA, example, footer) keep tiles of one grid row
+ * aligned. Phones: a compact tile of the two-column grid; from 761px: the wide
+ * tile with the state label, the example and the folder. The only color on the
+ * card is the due dot, which follows the memory strength.
  */
 
 .deck-card {
-  @apply relative flex min-w-0 items-center gap-3 border-0 border-t border-solid border-(--line) px-4 py-3.5 text-(--ink);
+  @apply relative row-span-6 grid min-h-42 min-w-0 grid-rows-subgrid items-start gap-1.25 rounded-(--card-radius) border-[1.5px] border-solid border-(--line) bg-(--surface) px-3.5 pt-4 pb-3.5 text-(--ink);
   animation: enter-rise var(--enter-duration) var(--ease-out)
     var(--enter-delay, 0ms) backwards;
-}
-
-.deck-card:first-child {
-  @apply border-t-0;
+  transition:
+    translate 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -41,7 +41,8 @@
 }
 
 .deck-card__top {
-  @apply hidden items-center justify-between gap-2;
+  @apply flex items-center justify-between gap-2;
+  grid-row: 1;
 }
 
 .deck-card__category,
@@ -54,39 +55,55 @@
 }
 
 .deck-card__state {
-  @apply shrink-0;
+  @apply hidden shrink-0;
 }
 
+/* The body dissolves so term, meaning, IPA and example each take their own
+   shared subgrid row (top 1, term 2, meaning 3, IPA 4, example 5, footer 6). */
 .deck-card__body {
-  @apply flex min-w-0 flex-1 flex-col;
+  @apply contents;
 }
 
 .deck-card__term {
-  @apply m-0 line-clamp-1 text-[17px] leading-[1.1] font-extrabold tracking-[-0.2px] wrap-anywhere;
+  @apply m-0 mt-1 line-clamp-2 text-[18px] leading-[1.1] font-extrabold tracking-[-0.5px] wrap-anywhere;
+  grid-row: 2;
 }
 
 .deck-card__meaning {
-  @apply m-0 line-clamp-1 text-[14px] leading-snug wrap-anywhere text-(--ink-soft);
+  @apply m-0 line-clamp-3 text-[13px] leading-snug font-bold wrap-anywhere text-(--ink);
+  grid-row: 3;
 }
 
 .deck-card__ipa {
-  @apply hidden font-[family-name:var(--deck-font-ipa)] text-[12px] wrap-anywhere text-(--ink-soft);
+  @apply line-clamp-2 block font-[family-name:var(--deck-font-ipa)] text-[12px] wrap-anywhere text-(--ink-soft);
+  grid-row: 4;
 }
 
 .deck-card__example {
-  @apply m-0 hidden rounded-(--radius-14) bg-(--ground) px-3.5 py-2.5 text-[13px] leading-normal wrap-anywhere text-(--ink-soft) italic;
+  @apply m-0 hidden self-stretch rounded-(--radius-14) bg-(--ground) px-3.5 py-2.5 text-[13px] leading-normal wrap-anywhere text-(--ink-soft) italic;
+  grid-row: 5;
 }
 
 .deck-card__example .es-toggle__sentence {
   font-size: 13px;
 }
 
+/* The eye toggle sits centered under the example instead of floating right. */
+.deck-card__example .es-toggle__row {
+  @apply flex-col items-stretch gap-0;
+}
+
+.deck-card__example .es-toggle__button {
+  @apply mx-auto mt-1 mb-0;
+}
+
 .deck-card__example-text {
-  @apply m-0;
+  @apply m-0 line-clamp-2;
 }
 
 .deck-card__footer {
-  @apply flex min-w-0 flex-none flex-col items-end;
+  @apply mt-auto flex min-w-0 flex-col items-stretch gap-1.5 pt-2;
+  grid-row: 6;
 }
 
 .deck-card__group {
@@ -104,11 +121,11 @@
 }
 
 .deck-card__memory-row {
-  @apply flex flex-col-reverse items-end gap-1.75;
+  @apply flex flex-row items-center justify-between gap-1.5;
 }
 
 .deck-card__memory {
-  @apply h-1.5 w-14.25 flex-none gap-[3px];
+  @apply h-[9px] w-[52px] flex-none gap-[3px];
 }
 
 .deck-card__memory .progress-bar__segment {
@@ -116,7 +133,7 @@
 }
 
 .deck-card__due {
-  @apply flex flex-none items-center gap-1.5;
+  @apply flex min-w-0 flex-none items-center gap-1.5;
 }
 
 .deck-card__due .pixel-label {
@@ -150,12 +167,13 @@
 }
 
 .deck-card__check {
-  @apply pointer-events-none absolute top-2 right-2 z-10 flex size-6 items-center justify-center rounded-full border-2 border-solid border-(--line) bg-(--surface) text-transparent;
+  @apply pointer-events-none absolute -top-2 -right-2 z-10 flex size-6 items-center justify-center rounded-full border-2 border-solid border-(--line) bg-(--surface) text-transparent;
   transition: var(--hover-transition);
 }
 
 .deck-card[data-selected='true'] {
-  @apply bg-(--indigo-soft);
+  @apply border-(--brand) bg-(--surface);
+  box-shadow: 0 0 0 1px var(--brand);
 }
 
 .deck-card[data-selected='true'] .deck-card__check {
@@ -164,92 +182,35 @@
 
 @media (min-width: 761px) {
   .deck-card {
-    @apply row-span-6 grid grid-rows-subgrid items-start gap-1.25 rounded-(--card-radius) border-[1.5px] bg-(--surface) px-4 pt-4.5 pb-4;
-    transition:
-      translate 180ms var(--ease-out),
-      border-color 180ms var(--ease-out),
-      box-shadow 180ms var(--ease-out);
+    @apply px-4 pt-4.5 pb-4;
   }
 
-  .deck-card:first-child {
-    @apply border-t-[1.5px];
-  }
-
-  .deck-card__top {
-    @apply flex;
-  }
-
-  /* The body dissolves so term, meaning, IPA and example each take their own
-     shared subgrid row (top 1, term 2, meaning 3, IPA 4, example 5, footer 6). */
-  .deck-card__top {
-    grid-row: 1;
-  }
-
-  .deck-card__body {
-    @apply contents;
+  .deck-card__state {
+    @apply block;
   }
 
   .deck-card__term {
-    @apply mt-1 line-clamp-2 text-[22px] leading-[1.1] tracking-[-0.5px];
-    grid-row: 2;
+    @apply text-[22px];
   }
 
   .deck-card__meaning {
-    @apply line-clamp-3 text-[14px] leading-snug font-bold text-(--ink);
-    grid-row: 3;
-  }
-
-  .deck-card__ipa {
-    @apply line-clamp-2 block;
-    grid-row: 4;
+    @apply text-[14px];
   }
 
   .deck-card__example {
-    @apply block self-stretch;
-    grid-row: 5;
-  }
-
-  /* The eye toggle sits centered under the example instead of floating right. */
-  .deck-card__example .es-toggle__row {
-    @apply flex-col items-stretch gap-0;
-  }
-
-  .deck-card__example .es-toggle__button {
-    @apply mx-auto mt-1 mb-0;
-  }
-
-  .deck-card__example-text {
-    @apply line-clamp-2;
-  }
-
-  .deck-card__footer {
-    @apply mt-auto items-stretch gap-1.5 pt-2;
-    grid-row: 6;
+    @apply block;
   }
 
   .deck-card__group {
     @apply inline-flex;
   }
 
-  .deck-card__memory-row {
-    @apply flex-row items-center justify-between;
-  }
-
   .deck-card__memory {
-    @apply h-[9px] w-[67px];
-  }
-
-  .deck-card__check {
-    @apply -top-2 -right-2;
-  }
-
-  .deck-card[data-selected='true'] {
-    @apply border-(--brand) bg-(--surface);
-    box-shadow: 0 0 0 1px var(--brand);
+    @apply w-[67px];
   }
 }
 
-@media (min-width: 761px) and (hover: hover) {
+@media (hover: hover) {
   .deck-card:hover {
     translate: 0 var(--hover-lift);
     border-color: var(--hover-accent);

@@ -1,18 +1,18 @@
 @reference 'tailwindcss';
 
-/* Phones: a 48px round plus button. From 761px: the labelled pill with a chevron. */
+/* The labelled outline pill with a chevron (wide screens only; phones use the
+   action card of the page header). */
 
 .new-card-menu {
   @apply relative;
 }
 
 .new-card-menu .new-card-menu__trigger {
-  @apply size-12 min-h-12 gap-0 border-[1.5px] p-0;
+  @apply min-h-13 gap-2 border-[1.5px] pr-4.5 pl-4;
 }
 
-.new-card-menu__label,
 .new-card-menu__chevron {
-  @apply hidden;
+  @apply text-(--ink-soft);
 }
 
 .new-card-menu__list {
@@ -35,23 +35,5 @@
 @media (hover: hover) {
   .new-card-menu__item:hover {
     @apply bg-(--surface-muted) text-(--indigo);
-  }
-}
-
-@media (min-width: 761px) {
-  .new-card-menu .new-card-menu__trigger {
-    @apply h-auto min-h-13 w-auto gap-2 pr-4.5 pl-4;
-  }
-
-  .new-card-menu__chevron {
-    @apply text-(--ink-soft);
-  }
-
-  .new-card-menu__label {
-    @apply inline;
-  }
-
-  .new-card-menu__chevron {
-    @apply block;
   }
 }

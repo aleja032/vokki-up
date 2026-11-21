@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { Play } from 'lucide-react';
+import { ChevronRight, Globe, Play, Plus } from 'lucide-react';
+import { ActionCard } from '@/components/ui/action-card';
 import { ActionPill } from '@/components/ui/action-pill';
 import { cardsMessages } from '../messages';
 import { NewCardMenu } from './new-card-menu';
@@ -14,9 +15,9 @@ type DeckPageHeaderProps = {
   onAddCard: () => void;
 };
 
-// Mi mazo header (proposal D): mascot, title with the deck summary, the new
-// card menu and the review action. On phones the title row carries the round
-// plus button and the review action takes its own full-width line.
+// Mi mazo header (proposal D). Wide screens: mascot, title with the deck
+// summary and one row of actions (new card menu, library, review). Phones: the
+// title, two action cards (new card, review) and a full-width library row.
 export function DeckPageHeader({
   totalCards,
   groupCount,
@@ -41,20 +42,41 @@ export function DeckPageHeader({
           </p>
         </div>
       </div>
+      <div className="deck-header__quick">
+        <ActionCard
+          icon={<Plus size={24} />}
+          onClick={onAddCard}
+          subtitle={messages.newCardSubtitle}
+          title={messages.newCardTitle}
+          variant="solid"
+        />
+        <ActionCard
+          href="/review?from=cards"
+          icon={<Play size={24} />}
+          subtitle={messages.dueToday(dueCount)}
+          title={messages.reviewTitle}
+        />
+      </div>
       <div className="deck-header__actions">
         <NewCardMenu onCreate={onAddCard} />
+        <ActionPill
+          className="deck-header__library"
+          href="/cards/word-library"
+          icon={<Globe size={18} strokeWidth={2.4} />}
+          iconEnd={<ChevronRight size={20} />}
+          variant="outline"
+        >
+          <span className="deck-header__library-label">
+            {messages.addFromLibrary}
+          </span>
+        </ActionPill>
         <ActionPill
           className="deck-header__cta"
           href="/review?from=cards"
           icon={<Play size={18} strokeWidth={2.4} />}
           variant="cta"
         >
-          <span className="deck-header__cta-wide">
-            {messages.reviewShort(dueCount)}
-          </span>
-          <span className="deck-header__cta-compact">
-            {messages.reviewToday(dueCount)}
-          </span>
+          {messages.reviewShort(dueCount)}
         </ActionPill>
       </div>
     </header>

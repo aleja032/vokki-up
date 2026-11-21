@@ -166,27 +166,32 @@
   }
 
   .app-main:has(.deck-page) {
-    @apply px-3.5 pt-4 pb-[calc(77px+40px+env(safe-area-inset-bottom))];
+    @apply px-5 pt-6.5 pb-[calc(77px+40px+env(safe-area-inset-bottom))];
   }
 }
 
 /* Page */
 
 .deck-page {
-  @apply flex flex-col gap-4 leading-[normal];
+  @apply flex flex-col gap-4.5 leading-[normal];
 }
 
 .deck-page__workspace {
-  @apply flex flex-col gap-4;
+  @apply flex flex-col gap-4.5;
 }
 
 @media (min-width: 761px) {
   .app-main:has(.deck-page) {
-    @apply pt-7;
+    @apply pt-7.5;
+  }
+
+  /* The proposal main is 1240px wide with 24px gutters: a 1192px content frame. */
+  .app-main__inner:has(.deck-page) {
+    @apply max-w-298;
   }
 
   .deck-page {
-    @apply gap-6.5;
+    @apply gap-6;
   }
 
   .deck-page__workspace {

@@ -13,7 +13,9 @@ export const cardsMessages = createLocalizedMessages({
     createCard: 'Crear tarjeta',
     addFromLibrary: 'Agregar desde la biblioteca',
     reviewShort: (due: number) => `Repasar ${due}`,
-    reviewToday: (due: number) => `Repasar ${due} para hoy`,
+    reviewTitle: 'Repasar',
+    dueToday: (due: number) => `${due} para hoy`,
+    newCardSubtitle: 'Con IA o manual',
     memoryLabel: (level: number) => `Memoria ${level} de 5`,
     groupsTitle: 'Carpetas',
     groupsLabel: 'Carpetas de tarjetas',
@@ -22,6 +24,12 @@ export const cardsMessages = createLocalizedMessages({
     folderSearchLabel: 'Buscar carpeta',
     noFolders: 'No hay carpetas con ese nombre.',
     openFolder: 'Abrir carpeta',
+    viewAllFolders: (count: number) => `Ver las ${count}`,
+    viewFewerFolders: 'Ver menos',
+    folderDue: (due: number) => `${due} hoy`,
+    showMore: (count: number) => `Ver ${count} más`,
+    shownOfTotal: (shown: number, total: number) =>
+      `${shown} de ${total} ${pluralize(total, 'tarjeta', 'tarjetas')}`,
     groupMeta: (cards: number, due: number) =>
       `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} · ${due} hoy`,
     cardCount: (cards: number) =>

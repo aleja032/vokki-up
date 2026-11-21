@@ -22,22 +22,28 @@ describe('DeckPageHeader', () => {
     expect(html).toContain('46 tarjetas · 3 carpetas');
   });
 
-  it('keeps one review link with the due count', () => {
+  // Wide screens show the pill, phones the action card; CSS swaps them.
+  it('links the review twice with the due count: phone card and wide pill', () => {
     const html = render();
-    expect(count(html, 'href="/review?from=cards"')).toBe(1);
+    expect(count(html, 'href="/review?from=cards"')).toBe(2);
+    expect(html).toContain('>Repasar<');
+    expect(html).toContain('>12 para hoy<');
     expect(html).toContain('Repasar 12');
   });
 
-  it('offers new card actions through one menu button', () => {
+  it('offers new card actions through one menu button and one phone card', () => {
     const html = render();
     expect(count(html, 'aria-haspopup="menu"')).toBe(1);
     expect(html).toContain('aria-label="Nueva tarjeta"');
     expect(html).toContain('Crear tarjeta');
+    expect(html).toContain('>Con IA o manual<');
+    expect(count(html, 'action-card--solid')).toBe(1);
   });
 
-  it('keeps exactly one word library link with its full accessible name', () => {
+  it('links the word library from the header row and from the menu', () => {
     const html = render();
-    expect(count(html, 'href="/cards/word-library"')).toBe(1);
+    expect(count(html, 'href="/cards/word-library"')).toBe(2);
+    expect(count(html, 'deck-header__library')).toBeGreaterThanOrEqual(2);
     expect(html).toContain('Agregar desde la biblioteca');
   });
 
