@@ -20,7 +20,7 @@
 }
 
 .aipane__heading p {
-  @apply m-0 text-[14px] leading-[1.45] text-(--ink-soft) wrap-anywhere;
+  @apply m-0 text-[14px] leading-[1.45] wrap-anywhere text-(--ink-soft);
 }
 
 .aipane__body {
@@ -32,7 +32,7 @@
 }
 
 .aipane__textarea {
-  @apply h-[220px] w-full min-w-0 resize-none rounded-[14px] border-[1.5px] border-solid border-(--line) bg-(--ground) p-4 text-[15px] leading-[1.5] text-(--ink) wrap-anywhere outline-none placeholder:text-(--ink-faint) focus:border-(--indigo);
+  @apply h-[220px] w-full min-w-0 resize-none rounded-(--radius-14) border-[1.5px] border-solid border-(--line) bg-(--ground) p-4 text-[15px] leading-[1.5] wrap-anywhere text-(--ink) outline-none placeholder:text-(--ink-faint) focus:border-(--indigo);
 }
 
 .aipane__meta {
@@ -40,7 +40,7 @@
 }
 
 .aipane__note {
-  @apply min-w-0 text-[13px] leading-[1.4] text-(--ink-soft) wrap-anywhere;
+  @apply min-w-0 text-[13px] leading-[1.4] wrap-anywhere text-(--ink-soft);
 }
 
 .aipane__counter {
@@ -54,7 +54,7 @@
 /* Image */
 
 .aipane__dropzone {
-  @apply flex h-[240px] min-w-0 flex-col items-center justify-center gap-3 rounded-[18px] border-[1.5px] border-dashed border-(--line) bg-(--ground) p-6 text-center transition-colors;
+  @apply flex h-[240px] min-w-0 flex-col items-center justify-center gap-3 rounded-(--radius-18) border-[1.5px] border-dashed border-(--line) bg-(--ground) p-6 text-center transition-colors;
 }
 
 .aipane__dropzone[data-dragging='true'] {
@@ -62,7 +62,7 @@
 }
 
 .aipane__dropzone-icon {
-  @apply flex size-14 items-center justify-center rounded-[18px] bg-(--indigo-soft) text-(--indigo);
+  @apply flex size-14 items-center justify-center rounded-(--radius-18) bg-(--indigo-soft) text-(--indigo);
 }
 
 .aipane__dropzone-text {
@@ -70,7 +70,7 @@
 }
 
 .aipane__pick {
-  @apply inline-flex h-11 cursor-pointer items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
+  @apply inline-flex h-11 cursor-pointer items-center gap-2 rounded-(--radius-14) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
 }
 
 .aipane__pick:focus-within {
@@ -78,11 +78,11 @@
 }
 
 .aipane__file {
-  @apply flex min-w-0 items-center gap-3 rounded-[16px] border border-solid border-(--line) bg-(--ground) p-4;
+  @apply flex min-w-0 items-center gap-3 rounded-(--radius-18) border border-solid border-(--line) bg-(--ground) p-4;
 }
 
 .aipane__file-icon {
-  @apply flex size-11 shrink-0 items-center justify-center rounded-[12px] bg-(--indigo-soft) text-(--indigo);
+  @apply flex size-11 shrink-0 items-center justify-center rounded-(--radius-14) bg-(--indigo-soft) text-(--indigo);
 }
 
 .aipane__file-copy {
@@ -98,7 +98,7 @@
 }
 
 .aipane__file-remove {
-  @apply flex size-10 shrink-0 items-center justify-center rounded-[12px] text-(--ink-soft);
+  @apply flex size-10 shrink-0 items-center justify-center rounded-(--radius-14) text-(--ink-soft);
 }
 
 /* Groups */
@@ -120,7 +120,7 @@
 }
 
 .aipane-chip {
-  @apply inline-flex h-10 max-w-full min-w-0 items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
+  @apply inline-flex h-10 max-w-full min-w-0 items-center gap-2 rounded-(--radius-14) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
   --aipane-tone: var(--indigo);
   --aipane-tone-soft: var(--indigo-soft);
 }
@@ -161,7 +161,7 @@
 /* Footer, alert and processing */
 
 .aipane__alert {
-  @apply m-0 rounded-[14px] bg-(--red-soft) px-4 py-3 text-[14px] leading-[1.45] text-(--red-ink) wrap-anywhere;
+  @apply m-0 rounded-(--radius-14) bg-(--red-soft) px-4 py-3 text-[14px] leading-[1.45] wrap-anywhere text-(--red-ink);
 }
 
 .aipane__footer {
@@ -169,11 +169,11 @@
 }
 
 .aipane__submit {
-  @apply inline-flex h-[52px] items-center justify-center gap-2 rounded-[14px] bg-(--indigo) px-6 text-[15px] font-bold text-(--surface) disabled:cursor-not-allowed disabled:opacity-50;
+  @apply inline-flex h-[52px] items-center justify-center gap-2 rounded-(--radius-pill) bg-(--brand) px-6 text-[15px] font-bold text-(--on-indigo) disabled:cursor-not-allowed disabled:opacity-50;
 }
 
 .aipane__processing {
-  @apply absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 rounded-[18px] bg-(--surface)/90 p-6 text-center backdrop-blur-[2px];
+  @apply absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 rounded-(--radius-18) bg-(--surface)/90 p-6 text-center backdrop-blur-[2px];
 }
 
 .aipane__processing strong {
@@ -228,7 +228,7 @@
 }
 
 .aipane-created__list li {
-  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 rounded-[14px] border border-solid border-(--line) bg-(--ground) px-4 py-3;
+  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 rounded-(--radius-14) border border-solid border-(--line) bg-(--ground) px-4 py-3;
 }
 
 .aipane-created__term {
@@ -248,11 +248,11 @@
 }
 
 .aipane-created__primary {
-  @apply inline-flex h-12 items-center rounded-[14px] bg-(--indigo) px-6 text-[15px] font-bold text-(--surface);
+  @apply inline-flex h-12 items-center rounded-(--radius-pill) bg-(--brand) px-6 text-[15px] font-bold text-(--on-indigo);
 }
 
 .aipane-created__secondary {
-  @apply inline-flex h-12 items-center rounded-[14px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-6 text-[15px] font-semibold text-(--ink);
+  @apply inline-flex h-12 items-center rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) bg-(--surface) px-6 text-[15px] font-semibold text-(--ink);
 }
 
 /* Hover feedback: buttons, chips and options */
@@ -270,24 +270,80 @@
 }
 
 @media (hover: hover) {
-  .aipane__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aipane-created__primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .aipane__submit:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aipane-created__primary:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     background-color: var(--indigo-strong);
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-1));
   }
 
-  .aipane-created__secondary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aipane__pick:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aipane-chip:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aipane__file-remove:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .aipane-created__secondary:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aipane__pick:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aipane-chip:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aipane__file-remove:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     border-color: var(--indigo);
     background-color: var(--indigo-soft);
     color: var(--indigo);
   }
 
-  .aipane__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
-  .aipane-created__primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+  .aipane__submit:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):active,
+  .aipane-created__primary:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):active {
     box-shadow: none;
     transform: none;
   }

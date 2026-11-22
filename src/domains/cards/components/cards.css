@@ -253,7 +253,7 @@
 }
 
 .deck-field__input--display {
-  @apply font-[family-name:var(--font-display),Georgia,serif] text-[18px] font-semibold;
+  @apply font-[family-name:var(--font-ui),sans-serif] text-[18px] font-bold;
 }
 
 .deck-field__input--name {
@@ -467,7 +467,7 @@
 }
 
 .deck-preview__word > span:first-child {
-  @apply font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-[1.1] font-semibold;
+  @apply font-[family-name:var(--font-ui),sans-serif] text-[32px] leading-[1.1] font-bold;
 }
 
 .deck-preview__word > span[data-empty='true'] {

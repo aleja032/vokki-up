@@ -43,4 +43,13 @@ describe('audit leak translations', () => {
     expect(translateText('1 de 1 tarjeta')).toBe('1 of 1 cards');
     expect(translateText('Con IA o manual')).toBe('With AI or manually');
   });
+  it('translates the settings provider labels', () => {
+    setAppLanguage('English');
+    expect(translateText('Proveedor')).toBe('Provider');
+    expect(translateText('Modelo')).toBe('Model');
+    expect(translateText('Modelos GPT')).toBe('GPT models');
+    expect(translateText('Vida diaria')).toBe('Daily life');
+    expect(translateText('Laboral')).toBe('Work');
+    expect(translateText('Ahora')).toBe('Just now');
+  });
 });

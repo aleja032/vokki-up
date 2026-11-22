@@ -54,11 +54,7 @@
 .drill-card {
   @apply relative box-border flex w-full min-w-0 flex-col gap-3 rounded-(--radius-36) border-2 border-solid border-(--line) p-5 md:gap-4.5 md:p-6.5;
 
-  background: linear-gradient(
-    180deg,
-    var(--surface-muted) 0%,
-    var(--surface) 100%
-  );
+  background: var(--surface);
   box-shadow:
     0 26px 50px var(--shadow-bubble),
     0 0 0 5px var(--ground);

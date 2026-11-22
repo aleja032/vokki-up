@@ -53,8 +53,11 @@ export function NoteList({
                     {translateText(note.category)}
                   </span>
                   <span aria-hidden="true">·</span>
-                  <time className="note-card__date" title={note.updatedAt}>
-                    {note.updatedAt}
+                  <time
+                    className="note-card__date"
+                    title={translateText(note.updatedAt)}
+                  >
+                    {translateText(note.updatedAt)}
                   </time>
                 </span>
               </span>

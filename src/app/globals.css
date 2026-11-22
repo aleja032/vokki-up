@@ -109,7 +109,7 @@
   --radius-44: 44px;
   --radius-pill: 999px;
   --hover-lift: -4px;
-  --card-radius: 24px;
+  --card-radius: var(--radius-26);
   --control-radius: 14px;
   --page-max: 1480px;
   --focus-ring: #4a3ac9;
@@ -306,8 +306,8 @@ a:focus-visible {
   gap: 10px;
   align-self: flex-start;
   padding: 0 24px;
-  border-radius: var(--control-radius);
-  background: var(--indigo);
+  border-radius: var(--radius-pill);
+  background: var(--brand);
   color: var(--on-indigo);
   font-size: 15px;
   font-weight: 700;
@@ -537,11 +537,14 @@ a:focus-visible {
   }
 }
 
+/* Pixel label, same voice as PixelLabel. */
 .eyebrow {
   color: var(--indigo);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.15px;
+  font-family: var(--font-pixel), monospace;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .secondary-action {
@@ -552,7 +555,7 @@ a:focus-visible {
   gap: 9px;
   padding: 0 18px;
   border: 1px solid var(--line);
-  border-radius: var(--control-radius);
+  border-radius: var(--radius-pill);
   background: var(--surface);
   color: var(--ink);
   font-size: 14px;
@@ -605,10 +608,9 @@ a:focus-visible {
 .portability-heading h1 {
   margin: 0;
   overflow-wrap: anywhere;
-  font-family: var(--font-display), Georgia, serif;
-  font-size: clamp(29px, 3vw, 37px);
-  font-weight: 600;
-  letter-spacing: -0.7px;
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.8px;
   line-height: 1.1;
 }
 .portability-heading p {
@@ -621,7 +623,7 @@ a:focus-visible {
   width: 48px;
   height: 48px;
   place-items: center;
-  border-radius: 15px;
+  border-radius: var(--radius-18);
   background: var(--indigo-soft);
   color: var(--indigo);
 }
@@ -657,7 +659,7 @@ a:focus-visible {
   gap: 15px;
   padding: 21px;
   border: 1px solid var(--line);
-  border-radius: 19px;
+  border-radius: var(--radius-26);
   background: var(--surface);
 }
 .portability-card__header {
@@ -682,7 +684,7 @@ a:focus-visible {
   margin: 0;
   overflow-wrap: anywhere;
   color: var(--ink-soft);
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.5;
 }
 .csv-badge {
@@ -691,13 +693,13 @@ a:focus-visible {
   border-radius: 9px;
   background: var(--green-soft);
   color: var(--green);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
 }
 .csv-schema-wrap {
   overflow-x: auto;
   border: 1px solid var(--line);
-  border-radius: 13px;
+  border-radius: var(--radius-18);
 }
 .csv-schema {
   width: 100%;
@@ -708,13 +710,13 @@ a:focus-visible {
 .csv-schema td {
   padding: 11px 12px;
   border-bottom: 1px solid var(--rule);
-  font-size: 11px;
+  font-size: 13px;
   white-space: nowrap;
 }
 .csv-schema th {
   background: var(--ground);
   color: var(--ink-faint);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -731,7 +733,7 @@ a:focus-visible {
   background: var(--ground);
   color: var(--indigo-strong);
   font-family: ui-monospace, monospace;
-  font-size: 10px;
+  font-size: 12px;
 }
 .csv-required,
 .csv-optional {
@@ -740,7 +742,7 @@ a:focus-visible {
   border-radius: 999px;
   background: var(--red-soft);
   color: var(--red-ink);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 650;
 }
 .csv-optional {
@@ -752,10 +754,10 @@ a:focus-visible {
   align-items: flex-start;
   gap: 8px;
   padding: 10px 12px;
-  border-radius: 11px;
+  border-radius: var(--radius-14);
   background: var(--indigo-soft);
   color: var(--indigo-strong);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.5;
 }
 .csv-group-note svg {
@@ -777,7 +779,7 @@ a:focus-visible {
   height: 38px;
   flex: 0 0 38px;
   place-items: center;
-  border-radius: 12px;
+  border-radius: var(--radius-14);
   background: var(--indigo-soft);
   color: var(--indigo);
 }
@@ -801,10 +803,10 @@ a:focus-visible {
   justify-content: center;
   gap: 8px;
   border: 1px dashed var(--indigo);
-  border-radius: 12px;
+  border-radius: var(--radius-pill);
   background: var(--indigo-soft);
   color: var(--indigo-strong);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 650;
 }
 .csv-file-button {
@@ -823,19 +825,19 @@ a:focus-visible {
   justify-content: space-between;
   gap: 10px;
   padding: 9px 11px;
-  border-radius: 10px;
+  border-radius: var(--radius-14);
   background: var(--ground);
 }
 .csv-file-name span {
   flex: 0 0 auto;
   color: var(--ink-faint);
-  font-size: 10px;
+  font-size: 12px;
 }
 .csv-file-name strong {
   min-width: 0;
   overflow: hidden;
   color: var(--ink);
-  font-size: 11px;
+  font-size: 13px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -845,11 +847,11 @@ a:focus-visible {
   gap: 6px;
   padding: 11px;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--radius-18);
   background: var(--surface);
 }
 .csv-validation[data-valid='true'] {
-  border-color: #b7dfc8;
+  border-color: color-mix(in srgb, var(--green) 35%, var(--line));
   background: var(--green-soft);
 }
 .csv-validation__headline {
@@ -863,7 +865,7 @@ a:focus-visible {
   min-width: 0;
   overflow-wrap: anywhere;
   color: var(--ink);
-  font-size: 11px;
+  font-size: 13px;
 }
 .csv-validation li {
   overflow-wrap: anywhere;
@@ -873,7 +875,7 @@ a:focus-visible {
   margin: 0;
   overflow-wrap: anywhere;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 12px;
 }
 .csv-validation ul {
   display: flex;
@@ -882,7 +884,7 @@ a:focus-visible {
   margin: 0;
   padding-left: 16px;
   color: var(--red-ink);
-  font-size: 10px;
+  font-size: 12px;
 }
 .csv-preview {
   display: flex;
@@ -894,11 +896,11 @@ a:focus-visible {
   justify-content: space-between;
   gap: 8px;
   color: var(--ink);
-  font-size: 11px;
+  font-size: 13px;
 }
 .csv-preview__heading span {
   color: var(--ink-faint);
-  font-size: 10px;
+  font-size: 12px;
 }
 .csv-preview__rows {
   display: flex;
@@ -911,8 +913,8 @@ a:focus-visible {
   gap: 7px;
   padding: 9px;
   border: 1px solid var(--line);
-  border-radius: 9px;
-  font-size: 10px;
+  border-radius: var(--radius-14);
+  font-size: 12px;
 }
 .csv-preview__row strong {
   overflow: hidden;
@@ -929,7 +931,7 @@ a:focus-visible {
 .csv-preview__row em {
   overflow: hidden;
   color: var(--indigo);
-  font-size: 9px;
+  font-size: 11px;
   font-style: normal;
   text-overflow: ellipsis;
   white-space: pre;
@@ -940,7 +942,7 @@ a:focus-visible {
   align-self: stretch;
   justify-content: space-between;
   padding-inline: 14px;
-  font-size: 12px;
+  font-size: 14px;
 }
 .portability-primary span {
   margin-inline: auto;
@@ -955,7 +957,7 @@ a:focus-visible {
   gap: 7px;
   margin: 0;
   color: var(--green);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
@@ -971,13 +973,13 @@ a:focus-visible {
   gap: 6px;
   padding: 18px;
   border: 1px dashed var(--line);
-  border-radius: 15px;
+  border-radius: var(--radius-22);
   background: var(--ground);
   text-align: center;
 }
 .csv-export-preview > span {
   color: var(--ink-faint);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.8px;
 }
@@ -989,7 +991,7 @@ a:focus-visible {
 .csv-export-preview p {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 10px;
+  font-size: 12px;
 }
 .portability-export {
   width: 100%;
@@ -998,7 +1000,7 @@ a:focus-visible {
   margin: 0;
   overflow-wrap: anywhere;
   color: var(--ink-faint);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.5;
 }
 @media (max-width: 950px) {
@@ -1019,12 +1021,12 @@ a:focus-visible {
   .csv-schema th,
   .csv-schema td {
     padding: 9px 8px;
-    font-size: 10px;
+    font-size: 12px;
   }
   .csv-preview__row {
     grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.3fr) minmax(0, 0.65fr);
     padding: 8px 6px;
-    font-size: 9px;
+    font-size: 11px;
   }
 }
 

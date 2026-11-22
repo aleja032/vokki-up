@@ -3,29 +3,14 @@
 /*
  * Sign-in screen and logout button, mobile first.
  * One centered card (max 420px); the same layout on desktop.
- * Colors come from the shared :root tokens; the extra tokens below cover
- * the text on indigo and the disabled / danger states in both themes.
+ * Colors come from the shared semantic tokens; the aliases below name the
+ * text on indigo and the disabled / danger states.
  */
 
 :root {
-  --signin-on-indigo: #ffffff;
-  --signin-disabled: #a9a3dd;
-  --signin-danger: #c2452d;
-}
-
-:root[data-theme='dark'],
-:root.dark {
-  --signin-on-indigo: #141416;
-  --signin-disabled: #4d4a7a;
-  --signin-danger: #e0705a;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --signin-on-indigo: #141416;
-    --signin-disabled: #4d4a7a;
-    --signin-danger: #e0705a;
-  }
+  --signin-on-indigo: var(--on-indigo);
+  --signin-disabled: color-mix(in srgb, var(--indigo) 40%, var(--surface));
+  --signin-danger: var(--coral);
 }
 
 .signin-workspace {
@@ -33,7 +18,7 @@
 }
 
 .signin-card {
-  @apply flex w-full max-w-[420px] min-w-0 flex-col gap-6 rounded-(--card-radius) border border-solid border-(--line) bg-(--surface) px-5 py-7 text-(--ink);
+  @apply flex w-full max-w-[420px] min-w-0 flex-col gap-6 rounded-(--radius-30) border border-solid border-(--line) bg-(--surface) px-5 py-7 text-(--ink) md:px-8 md:py-9;
 }
 
 .signin-brand {
@@ -79,7 +64,7 @@
 }
 
 .signin-field__input {
-  @apply h-[52px] w-full min-w-0 rounded-(--control-radius) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[15px] text-(--ink) placeholder:text-(--ink-faint) focus:outline-2 focus:outline-offset-2 focus:outline-(--indigo);
+  @apply h-[52px] w-full min-w-0 rounded-(--radius-18) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[15px] text-(--ink) placeholder:text-(--ink-faint) focus:outline-2 focus:outline-offset-2 focus:outline-(--indigo);
 }
 
 .signin-field__input--password {
@@ -99,7 +84,7 @@
 }
 
 .signin-form__submit {
-  @apply flex h-[52px] w-full cursor-pointer items-center justify-center rounded-(--control-radius) border-0 bg-(--indigo) px-6 font-[family-name:var(--font-ui),sans-serif] text-[16px] font-bold text-(--signin-on-indigo) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--indigo);
+  @apply flex h-[52px] w-full cursor-pointer items-center justify-center rounded-(--radius-pill) border-0 bg-(--brand) px-6 font-[family-name:var(--font-ui),sans-serif] text-[16px] font-bold text-(--signin-on-indigo) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--indigo);
 }
 
 .signin-form__submit:disabled {
@@ -111,17 +96,17 @@
 }
 
 .signin-form__root-error {
-  @apply m-0 rounded-(--control-radius) border border-solid border-(--signin-danger) bg-(--red-soft) px-4 py-3 text-[14px] leading-[1.45] wrap-anywhere text-(--red-ink);
+  @apply m-0 rounded-(--radius-18) border border-solid border-(--signin-danger) bg-(--red-soft) px-4 py-3 text-[14px] leading-[1.45] wrap-anywhere text-(--red-ink);
 }
 
 .signin-form__guest {
-  @apply flex h-12 items-center justify-center rounded-(--control-radius) border-[1.5px] border-solid border-(--line) px-4 text-[15px] font-semibold text-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--indigo);
+  @apply flex h-12 items-center justify-center rounded-(--radius-pill) border-[1.5px] border-solid border-(--line) px-4 text-[15px] font-semibold text-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--indigo);
 }
 
 /* Authenticated card */
 
 .signin-account {
-  @apply flex min-w-0 flex-col gap-1 rounded-(--control-radius) bg-(--surface-muted) px-4 py-3.5;
+  @apply flex min-w-0 flex-col gap-1 rounded-(--radius-18) bg-(--surface-muted) px-4 py-3.5;
 }
 
 .signin-account span {
@@ -184,23 +169,72 @@
 }
 
 @media (hover: hover) {
-  .signin-login-cta:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .signin-form__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .signin-login-cta:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .signin-form__submit:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     background-color: var(--indigo-strong);
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-1));
   }
 
-  .signin-form__guest:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .signin-logout:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .signin-field__toggle:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .signin-form__guest:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .signin-logout:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .signin-field__toggle:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     border-color: var(--indigo);
     background-color: var(--indigo-soft);
     color: var(--indigo);
   }
 
-  .signin-login-cta:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
-  .signin-form__submit:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+  .signin-login-cta:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):active,
+  .signin-form__submit:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):active {
     box-shadow: none;
     transform: none;
   }

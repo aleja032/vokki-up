@@ -48,7 +48,7 @@ export function NoteDetail({
             {note.title || notesMessages.list.untitled}
           </h2>
           <span className="note-detail__meta">
-            {messages.edited(note.updatedAt)}
+            {messages.edited(translateText(note.updatedAt))}
           </span>
         </div>
         <div className="note-detail__actions">

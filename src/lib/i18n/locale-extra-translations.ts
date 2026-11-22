@@ -2,6 +2,18 @@
 // Merged over the base map in `locale.ts`; keep each key identical to the
 // Spanish source string used in the domain messages.
 export const extraTranslations: Record<string, string> = {
+  // Settings provider panel
+  Proveedor: 'Provider',
+  Modelo: 'Model',
+  'Modelos GPT': 'GPT models',
+
+  // Notes: label stored when a note is saved
+  Ahora: 'Just now',
+
+  // Group name suggestions
+  'Vida diaria': 'Daily life',
+  Laboral: 'Work',
+
   // Parts of speech (stored as Spanish data values, shown translated)
   Sustantivo: 'Noun',
   Verbo: 'Verb',

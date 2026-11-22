@@ -9,112 +9,42 @@
  * - 761px and up: page inside the shell; the review step uses two columns.
  */
 
-/* Palette: proposal values for the light theme, existing dark tokens otherwise. */
+/* Palette: aliases of the semantic tokens (light and dark live in globals.css). */
 
-:root {
-  --aicap-edge: #d3cdc0;
-  --aicap-dashed: #b9b3a6;
-  --aicap-ghost: #b9b3a6;
-  --aicap-danger: #c2452d;
-  --aicap-danger-ink: #7e2a17;
-  --aicap-danger-edge: #e3a99a;
-  --aicap-disabled: #a9a3dd;
-  --aicap-on-indigo: #ffffff;
-  --aicap-green-ink: #1a6b47;
-  --aicap-green-notice: #14553a;
-  --aicap-amber-ink: #5c3b00;
-  --aicap-amber-pale: #fff7e6;
-  --aicap-amber-edge: #e0b867;
-  --aicap-amber-text: #7a4f00;
-  --aicap-amber-strong: #9a6200;
-  --aicap-teal: #1b7f92;
-  --aicap-bar-light: #b9b3ee;
-  --aicap-spin-track: #c9c3f5;
-  --aicap-offline-dot: #8e8a9e;
-  --aicap-blur-bg: #e2ddd3;
+:root,
+.accent-violet {
+  --aicap-edge: var(--line);
+  --aicap-dashed: var(--line);
+  --aicap-ghost: var(--line);
+  --aicap-danger: var(--coral);
+  --aicap-danger-ink: var(--coral);
+  --aicap-danger-edge: color-mix(in srgb, var(--coral) 45%, transparent);
+  --aicap-disabled: color-mix(in srgb, var(--indigo) 40%, var(--surface));
+  --aicap-on-indigo: var(--on-indigo);
+  --aicap-green-ink: var(--green);
+  --aicap-green-notice: var(--green);
+  --aicap-amber-ink: var(--amber-ink);
+  --aicap-amber-pale: var(--amber-soft);
+  --aicap-amber-edge: color-mix(in srgb, var(--amber) 55%, transparent);
+  --aicap-amber-text: var(--amber-ink);
+  --aicap-amber-strong: var(--amber-ink);
+  --aicap-teal: var(--blue);
+  --aicap-bar-light: var(--indigo-soft);
+  --aicap-spin-track: var(--indigo-soft);
+  --aicap-offline-dot: var(--ink-faint);
+  --aicap-blur-bg: var(--surface-muted);
   --aicap-font-ipa: var(--font-ipa), 'Noto Sans', sans-serif;
 
-  --aicap-noun-soft: #e9e6fb;
-  --aicap-noun-ink: #3a2cb0;
-  --aicap-verb-soft: #ddf2e7;
-  --aicap-verb-ink: #1a6b47;
-  --aicap-adjective-soft: #fcebc4;
-  --aicap-adjective-ink: #7a4f00;
-  --aicap-adverb-soft: #d9eef2;
-  --aicap-adverb-ink: #135f6e;
-  --aicap-phrase-soft: #fbe4dd;
-  --aicap-phrase-ink: #a8381f;
-}
-
-:root[data-theme='dark'],
-:root.dark {
-  --aicap-edge: #4a4a52;
-  --aicap-dashed: #5a5a63;
-  --aicap-ghost: #5a5a63;
-  --aicap-danger: #e0705a;
-  --aicap-danger-ink: #f4b3a0;
-  --aicap-danger-edge: #7a4034;
-  --aicap-disabled: #4d4a7a;
-  --aicap-on-indigo: #141416;
-  --aicap-green-ink: #67bd91;
-  --aicap-green-notice: #67bd91;
-  --aicap-amber-ink: #e3b25a;
-  --aicap-amber-pale: #2f2618;
-  --aicap-amber-edge: #6b5530;
-  --aicap-amber-text: #e3b25a;
-  --aicap-amber-strong: #e3b25a;
-  --aicap-teal: #72bac6;
-  --aicap-bar-light: #4d4a7a;
-  --aicap-spin-track: #4d4a7a;
-  --aicap-offline-dot: #86838d;
-  --aicap-blur-bg: #33333a;
-
-  --aicap-noun-soft: #302d4c;
-  --aicap-noun-ink: #b0a9fa;
-  --aicap-verb-soft: #1e3429;
-  --aicap-verb-ink: #67bd91;
-  --aicap-adjective-soft: #3b3020;
-  --aicap-adjective-ink: #e3b25a;
-  --aicap-adverb-soft: #1d3439;
-  --aicap-adverb-ink: #72bac6;
-  --aicap-phrase-soft: #422821;
-  --aicap-phrase-ink: #f09a7e;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --aicap-edge: #4a4a52;
-    --aicap-dashed: #5a5a63;
-    --aicap-ghost: #5a5a63;
-    --aicap-danger: #e0705a;
-    --aicap-danger-ink: #f4b3a0;
-    --aicap-danger-edge: #7a4034;
-    --aicap-disabled: #4d4a7a;
-    --aicap-on-indigo: #141416;
-    --aicap-green-ink: #67bd91;
-    --aicap-green-notice: #67bd91;
-    --aicap-amber-ink: #e3b25a;
-    --aicap-amber-pale: #2f2618;
-    --aicap-amber-edge: #6b5530;
-    --aicap-amber-text: #e3b25a;
-    --aicap-amber-strong: #e3b25a;
-    --aicap-teal: #72bac6;
-    --aicap-bar-light: #4d4a7a;
-    --aicap-spin-track: #4d4a7a;
-    --aicap-offline-dot: #86838d;
-    --aicap-blur-bg: #33333a;
-
-    --aicap-noun-soft: #302d4c;
-    --aicap-noun-ink: #b0a9fa;
-    --aicap-verb-soft: #1e3429;
-    --aicap-verb-ink: #67bd91;
-    --aicap-adjective-soft: #3b3020;
-    --aicap-adjective-ink: #e3b25a;
-    --aicap-adverb-soft: #1d3439;
-    --aicap-adverb-ink: #72bac6;
-    --aicap-phrase-soft: #422821;
-    --aicap-phrase-ink: #f09a7e;
-  }
+  --aicap-noun-soft: var(--indigo-soft);
+  --aicap-noun-ink: var(--indigo);
+  --aicap-verb-soft: var(--green-soft);
+  --aicap-verb-ink: var(--green);
+  --aicap-adjective-soft: var(--amber-soft);
+  --aicap-adjective-ink: var(--amber-ink);
+  --aicap-adverb-soft: var(--blue-soft);
+  --aicap-adverb-ink: var(--blue);
+  --aicap-phrase-soft: var(--coral-soft);
+  --aicap-phrase-ink: var(--coral);
 }
 
 /* Motion (visual only; no progress is simulated) */
@@ -177,7 +107,7 @@
 }
 
 .aicap__back {
-  @apply flex size-[46px] shrink-0 items-center justify-center rounded-[14px] border border-solid border-(--line) bg-(--surface) text-(--ink);
+  @apply flex size-[46px] shrink-0 items-center justify-center rounded-(--radius-14) border border-solid border-(--line) bg-(--surface) text-(--ink);
 }
 
 .aicap__bar-title {
@@ -269,15 +199,15 @@
 /* Buttons */
 
 .aicap-button {
-  @apply inline-flex h-11 max-w-full cursor-pointer items-center justify-center gap-2 rounded-[12px] px-[18px] text-[14px] font-semibold;
+  @apply inline-flex h-11 max-w-full cursor-pointer items-center justify-center gap-2 rounded-(--radius-pill) px-[18px] text-[14px] font-semibold;
 }
 
 .aicap-button--lg {
-  @apply h-[52px] gap-2.5 rounded-[14px] px-6 text-[16px] font-bold;
+  @apply h-[52px] gap-2.5 rounded-(--radius-pill) px-6 text-[16px] font-bold;
 }
 
 .aicap-button--md {
-  @apply h-12 rounded-[14px] px-5 text-[15px] font-semibold;
+  @apply h-12 rounded-(--radius-pill) px-5 text-[15px] font-semibold;
 }
 
 .aicap-button--sm {
@@ -289,7 +219,7 @@
 }
 
 .aicap-button--primary {
-  @apply bg-(--indigo) text-(--aicap-on-indigo);
+  @apply bg-(--brand) text-(--aicap-on-indigo);
 }
 
 .aicap-button--primary[data-disabled='true'] {
@@ -325,11 +255,11 @@ a.aicap-button--outline {
 /* Mode tabs */
 
 .aicap-modes {
-  @apply grid grid-cols-2 gap-1.5 rounded-[16px] bg-(--surface-muted) p-1.5;
+  @apply grid grid-cols-2 gap-1.5 rounded-(--radius-18) bg-(--surface-muted) p-1.5;
 }
 
 .aicap-modes__tab {
-  @apply flex h-11 items-center justify-center gap-2 rounded-[12px] px-4 text-[15px] font-semibold text-(--ink-soft);
+  @apply flex h-11 items-center justify-center gap-2 rounded-(--radius-14) px-4 text-[15px] font-semibold text-(--ink-soft);
 }
 
 .aicap-modes__tab[aria-selected='true'] {
@@ -393,13 +323,13 @@ a.aicap-button--outline {
 }
 
 .aicap-textarea {
-  @apply w-full resize-none rounded-[16px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 py-3.5 text-[16px] leading-normal text-(--ink) focus:outline-2 focus:outline-offset-2 focus:outline-(--focus-ring);
+  @apply w-full resize-none rounded-(--radius-18) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 py-3.5 text-[16px] leading-normal text-(--ink) focus:outline-2 focus:outline-offset-2 focus:outline-(--focus-ring);
 
   font-family: inherit;
 }
 
 .aicap-textarea--compact {
-  @apply resize-y rounded-[14px] text-[15px];
+  @apply resize-y rounded-(--radius-14) text-[15px];
 }
 
 .aicap-chips {
@@ -427,11 +357,11 @@ a.aicap-button--outline {
 }
 
 .aicap-dropzone {
-  @apply flex flex-col items-center gap-4 rounded-[20px] border-[1.5px] border-dashed border-(--aicap-dashed) bg-(--surface) px-6 py-7 text-center;
+  @apply flex flex-col items-center gap-4 rounded-(--radius-22) border-[1.5px] border-dashed border-(--aicap-dashed) bg-(--surface) px-6 py-7 text-center;
 }
 
 .aicap-dropzone__icon {
-  @apply flex size-14 items-center justify-center rounded-[18px] bg-(--indigo-soft) text-(--indigo);
+  @apply flex size-14 items-center justify-center rounded-(--radius-18) bg-(--indigo-soft) text-(--indigo);
 }
 
 .aicap-dropzone__text {
@@ -447,11 +377,11 @@ a.aicap-button--outline {
 }
 
 .aicap-file {
-  @apply flex items-center gap-3.5 rounded-[18px] border-[1.5px] border-solid border-(--indigo) bg-(--surface) p-3.5;
+  @apply flex items-center gap-3.5 rounded-(--radius-18) border-[1.5px] border-solid border-(--indigo) bg-(--surface) p-3.5;
 }
 
 .aicap-file__thumb {
-  @apply flex size-16 shrink-0 flex-col gap-1.5 rounded-[12px] bg-(--surface-muted) p-2.5;
+  @apply flex size-16 shrink-0 flex-col gap-1.5 rounded-(--radius-14) bg-(--surface-muted) p-2.5;
 }
 
 .aicap-file__thumb span {
@@ -487,7 +417,7 @@ a.aicap-button--outline {
 }
 
 .aicap-file__remove {
-  @apply flex size-11 items-center justify-center rounded-[12px] bg-(--ground) text-(--ink-soft);
+  @apply flex size-11 items-center justify-center rounded-(--radius-14) bg-(--ground) text-(--ink-soft);
 }
 
 .aicap-file--compact {
@@ -497,7 +427,7 @@ a.aicap-button--outline {
 }
 
 .aicap-file--compact .aicap-file__thumb {
-  @apply size-14 gap-[5px] rounded-[10px] p-[9px];
+  @apply size-14 gap-[5px] rounded-(--radius-14) p-[9px];
 }
 
 .aicap-file--compact .aicap-file__thumb span {
@@ -520,7 +450,7 @@ a.aicap-button--outline {
 }
 
 .aicap-group {
-  @apply inline-flex h-10 items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold;
+  @apply inline-flex h-10 items-center gap-2 rounded-(--radius-14) border-[1.5px] border-solid border-(--line) bg-(--surface) px-4 text-[14px] font-semibold;
 }
 
 .aicap-group[data-tone='indigo'] {
@@ -551,7 +481,7 @@ a.aicap-button--outline {
 }
 
 .aicap-note {
-  @apply flex gap-3.5 rounded-[18px] bg-(--indigo-soft) px-5 py-4.5 text-(--ink);
+  @apply flex gap-3.5 rounded-(--radius-18) bg-(--indigo-soft) px-5 py-4.5 text-(--ink);
 }
 
 .aicap-note__icon {
@@ -563,7 +493,7 @@ a.aicap-button--outline {
 }
 
 .aicap-note--compact {
-  @apply gap-3 rounded-[16px] p-4;
+  @apply gap-3 rounded-(--radius-18) p-4;
 }
 
 .aicap-note--compact .aicap-note__icon {
@@ -577,11 +507,11 @@ a.aicap-button--outline {
 /* Panels, headings */
 
 .aicap-panel {
-  @apply flex flex-col gap-3.5 rounded-[22px] border border-solid border-(--line) bg-(--surface) px-6 py-[22px];
+  @apply flex flex-col gap-3.5 rounded-(--radius-22) border border-solid border-(--line) bg-(--surface) px-6 py-[22px];
 }
 
 .aicap-panel--progress {
-  @apply gap-6 rounded-[24px] py-7;
+  @apply gap-6 rounded-(--radius-26) py-7;
 }
 
 .aicap-panel--details {
@@ -605,7 +535,7 @@ a.aicap-button--outline {
 }
 
 .aicap-display {
-  @apply m-0 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] font-semibold;
+  @apply m-0 font-[family-name:var(--font-ui),sans-serif] font-bold wrap-anywhere;
 }
 
 .aicap-display--sm {
@@ -671,7 +601,7 @@ a.aicap-button--outline {
 }
 
 .aicap-skeleton {
-  @apply flex flex-col gap-3 rounded-[20px] border border-solid border-(--line) bg-(--surface) p-[22px];
+  @apply flex flex-col gap-3 rounded-(--radius-22) border border-solid border-(--line) bg-(--surface) p-[22px];
 }
 
 .aicap-skeleton__line {
@@ -727,11 +657,11 @@ a.aicap-button--outline {
 }
 
 .aicap-bulk__accept {
-  @apply inline-flex h-10 items-center gap-2 rounded-[12px] border-[1.5px] border-solid border-(--aicap-edge) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
+  @apply inline-flex h-10 items-center gap-2 rounded-(--radius-14) border-[1.5px] border-solid border-(--aicap-edge) bg-(--surface) px-4 text-[14px] font-semibold text-(--ink);
 }
 
 .aicap-bulk__discard {
-  @apply inline-flex h-10 items-center gap-2 rounded-[12px] bg-transparent px-4 text-[14px] font-semibold text-(--red-ink);
+  @apply inline-flex h-10 items-center gap-2 rounded-(--radius-14) bg-transparent px-4 text-[14px] font-semibold text-(--red-ink);
 }
 
 .aicap-review[data-state='discard-confirm'] .aicap-bulk,
@@ -752,7 +682,7 @@ a.aicap-button--outline {
 }
 
 .aicap-confirm {
-  @apply flex flex-col gap-4 rounded-[20px] bg-(--red-soft) p-5 text-(--aicap-danger-ink);
+  @apply flex flex-col gap-4 rounded-(--radius-22) bg-(--red-soft) p-5 text-(--aicap-danger-ink);
 }
 
 .aicap-confirm__copy {
@@ -773,7 +703,7 @@ a.aicap-button--outline {
 
 .aicap-confirm__cancel,
 .aicap-confirm__accept {
-  @apply flex h-12 items-center justify-center rounded-[14px] px-4 text-[15px];
+  @apply flex h-12 items-center justify-center rounded-(--radius-14) px-4 text-[15px];
 }
 
 .aicap-confirm__cancel {
@@ -785,11 +715,11 @@ a.aicap-button--outline {
 }
 
 .aicap-discarded {
-  @apply flex flex-col items-center gap-3.5 rounded-[24px] border border-solid border-(--line) bg-(--surface) px-6 py-8 text-center;
+  @apply flex flex-col items-center gap-3.5 rounded-(--radius-26) border border-solid border-(--line) bg-(--surface) px-6 py-8 text-center;
 }
 
 .aicap-discarded__icon {
-  @apply flex size-14 items-center justify-center rounded-[18px] bg-(--surface-muted) text-(--ink-soft);
+  @apply flex size-14 items-center justify-center rounded-(--radius-18) bg-(--surface-muted) text-(--ink-soft);
 }
 
 .aicap-discarded__title {
@@ -809,7 +739,7 @@ a.aicap-button--outline {
 }
 
 .aicap-proposal {
-  @apply flex min-w-0 flex-col gap-4 rounded-[22px] border-2 border-solid border-(--line) bg-(--surface) p-[22px];
+  @apply flex min-w-0 flex-col gap-4 rounded-(--radius-22) border-2 border-solid border-(--line) bg-(--surface) p-[22px];
 }
 
 .aicap-proposal[data-tone='accepted'] {
@@ -841,7 +771,7 @@ a.aicap-button--outline {
 }
 
 .aicap-correction {
-  @apply flex flex-wrap items-center justify-between gap-2.5 rounded-[14px] bg-(--amber-soft) px-3.5 py-3 text-(--aicap-amber-ink);
+  @apply flex flex-wrap items-center justify-between gap-2.5 rounded-(--radius-14) bg-(--amber-soft) px-3.5 py-3 text-(--aicap-amber-ink);
 }
 
 .aicap-correction__text {
@@ -849,7 +779,7 @@ a.aicap-button--outline {
 }
 
 .aicap-correction__toggle {
-  @apply h-9 rounded-[10px] border border-solid border-(--aicap-amber-edge) bg-(--aicap-amber-pale) px-3 text-[12px] font-semibold text-(--aicap-amber-ink);
+  @apply h-9 rounded-(--radius-14) border border-solid border-(--aicap-amber-edge) bg-(--aicap-amber-pale) px-3 text-[12px] font-semibold text-(--aicap-amber-ink);
 }
 
 .aicap-proposal__head {
@@ -861,11 +791,11 @@ a.aicap-button--outline {
 }
 
 .aicap-proposal__term {
-  @apply line-clamp-2 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[26px] leading-[1.15] font-semibold;
+  @apply line-clamp-2 font-[family-name:var(--font-ui),sans-serif] text-[26px] leading-[1.15] font-bold wrap-anywhere;
 }
 
 .aicap-proposal__ipa {
-  @apply line-clamp-2 wrap-anywhere font-[family-name:var(--aicap-font-ipa)] text-[14px] leading-[19px] text-(--ink-soft);
+  @apply line-clamp-2 font-[family-name:var(--aicap-font-ipa)] text-[14px] leading-[19px] wrap-anywhere text-(--ink-soft);
 }
 
 .aicap-proposal__category,
@@ -908,7 +838,7 @@ a.aicap-button--outline {
 }
 
 .aicap-proposal__example {
-  @apply line-clamp-3 rounded-[12px] bg-(--ground) px-3.5 py-3 text-[14px] leading-normal text-(--ink-soft) italic;
+  @apply line-clamp-3 rounded-(--radius-14) bg-(--ground) px-3.5 py-3 text-[14px] leading-normal text-(--ink-soft) italic;
 }
 
 .aicap-proposal__related {
@@ -924,7 +854,7 @@ a.aicap-button--outline {
 }
 
 .aicap-alert {
-  @apply flex min-w-0 flex-col gap-3 rounded-[14px] wrap-anywhere bg-(--red-soft) px-4 py-3.5 text-(--aicap-danger-ink);
+  @apply flex min-w-0 flex-col gap-3 rounded-(--radius-14) bg-(--red-soft) px-4 py-3.5 wrap-anywhere text-(--aicap-danger-ink);
 }
 
 .aicap-alert__text {
@@ -952,7 +882,7 @@ a.aicap-button--outline {
 }
 
 .aicap-action {
-  @apply h-11 rounded-[12px] border-[1.5px] border-solid border-(--aicap-edge) bg-(--surface) px-2.5 text-[14px] font-semibold text-(--ink);
+  @apply h-11 rounded-(--radius-14) border-[1.5px] border-solid border-(--aicap-edge) bg-(--surface) px-2.5 text-[14px] font-semibold text-(--ink);
 }
 
 .aicap-action--reject {
@@ -968,7 +898,7 @@ a.aicap-button--outline {
 }
 
 .aicap-rejected {
-  @apply flex items-center gap-3 rounded-[16px] border-[1.5px] border-dashed border-(--aicap-edge) px-[18px] py-3.5;
+  @apply flex items-center gap-3 rounded-(--radius-18) border-[1.5px] border-dashed border-(--aicap-edge) px-[18px] py-3.5;
 }
 
 .aicap-rejected__text {
@@ -976,7 +906,7 @@ a.aicap-button--outline {
 }
 
 .aicap-rejected__undo {
-  @apply h-10 shrink-0 rounded-[12px] bg-(--surface-muted) px-4 text-[13px] font-semibold text-(--ink);
+  @apply h-10 shrink-0 rounded-(--radius-14) bg-(--surface-muted) px-4 text-[13px] font-semibold text-(--ink);
 }
 
 /* Hero, list, callouts (created and error screens) */
@@ -990,11 +920,11 @@ a.aicap-button--outline {
 }
 
 .aicap-hero__icon {
-  @apply flex size-22 items-center justify-center rounded-[28px] bg-(--surface-muted) text-(--ink-soft);
+  @apply flex size-22 items-center justify-center rounded-(--radius-28) bg-(--surface-muted) text-(--ink-soft);
 }
 
 .aicap-hero__icon--success {
-  @apply size-24 rounded-[30px] bg-(--green-soft) text-(--aicap-green-ink);
+  @apply size-24 rounded-(--radius-30) bg-(--green-soft) text-(--aicap-green-ink);
 }
 
 .aicap-hero__icon--danger {
@@ -1002,7 +932,7 @@ a.aicap-button--outline {
 }
 
 .aicap-hero__body {
-  @apply m-0 text-[15px] wrap-anywhere leading-[1.55] text-(--ink-soft);
+  @apply m-0 text-[15px] leading-[1.55] wrap-anywhere text-(--ink-soft);
 }
 
 .aicap-hero__body--lg {
@@ -1014,7 +944,7 @@ a.aicap-button--outline {
 }
 
 .aicap-list {
-  @apply rounded-[24px] border border-solid border-(--line) bg-(--surface) px-5 py-2;
+  @apply rounded-(--radius-26) border border-solid border-(--line) bg-(--surface) px-5 py-2;
 }
 
 .aicap-list__row {
@@ -1026,7 +956,7 @@ a.aicap-button--outline {
 }
 
 .aicap-list__word {
-  @apply line-clamp-2 wrap-anywhere font-[family-name:var(--font-display),Georgia,serif] text-[20px] font-semibold;
+  @apply line-clamp-2 font-[family-name:var(--font-ui),sans-serif] text-[20px] font-bold wrap-anywhere;
 }
 
 .aicap-list__meaning {
@@ -1042,7 +972,7 @@ a.aicap-button--outline {
 }
 
 .aicap-callout {
-  @apply flex items-start gap-3 rounded-[18px] px-5 py-4 text-[14px] leading-normal;
+  @apply flex items-start gap-3 rounded-(--radius-18) px-5 py-4 text-[14px] leading-normal;
 }
 
 .aicap-callout .aicap-icon {
@@ -1066,7 +996,7 @@ a.aicap-button--outline {
 }
 
 .aicap-blurred__page {
-  @apply flex size-30 flex-col gap-2.5 rounded-[22px] border-[3px] border-solid border-(--aicap-danger) bg-(--aicap-blur-bg) px-[18px] py-[22px] blur-[1.5px];
+  @apply flex size-30 flex-col gap-2.5 rounded-(--radius-22) border-[3px] border-solid border-(--aicap-danger) bg-(--aicap-blur-bg) px-[18px] py-[22px] blur-[1.5px];
 }
 
 .aicap-blurred__page span {
@@ -1090,7 +1020,7 @@ a.aicap-button--outline {
 }
 
 .aicap-blurred__badge {
-  @apply absolute box-content -right-2.5 -bottom-2.5 flex size-10 items-center justify-center rounded-full border-[3px] border-solid border-(--ground) bg-(--aicap-danger) text-(--aicap-on-indigo);
+  @apply absolute -right-2.5 -bottom-2.5 box-content flex size-10 items-center justify-center rounded-full border-[3px] border-solid border-(--ground) bg-(--aicap-danger) text-(--aicap-on-indigo);
 }
 
 .aicap-tips {
@@ -1106,7 +1036,7 @@ a.aicap-button--outline {
 }
 
 .aicap-warning {
-  @apply flex items-start gap-3 rounded-[16px] border-[1.5px] border-solid bg-(--surface) px-[18px] py-4;
+  @apply flex items-start gap-3 rounded-(--radius-18) border-[1.5px] border-solid bg-(--surface) px-[18px] py-4;
 }
 
 .aicap-warning[data-tone='error'] {
@@ -1166,7 +1096,7 @@ a.aicap-button--outline {
 }
 
 .aicap-support {
-  @apply inline-flex h-9 items-center gap-1.5 rounded-[10px] border border-solid border-(--line) bg-(--ground) px-3 text-[13px] font-semibold text-(--ink);
+  @apply inline-flex h-9 items-center gap-1.5 rounded-(--radius-14) border border-solid border-(--line) bg-(--ground) px-3 text-[13px] font-semibold text-(--ink);
 }
 
 /* Wide screens: page inside the shell */
@@ -1199,7 +1129,7 @@ a.aicap-button--outline {
   }
 
   .aicap__page-title h1 {
-    @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[42px] leading-[normal] font-semibold tracking-[-0.8px];
+    @apply m-0 font-[family-name:var(--font-ui),sans-serif] text-[42px] leading-[normal] font-bold tracking-[-0.8px];
   }
 
   .aicap__page-head .aicap-modes {
@@ -1240,7 +1170,7 @@ a.aicap-button--outline {
   }
 
   .aicap-input {
-    @apply box-content flex min-w-0 flex-[1_1_320px] flex-col gap-[22px] rounded-[26px] border border-solid border-(--line) bg-(--surface) p-7;
+    @apply box-content flex min-w-0 flex-[1_1_320px] flex-col gap-[22px] rounded-(--radius-26) border border-solid border-(--line) bg-(--surface) p-7;
   }
 
   .aicap-input__heading {
@@ -1351,11 +1281,11 @@ a.aicap-button--outline {
   }
 
   .aicap-rejected {
-    @apply rounded-[18px] px-5 py-4;
+    @apply rounded-(--radius-18) px-5 py-4;
   }
 
   .aicap-savebar {
-    @apply mt-3 flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-solid border-(--line) bg-(--surface) px-6 py-5;
+    @apply mt-3 flex flex-wrap items-center justify-between gap-4 rounded-(--radius-22) border border-solid border-(--line) bg-(--surface) px-6 py-5;
   }
 
   .aicap-savebar__hint {
@@ -1411,43 +1341,155 @@ a.aicap-button--outline {
 }
 
 @media (hover: hover) {
-  .aicap-button--primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aicap-action--accept:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .aicap-button--primary:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aicap-action--accept:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     background-color: var(--indigo-strong);
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-1));
   }
 
-  .aicap-button--danger:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .aicap-button--danger:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-1));
   }
 
-  .aicap-button--outline:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aicap-bulk__accept:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aicap-action:not(.aicap-action--accept):not(.aicap-action--reject):not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aicap-rejected__undo:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aicap__back:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aicap-file__remove:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aicap-modes__tab:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .aicap-button--outline:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aicap-bulk__accept:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aicap-action:not(.aicap-action--accept):not(.aicap-action--reject):not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aicap-rejected__undo:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aicap__back:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aicap-file__remove:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aicap-modes__tab:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     border-color: var(--indigo);
     background-color: var(--indigo-soft);
     color: var(--indigo);
   }
 
-  .aicap-button--danger-outline:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aicap-action--reject:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover,
-  .aicap-bulk__discard:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):hover {
+  .aicap-button--danger-outline:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aicap-action--reject:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover,
+  .aicap-bulk__discard:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):hover {
     background-color: var(--red-soft);
   }
 
-  .aicap-button--primary:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active,
-  .aicap-action--accept:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+  .aicap-button--primary:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):active,
+  .aicap-action--accept:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):active {
     box-shadow: none;
     transform: none;
   }
 
-  .aicap-button--danger:not(:disabled, [aria-disabled='true'], [aria-pressed='true'], [aria-selected='true'], [aria-checked='true'], [aria-current='page']):active {
+  .aicap-button--danger:not(
+      :disabled,
+      [aria-disabled='true'],
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current='page']
+    ):active {
     box-shadow: none;
     transform: none;
   }
@@ -1456,7 +1498,9 @@ a.aicap-button--outline {
 .aicap__crumb {
   text-decoration: underline transparent;
   text-underline-offset: 3px;
-  transition: var(--hover-transition), text-decoration-color var(--hover-duration) var(--ease-out);
+  transition:
+    var(--hover-transition),
+    text-decoration-color var(--hover-duration) var(--ease-out);
 }
 
 @media (hover: hover) {
