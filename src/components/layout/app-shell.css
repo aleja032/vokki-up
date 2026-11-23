@@ -28,7 +28,7 @@
 /* Avatar */
 
 .user-avatar {
-  @apply flex size-11 shrink-0 items-center justify-center rounded-full bg-(--brand) text-[16px] font-extrabold text-(--on-indigo);
+  @apply flex size-11 shrink-0 items-center justify-center rounded-full bg-(--brand) text-[16px] font-extrabold text-(--on-brand);
 }
 
 /* Connection pill */

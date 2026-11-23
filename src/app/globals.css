@@ -32,33 +32,34 @@
   color-scheme: light;
   --ground: #f7f4ee;
   --surface: #ffffff;
-  --surface-muted: #f0eee8;
-  --line: #e3e0d8;
-  --rule: #f0eee8;
-  --track: #e3e0d8;
+  --surface-muted: #f1ede6;
+  --line: #e6e1d8;
+  --rule: #f1ede6;
+  --track: #e6e1d8;
   --nav: #ffffff;
-  --ink: #17202b;
-  --ink-soft: #566275;
-  --ink-faint: #667286;
-  --indigo: #4a3ac9;
-  --indigo-strong: #3a2cb0;
-  --indigo-soft: #e9e6fb;
+  --ink: #1b1a2e;
+  --ink-soft: #5b5873;
+  --ink-faint: #6a6784;
+  --indigo: #5b3fe0;
+  --indigo-strong: #4a2fc4;
+  --indigo-soft: #ede8ff;
   --on-indigo: #ffffff;
-  --brand: #4a3ac9;
+  --on-brand: #ffffff;
+  --brand: #7456ff;
   --brand-line: var(--brand);
   --amber: #f2b53a;
-  --amber-soft: #fff0d0;
-  --amber-ink: #8a5a00;
-  --green: #0a6b4f;
-  --green-soft: #e1f6ee;
-  --mint: #0a6b4f;
-  --mint-soft: #e1f6ee;
-  --coral: #a33a1b;
-  --coral-soft: #ffe9e2;
+  --amber-soft: #ffebd6;
+  --amber-ink: #9a4a00;
+  --green: #0b6e55;
+  --green-soft: #ddf8ef;
+  --mint: #0b6e55;
+  --mint-soft: #ddf8ef;
+  --coral: #b5402d;
+  --coral-soft: #ffe8e3;
   --blue: #135f6e;
   --blue-soft: #d9eef2;
-  --red-soft: #ffe9e2;
-  --red-ink: #a33a1b;
+  --red-soft: #ffe8e3;
+  --red-ink: #b5402d;
   --urgency-coral: #ff7a59;
   --urgency-amber: #ffb84d;
   --urgency-green: #2fcb9b;
@@ -66,25 +67,30 @@
   --cta-to: #2fcb9b;
   --cta-ink: #062b20;
   --cta-gradient: linear-gradient(135deg, var(--cta-from), var(--cta-to));
-  --hero-surface: #0b1520;
-  --hero-lavender: #b8adff;
-  --hero-text-soft: #c9d4e2;
-  --hero-accent: #6ee7be;
+  /* Due states (folders, status filter, tiles, hand cards): violet, ink and
+     mint, never coral or amber. The state is also written next to every dot. */
+  --due-now: var(--brand);
+  --due-soon: var(--ink-soft);
+  --due-safe: var(--mint);
+  --hero-surface: #191531;
+  --hero-lavender: #c3b4ff;
+  --hero-text-soft: #d6d0ea;
+  --hero-accent: #6ee7c2;
   --hero-star: #ffe9c2;
   --hero-bubble-bg: #ffffff;
-  --hero-bubble-ink: #16202c;
-  --hero-glow: rgb(142 132 255 / 0.24);
-  --hero-shade-80: rgb(11 21 32 / 0.8);
-  --hero-shade-10: rgb(11 21 32 / 0.1);
-  --hero-shade-95: rgb(11 21 32 / 0.95);
+  --hero-bubble-ink: #1b1a2e;
+  --hero-glow: rgb(116 86 255 / 0.24);
+  --hero-shade-80: rgb(25 21 49 / 0.8);
+  --hero-shade-10: rgb(25 21 49 / 0.1);
+  --hero-shade-95: rgb(25 21 49 / 0.95);
   --on-hero-track: rgb(255 255 255 / 0.2);
   --shadow-mascot: rgb(0 0 0 / 0.5);
   --shadow-mascot-soft: rgb(0 0 0 / 0.4);
   --shadow-bubble: rgb(0 0 0 / 0.3);
   --shadow-card: rgb(0 0 0 / 0.28);
   --shadow-nav: rgb(0 0 0 / 0.3);
-  --hover-accent: #8e84ff;
-  --hover-accent-glow: rgb(142 132 255 / 0.22);
+  --hover-accent: #7456ff;
+  --hover-accent-glow: rgb(116 86 255 / 0.22);
   --chart-line: #2a8f6c;
   --chart-vein: #138a66;
   --chart-area-top: rgb(47 203 155 / 0.28);
@@ -95,8 +101,8 @@
   --scrim: rgb(20 20 22 / 0.42);
   --shadow-dialog: rgb(20 20 22 / 0.28);
   --theme-light: #f7f4ee;
-  --theme-dark: #0c1118;
-  --theme-accent: #6ee7be;
+  --theme-dark: #0f0d16;
+  --theme-accent: #6ee7c2;
   --radius-14: 14px;
   --radius-18: 18px;
   --radius-22: 22px;
@@ -112,12 +118,12 @@
   --card-radius: var(--radius-26);
   --control-radius: 14px;
   --page-max: 1480px;
-  --focus-ring: #4a3ac9;
+  --focus-ring: #5b3fe0;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --hover-duration: 150ms;
   --enter-duration: 200ms;
   --enter-distance: 6px;
-  --hover-shadow: 0 6px 18px rgb(23 32 43 / 0.1);
+  --hover-shadow: 0 6px 18px rgb(27 26 46 / 0.1);
   --lift-1: -1px;
   --lift-2: -2px;
   --press-scale: 0.98;
@@ -135,70 +141,76 @@
 :root[data-theme='dark'],
 .dark {
   color-scheme: dark;
-  --ground: #0c1118;
-  --surface: #151c27;
-  --surface-muted: #1b2433;
-  --line: #243044;
-  --rule: #243044;
-  --track: #2a3649;
-  --nav: #111823;
-  --ink: #eef2f7;
-  --ink-soft: #9aa8bc;
-  --ink-faint: #7f8da3;
-  --indigo: #c8c0ff;
-  --indigo-strong: #dad4ff;
-  --indigo-soft: #2b2766;
+  --ground: #0f0d16;
+  --surface: #1a1724;
+  --surface-muted: #221e2f;
+  --line: #2f2a3f;
+  --rule: #2f2a3f;
+  --track: #2f2a3f;
+  --nav: #14111c;
+  --ink: #f4f1fa;
+  --ink-soft: #a8a2bd;
+  --ink-faint: #8a84a3;
+  --indigo: #c3b4ff;
+  --indigo-strong: #d9cfff;
+  --indigo-soft: #2b2350;
   --on-indigo: #14102e;
-  --brand: #8e84ff;
-  --amber: #ffd27a;
-  --amber-soft: #33260f;
-  --amber-ink: #ffd27a;
-  --green: #6ee7be;
-  --green-soft: #0f2e2a;
-  --mint: #6ee7be;
-  --mint-soft: #0f2e2a;
-  --coral: #ffa68e;
-  --coral-soft: #33191a;
+  --brand: #7456ff;
+  --brand-line: #a99bff;
+  --amber: #ffb877;
+  --amber-soft: #3a2414;
+  --amber-ink: #ffb877;
+  --green: #6ee7c2;
+  --green-soft: #102e29;
+  --mint: #6ee7c2;
+  --mint-soft: #102e29;
+  --coral: #ffab9c;
+  --coral-soft: #36202a;
   --blue: #72bac6;
   --blue-soft: #1d3439;
-  --red-soft: #33191a;
-  --red-ink: #ffa68e;
-  --focus-ring: #c8c0ff;
+  --red-soft: #36202a;
+  --red-ink: #ffab9c;
+  --focus-ring: #c3b4ff;
+  --hover-accent: #a99bff;
+  --hover-accent-glow: rgb(169 155 255 / 0.22);
   --hover-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     color-scheme: dark;
-    --ground: #0c1118;
-    --surface: #151c27;
-    --surface-muted: #1b2433;
-    --line: #243044;
-    --rule: #243044;
-    --track: #2a3649;
-    --nav: #111823;
-    --ink: #eef2f7;
-    --ink-soft: #9aa8bc;
-    --ink-faint: #7f8da3;
-    --indigo: #c8c0ff;
-    --indigo-strong: #dad4ff;
-    --indigo-soft: #2b2766;
+    --ground: #0f0d16;
+    --surface: #1a1724;
+    --surface-muted: #221e2f;
+    --line: #2f2a3f;
+    --rule: #2f2a3f;
+    --track: #2f2a3f;
+    --nav: #14111c;
+    --ink: #f4f1fa;
+    --ink-soft: #a8a2bd;
+    --ink-faint: #8a84a3;
+    --indigo: #c3b4ff;
+    --indigo-strong: #d9cfff;
+    --indigo-soft: #2b2350;
     --on-indigo: #14102e;
-    --brand: #8e84ff;
-    --amber: #ffd27a;
-    --amber-soft: #33260f;
-    --amber-ink: #ffd27a;
-    --green: #6ee7be;
-    --green-soft: #0f2e2a;
-    --mint: #6ee7be;
-    --mint-soft: #0f2e2a;
-    --coral: #ffa68e;
-    --coral-soft: #33191a;
+    --brand: #7456ff;
+    --brand-line: #a99bff;
+    --amber: #ffb877;
+    --amber-soft: #3a2414;
+    --amber-ink: #ffb877;
+    --green: #6ee7c2;
+    --green-soft: #102e29;
+    --mint: #6ee7c2;
+    --mint-soft: #102e29;
+    --coral: #ffab9c;
+    --coral-soft: #36202a;
     --blue: #72bac6;
     --blue-soft: #1d3439;
-    --red-soft: #33191a;
-    --red-ink: #ffa68e;
-    --focus-ring: #c8c0ff;
+    --red-soft: #36202a;
+    --red-ink: #ffab9c;
+    --focus-ring: #c3b4ff;
+    --hover-accent: #a99bff;
+    --hover-accent-glow: rgb(169 155 255 / 0.22);
     --hover-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
   }
 }
@@ -250,46 +262,6 @@ a:focus-visible {
 ::selection {
   background: var(--indigo-soft);
   color: var(--ink);
-}
-
-/*
- * Violet accents (Mi mazo artboards). Scoped override of the accent tokens
- * only: put the accent-violet class on a page and its accents (brand, rings, hover,
- * tone dots) take the violet of VokkiDMazo.dc.html. Grounds, surfaces, lines,
- * ink and the shell keep following the app theme, so the page matches home.
- * Light and dark values are copied from the theme objects of the artboard.
- */
-.accent-violet {
-  --indigo: #5b3fe0;
-  --indigo-soft: #ede8ff;
-  --brand: #7456ff;
-  --brand-line: #7456ff;
-  --urgency-coral: #ff846f;
-  --urgency-amber: var(--brand);
-  --urgency-green: #6ee7c2;
-  --hover-accent: #7456ff;
-  --hover-accent-glow: rgb(116 86 255 / 0.22);
-  --focus-ring: var(--indigo);
-  /* Due-state dots (folders, status filter, tiles): violet, ink and mint, never
-     coral or amber. The state is also written next to every dot. */
-  --due-now: var(--brand);
-  --due-soon: var(--ink-soft);
-  --due-safe: var(--urgency-green);
-}
-
-:root[data-theme='dark'] .accent-violet,
-.dark .accent-violet {
-  --indigo: #c3b4ff;
-  --indigo-soft: #2b2350;
-  --brand-line: #a99bff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) .accent-violet {
-    --indigo: #c3b4ff;
-    --indigo-soft: #2b2350;
-    --brand-line: #a99bff;
-  }
 }
 
 .card-surface {

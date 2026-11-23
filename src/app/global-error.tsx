@@ -43,8 +43,8 @@ function getServerLocale(): Locale {
 
 // Self-contained: the root layout (and its CSS and fonts) is not rendered here.
 const globalErrorStyles = `
-  :root { color-scheme: light dark; --ground: #f7f4ee; --surface: #ffffff; --line: #e2ddd3; --ink: #1b1a2e; --ink-soft: #5b5870; --indigo: #4a3ac9; --indigo-soft: #e9e6fb; --on-indigo: #ffffff; }
-  @media (prefers-color-scheme: dark) { :root { --ground: #141416; --surface: #1d1d21; --line: #33333a; --ink: #edebe6; --ink-soft: #a6a3ad; --indigo: #9a91f5; --indigo-soft: #302d4c; --on-indigo: #141416; } }
+  :root { color-scheme: light dark; --ground: #f7f4ee; --surface: #ffffff; --line: #e6e1d8; --ink: #1b1a2e; --ink-soft: #5b5873; --indigo: #5b3fe0; --indigo-soft: #ede8ff; --on-indigo: #ffffff; }
+  @media (prefers-color-scheme: dark) { :root { --ground: #0f0d16; --surface: #1a1724; --line: #2f2a3f; --ink: #f4f1fa; --ink-soft: #a8a2bd; --indigo: #c3b4ff; --indigo-soft: #2b2350; --on-indigo: #14102e; } }
   * { box-sizing: border-box; }
   body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: var(--ground); color: var(--ink); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; line-height: 1.5; }
   .ge { width: 100%; max-width: 480px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }

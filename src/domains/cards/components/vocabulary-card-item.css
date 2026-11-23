@@ -136,15 +136,15 @@
 }
 
 .deck-card__dot[data-tone='coral'] {
-  background-color: var(--due-now, var(--urgency-coral));
+  background-color: var(--due-now);
 }
 
 .deck-card__dot[data-tone='amber'] {
-  background-color: var(--due-soon, var(--urgency-amber));
+  background-color: var(--due-soon);
 }
 
 .deck-card__dot[data-tone='mint'] {
-  background-color: var(--due-safe, var(--urgency-green));
+  background-color: var(--due-safe);
 }
 
 /* Manage mode: the whole card is one checkbox. */

@@ -56,11 +56,7 @@ export function WordLibrary({ worldParam }: WordLibraryProps) {
 
   const world = findWorld(worldParam);
   if (!world && worldParam !== WHOLE_LIBRARY_PARAM) {
-    return (
-      <div className="accent-violet">
-        <WorldsHub levelTotals={levelTotals} worlds={worlds} />
-      </div>
-    );
+    return <WorldsHub levelTotals={levelTotals} worlds={worlds} />;
   }
 
   return (

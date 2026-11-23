@@ -16,14 +16,8 @@ type CardsDashboardProps = {
   renderAddPanel?: (api: CardsAddPanelApi) => ReactNode;
 };
 
-// The accent-violet class re-skins only the accents of the page (globals.css);
-// the ground, surfaces and shell keep following the app theme, like home.
 export function CardsDashboard(props: CardsDashboardProps) {
-  return (
-    <div className="accent-violet">
-      <CardsDashboardView {...props} />
-    </div>
-  );
+  return <CardsDashboardView {...props} />;
 }
 
 function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {

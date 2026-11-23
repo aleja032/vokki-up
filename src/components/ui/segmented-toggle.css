@@ -37,15 +37,15 @@
 
 .segmented-toggle__dot {
   @apply size-2 shrink-0 rounded-full;
-  background-color: var(--due-soon, var(--brand));
+  background-color: var(--due-soon);
 }
 
 .segmented-toggle__dot[data-dot='coral'] {
-  background-color: var(--due-now, var(--urgency-coral));
+  background-color: var(--due-now);
 }
 
 .segmented-toggle__dot[data-dot='mint'] {
-  background-color: var(--due-safe, var(--urgency-green));
+  background-color: var(--due-safe);
 }
 
 .segmented-toggle__count {

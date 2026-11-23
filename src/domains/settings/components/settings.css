@@ -109,7 +109,7 @@
 }
 
 .prefs-avatar {
-  @apply flex size-14 shrink-0 items-center justify-center rounded-(--radius-pill) bg-(--brand) text-[22px] font-extrabold text-(--on-indigo);
+  @apply flex size-14 shrink-0 items-center justify-center rounded-(--radius-pill) bg-(--brand) text-[22px] font-extrabold text-(--on-brand);
 }
 
 .prefs-account__copy {
@@ -213,7 +213,7 @@
 }
 
 .prefs-theme__check {
-  @apply absolute top-1.5 right-1.5 flex size-6 items-center justify-center rounded-(--radius-pill) bg-(--brand) text-(--on-indigo);
+  @apply absolute top-1.5 right-1.5 flex size-6 items-center justify-center rounded-(--radius-pill) bg-(--brand) text-(--on-brand);
 }
 
 .prefs-theme__label {

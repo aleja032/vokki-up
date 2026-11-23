@@ -208,7 +208,7 @@ export function WordLibraryBrowser({
   }
 
   return (
-    <div className="word-library accent-violet" data-adding={isAdding}>
+    <div className="word-library" data-adding={isAdding}>
       {world ? (
         <>
           <WorldBanner world={world} />

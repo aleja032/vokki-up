@@ -11,8 +11,7 @@
 
 /* Palette: aliases of the semantic tokens (light and dark live in globals.css). */
 
-:root,
-.accent-violet {
+:root {
   --aicap-edge: var(--line);
   --aicap-dashed: var(--line);
   --aicap-ghost: var(--line);

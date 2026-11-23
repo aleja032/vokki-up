@@ -52,62 +52,71 @@ const fixedTokens = [
   '--hover-lift'
 ];
 
-// Values copied from the theme objects of VokkiD.dc.html / VokkiDLight.dc.html.
+// Values copied from the theme objects (claro / oscuro) of the violet D
+// artboards (VokkiD.dc.html and siblings).
 const designLight: Record<string, string> = {
   '--ground': '#f7f4ee',
   '--nav': '#ffffff',
   '--surface': '#ffffff',
-  '--surface-muted': '#f0eee8',
-  '--line': '#e3e0d8',
-  '--ink': '#17202b',
-  '--ink-soft': '#566275',
-  '--track': '#e3e0d8',
-  '--mint': '#0a6b4f',
-  '--mint-soft': '#e1f6ee',
-  '--amber-ink': '#8a5a00',
-  '--amber-soft': '#fff0d0',
-  '--coral': '#a33a1b',
-  '--coral-soft': '#ffe9e2',
-  '--indigo': '#4a3ac9',
-  '--indigo-soft': '#e9e6fb',
-  '--brand': '#4a3ac9',
-  '--on-indigo': '#ffffff'
+  '--surface-muted': '#f1ede6',
+  '--line': '#e6e1d8',
+  '--ink': '#1b1a2e',
+  '--ink-soft': '#5b5873',
+  '--track': '#e6e1d8',
+  '--mint': '#0b6e55',
+  '--mint-soft': '#ddf8ef',
+  '--amber-ink': '#9a4a00',
+  '--amber-soft': '#ffebd6',
+  '--coral': '#b5402d',
+  '--coral-soft': '#ffe8e3',
+  '--indigo': '#5b3fe0',
+  '--indigo-soft': '#ede8ff',
+  '--brand': '#7456ff',
+  '--on-indigo': '#ffffff',
+  '--on-brand': '#ffffff',
+  '--hover-accent': '#7456ff',
+  '--hover-accent-glow': 'rgb(116 86 255 / 0.22)',
+  '--focus-ring': '#5b3fe0'
 };
 
 const designDark: Record<string, string> = {
-  '--ground': '#0c1118',
-  '--nav': '#111823',
-  '--surface': '#151c27',
-  '--surface-muted': '#1b2433',
-  '--line': '#243044',
-  '--ink': '#eef2f7',
-  '--ink-soft': '#9aa8bc',
-  '--track': '#2a3649',
-  '--mint': '#6ee7be',
-  '--mint-soft': '#0f2e2a',
-  '--amber-ink': '#ffd27a',
-  '--amber-soft': '#33260f',
-  '--coral': '#ffa68e',
-  '--coral-soft': '#33191a',
-  '--indigo': '#c8c0ff',
-  '--indigo-soft': '#2b2766',
-  '--brand': '#8e84ff',
-  '--on-indigo': '#14102e'
+  '--ground': '#0f0d16',
+  '--nav': '#14111c',
+  '--surface': '#1a1724',
+  '--surface-muted': '#221e2f',
+  '--line': '#2f2a3f',
+  '--ink': '#f4f1fa',
+  '--ink-soft': '#a8a2bd',
+  '--track': '#2f2a3f',
+  '--mint': '#6ee7c2',
+  '--mint-soft': '#102e29',
+  '--amber-ink': '#ffb877',
+  '--amber-soft': '#3a2414',
+  '--coral': '#ffab9c',
+  '--coral-soft': '#36202a',
+  '--indigo': '#c3b4ff',
+  '--indigo-soft': '#2b2350',
+  '--brand': '#7456ff',
+  '--brand-line': '#a99bff',
+  '--on-indigo': '#14102e',
+  '--hover-accent': '#a99bff',
+  '--hover-accent-glow': 'rgb(169 155 255 / 0.22)',
+  '--focus-ring': '#c3b4ff'
 };
 
 // Colors that do not change with the theme in the proposal.
 const designFixed: Record<string, string> = {
-  '--hero-surface': '#0b1520',
-  '--hero-lavender': '#b8adff',
-  '--hero-text-soft': '#c9d4e2',
-  '--hero-accent': '#6ee7be',
+  '--hero-surface': '#191531',
+  '--hero-lavender': '#c3b4ff',
+  '--hero-text-soft': '#d6d0ea',
+  '--hero-accent': '#6ee7c2',
   '--hero-star': '#ffe9c2',
   '--hero-bubble-bg': '#ffffff',
-  '--hero-bubble-ink': '#16202c',
-  '--hero-glow': 'rgb(142 132 255 / 0.24)',
-  '--hero-shade-80': 'rgb(11 21 32 / 0.8)',
-  '--hero-shade-10': 'rgb(11 21 32 / 0.1)',
-  '--hero-shade-95': 'rgb(11 21 32 / 0.95)',
+  '--hero-bubble-ink': '#1b1a2e',
+  '--hero-glow': 'rgb(116 86 255 / 0.24)',
+  '--hero-shade-80': 'rgb(25 21 49 / 0.8)',
+  '--hero-shade-10': 'rgb(25 21 49 / 0.1)',
+  '--hero-shade-95': 'rgb(25 21 49 / 0.95)',
   '--on-hero-track': 'rgb(255 255 255 / 0.2)',
   '--urgency-coral': '#ff7a59',
   '--urgency-amber': '#ffb84d',
@@ -123,8 +132,6 @@ const designFixed: Record<string, string> = {
   '--shadow-bubble': 'rgb(0 0 0 / 0.3)',
   '--shadow-card': 'rgb(0 0 0 / 0.28)',
   '--shadow-nav': 'rgb(0 0 0 / 0.3)',
-  '--hover-accent': '#8e84ff',
-  '--hover-accent-glow': 'rgb(142 132 255 / 0.22)',
   '--chart-line': '#2a8f6c',
   '--chart-vein': '#138a66',
   '--chart-area-top': 'rgb(47 203 155 / 0.28)',
@@ -134,8 +141,8 @@ const designFixed: Record<string, string> = {
   '--scrim': 'rgb(20 20 22 / 0.42)',
   '--shadow-dialog': 'rgb(20 20 22 / 0.28)',
   '--theme-light': '#f7f4ee',
-  '--theme-dark': '#0c1118',
-  '--theme-accent': '#6ee7be'
+  '--theme-dark': '#0f0d16',
+  '--theme-accent': '#6ee7c2'
 };
 
 function declared(source: string, token: string): string | undefined {
@@ -161,77 +168,22 @@ describe('proposal D palette', () => {
   );
 });
 
-// Violet accents of the Mi mazo artboards (VokkiDMazo.dc.html), scoped on
-// .accent-violet. Only accents are overridden: the ground, surfaces, lines,
-// ink and shell tokens must keep following the app theme (same as home).
-const violetLight: Record<string, string> = {
-  '--indigo': '#5b3fe0',
-  '--indigo-soft': '#ede8ff',
-  '--brand': '#7456ff',
-  '--brand-line': '#7456ff',
-  '--urgency-coral': '#ff846f',
-  '--urgency-green': '#6ee7c2',
-  '--hover-accent': '#7456ff'
-};
-
-const violetDark: Record<string, string> = {
-  '--indigo': '#c3b4ff',
-  '--indigo-soft': '#2b2350',
-  '--brand-line': '#a99bff'
-};
-
-const violetLightBlock = block('.accent-violet');
-const violetDarkBlock = block(
-  ":root[data-theme='dark'] .accent-violet,\n.dark .accent-violet"
-);
-const violetMediaBlock = block(
-  ":root:not([data-theme='light']) .accent-violet"
-);
-const themeSurfaceTokens = [
-  '--ground',
-  '--surface',
-  '--surface-muted',
-  '--line',
-  '--track',
-  '--nav',
-  '--ink',
-  '--ink-soft'
-];
-
-describe('violet accents (Mi mazo)', () => {
-  it.each(Object.entries(violetLight))('%s is %s in light', (token, value) => {
-    expect(declared(violetLightBlock, token)).toBe(value);
+describe('violet palette, whole site', () => {
+  it('has no scoped accent override left: the global palette is violet', () => {
+    expect(css).not.toContain('.accent-violet');
   });
 
-  it.each(Object.entries(violetDark))('%s is %s in dark', (token, value) => {
-    expect(declared(violetDarkBlock, token)).toBe(value);
-    expect(declared(violetMediaBlock, token)).toBe(value);
+  it('draws the due states with violet, ink and mint instead of coral or amber', () => {
+    expect(declared(lightBlock, '--due-now')).toBe('var(--brand)');
+    expect(declared(lightBlock, '--due-soon')).toBe('var(--ink-soft)');
+    expect(declared(lightBlock, '--due-safe')).toBe('var(--mint)');
+    expect(darkBlock).not.toContain('--due-');
   });
 
-  it('keeps the learning tone violet and the CTA gradient untouched', () => {
-    expect(declared(violetLightBlock, '--urgency-amber')).toBe('var(--brand)');
-    expect(violetLightBlock).not.toContain('--cta-from');
+  it('keeps the CTA gradient mint in both themes', () => {
+    expect(declared(lightBlock, '--cta-from')).toBe('#5be8bc');
+    expect(darkBlock).not.toContain('--cta-from');
   });
-
-  it('draws the due dots with violet, ink and mint instead of coral or amber', () => {
-    expect(declared(violetLightBlock, '--due-now')).toBe('var(--brand)');
-    expect(declared(violetLightBlock, '--due-soon')).toBe('var(--ink-soft)');
-    expect(declared(violetLightBlock, '--due-safe')).toBe(
-      'var(--urgency-green)'
-    );
-  });
-
-  it.each(themeSurfaceTokens)(
-    'does not override %s, so the page follows the home theme',
-    token => {
-      for (const scoped of [
-        violetLightBlock,
-        violetDarkBlock,
-        violetMediaBlock
-      ])
-        expect(scoped).not.toContain(`${token}:`);
-    }
-  );
 });
 
 describe('design tokens', () => {

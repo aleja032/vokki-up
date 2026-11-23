@@ -14,15 +14,15 @@
 }
 
 .due-card[data-tone='coral'] {
-  --due-accent: var(--urgency-coral);
+  --due-accent: var(--due-now);
 }
 
 .due-card[data-tone='amber'] {
-  --due-accent: var(--urgency-amber);
+  --due-accent: var(--due-soon);
 }
 
 .due-card[data-tone='mint'] {
-  --due-accent: var(--line);
+  --due-accent: var(--due-safe);
 }
 
 .due-card__tag {
@@ -58,11 +58,11 @@
 }
 
 .due-card[data-tone='coral'] .due-card__due {
-  @apply text-(--coral);
+  @apply text-(--indigo);
 }
 
 .due-card[data-tone='amber'] .due-card__due {
-  @apply text-(--amber-ink);
+  @apply text-(--ink-soft);
 }
 
 .due-card[data-tone='brand'] .due-card__due {
