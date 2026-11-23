@@ -10,7 +10,7 @@
 }
 
 .deck-header__mascot {
-  @apply hidden h-24 w-auto shrink-0;
+  @apply hidden h-17 w-auto shrink-0;
 }
 
 .deck-header__copy {

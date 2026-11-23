@@ -8,8 +8,8 @@ export const siteConfig = createLocalizedMessages({
   description: 'Aprende vocabulario en contexto, cinco minutos a la vez.',
   navigation: [
     { label: 'Inicio', href: '/', icon: 'home' },
-    { label: 'Mi mazo', href: '/cards', icon: 'cards' },
     { label: 'Mundos', href: '/cards/word-library', icon: 'worlds' },
+    { label: 'Mi mazo', href: '/cards', icon: 'cards' },
     ...(FEATURES.writing
       ? ([{ label: 'Escritura', href: '/writing', icon: 'writing' }] as const)
       : []),

@@ -27,20 +27,23 @@ export function DueWordCard({ word, href }: { word: DueWord; href: string }) {
       <PixelLabel className="due-card__tag">
         {translateText(word.partOfSpeech)}
       </PixelLabel>
-      <span className="due-card__word">
-        <strong className="due-card__term">{word.term}</strong>
-        <span className="due-card__ipa">{word.phonetics}</span>
-      </span>
+      <strong className="due-card__term">{word.term}</strong>
+      <span className="due-card__meaning">{word.meaning}</span>
+      <span className="due-card__ipa">{word.phonetics}</span>
       <span className="due-card__footer">
         <ProgressBar
           className="due-card__memory"
           label={copy.memoryLabel(word.memoryLevel)}
           max={MAX_MEMORY_LEVEL}
           segments={MAX_MEMORY_LEVEL}
+          shape="blocks"
           tone={word.tone}
           value={word.memoryLevel}
         />
-        <PixelLabel className="due-card__due">{label}</PixelLabel>
+        <span className="due-card__due">
+          <span aria-hidden="true" className="due-card__dot" />
+          <PixelLabel className="due-card__due-label">{label}</PixelLabel>
+        </span>
       </span>
     </Link>
   );

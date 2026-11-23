@@ -21,8 +21,9 @@ describe('WeekLeafChart', () => {
   it('draws a leaf per active day and a ring for an empty one', () => {
     const html = renderToStaticMarkup(<WeekLeafChart days={days} />);
 
-    expect(html.match(/week-leaf__leaf/g)).toHaveLength(2);
-    expect(html.match(/week-leaf__empty/g)).toHaveLength(1);
+    // One wide and one compact chart are rendered; CSS shows one of them.
+    expect(html.match(/week-leaf__leaf/g)).toHaveLength(4);
+    expect(html.match(/week-leaf__empty/g)).toHaveLength(2);
     expect(html).toContain('data-today="true"');
   });
 

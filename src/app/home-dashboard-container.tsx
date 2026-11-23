@@ -16,13 +16,18 @@ import {
   normalizeCatalogTerm,
   wordLibraryCatalog
 } from '@/domains/cards/word-library/catalog';
-import { buildDueQueue } from '@/domains/cards/scheduling/progress';
+import { countCardStatuses } from '@/domains/cards/card-status';
+import {
+  buildDueQueue,
+  getLocalDateKey
+} from '@/domains/cards/scheduling/progress';
 import { STARTER_CARDS } from '@/domains/cards/data';
 import { HomeDashboard } from '@/domains/home/components/home-dashboard';
 import type { HomeSummary } from '@/domains/home/home-summary.types';
 import { deriveWorldProgress } from '@/lib/home/derive-worlds';
 import {
   buildDueHand,
+  buildMission,
   deriveWeeklyAccuracy
 } from '@/lib/home/build-home-extras';
 import { useBrowserState } from '@/lib/storage/use-browser-state';
@@ -52,20 +57,37 @@ export function HomeDashboardContainer() {
   const now = new Date();
   const summary: HomeSummary | null =
     cardsLoaded && schedulesLoaded && eventsLoaded && sessionsLoaded
-      ? {
-          ...deriveCardsHomeSummary(cards, schedules, events, reviewSessions),
-          dueHand: buildDueHand(
-            buildDueQueue(cards, schedules, now, cards.length),
-            schedules
-          ),
-          weeklyAccuracy: deriveWeeklyAccuracy(events, now),
-          worlds: deriveWorldProgress(
-            wordLibraryCatalog,
-            cards.map(card => card.term),
-            normalizeCatalogTerm
-          )
-        }
+      ? buildSummary()
       : null;
+
+  function buildSummary(): HomeSummary {
+    const dueHand = buildDueHand(
+      buildDueQueue(cards, schedules, now, cards.length),
+      schedules
+    );
+    const statusCounts = countCardStatuses(cards, schedules, now);
+    return {
+      ...deriveCardsHomeSummary(cards, schedules, events, reviewSessions),
+      dueHand,
+      mission: buildMission(
+        events,
+        Object.fromEntries(cards.map(card => [card.id, card.term])),
+        dueHand,
+        getLocalDateKey(now)
+      ),
+      upcoming: {
+        today: statusCounts.due,
+        week: statusCounts.week,
+        safe: statusCounts.safe
+      },
+      weeklyAccuracy: deriveWeeklyAccuracy(events, now),
+      worlds: deriveWorldProgress(
+        wordLibraryCatalog,
+        cards.map(card => card.term),
+        normalizeCatalogTerm
+      )
+    };
+  }
 
   return <HomeDashboard summary={summary} />;
 }

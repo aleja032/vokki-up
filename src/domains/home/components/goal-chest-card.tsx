@@ -22,30 +22,32 @@ export function GoalChestCard({
 
   return (
     <section aria-labelledby="goal-title" className="goal-chest">
-      <div className="goal-chest__header">
-        <h2 className="goal-chest__title" id="goal-title">
-          <PixelLabel className="goal-chest__label">
-            {copy.goalHeading}
-          </PixelLabel>
-        </h2>
-        <strong className="goal-chest__count">
-          <span className="sr-only">{copy.goalCount(completed, target)}</span>
-          <span aria-hidden="true">{copy.goalCount(animated, target)}</span>
-        </strong>
-      </div>
-      <div className="goal-chest__row">
-        <ProgressBar
-          className="goal-chest__bar"
-          label={copy.progressLabel(completed, target)}
-          max={target}
-          segments={GOAL_SEGMENTS}
-          tone="amber"
-          value={completed}
-        />
-        <span aria-hidden="true" className="goal-chest__chest">
-          <Gift size={28} strokeWidth={1.8} />
+      <h2 className="goal-chest__title" id="goal-title">
+        <PixelLabel className="goal-chest__label">
+          {copy.goalHeading}
+        </PixelLabel>
+      </h2>
+      <strong className="goal-chest__count">
+        <span className="sr-only">{copy.goalCount(completed, target)}</span>
+        <span aria-hidden="true" className="goal-chest__number">
+          {animated}
         </span>
-      </div>
+        <span aria-hidden="true" className="goal-chest__total">
+          {copy.goalTotal(target)}
+        </span>
+      </strong>
+      <ProgressBar
+        className="goal-chest__bar"
+        label={copy.progressLabel(completed, target)}
+        max={target}
+        segments={GOAL_SEGMENTS}
+        shape="blocks"
+        tone="brand"
+        value={completed}
+      />
+      <span aria-hidden="true" className="goal-chest__chest">
+        <Gift size={28} strokeWidth={1.8} />
+      </span>
       <p className="goal-chest__note">
         {remaining > 0 ? copy.goalRemaining(remaining) : copy.goalDone}
       </p>

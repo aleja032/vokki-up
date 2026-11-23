@@ -1,41 +1,95 @@
 @reference 'tailwindcss';
 
+/* Phones: label and count on one line, then bar beside the chest. From the
+   wide layout the count grows and the chest sits beside the note. */
 .goal-chest {
-  @apply flex min-w-0 flex-col justify-center gap-3 rounded-(--radius-30) border border-solid border-(--line) bg-(--surface) p-5.5;
-}
-
-.goal-chest__header {
-  @apply flex flex-wrap items-center justify-between gap-2;
+  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-3 rounded-(--radius-30) border border-solid border-(--line) bg-(--surface) p-5;
+  grid-template-areas:
+    'title count'
+    'bar chest'
+    'note note';
 }
 
 .goal-chest__title {
   @apply m-0;
+  grid-area: title;
 }
 
 .goal-chest__label {
-  @apply text-[14px] text-(--amber-ink);
+  @apply text-[14px] text-(--indigo);
 }
 
 .goal-chest__count {
-  @apply font-extrabold tabular-nums;
+  @apply flex items-baseline gap-1 text-[14px] font-extrabold tabular-nums;
+  grid-area: count;
 }
 
-.goal-chest__row {
-  @apply flex items-center gap-3.5;
+.goal-chest__total {
+  @apply text-[14px] font-extrabold;
 }
 
 .goal-chest__bar {
-  @apply h-3.5 min-w-0 flex-1;
+  @apply h-3.25 min-w-0 gap-0.75;
+  grid-area: bar;
 }
 
 .goal-chest__bar .progress-bar__segment {
-  @apply rounded-[3px];
+  @apply h-3.25;
 }
 
 .goal-chest__chest {
-  @apply flex size-13.5 flex-none items-center justify-center rounded-(--radius-18) bg-(--amber-soft) text-(--amber-ink);
+  @apply flex size-12 flex-none items-center justify-center rounded-(--radius-18) bg-(--surface-muted) text-(--indigo);
+  grid-area: chest;
 }
 
 .goal-chest__note {
-  @apply m-0 text-[13.5px] text-(--ink-soft);
+  @apply m-0 text-[13px] text-(--ink-soft);
+  grid-area: note;
+}
+
+@media (min-width: 1024px) {
+  .goal-chest {
+    @apply grid-cols-[auto_minmax(0,1fr)] content-center gap-x-3 gap-y-3.5 p-0;
+    grid-template-areas:
+      'title title'
+      'count count'
+      'bar bar'
+      'chest note';
+  }
+
+  .goal-chest__label {
+    @apply text-[14px];
+  }
+
+  .goal-chest__count {
+    @apply gap-2;
+  }
+
+  .goal-chest__number {
+    @apply text-[46px] leading-none tracking-[-1.5px];
+  }
+
+  .goal-chest__total {
+    @apply text-[18px] font-bold text-(--ink-soft);
+  }
+
+  .goal-chest__bar {
+    @apply h-3.5 gap-1;
+  }
+
+  .goal-chest__bar .progress-bar__segment {
+    @apply h-3.5;
+  }
+
+  .goal-chest__chest {
+    @apply size-11 rounded-(--radius-14);
+  }
+
+  .goal-chest__chest svg {
+    @apply size-6.5;
+  }
+
+  .goal-chest__note {
+    @apply text-[13.5px];
+  }
 }

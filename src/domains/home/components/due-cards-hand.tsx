@@ -7,30 +7,19 @@ import './due-cards-hand.css';
 
 const { copy } = homeDashboardData;
 
-// Fan tilt in degrees for a hand of 1 to 4 cards, left to right.
-const TILTS: Record<number, number[]> = {
-  1: [0],
-  2: [-2, 2],
-  3: [-4, 0, 4],
-  4: [-6, -2, 2, 6]
-};
-
 interface DueCardsHandProps {
   hand: DueWord[];
   totalDue: number;
-  newCount: number;
-  estimatedMinutes: number;
   href: string;
 }
 
-export function DueCardsHand({
-  hand,
-  totalDue,
-  newCount,
-  estimatedMinutes,
-  href
-}: DueCardsHandProps) {
-  const tilts = TILTS[hand.length] ?? [];
+export function DueCardsHand({ hand, totalDue, href }: DueCardsHandProps) {
+  const legend = [
+    ['fragile', copy.legend.fragile],
+    ['learning', copy.legend.learning],
+    ['firm', copy.legend.firm],
+    ['mastered', copy.legend.mastered]
+  ] as const;
 
   return (
     <section aria-labelledby="due-hand-title" className="due-hand">
@@ -43,20 +32,11 @@ export function DueCardsHand({
         pixel
         title={copy.handHeading}
       />
-      <p className="due-hand__hint">
-        {copy.handHint}
-        {totalDue > 0
-          ? ` · ${copy.newChip(newCount)} · ${copy.minutesChip(estimatedMinutes)}`
-          : null}
-      </p>
+      <p className="due-hand__hint">{copy.handHint}</p>
       {hand.length > 0 ? (
         <ul className="due-hand__fan">
-          {hand.map((word, index) => (
-            <li
-              className="due-hand__item"
-              data-tilt={tilts[index]}
-              key={word.id}
-            >
+          {hand.map(word => (
+            <li className="due-hand__item" key={word.id}>
               <DueWordCard href={href} word={word} />
             </li>
           ))}
@@ -64,6 +44,15 @@ export function DueCardsHand({
       ) : (
         <p className="due-hand__empty">{copy.handEmpty}</p>
       )}
+      <ul aria-label={copy.legend.label} className="due-hand__legend">
+        <li className="due-hand__legend-title">{copy.legend.label}</li>
+        {legend.map(([key, label]) => (
+          <li className="due-hand__legend-item" data-level={key} key={key}>
+            <span aria-hidden="true" className="due-hand__legend-dot" />
+            {label}
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

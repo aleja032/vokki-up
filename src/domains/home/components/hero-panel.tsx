@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Library, Play } from 'lucide-react';
 import { actionPillClass } from '@/components/ui/action-pill';
 import { PixelLabel } from '@/components/ui/pixel-label';
+import { translateText } from '@/lib/i18n/locale';
 import { cn } from '@/lib/utils';
 import { homeDashboardData } from '../data';
 import type { HomeDashboardData } from '../types';
@@ -15,9 +16,12 @@ const STARTER_TAGS = ['order', 'receipt', 'table'] as const;
 
 export function HeroPanel({
   data,
-  words = []
+  words = [],
+  worldName
 }: {
   data: HomeDashboardData['nextSession'];
+  /** Name of the world the user is working on, shown in the kicker. */
+  worldName?: string;
   /** Real words of the due hand; the first three float over the scene. */
   words?: readonly string[];
 }) {
@@ -69,7 +73,9 @@ export function HeroPanel({
       ) : null}
       <div className="hero-panel__copy">
         <PixelLabel className="hero-panel__kicker">
-          {copy.nextSessionHeading}
+          {worldName
+            ? copy.heroKicker(translateText(worldName))
+            : copy.nextSessionHeading}
         </PixelLabel>
         <h1 className="hero-panel__title" id="hero-title">
           {dueCount > 0 ? (

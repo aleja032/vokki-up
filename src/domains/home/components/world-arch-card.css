@@ -1,40 +1,17 @@
 @reference 'tailwindcss';
 
+/* Arch card of the artboard: dark scene with progress when the world is in
+   progress, otherwise a plain surface with its icon. Phone first. */
 .world-arch {
-  --world-bg: var(--surface-muted);
-  --world-fg: var(--indigo);
-  @apply relative box-border flex h-62.5 w-44 flex-none flex-col items-center justify-end overflow-hidden rounded-t-(--radius-pill) rounded-b-(--radius-30) border-[1.5px] border-solid border-(--line) bg-(--world-bg) text-center text-(--ink);
-}
-
-.world-arch[data-world='daily'] {
-  --world-bg: var(--mint-soft);
-  --world-fg: var(--mint);
-}
-
-.world-arch[data-world='work'] {
-  --world-bg: var(--amber-soft);
-  --world-fg: var(--amber-ink);
-}
-
-.world-arch[data-world='travel'] {
-  --world-bg: var(--indigo-soft);
-  --world-fg: var(--indigo);
-}
-
-.world-arch[data-world='phrases'] {
-  --world-bg: var(--coral-soft);
-  --world-fg: var(--coral);
-}
-
-.world-arch[data-state='active'] {
-  @apply border-[3px] border-(--brand) bg-(--hero-surface) text-white;
-}
-
-.world-arch {
+  @apply relative box-border flex h-62.5 w-44 flex-none flex-col items-center justify-end overflow-hidden rounded-t-(--radius-pill) rounded-b-(--radius-30) border-[1.5px] border-solid border-(--line) bg-(--surface) text-center text-(--ink);
   transition:
     translate 180ms var(--ease-out),
     border-color 180ms var(--ease-out),
     box-shadow 180ms var(--ease-out);
+}
+
+.world-arch[data-state='active'] {
+  @apply border-[3px] border-(--brand-line) bg-(--hero-surface) text-white;
 }
 
 @media (hover: hover) {
@@ -56,7 +33,11 @@
 }
 
 .world-arch__icon {
-  @apply absolute top-12 left-1/2 -translate-x-1/2 text-(--world-fg);
+  @apply absolute top-12.5 left-1/2 -translate-x-1/2 text-(--indigo);
+}
+
+.world-arch__icon svg {
+  @apply size-12;
 }
 
 .world-arch__info {
@@ -64,7 +45,7 @@
 }
 
 .world-arch__state {
-  @apply text-[11px] text-(--world-fg);
+  @apply text-[11px] text-(--ink-soft);
 }
 
 .world-arch[data-state='active'] .world-arch__state {
@@ -81,7 +62,7 @@
 }
 
 .world-arch__bar {
-  @apply h-2 w-28;
+  @apply h-2 w-27.5;
 }
 
 .world-arch[data-state='active'] .world-arch__bar {
@@ -101,8 +82,16 @@
     @apply top-21;
   }
 
+  .world-arch__icon svg {
+    @apply size-15;
+  }
+
   .world-arch__info {
     @apply gap-2 px-4.5 pb-5.5;
+  }
+
+  .world-arch__state {
+    @apply text-[12px];
   }
 
   .world-arch__name {

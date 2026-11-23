@@ -16,7 +16,7 @@ describe('GoalChestCard', () => {
     expect(html).toContain('8 / 20 tarjetas');
     expect(html.match(/progress-bar__segment/g)).toHaveLength(10);
     expect(html.match(/data-filled="true"/g)).toHaveLength(4);
-    expect(html).toContain('12 más y cumples la meta');
+    expect(html).toContain('12 tarjetas más y abres el cofre.');
     expect(html).toContain('aria-label="8 de 20 tarjetas completadas hoy"');
   });
 
@@ -26,6 +26,6 @@ describe('GoalChestCard', () => {
     );
 
     expect(html).toContain('Meta cumplida');
-    expect(html).not.toContain('cumples la meta');
+    expect(html).not.toContain('abres el cofre.');
   });
 });

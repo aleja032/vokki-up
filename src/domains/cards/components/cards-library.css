@@ -167,7 +167,7 @@
   }
 
   .deck-library__search {
-    @apply min-h-12 w-auto flex-[0_1_240px] gap-2.5;
+    @apply min-h-12 w-auto flex-[1_1_300px] gap-2.5;
   }
 
   .deck-library__type {

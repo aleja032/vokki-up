@@ -1,0 +1,40 @@
+@reference 'tailwindcss';
+
+.mission-card__body {
+  @apply flex items-center gap-4.5;
+}
+
+.mission-card__art {
+  @apply relative h-29 w-24 flex-none overflow-hidden rounded-(--radius-22) border border-solid border-(--line);
+}
+
+.mission-card__image {
+  @apply object-cover;
+  image-rendering: pixelated;
+}
+
+.mission-card__copy {
+  @apply flex min-w-0 flex-col gap-1.5;
+}
+
+.mission-card__name {
+  @apply m-0 text-[22px] leading-[1.1] font-extrabold tracking-[-0.6px] wrap-anywhere;
+}
+
+.mission-card__text {
+  @apply m-0 text-[14px] text-(--ink-soft);
+}
+
+.mission-card .mission-card__cta {
+  @apply mt-auto w-full;
+}
+
+@media (min-width: 768px) {
+  .mission-card__art {
+    @apply h-34 w-28;
+  }
+
+  .mission-card__name {
+    @apply text-[26px];
+  }
+}

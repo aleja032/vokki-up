@@ -1,0 +1,81 @@
+@reference 'tailwindcss';
+
+/* Wide screens only: the phone artboard has no upcoming-reviews card. */
+.upcoming {
+  @apply hidden min-w-0 flex-col gap-2.5 rounded-(--radius-36) border border-solid border-(--line) bg-(--surface) p-6.5;
+}
+
+@media (min-width: 768px) {
+  .upcoming {
+    @apply flex;
+  }
+}
+
+.upcoming__header {
+  @apply flex items-center justify-between gap-3;
+}
+
+.upcoming__title {
+  @apply m-0 font-(family-name:--font-pixel) text-[16px] font-semibold tracking-[1px] text-(--indigo) uppercase;
+}
+
+.upcoming__link {
+  @apply inline-flex min-h-11 items-center text-[13px] font-bold text-(--indigo);
+}
+
+.upcoming__list {
+  @apply m-0 flex flex-1 list-none flex-col gap-2.5 p-0;
+}
+
+.upcoming__list > li {
+  @apply flex flex-1;
+}
+
+.upcoming__row {
+  @apply flex min-w-0 flex-1 items-center gap-3 rounded-(--radius-18) bg-(--surface-muted) px-3.5 py-2.5 text-(--ink);
+  transition: var(--hover-transition);
+}
+
+a.upcoming__row:hover {
+  box-shadow: inset 0 0 0 1px var(--brand);
+}
+
+.upcoming__dot {
+  @apply size-2.5 flex-none rounded-full;
+}
+
+.upcoming__dot[data-level='today'] {
+  background: var(--memory-fragile);
+}
+
+.upcoming__dot[data-level='week'] {
+  background: var(--brand);
+}
+
+.upcoming__dot[data-level='safe'] {
+  background: var(--memory-mastered);
+}
+
+.upcoming__icon {
+  @apply flex size-7 flex-none items-center justify-center rounded-(--radius-14) bg-(--indigo-soft) text-(--indigo);
+}
+
+.upcoming__copy {
+  @apply flex min-w-0 flex-1 flex-col leading-tight;
+}
+
+.upcoming__copy > strong {
+  @apply text-[14.5px] font-bold wrap-anywhere;
+}
+
+.upcoming__copy > span {
+  @apply text-[12.5px] wrap-anywhere text-(--ink-soft);
+}
+
+.upcoming__count {
+  @apply text-[20px] font-bold tabular-nums;
+}
+
+.upcoming__arrow {
+  @apply flex-none text-(--ink-soft);
+}

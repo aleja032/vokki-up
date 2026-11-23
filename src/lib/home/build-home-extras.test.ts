@@ -1,9 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { buildDueHand, deriveWeeklyAccuracy } from './build-home-extras';
+import {
+  buildDueHand,
+  buildMission,
+  deriveWeeklyAccuracy
+} from './build-home-extras';
 
 const card = (id: string) => ({
   id,
   term: id,
+  meaning: `${id} meaning`,
   phonetics: `/${id}/`,
   partOfSpeech: 'Verbo'
 });
@@ -19,24 +24,57 @@ describe('buildDueHand', () => {
   });
 
   it('derives memory level, newness and tone from the schedule', () => {
-    const [weak, mid, strong, fresh] = buildDueHand(
-      [card('a'), card('b'), card('c'), card('d')],
+    const [weak, mid, firm, strong, fresh] = buildDueHand(
+      [card('a'), card('b'), card('e'), card('c'), card('d')],
       {
         a: { repetitions: 0 },
-        b: { repetitions: 3 },
+        b: { repetitions: 2 },
+        e: { repetitions: 3 },
         c: { repetitions: 9 }
       }
     );
     expect(weak).toMatchObject({ memoryLevel: 0, tone: 'coral', isNew: false });
-    expect(mid).toMatchObject({ memoryLevel: 3, tone: 'amber' });
+    expect(mid).toMatchObject({ memoryLevel: 2, tone: 'amber' });
+    expect(firm).toMatchObject({ memoryLevel: 3, tone: 'brand' });
     expect(strong).toMatchObject({ memoryLevel: 5, tone: 'mint' });
     expect(fresh).toMatchObject({ isNew: true, tone: 'brand', memoryLevel: 0 });
   });
 
   it('caps the hand at the limit', () => {
     const cards = Array.from({ length: 9 }, (_, index) => card(`c${index}`));
-    expect(buildDueHand(cards, {})).toHaveLength(4);
+    expect(buildDueHand(cards, {})).toHaveLength(6);
     expect(buildDueHand(cards, {}, 0)).toEqual([]);
+  });
+});
+
+describe('buildMission', () => {
+  const terms = { a: 'alpha', b: 'beta' };
+  const hand = [{ term: 'alpha' }, { term: 'gamma' }, { term: 'delta' }];
+
+  it('puts recalled words first and marks the next one', () => {
+    const mission = buildMission(
+      [
+        { cardId: 'a', rating: 'good', localDate: '2026-05-20' },
+        { cardId: 'b', rating: 'again', localDate: '2026-05-20' },
+        { cardId: 'b', rating: 'good', localDate: '2026-05-19' }
+      ],
+      terms,
+      hand,
+      '2026-05-20'
+    );
+    expect(mission).toEqual({
+      steps: [
+        { term: 'alpha', state: 'done' },
+        { term: 'gamma', state: 'current' },
+        { term: 'delta', state: 'upcoming' }
+      ],
+      doneCount: 1,
+      nextTerm: 'gamma'
+    });
+  });
+
+  it('is null with nothing recalled and an empty hand', () => {
+    expect(buildMission([], terms, [], '2026-05-20')).toBeNull();
   });
 });
 

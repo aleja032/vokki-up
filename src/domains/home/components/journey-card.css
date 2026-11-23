@@ -1,0 +1,89 @@
+@reference 'tailwindcss';
+
+/* The path: one node per word. Each step draws the connector that reaches it
+   from the previous node, so any count of steps lines up without maths. */
+.journey-card__path {
+  @apply m-0 grid list-none auto-cols-fr grid-flow-col p-0 pt-0.5;
+}
+
+.journey-card__step {
+  @apply relative z-1 flex min-w-0 flex-col items-center gap-2;
+}
+
+.journey-card__step::before {
+  @apply absolute top-4 right-[calc(50%+1rem)] h-1 w-[calc(100%-2rem)] rounded-sm bg-(--track);
+  content: '';
+}
+
+.journey-card__step[data-first]::before {
+  @apply hidden;
+}
+
+.journey-card__step[data-state='done']::before {
+  background: var(--urgency-green);
+}
+
+.journey-card__step[data-state='current']::before {
+  background: linear-gradient(90deg, var(--urgency-green), var(--brand));
+}
+
+.journey-card__node {
+  @apply relative box-border flex size-8 items-center justify-center rounded-full border-solid;
+}
+
+.journey-card__step[data-state='done'] .journey-card__node {
+  @apply border-0 text-(--cta-ink);
+  background: var(--cta-gradient);
+}
+
+.journey-card__step[data-state='current'] .journey-card__node {
+  @apply border-4 border-(--brand-line) bg-(--surface);
+  box-shadow: 0 0 0 5px var(--indigo-soft);
+}
+
+.journey-card__step[data-state='upcoming'] .journey-card__node {
+  @apply border-[2.5px] border-(--line) bg-(--surface);
+}
+
+.journey-card__term {
+  @apply max-w-full truncate text-[13px] font-bold text-(--ink);
+}
+
+.journey-card__step[data-state='current'] .journey-card__term {
+  @apply font-extrabold text-(--indigo);
+}
+
+.journey-card__step[data-state='upcoming'] .journey-card__term {
+  @apply text-(--ink-soft);
+}
+
+.journey-card__noma {
+  @apply mt-auto flex items-center gap-3;
+}
+
+.journey-card__mascot {
+  @apply h-21 w-auto flex-none;
+}
+
+.journey-card__bubble {
+  @apply relative m-0 min-w-0 rounded-[20px] border border-solid border-(--line) bg-(--mint-soft) px-4 py-3 text-[14px] leading-[1.4];
+}
+
+.journey-card__bubble::before {
+  @apply absolute top-1/2 -left-1.75 -mt-1.75 size-3.5 rotate-45 border-b border-l border-solid border-(--line) bg-(--mint-soft);
+  content: '';
+}
+
+.journey-card__word {
+  @apply rounded-lg bg-(--indigo-soft) px-2 py-px font-extrabold text-(--indigo);
+}
+
+@media (min-width: 768px) {
+  .journey-card__term {
+    @apply text-[14.5px];
+  }
+
+  .journey-card__mascot {
+    @apply h-24;
+  }
+}

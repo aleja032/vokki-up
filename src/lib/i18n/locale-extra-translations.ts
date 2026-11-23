@@ -359,6 +359,28 @@ export const extraTranslations: Record<string, string> = {
   'Mientras más baja la barra de memoria, más urgente.':
     'The lower the memory bar, the more urgent.',
   'Tu mano de hoy está vacía.': 'Your hand for today is empty.',
+  'Responde tus cartas antes de que se olviden y abre el cofre de la meta.':
+    'Answer your cards before they fade and open the goal chest.',
+  Dominio: 'Mastery',
+  Frágil: 'Fragile',
+  Firme: 'Firm',
+  'Misión de hoy': 'Today’s mission',
+  'Tu recorrido de palabras': 'Your word journey',
+  'Tu progreso de vocabulario': 'Your vocabulary progress',
+  'palabras dominadas': 'mastered words',
+  'de aciertos': 'correct',
+  'esta semana': 'this week',
+  'Cada palabra dominada hace crecer a Noma y el mundo se ve más nítido.':
+    'Every mastered word makes Noma grow and the world look sharper.',
+  'Noma detectó 1 palabra clave de este mundo. Recuérdala para que este lugar se vea más nítido.':
+    'Noma spotted 1 key word in this world. Remember it to make this place look sharper.',
+  'Seguir repasando': 'Keep reviewing',
+  'Noma celebrando': 'Noma celebrating',
+  'Próximos repasos': 'Upcoming reviews',
+  'Para repasar ya': 'Due now',
+  'De mañana a 7 días': 'From tomorrow to 7 days',
+  '8 días o más': '8 days or more',
+  'Nuevo mundo': 'New world',
   'Se olvida hoy': 'Fading today',
   'Repasa hoy': 'Review today',
   '¡Meta cumplida! Abriste el cofre.': 'Goal reached! You opened the chest.',
@@ -543,6 +565,35 @@ export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
   [/^(\d+) pendientes de revisar$/, '$1 left to review'],
   [/^(\d+) pendientes · disponible offline$/, '$1 pending · available offline'],
   [/^Ver todas \((\d+)\)$/, 'See all ($1)'],
+  [/^Mundo · (.+)$/, 'World · $1'],
+  [/^Mundo (.+)$/, 'World $1'],
+  [/^\/ (\d+) tarjetas$/, '/ $1 cards'],
+  [
+    /^(\d+) tarjetas más y abres el cofre\.$/,
+    '$1 more cards and you open the chest.'
+  ],
+  [/^de (\d+) vistas$/, 'of $1 seen'],
+  [
+    /^Noma detectó (\d+) palabras clave de este mundo\. Recuérdalas para que este lugar se vea más nítido\.$/,
+    'Noma spotted $1 key words in this world. Remember them to make this place look sharper.'
+  ],
+  [/^Recordar (.+)$/, 'Recall $1'],
+  [
+    /^¡Misión cumplida! Recordaste las (\d+) palabras\.$/,
+    'Mission complete! You recalled all $1 words.'
+  ],
+  [
+    /^Empieza con (.+): cada palabra recordada avanza la misión\.$/,
+    'Start with $1: every word you recall moves the mission forward.'
+  ],
+  [
+    /^¡Genial! Ya recordaste (\d+) de (\d+) palabras\. Con (.+) la misión quedará casi completa\.$/,
+    'Great! You already recalled $1 of $2 words. With $3 the mission will be almost complete.'
+  ],
+  [
+    /^¡Genial! Ya recordaste (\d+) de (\d+) palabras\. Sigue con (.+)\.$/,
+    'Great! You already recalled $1 of $2 words. Keep going with $3.'
+  ],
   [/^Memoria (\d+) de 5$/, 'Memory $1 of 5'],
   [/^Racha de (\d+) días$/, '$1-day streak'],
   [/^(\d+) \/ (\d+) tarjetas$/, '$1 / $2 cards'],

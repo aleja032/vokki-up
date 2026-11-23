@@ -106,7 +106,7 @@
 
 @media (min-width: 768px) {
   .hero-panel {
-    @apply mt-10 min-h-95 justify-center;
+    @apply mt-14 min-h-95 justify-center;
   }
 
   .hero-panel__backdrop {

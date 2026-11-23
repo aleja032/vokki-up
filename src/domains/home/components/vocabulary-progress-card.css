@@ -1,0 +1,62 @@
+@reference 'tailwindcss';
+
+.vocabulary-progress__stats {
+  @apply flex items-center gap-5;
+}
+
+.vocabulary-progress__stat {
+  @apply min-w-0 flex-1;
+}
+
+.vocabulary-progress__value {
+  @apply m-0 text-[40px] leading-none font-extrabold tracking-[-1.5px] tabular-nums;
+}
+
+.vocabulary-progress__value--accent {
+  @apply text-(--mint);
+}
+
+.vocabulary-progress__caption {
+  @apply mt-1 mb-0 text-[14px] text-(--ink-soft);
+}
+
+.vocabulary-progress__divider {
+  @apply w-px self-stretch bg-(--line);
+}
+
+.vocabulary-progress__growth {
+  @apply mt-auto flex items-end justify-center gap-4 pt-1.5 text-(--ink-soft);
+}
+
+.vocabulary-progress__step {
+  @apply flex items-end gap-4;
+}
+
+.vocabulary-progress__noma {
+  @apply w-auto opacity-90;
+}
+
+.vocabulary-progress__noma[data-size='small'] {
+  @apply h-11;
+}
+
+.vocabulary-progress__noma[data-size='medium'] {
+  @apply h-15.5;
+}
+
+.vocabulary-progress__noma[data-size='large'] {
+  @apply h-21 opacity-100;
+  filter: drop-shadow(
+    0 0 14px color-mix(in srgb, var(--memory-mastered) 70%, transparent)
+  );
+}
+
+.vocabulary-progress__note {
+  @apply m-0 text-center text-[13.5px] text-(--ink-soft);
+}
+
+@media (min-width: 768px) {
+  .vocabulary-progress__value {
+    @apply text-[46px];
+  }
+}

@@ -5,11 +5,11 @@
 }
 
 .worlds-row__title {
-  @apply m-0 flex items-center gap-2 px-1 text-[21px] font-extrabold tracking-[-0.02em] text-(--ink);
+  @apply m-0 flex items-center gap-2 px-1 text-[21px] font-extrabold tracking-[-0.4px] text-(--ink);
 }
 
 .worlds-row__title svg {
-  @apply text-(--mint);
+  @apply text-(--indigo);
 }
 
 /* Phones: one row you scroll sideways. */
@@ -27,10 +27,10 @@
   }
 
   .worlds-row__title {
-    @apply text-[26px];
+    @apply gap-2.5 px-0 text-[26px] tracking-[-0.6px];
   }
 
   .worlds-row__list {
-    @apply mr-0 grid grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] gap-5.5 overflow-visible p-0;
+    @apply mr-0 grid grid-cols-[repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-5.5 overflow-visible p-0;
   }
 }

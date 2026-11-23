@@ -47,7 +47,7 @@ export function WorldArchCard({ world }: { world: WorldProgress }) {
         </>
       ) : (
         <span aria-hidden="true" className="world-arch__icon">
-          <Icon size={64} strokeWidth={1.5} />
+          <Icon size={60} strokeWidth={1.5} />
         </span>
       )}
       <div className="world-arch__info">
@@ -60,7 +60,7 @@ export function WorldArchCard({ world }: { world: WorldProgress }) {
             className="world-arch__bar"
             label={`${name}: ${world.learned}/${world.total}`}
             max={world.total}
-            tone="mint"
+            tone="brand"
             value={world.learned}
           />
           <span className="world-arch__count">

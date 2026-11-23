@@ -1,4 +1,9 @@
-import type { DueWord, WorldProgress } from '@/lib/home/home-hand.types';
+import type {
+  DueWord,
+  HomeMission,
+  UpcomingReviews,
+  WorldProgress
+} from '@/lib/home/home-hand.types';
 
 export type HomeActivity = {
   title: string;
@@ -19,8 +24,6 @@ export type HomeDashboardData = {
     addFromLibrary: string;
     nextSessionDescription: string;
     pendingChip: (count: number) => string;
-    newChip: (count: number) => string;
-    minutesChip: (minutes: number) => string;
     goalRemaining: (remaining: number) => string;
     completedCards: (target: number) => string;
     weekdayInitial: (day: string) => string;
@@ -33,27 +36,46 @@ export type HomeDashboardData = {
     ) => string;
     startSession: string;
     weekHeading: string;
-    statisticsLink: string;
     progressLabel: (completed: number, target: number) => string;
     completedToday: (target: number) => string;
     weeklyChartLabel: string;
     weeklyChartCaption: string;
-    streakMetricLabel: string;
-    seenMetricLabel: string;
-    masteredMetricLabel: string;
-    statisticsLabels: {
-      streakDays: string;
-      wordsSeen: string;
-      masteredWords: string;
-      weeklyMinutes: string;
-      accuracy: string;
-    };
-    statisticsSectionLabel: string;
-    statisticsUnits: {
-      streakDays: string;
-      weeklyMinutes: string;
-    };
     todayActivityHeading: string;
+    heroKicker: (world: string) => string;
+    legend: {
+      label: string;
+      fragile: string;
+      learning: string;
+      firm: string;
+      mastered: string;
+    };
+    goalTotal: (target: number) => string;
+    mission: {
+      heading: string;
+      imageAlt: (world: string) => string;
+      description: (count: number) => string;
+      cta: (term: string) => string;
+      completeCta: string;
+      bubble: (done: number, total: number, next: string | null) => string;
+      noma: string;
+    };
+    journeyHeading: string;
+    progressHeading: string;
+    masteredCaption: string;
+    seenCaption: (seen: number) => string;
+    accuracyCaption: string;
+    accuracyPeriod: string;
+    progressNote: string;
+    upcoming: {
+      heading: string;
+      link: string;
+      today: string;
+      todayHint: string;
+      week: string;
+      weekHint: string;
+      safe: string;
+      safeHint: string;
+    };
     heroTitleLead: (count: number) => string;
     heroTitleAccent: string;
     heroTitleTail: string;
@@ -95,6 +117,8 @@ export type HomeDashboardData = {
     accuracy: number | null;
   };
   dueHand: DueWord[];
+  mission: HomeMission | null;
+  upcoming: UpcomingReviews;
   worlds: WorldProgress[];
   activities: HomeActivity[];
 };

@@ -35,6 +35,8 @@ export function deriveHomeDashboardData(
       accuracy: summary.weeklyAccuracy
     },
     dueHand: summary.dueHand,
+    mission: summary.mission,
+    upcoming: summary.upcoming,
     worlds: summary.worlds,
     nextSession: {
       ...homeDashboardData.nextSession,

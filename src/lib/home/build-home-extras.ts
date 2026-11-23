@@ -1,10 +1,16 @@
-import type { DueWord, DueWordTone } from './home-hand.types';
+import type {
+  DueWord,
+  DueWordTone,
+  HomeMission,
+  MissionStep
+} from './home-hand.types';
 
 // Structural inputs: src/lib never imports a domain, so these mirror only the
 // fields read from the cards domain.
 type HandCard = {
   id: string;
   term: string;
+  meaning: string;
   phonetics: string;
   partOfSpeech: string;
 };
@@ -14,14 +20,17 @@ type HandSchedule = { repetitions: number };
 type AccuracyEvent = { rating: string; reviewedAt: string };
 
 export const MAX_MEMORY_LEVEL = 5;
-export const DEFAULT_HAND_SIZE = 4;
+export const DEFAULT_HAND_SIZE = 6;
+export const MISSION_SIZE = 5;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+// Fragile (coral), learning (amber), firm (violet), mastered (mint).
 function toneFor(memoryLevel: number, isNew: boolean): DueWordTone {
   if (isNew) return 'brand';
   if (memoryLevel <= 1) return 'coral';
-  return memoryLevel <= 3 ? 'amber' : 'mint';
+  if (memoryLevel === 2) return 'amber';
+  return memoryLevel === 3 ? 'brand' : 'mint';
 }
 
 /**
@@ -45,6 +54,7 @@ export function buildDueHand(
       const word: DueWord = {
         id: card.id,
         term: card.term,
+        meaning: card.meaning,
         phonetics: card.phonetics,
         partOfSpeech: card.partOfSpeech,
         memoryLevel,
@@ -61,6 +71,42 @@ export function buildDueHand(
     )
     .slice(0, Math.max(0, limit))
     .map(entry => entry.word);
+}
+
+type MissionEvent = { cardId: string; rating: string; localDate: string };
+
+/**
+ * Today's mission path (up to five words): the words already recalled today
+ * (reviewed and not rated "again") come first, then the weakest words of the
+ * due hand. Null when there is nothing to show.
+ */
+export function buildMission(
+  events: MissionEvent[],
+  termByCardId: Record<string, string | undefined>,
+  hand: { term: string }[],
+  todayKey: string
+): HomeMission | null {
+  const recalled: string[] = [];
+  for (const event of events) {
+    if (event.localDate !== todayKey || event.rating === 'again') continue;
+    const term = termByCardId[event.cardId];
+    if (term && !recalled.includes(term)) recalled.push(term);
+  }
+  const done = recalled.slice(-MISSION_SIZE);
+  const pending = hand
+    .map(word => word.term)
+    .filter(term => !done.includes(term))
+    .slice(0, MISSION_SIZE - done.length);
+  if (done.length + pending.length === 0) return null;
+
+  const steps: MissionStep[] = [
+    ...done.map(term => ({ term, state: 'done' as const })),
+    ...pending.map((term, index) => ({
+      term,
+      state: index === 0 ? ('current' as const) : ('upcoming' as const)
+    }))
+  ];
+  return { steps, doneCount: done.length, nextTerm: pending[0] ?? null };
 }
 
 /**

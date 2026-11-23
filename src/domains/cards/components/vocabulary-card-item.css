@@ -9,7 +9,8 @@
  */
 
 .deck-card {
-  @apply relative row-span-6 grid min-h-42 min-w-0 grid-rows-subgrid items-start gap-1.25 rounded-(--card-radius) border-[1.5px] border-solid border-(--line) bg-(--surface) px-3.5 pt-4 pb-3.5 text-(--ink);
+  @apply relative row-span-6 grid min-h-42 min-w-0 grid-rows-subgrid items-start gap-1.25 rounded-3xl border border-l-5 border-solid border-(--line) bg-(--surface-muted) px-3.5 pt-4 pb-3.5 text-(--ink);
+  border-left-color: var(--due-now);
   animation: enter-rise var(--enter-duration) var(--ease-out)
     var(--enter-delay, 0ms) backwards;
   transition:
@@ -135,6 +136,16 @@
   @apply size-2 shrink-0 rounded-full bg-(--brand);
 }
 
+/* The left edge repeats the due colour, as the memory colour does in the
+   artboard (due tokens only: violet, ink and mint). */
+.deck-card:has(.deck-card__dot[data-tone='amber']) {
+  border-left-color: var(--due-soon);
+}
+
+.deck-card:has(.deck-card__dot[data-tone='mint']) {
+  border-left-color: var(--due-safe);
+}
+
 .deck-card__dot[data-tone='coral'] {
   background-color: var(--due-now);
 }
@@ -163,7 +174,7 @@
 }
 
 .deck-card[data-selected='true'] {
-  @apply border-(--brand) bg-(--surface);
+  @apply border-t-(--brand) border-r-(--brand) border-b-(--brand) bg-(--surface-muted);
   box-shadow: 0 0 0 1px var(--brand);
 }
 
@@ -174,6 +185,10 @@
 @media (min-width: 761px) {
   .deck-card {
     @apply px-4 pt-4.5 pb-4;
+  }
+
+  .deck-card[data-selected='true'] {
+    border-left-color: var(--brand);
   }
 
   .deck-card__top .tile-eyebrow__state {
@@ -204,7 +219,9 @@
 @media (hover: hover) {
   .deck-card:hover {
     translate: 0 var(--hover-lift);
-    border-color: var(--hover-accent);
+    border-top-color: var(--hover-accent);
+    border-right-color: var(--hover-accent);
+    border-bottom-color: var(--hover-accent);
     box-shadow: 0 14px 30px var(--hover-accent-glow);
   }
 }

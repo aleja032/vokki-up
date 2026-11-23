@@ -2,44 +2,66 @@
 
 /*
  * Home layout (proposal D). Each block owns its own styles; this file only
- * arranges them. Mobile first: everything stacks, then the hand sits beside the
- * goal and the week beside today's activity from tablet width.
+ * arranges them. Mobile first: everything stacks at 24px, then the hand sits
+ * beside the goal in one panel from 1024px, the three progress cards form a
+ * row and the week sits beside the upcoming reviews from tablet width.
  */
 
 /* Phones: the proposal uses 14px gutters; the shell gives 24px, so pull in 10px. */
 .home-dashboard {
-  @apply -mx-2.5 flex min-w-0 flex-col gap-5;
+  @apply -mx-2.5 flex min-w-0 flex-col gap-6;
 }
 
 .home-dashboard__hand-row {
-  @apply flex min-w-0 flex-col gap-4.5;
+  @apply flex min-w-0 flex-col gap-6;
+}
+
+.home-dashboard__advance {
+  @apply grid min-w-0 grid-cols-1 gap-6;
 }
 
 .home-dashboard__lower {
-  @apply grid min-w-0 grid-cols-1 gap-5;
+  @apply grid min-w-0 grid-cols-1 gap-6;
 }
 
 @media (min-width: 768px) {
   .home-dashboard {
-    @apply mx-0 gap-7;
+    @apply mx-0 gap-8.5;
   }
 
-  .home-dashboard__hand-row {
-    @apply gap-6;
+  .home-dashboard__advance {
+    @apply grid-cols-[repeat(auto-fit,minmax(min(100%,21.25rem),1fr))] items-stretch;
   }
 
   .home-dashboard__lower {
-    @apply gap-6;
+    @apply grid-cols-[repeat(auto-fit,minmax(min(100%,21.25rem),1fr))];
   }
 }
 
+/* Wide: hand and goal share one rounded panel, divided by a hairline. */
 @media (min-width: 1024px) {
   .home-dashboard__hand-row {
-    @apply grid grid-cols-[minmax(0,3fr)_minmax(18rem,1fr)];
+    @apply grid grid-cols-[minmax(0,3fr)_minmax(15.5rem,1fr)] gap-7 rounded-(--radius-40) border border-solid border-(--line) bg-(--surface) p-7;
   }
 
-  .home-dashboard__lower {
-    @apply grid-cols-2;
+  .home-dashboard__hand-row > .due-hand,
+  .home-dashboard__hand-row > .goal-chest {
+    @apply rounded-none border-0 bg-transparent p-0;
+  }
+
+  .home-dashboard__hand-row > .due-hand {
+    @apply overflow-visible;
+  }
+
+  .home-dashboard__hand-row > .due-hand > .section-title,
+  .home-dashboard__hand-row > .due-hand > .due-hand__hint,
+  .home-dashboard__hand-row > .due-hand > .due-hand__empty,
+  .home-dashboard__hand-row > .due-hand > .due-hand__legend {
+    @apply px-0;
+  }
+
+  .home-dashboard__hand-row > .goal-chest {
+    @apply border-l border-solid border-(--line) pl-7;
   }
 }
 

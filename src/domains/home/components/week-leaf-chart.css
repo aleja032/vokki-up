@@ -1,11 +1,11 @@
 @reference 'tailwindcss';
 
 .week-leaf {
-  @apply flex min-w-0 flex-col gap-4 rounded-(--radius-36) border border-solid border-(--line) bg-(--surface) p-5;
+  @apply flex min-w-0 flex-col gap-3.5 rounded-(--radius-30) border border-solid border-(--line) bg-(--surface) p-5;
 }
 
 .week-leaf .section-title__text--pixel {
-  @apply text-(--indigo);
+  @apply text-[15px] text-(--indigo);
 }
 
 .week-leaf__caption {
@@ -16,6 +16,21 @@
   @apply block h-auto w-full overflow-visible;
 }
 
+/* Two geometries: phones get the compact one, tablets and up the wide one. */
+.week-leaf__chart--wide {
+  @apply hidden;
+}
+
+@media (min-width: 768px) {
+  .week-leaf__chart--wide {
+    @apply block;
+  }
+
+  .week-leaf__chart--compact {
+    @apply hidden;
+  }
+}
+
 .week-leaf__stop--top {
   stop-color: var(--chart-area-top);
 }
@@ -23,10 +38,6 @@
 .week-leaf__stop--bottom {
   stop-color: var(--urgency-green);
   stop-opacity: 0;
-}
-
-.week-leaf__area {
-  fill: url(#week-leaf-fill);
 }
 
 .week-leaf__baseline {
@@ -87,6 +98,10 @@
 
 @media (min-width: 768px) {
   .week-leaf {
-    @apply p-6.5;
+    @apply gap-4 rounded-(--radius-36) p-6.5;
+  }
+
+  .week-leaf .section-title__text--pixel {
+    @apply text-[16px];
   }
 }

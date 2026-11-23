@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   CHART_BASELINE_Y,
+  CHART_EMPTY_Y,
+  COMPACT_LAYOUT,
   buildAreaPath,
   buildChartPoints,
   buildSmoothPath
@@ -11,14 +13,23 @@ describe('buildChartPoints', () => {
     const points = buildChartPoints([0, 10, 5]);
 
     expect(points.map(point => point.x)).toEqual([36, 280, 524]);
-    expect(points[0].y).toBe(CHART_BASELINE_Y);
+    expect(points[0].y).toBe(CHART_EMPTY_Y);
     expect(points[1].y).toBeLessThan(points[2].y);
   });
 
-  it('keeps a flat baseline when every day is empty', () => {
+  it('keeps a flat line above the baseline when every day is empty', () => {
     const points = buildChartPoints([0, 0, 0]);
 
-    expect(points.every(point => point.y === CHART_BASELINE_Y)).toBe(true);
+    expect(points.every(point => point.y === CHART_EMPTY_Y)).toBe(true);
+    expect(CHART_EMPTY_Y).toBeLessThan(CHART_BASELINE_Y);
+  });
+
+  it('matches the artboard points on the phone layout', () => {
+    const points = buildChartPoints([14, 20, 0, 6], COMPACT_LAYOUT);
+
+    expect(points[0]).toEqual({ x: 36, y: 74.8 });
+    expect(points[1].y).toBe(46);
+    expect(points[2].y).toBe(142);
   });
 });
 

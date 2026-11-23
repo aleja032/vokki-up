@@ -25,7 +25,7 @@ describe('WorldsRow', () => {
     expect(html).toContain('En curso');
     expect(html).toContain('world-daily.png');
     expect(html).toContain('data-state="new"');
-    expect(html).toContain('Sin empezar');
+    expect(html).toContain('Nuevo mundo');
   });
 
   it('renders nothing without worlds', () => {

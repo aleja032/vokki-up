@@ -1,86 +1,107 @@
 @reference 'tailwindcss';
 
+/* Hand card of the artboard: surface-muted card, 5px memory-coloured left
+   edge, term, meaning, IPA and the five-square memory bar. Phone first. */
 .due-card {
-  --due-accent: var(--brand);
-  @apply relative box-border flex h-51.5 w-35.5 flex-none flex-col justify-between rounded-(--radius-26) border-2 border-solid border-(--due-accent) px-4 pt-4 pb-4.5 text-(--ink);
-  background: var(--surface);
-  box-shadow:
-    0 18px 34px var(--shadow-card),
-    0 0 0 3px var(--ground);
+  --due-accent: var(--memory-firm);
+  @apply relative box-border flex h-44 w-32.5 flex-none flex-col gap-1.25 rounded-3xl border border-l-5 border-solid border-(--line) bg-(--surface-muted) px-3.5 pt-4 pb-3.5 text-(--ink);
+  border-left-color: var(--due-accent);
+  box-shadow: -6px 4px 14px var(--shadow-card);
   transition:
     translate 180ms var(--ease-out),
-    box-shadow 180ms var(--ease-out),
-    border-color 180ms var(--ease-out);
+    border-color 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out);
 }
 
 .due-card[data-tone='coral'] {
-  --due-accent: var(--due-now);
+  --due-accent: var(--memory-fragile);
 }
 
 .due-card[data-tone='amber'] {
-  --due-accent: var(--due-soon);
+  --due-accent: var(--memory-learning);
 }
 
 .due-card[data-tone='mint'] {
-  --due-accent: var(--due-safe);
+  --due-accent: var(--memory-mastered);
 }
 
 .due-card__tag {
-  @apply text-(--indigo);
-}
-
-.due-card__word {
-  @apply flex min-w-0 flex-col items-center gap-1 text-center;
+  @apply block max-w-full truncate text-[9px] whitespace-nowrap text-(--ink-soft);
 }
 
 .due-card__term {
-  @apply max-w-full text-[20px] leading-[1.1] font-extrabold tracking-[-0.02em] wrap-anywhere;
+  @apply mt-1 max-w-full text-[18px] leading-[1.1] font-extrabold tracking-[-0.5px] wrap-anywhere;
+}
+
+.due-card__meaning {
+  @apply text-[13px] font-bold wrap-anywhere text-(--ink);
 }
 
 .due-card__ipa {
-  @apply max-w-full text-[12px] wrap-anywhere text-(--ink-soft);
+  @apply text-[12px] wrap-anywhere text-(--ink-soft);
 }
 
 .due-card__footer {
-  @apply flex flex-col items-center gap-1.5;
+  @apply mt-auto flex items-center justify-between gap-1.5 pt-2;
 }
 
 .due-card__memory {
-  @apply w-20;
+  @apply h-auto w-auto gap-0.75;
 }
 
 .due-card__memory .progress-bar__segment {
-  @apply rounded-[3px];
+  @apply h-2.25 w-2 flex-none rounded-[3px] bg-(--track);
+}
+
+.due-card__memory .progress-bar__segment[data-filled='true'] {
+  background: var(--due-accent);
 }
 
 .due-card__due {
-  @apply text-[11px] text-(--ink-soft);
+  @apply flex flex-none items-center gap-1.5;
 }
 
-.due-card[data-tone='coral'] .due-card__due {
-  @apply text-(--indigo);
+.due-card__dot {
+  @apply size-2 rounded-full;
+  background: var(--brand);
 }
 
-.due-card[data-tone='amber'] .due-card__due {
-  @apply text-(--ink-soft);
+.due-card[data-tone='coral'] .due-card__dot {
+  background: var(--memory-fragile);
 }
 
-.due-card[data-tone='brand'] .due-card__due {
-  @apply text-(--indigo);
+.due-card__due-label {
+  @apply text-[9px] whitespace-nowrap text-(--ink-soft);
 }
 
 @media (hover: hover) {
   .due-card:hover {
     translate: 0 var(--hover-lift);
     border-color: var(--hover-accent);
-    box-shadow:
-      0 14px 30px var(--hover-accent-glow),
-      0 0 0 3px var(--ground);
+    border-left-color: var(--due-accent);
+    box-shadow: 0 14px 30px var(--hover-accent-glow);
   }
 }
 
 @media (min-width: 768px) {
   .due-card {
-    @apply h-56 w-40;
+    @apply h-58 w-47.5 gap-1.25 px-4 pt-4.5 pb-4;
+  }
+
+  .due-card__tag,
+  .due-card__due-label {
+    @apply text-[10.5px];
+  }
+
+  .due-card__term {
+    @apply text-[24px];
+  }
+
+  .due-card__meaning {
+    @apply text-[14px];
+  }
+
+  .due-card__memory .progress-bar__segment {
+    @apply w-2.75;
   }
 }

@@ -114,7 +114,7 @@
 /* Bottom navigation (mobile) */
 
 .bottom-navigation {
-  @apply fixed inset-x-3 bottom-[max(14px,env(safe-area-inset-bottom))] z-10 grid auto-cols-fr grid-flow-col items-end rounded-(--radius-pill) border border-solid border-(--line) bg-(--nav) px-1.5 pt-2 pb-2.5;
+  @apply fixed inset-x-3 bottom-[max(14px,env(safe-area-inset-bottom))] z-10 grid auto-cols-fr grid-flow-col items-end rounded-4xl border border-solid border-(--line) bg-(--nav) px-1.5 pt-2 pb-2.5;
   box-shadow: 0 12px 30px var(--shadow-nav);
 }
 
@@ -131,7 +131,7 @@
 }
 
 .bottom-navigation__item[aria-current='page'] {
-  @apply font-extrabold text-(--mint);
+  @apply font-extrabold text-(--indigo);
 }
 
 /* Raised center action: starts a review round. */
@@ -165,7 +165,7 @@
   }
 
   .bottom-navigation__item:not([aria-current='page']):hover {
-    @apply text-(--mint);
+    @apply text-(--indigo);
   }
 
   a.user-avatar:hover {

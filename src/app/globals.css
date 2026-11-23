@@ -63,6 +63,11 @@
   --urgency-coral: #ff7a59;
   --urgency-amber: #ffb84d;
   --urgency-green: #2fcb9b;
+  /* Memory strength on the home hand and legend (artboard colours, both themes). */
+  --memory-fragile: #ff846f;
+  --memory-learning: #ffb454;
+  --memory-firm: #9b87ff;
+  --memory-mastered: #6ee7c2;
   --cta-from: #5be8bc;
   --cta-to: #2fcb9b;
   --cta-ink: #062b20;
