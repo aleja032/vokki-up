@@ -12,12 +12,17 @@ type ArchCardProps = {
   stateLabel: string;
   title: string;
   description?: string;
+  /** Short facts line under the description, e.g. "200 palabras · 46 en tu mazo". */
+  meta?: string;
   /** Accessible name of the bar, and the value shown next to it. */
   progress: { value: number; max: number; label: string };
-  /** Pixel art of an active card. Without it the card shows `icon`. */
+  /** Pixel art of the card. Without it the card shows `icon`. */
   imageSrc?: string;
   icon?: ReactNode;
+  /** In progress: the card gets the brand outline. */
   isActive?: boolean;
+  /** Semantic accent of the bar and the state label. */
+  accent?: 'brand' | 'mint' | 'amber' | 'lavender';
   className?: string;
 };
 
@@ -29,15 +34,19 @@ export function ArchCard({
   stateLabel,
   title,
   description,
+  meta,
   progress,
   imageSrc,
   icon,
   isActive = false,
+  accent = 'brand',
   className
 }: ArchCardProps) {
   return (
     <Link
       className={cn('arch-card', className)}
+      data-accent={accent}
+      data-art={imageSrc ? 'true' : 'false'}
       data-state={isActive ? 'active' : 'idle'}
       href={href}
     >
@@ -64,6 +73,7 @@ export function ArchCard({
         {description ? (
           <span className="arch-card__description">{description}</span>
         ) : null}
+        {meta ? <span className="arch-card__meta">{meta}</span> : null}
         <span className="arch-card__progress">
           <ProgressBar
             className="arch-card__bar"

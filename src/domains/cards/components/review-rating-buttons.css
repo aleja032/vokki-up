@@ -13,37 +13,42 @@
 }
 
 .review-rating {
-  --rating-ink: var(--indigo);
-  --rating-soft: var(--indigo-soft);
-  @apply flex min-h-16 min-w-0 flex-col items-center justify-center gap-px rounded-(--radius-22) border-2 border-solid border-(--rating-ink) bg-(--rating-soft) px-1.5 py-2 text-(--rating-ink);
+  --rating-dot: var(--brand);
+  @apply flex min-h-16 min-w-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-(--radius-22) border-[1.5px] border-solid border-(--line) bg-(--surface) px-1.5 py-2 text-(--ink);
   transition: var(--hover-transition);
 }
 
 .review-rating[data-tone='again'] {
-  --rating-ink: var(--coral);
-  --rating-soft: var(--coral-soft);
+  --rating-dot: var(--due-now);
 }
 
 .review-rating[data-tone='good'] {
-  --rating-ink: var(--mint);
-  --rating-soft: var(--mint-soft);
+  --rating-dot: var(--due-soon);
 }
 
 .review-rating[data-tone='easy'] {
-  --rating-ink: var(--indigo);
-  --rating-soft: var(--indigo-soft);
+  --rating-dot: var(--due-safe);
+}
+
+.review-rating__when {
+  @apply flex items-center gap-1.5;
+}
+
+.review-rating__dot {
+  @apply size-2 flex-none rounded-full bg-(--rating-dot);
 }
 
 .review-rating__label {
   @apply text-base leading-snug font-extrabold wrap-anywhere;
 }
 
-.review-rating__hint {
-  @apply text-xs font-semibold opacity-90;
+.review-rating .review-rating__hint {
+  @apply text-[10.5px] text-(--ink-soft);
 }
 
 @media (hover: hover) {
   .review-rating:hover {
+    border-color: var(--hover-accent);
     box-shadow: var(--hover-shadow);
     transform: translateY(var(--lift-1));
   }

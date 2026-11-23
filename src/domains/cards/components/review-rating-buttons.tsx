@@ -1,3 +1,4 @@
+import { PixelLabel } from '@/components/ui/pixel-label';
 import { cardsMessages } from '../messages';
 import type { CardRating } from '../types';
 import { REVIEW_RATINGS } from '../hooks/use-card-review';
@@ -34,8 +35,11 @@ export function ReviewRatingButtons({
             <span className="review-rating__label">
               {messages.ratings[rating]}
             </span>
-            <span className="review-rating__hint">
-              {getIntervalLabel(rating)}
+            <span className="review-rating__when">
+              <span aria-hidden="true" className="review-rating__dot" />
+              <PixelLabel className="review-rating__hint">
+                {getIntervalLabel(rating)}
+              </PixelLabel>
             </span>
           </button>
         ))}

@@ -44,7 +44,7 @@ export function ReviewHeader({
         max={hasCards ? total : 1}
         segments={isSegmented ? total : undefined}
         shape="blocks"
-        tone="mint"
+        tone="brand"
         value={hasCards ? position : 1}
       />
       <span className="review-header__count">

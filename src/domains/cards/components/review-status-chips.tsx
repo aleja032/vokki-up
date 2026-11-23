@@ -28,7 +28,7 @@ export function ReviewStatusChips({
         <Pill
           className="review-status__combo"
           icon={<Zap size={16} strokeWidth={2.2} />}
-          tone="amber"
+          tone="brand"
         >
           {messages.status.combo(combo)}
         </Pill>
@@ -37,7 +37,7 @@ export function ReviewStatusChips({
         <Pill
           className="review-status__chip"
           icon={<Target size={16} strokeWidth={2.2} />}
-          tone="mint"
+          tone="brand"
         >
           {messages.status.accuracy(correct, reviewed)}
         </Pill>

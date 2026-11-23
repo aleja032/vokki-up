@@ -28,6 +28,7 @@ import {
   WORLDS,
   type WorldSummary
 } from '../word-library/worlds';
+import { LibraryViewTabs } from './library-view-tabs';
 import { SelectionActionBar } from './selection-action-bar';
 import { WordLibraryEntryCard } from './word-library-entry-card';
 import { WorldBanner } from './world-banner';
@@ -211,11 +212,13 @@ export function WordLibraryBrowser({
     <div className="word-library" data-adding={isAdding}>
       {world ? (
         <>
+          <LibraryViewTabs view="worlds" />
           <WorldBanner world={world} />
           <WorldStages activeLevel={level} world={world} />
         </>
       ) : (
         <header className="word-library__header">
+          <LibraryViewTabs view="library" />
           <LocationCrumb
             ariaLabel={messages.locationLabel}
             currentLabel={messages.title}
@@ -224,7 +227,7 @@ export function WordLibraryBrowser({
             rootLabel={messages.backToWorlds}
           />
           <h1 id="word-library-title">{messages.title}</h1>
-          <p>{messages.summary}</p>
+          <p>{messages.libraryIntro}</p>
         </header>
       )}
 

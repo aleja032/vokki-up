@@ -24,7 +24,7 @@ export function WorldStages({ world, activeLevel }: WorldStagesProps) {
       {WORD_LIBRARY_LEVELS.map(level => {
         const progress = world.levels[level];
         const number = LEVEL_NUMBER[level];
-        const summary = `${messages.levelNames[level]} · ${progress.inDeck}/${progress.total}`;
+        const summary = `${messages.levelNames[level]} · ${messages.stageOwned(progress.inDeck, progress.total)}`;
         return (
           <div
             className="world-stages__stage"

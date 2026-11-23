@@ -9,11 +9,24 @@
 }
 
 .worlds-hub__heading {
-  @apply min-w-0;
+  @apply min-w-0 flex-1;
 }
 
 .worlds-hub__heading h1 {
   @apply m-0 font-(family-name:--font-display) text-[28px] leading-[1.05] font-semibold tracking-[-0.8px] md:text-[40px] md:tracking-[-1.2px];
+}
+
+.worlds-hub .library-view-tabs {
+  @apply self-start;
+}
+
+.worlds-hub__intro {
+  @apply max-w-xl text-[15px] text-(--ink);
+}
+
+.worlds-hub__mascot {
+  @apply h-auto w-18 flex-none self-end;
+  filter: drop-shadow(0 10px 14px var(--shadow-mascot));
 }
 
 .worlds-hub__heading p {
@@ -52,6 +65,16 @@
   @apply text-[14px];
 }
 
-.worlds-hub .worlds-hub__all {
+.worlds-hub__level-text small {
+  @apply text-[12.5px] text-(--ink-soft);
+}
+
+.worlds-hub .worlds-hub__continue {
   @apply mt-4 self-start;
+}
+
+@media (min-width: 768px) {
+  .worlds-hub__mascot {
+    @apply w-30;
+  }
 }

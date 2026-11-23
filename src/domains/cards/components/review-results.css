@@ -14,10 +14,23 @@
   @apply relative flex flex-col items-center gap-1.5 md:flex-[1_1_300px] md:gap-2;
 }
 
-.round-results__glow {
-  @apply pointer-events-none absolute -top-5 size-70 md:size-90;
+/* Completion: the round ends on the world scene with Noma cheering. */
+.round-results__stage--scene {
+  @apply box-border h-62.5 w-full justify-end overflow-hidden rounded-(--radius-34) border-[1.5px] border-solid border-(--line) bg-(--hero-surface) p-3 md:h-110 md:rounded-(--radius-40) md:p-6;
+}
 
-  background: radial-gradient(circle, var(--hero-glow), transparent 66%);
+.round-results__scene {
+  @apply object-cover;
+  image-rendering: pixelated;
+}
+
+.round-results__shade {
+  @apply absolute inset-0;
+  background: linear-gradient(
+    0deg,
+    var(--hero-shade-95) 4%,
+    var(--hero-shade-10) 70%
+  );
 }
 
 .round-results__pet {
@@ -146,5 +159,5 @@
 }
 
 .round-results__stats .stat-tile__value {
-  @apply text-[28px] tracking-[-1px] md:text-[32px];
+  @apply text-2xl tracking-[-1px] whitespace-nowrap md:text-[32px];
 }

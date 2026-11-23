@@ -52,9 +52,9 @@
 /* Card face */
 
 .drill-card {
-  @apply relative box-border flex w-full min-w-0 flex-col gap-3 rounded-(--radius-36) border-2 border-solid border-(--line) p-5 md:gap-4.5 md:p-6.5;
+  @apply relative box-border flex w-full min-w-0 flex-col gap-3 rounded-(--radius-36) border-2 border-l-6 border-solid border-(--line) border-l-(--due-now) p-5 pl-4 md:gap-4.5 md:p-6.5 md:pl-5.5;
 
-  background: var(--surface);
+  background: var(--surface-muted);
   box-shadow:
     0 26px 50px var(--shadow-bubble),
     0 0 0 5px var(--ground);
@@ -81,7 +81,7 @@
 }
 
 .drill-card__listen {
-  @apply flex size-11 shrink-0 items-center justify-center rounded-full border-0 bg-(--mint-soft) p-0 text-(--mint) disabled:cursor-not-allowed disabled:opacity-60;
+  @apply flex size-11 shrink-0 items-center justify-center rounded-full border-0 bg-(--indigo-soft) p-0 text-(--indigo) disabled:cursor-not-allowed disabled:opacity-60;
 }
 
 .drill-card__speech-status {
@@ -93,7 +93,7 @@
 }
 
 .drill-card__meaning {
-  @apply text-xl leading-snug font-extrabold text-(--mint) md:text-[22px];
+  @apply text-xl leading-snug font-extrabold text-(--indigo) md:text-[22px];
 }
 
 .drill-card__example {
@@ -131,8 +131,8 @@
   }
 
   .drill-card__listen:not(:disabled):hover {
-    background-color: var(--mint);
-    color: var(--mint-soft);
+    background-color: var(--indigo);
+    color: var(--indigo-soft);
   }
 }
 

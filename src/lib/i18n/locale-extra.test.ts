@@ -32,6 +32,16 @@ describe('audit leak translations', () => {
     );
   });
 
+  it('translates the Mundos tabs and microcopy', () => {
+    setAppLanguage('English');
+    expect(translateText('Por mundos')).toBe('By world');
+    expect(translateText('Toda la biblioteca')).toBe('Whole library');
+    expect(translateText('Continuar Día a día')).toBe('Continue Día a día');
+    expect(translateText('Continuar Daily life')).toBe('Continue Daily life');
+    expect(translateText('12 de 80 en tu mazo')).toBe('12 of 80 in your deck');
+    expect(translateText('en todos los mundos')).toBe('across all worlds');
+  });
+
   it('translates the Mi mazo phone labels', () => {
     setAppLanguage('English');
     expect(translateText('12 para hoy')).toBe('12 for today');

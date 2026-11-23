@@ -12,9 +12,9 @@ function NomaImage({ className }: { className: string }) {
       alt=""
       aria-hidden="true"
       className={className}
-      height={587}
-      src="/images/noma.png"
-      width={700}
+      height={700}
+      src="/images/noma-cheer.png"
+      width={648}
     />
   );
 }

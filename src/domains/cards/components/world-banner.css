@@ -9,12 +9,36 @@
 }
 
 .world-banner__image {
-  @apply object-cover;
+  @apply object-cover object-[50%_60%];
   image-rendering: pixelated;
 }
 
-.world-banner__icon {
-  @apply size-28 opacity-70;
+.world-banner__tags {
+  @apply pointer-events-none absolute inset-0 m-0 hidden list-none p-0;
+}
+
+.world-banner__tag {
+  @apply absolute rounded-(--radius-14) border-2 border-solid border-(--brand-line) bg-(--hero-surface) px-3 py-1.5 font-(family-name:--font-pixel) text-[15px] leading-none text-white;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--brand-line) 55%, transparent);
+}
+
+.world-banner__tag:nth-child(1) {
+  @apply top-[16%] right-[34%];
+}
+
+.world-banner__tag:nth-child(2) {
+  @apply top-[46%] right-[8%] border-(--hero-accent) [animation-delay:1.2s];
+  box-shadow: 0 0 18px color-mix(in srgb, var(--hero-accent) 50%, transparent);
+}
+
+.world-banner__tag:nth-child(3) {
+  @apply top-[70%] right-[26%] [animation-delay:2.4s];
+}
+
+@media (min-width: 768px) {
+  .world-banner__tags {
+    @apply block;
+  }
 }
 
 .world-banner__shade {

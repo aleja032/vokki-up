@@ -28,6 +28,9 @@ describe('ReviewCompleteScreen', () => {
     const html = render();
     expect(html).toContain('Ronda completada');
     expect(html).toContain('¡Rescataste 12 palabras!');
+    expect(html).toContain('world-cafe-words.png');
+    expect(html).toContain('noma-cheer.png');
+    expect(html).not.toContain('coral');
   });
 
   it('derives accuracy, best combo and streak from the round', () => {

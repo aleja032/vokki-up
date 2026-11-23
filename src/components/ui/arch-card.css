@@ -3,6 +3,7 @@
 /* Phones: a row card with an arch thumbnail. From 640px: the tall arch, with
    the text laid over the art. */
 .arch-card {
+  --arch-accent: var(--brand);
   @apply relative box-border flex min-w-0 items-center gap-4 rounded-(--radius-30) border border-solid border-(--line) bg-(--surface) p-3 text-(--ink) no-underline;
   transition:
     translate 180ms var(--ease-out),
@@ -14,8 +15,24 @@
   @apply relative flex h-26 w-21 flex-none items-center justify-center overflow-hidden rounded-t-(--radius-pill) rounded-b-[20px] border-[1.5px] border-solid border-(--line) bg-(--surface-muted) text-(--indigo);
 }
 
+.arch-card[data-art='true'] .arch-card__art {
+  @apply bg-(--hero-surface);
+}
+
 .arch-card[data-state='active'] .arch-card__art {
-  @apply border-[3px] border-(--brand-line) bg-(--hero-surface);
+  @apply border-[3px] border-(--brand-line);
+}
+
+.arch-card[data-accent='mint'] {
+  --arch-accent: var(--mint);
+}
+
+.arch-card[data-accent='amber'] {
+  --arch-accent: var(--amber);
+}
+
+.arch-card[data-accent='lavender'] {
+  --arch-accent: var(--indigo);
 }
 
 .arch-card__image {
@@ -59,6 +76,14 @@
   @apply h-1.75 min-w-0 flex-1;
 }
 
+.arch-card__meta {
+  @apply block text-[12.5px] font-semibold text-(--ink-soft);
+}
+
+.arch-card__bar {
+  --bar-fill: var(--arch-accent);
+}
+
 .arch-card__count {
   @apply text-[12px] font-bold tabular-nums;
 }
@@ -80,8 +105,25 @@
     @apply h-100 flex-col justify-end overflow-hidden rounded-t-(--radius-pill) rounded-b-[38px] border-[1.5px] p-0 text-center;
   }
 
+  .arch-card[data-art='true'] {
+    @apply bg-(--hero-surface) text-white;
+    --arch-accent: var(--hero-lavender);
+  }
+
+  .arch-card[data-art='true'][data-accent='brand'] {
+    --arch-accent: var(--brand-line);
+  }
+
+  .arch-card[data-art='true'][data-accent='mint'] {
+    --arch-accent: var(--hero-accent);
+  }
+
+  .arch-card[data-art='true'][data-accent='amber'] {
+    --arch-accent: var(--amber);
+  }
+
   .arch-card[data-state='active'] {
-    @apply border-[3px] border-(--brand-line) bg-(--hero-surface) text-white;
+    @apply border-[3px] border-(--brand-line);
   }
 
   .arch-card__art,
@@ -91,7 +133,12 @@
 
   .arch-card__shade {
     @apply absolute inset-0 block;
-    background: linear-gradient(0deg, var(--hero-shade-95) 8%, transparent 62%);
+    background: linear-gradient(
+      0deg,
+      var(--hero-shade-95) 22%,
+      var(--hero-shade-80) 44%,
+      transparent 72%
+    );
   }
 
   .arch-card__icon {
@@ -106,8 +153,8 @@
     @apply w-full flex-none items-center gap-2 px-5.5 pb-6.5 text-center;
   }
 
-  .arch-card[data-state='active'] .arch-card__state {
-    @apply text-(--hero-lavender);
+  .arch-card[data-art='true'] .arch-card__state {
+    @apply text-(--arch-accent);
   }
 
   .arch-card__title {
@@ -118,7 +165,8 @@
     @apply text-[13.5px];
   }
 
-  .arch-card[data-state='active'] .arch-card__description {
+  .arch-card[data-art='true'] .arch-card__description,
+  .arch-card[data-art='true'] .arch-card__meta {
     @apply text-white/85;
   }
 
@@ -126,8 +174,16 @@
     @apply h-2 w-30 flex-none;
   }
 
-  .arch-card[data-state='active'] .arch-card__bar {
+  .arch-card[data-art='true'] .arch-card__bar {
     @apply bg-(--on-hero-track);
+  }
+
+  .arch-card__meta {
+    @apply block text-[12.5px] font-semibold text-(--ink-soft);
+  }
+
+  .arch-card__bar {
+    --bar-fill: var(--arch-accent);
   }
 
   .arch-card__count {

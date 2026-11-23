@@ -7,24 +7,29 @@
 
 .review-memory[data-tone='brand'] {
   --memory-ink: var(--indigo);
+  --memory-fill: var(--brand);
 }
 
 .review-memory[data-tone='coral'] {
-  --memory-ink: var(--coral);
+  --memory-ink: var(--indigo);
+  --memory-fill: var(--due-now);
 }
 
 .review-memory[data-tone='amber'] {
-  --memory-ink: var(--amber-ink);
+  --memory-ink: var(--ink-soft);
+  --memory-fill: var(--due-soon);
 }
 
 .review-memory[data-tone='mint'] {
   --memory-ink: var(--mint);
+  --memory-fill: var(--due-safe);
 }
 
 .review-memory .review-memory__label {
   @apply text-xs text-(--memory-ink);
 }
 
-.review-memory__bar {
+.review-memory .review-memory__bar {
+  --bar-fill: var(--memory-fill, var(--brand));
   @apply w-30.5 flex-none gap-[3px];
 }

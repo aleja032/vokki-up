@@ -28,6 +28,11 @@ describe('ReviewRatingButtons', () => {
     expect(html).toContain('¿Qué tan fácil fue recordarla?');
   });
 
+  it('marks each rating with a due-token dot and no orange tone', () => {
+    expect(html.match(/review-rating__dot/g)).toHaveLength(3);
+    expect(html).not.toContain('coral');
+  });
+
   it('shows no keyboard hint copy', () => {
     expect(html).not.toContain('<kbd');
     expect(html).not.toContain('tecla');

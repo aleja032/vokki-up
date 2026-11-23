@@ -64,6 +64,17 @@ export const wordLibraryMessages = createLocalizedMessages({
   stage: (stage: number) => `Etapa ${stage}`,
   searchInWorld: (name: string) => `Buscar en ${name}`,
   openWholeLibrary: 'Ver toda la biblioteca',
+  worldsIntro:
+    'Elige un mundo para aprender por tema, o explora todas las palabras.',
+  viewTabsLabel: 'Vista de la biblioteca',
+  tabWorlds: 'Por mundos',
+  tabLibrary: 'Toda la biblioteca',
+  continueWorld: (name: string) => `Continuar ${name}`,
+  libraryIntro:
+    'Las mismas palabras de los mundos, en una sola lista con búsqueda.',
+  levelHint: 'en todos los mundos',
+  stageOwned: (inDeck: number, total: number) =>
+    `${inDeck} de ${total} en tu mazo`,
   backToWorlds: 'Mundos',
   viewInDeck: 'Ver en Mi mazo',
   locationLabel: 'Ubicación en Mundos',

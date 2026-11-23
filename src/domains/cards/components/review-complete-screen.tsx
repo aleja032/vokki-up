@@ -42,15 +42,24 @@ export function ReviewCompleteScreen({
 
   return (
     <section className="round-results" aria-labelledby="review-done-title">
-      <div className="round-results__stage">
-        <span aria-hidden="true" className="round-results__glow" />
+      <div className="round-results__stage round-results__stage--scene">
+        <Image
+          alt=""
+          aria-hidden="true"
+          className="round-results__scene"
+          fill
+          sizes="(min-width: 768px) 360px, 100vw"
+          src="/images/world-cafe-words.png"
+          unoptimized
+        />
+        <span aria-hidden="true" className="round-results__shade" />
         <Image
           alt=""
           aria-hidden="true"
           className="round-results__pet motion-mascot-bob"
-          height={587}
-          src="/images/noma.png"
-          width={700}
+          height={700}
+          src="/images/noma-cheer.png"
+          width={648}
         />
       </div>
       <div className="round-results__body">
@@ -92,7 +101,7 @@ export function ReviewCompleteScreen({
           {messages.done.nextReturn}
         </p>
         <div className="round-results__chips">
-          <Pill tone="coral">{messages.done.hardChip(hard)}</Pill>
+          <Pill tone="neutral">{messages.done.hardChip(hard)}</Pill>
           <Pill tone="brand">{messages.done.goodChip(good)}</Pill>
           <Pill tone="mint">{messages.done.easyChip(easy)}</Pill>
         </div>

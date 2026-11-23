@@ -43,6 +43,23 @@ describe('ArchCard', () => {
     expect(idle).not.toContain('<img');
   });
 
+  it('shows art on idle cards too, with a facts line and an accent', () => {
+    const html = renderToStaticMarkup(
+      <ArchCard
+        {...base}
+        accent="mint"
+        imageSrc="/images/world-travel.svg"
+        meta="200 palabras · 0 en tu mazo"
+      />
+    );
+
+    expect(html).toContain('data-state="idle"');
+    expect(html).toContain('data-art="true"');
+    expect(html).toContain('data-accent="mint"');
+    expect(html).toContain('world-travel.svg');
+    expect(html).toContain('200 palabras · 0 en tu mazo');
+  });
+
   it('omits the description when there is none', () => {
     const html = renderToStaticMarkup(
       <ArchCard {...base} description={undefined} />

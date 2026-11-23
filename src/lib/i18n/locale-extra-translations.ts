@@ -373,6 +373,14 @@ export const extraTranslations: Record<string, string> = {
   'Tu biblioteca': 'Your library',
   Niveles: 'Levels',
   'Ver toda la biblioteca': 'View the whole library',
+  'Elige un mundo para aprender por tema, o explora todas las palabras.':
+    'Pick a world to learn by topic, or explore every word.',
+  'Vista de la biblioteca': 'Library view',
+  'Por mundos': 'By world',
+  'Toda la biblioteca': 'Whole library',
+  'Las mismas palabras de los mundos, en una sola lista con búsqueda.':
+    'The same words as the worlds, in one searchable list.',
+  'en todos los mundos': 'across all worlds',
   'Sin agregar': 'Not added',
   Seleccionada: 'Selected',
   'Rutina, casa, compras y calle': 'Routine, home, shopping and the street',
@@ -436,6 +444,11 @@ export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
   [/^(\d+) de (\d+) tarjetas?$/, '$1 of $2 cards'],
   [/^Buscar en (.+)$/, 'Search in $1'],
   [/^(\d+) mundos$/, '$1 worlds'],
+  [
+    /^Continuar (Día a día|Trabajo|Viajes|Frases útiles|Daily life|Work|Travel|Useful phrases)$/,
+    'Continue $1'
+  ],
+  [/^(\d+) de (\d+) en tu mazo$/, '$1 of $2 in your deck'],
   [/^(\d+) en tu mazo$/, '$1 in your deck'],
   [/^Nivel (\d+) de 3$/, 'Level $1 of 3'],
   [/^Etapa (\d+)$/, 'Stage $1'],
