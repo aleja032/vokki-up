@@ -46,6 +46,7 @@ export function NotesWorkspace() {
           icon={<ArrowLeft size={18} />}
           onClick={() => setEditingNoteId(null)}
           size="sm"
+          variant="tertiary"
         >
           {messages.backToList}
         </ActionPill>
@@ -71,16 +72,16 @@ export function NotesWorkspace() {
             {messages.title}
           </h1>
           <p className="notes-page__subtitle">{messages.desktopSubtitle}</p>
+          <ActionPill
+            className="notes-page__new-note"
+            icon={<Plus size={18} strokeWidth={2.6} />}
+            onClick={handleCreateNote}
+            size="sm"
+            variant="primary"
+          >
+            {messages.newNote}
+          </ActionPill>
         </div>
-        <ActionPill
-          className="notes-page__new-note"
-          icon={<Plus size={18} strokeWidth={2.6} />}
-          onClick={handleCreateNote}
-          size="sm"
-          variant="mint"
-        >
-          {messages.newNote}
-        </ActionPill>
       </header>
 
       <div className="notes-page__content">

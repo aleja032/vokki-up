@@ -2,6 +2,9 @@ import { createLocalizedMessages } from '@/lib/i18n/locale';
 
 export const importExportMessages = createLocalizedMessages({
   back: 'Ajustes',
+  backToDeck: 'Mi mazo',
+  fromDeckSubtitle:
+    'Sube un archivo CSV para sumar tarjetas a tu mazo. Al terminar, vuelve a Mi mazo.',
   topEyebrow: 'TUS DATOS, A TU MANERA',
   eyebrow: 'PORTABILIDAD',
   title: 'Importar o exportar',
@@ -43,6 +46,7 @@ export const importExportMessages = createLocalizedMessages({
     title: 'Importar tarjetas',
     description: 'Revisa el archivo antes de usar sus filas.',
     chooseFile: 'Elegir archivo CSV',
+    viewDeck: 'Ver Mi mazo',
     sampleBadge: 'Muestra incluida',
     selectedBadge: 'Archivo seleccionado',
     validationOk: 'Resumen de validación',

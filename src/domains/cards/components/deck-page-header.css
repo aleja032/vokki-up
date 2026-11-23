@@ -1,18 +1,16 @@
 @reference 'tailwindcss';
 
-/* Mobile first: the title, the two action cards and the library row stack with
-   an 18px rhythm; the new card menu and the review pill are wide-screen only. */
+/* Mobile first: title, summary, then the three main actions (review on its own
+   row, new card and import side by side) and the library as one extra row. From
+   761px the mascot sits at the left and the three actions share one row of
+   equal columns under the summary; the library lives in the new card menu. */
 
 .deck-header {
-  @apply flex flex-col gap-4.5;
-}
-
-.deck-header__identity {
-  @apply order-1 flex min-w-0 items-center gap-4;
+  @apply flex min-w-0 items-center gap-4;
 }
 
 .deck-header__mascot {
-  @apply hidden h-17 w-auto;
+  @apply hidden h-24 w-auto shrink-0;
 }
 
 .deck-header__copy {
@@ -27,36 +25,30 @@
   @apply m-0 mt-1 text-[14.5px] text-(--ink-soft);
 }
 
-.deck-header__quick {
-  @apply order-2 flex gap-3;
-}
-
-/* The actions wrapper dissolves on phones so the library row joins the stack. */
 .deck-header__actions {
-  @apply contents;
+  @apply mt-4 grid min-w-0 grid-cols-2 gap-3;
 }
 
-.deck-header .new-card-menu,
-.deck-header__cta {
-  @apply hidden;
+.deck-header .deck-header__review {
+  @apply col-span-2;
 }
 
-/* The library link is a full-width row with a trailing chevron. */
+.deck-header__new {
+  @apply min-w-0;
+}
+
+.deck-header .deck-header__import,
 .deck-header .deck-header__library {
-  @apply order-3 min-h-14 w-full justify-start gap-3 border-[1.5px] px-5 text-[15.5px];
+  @apply px-3;
 }
 
-.deck-header__library-label {
-  @apply min-w-0 flex-1 text-left;
-}
-
-.deck-header__library > .action-pill__icon:last-child {
-  @apply text-(--ink-soft);
+.deck-header .deck-header__library {
+  @apply col-span-2;
 }
 
 @media (min-width: 761px) {
   .deck-header {
-    @apply flex-row flex-wrap items-center justify-between gap-4.5;
+    @apply gap-5;
   }
 
   .deck-header__mascot {
@@ -68,34 +60,18 @@
   }
 
   .deck-header__summary {
-    @apply mt-0 text-[15px];
-  }
-
-  .deck-header__quick {
-    @apply hidden;
+    @apply mt-0.5 text-[15px];
   }
 
   .deck-header__actions {
-    @apply order-2 flex flex-wrap items-center gap-3;
+    @apply mt-4 max-w-170 grid-cols-3;
   }
 
-  .deck-header .new-card-menu {
-    @apply block;
-  }
-
-  .deck-header__cta {
-    @apply inline-flex text-[16px];
+  .deck-header .deck-header__review {
+    @apply col-span-1;
   }
 
   .deck-header .deck-header__library {
-    @apply order-none min-h-13 w-auto justify-center gap-2 px-5 text-[15px];
-  }
-
-  .deck-header__library-label {
-    @apply flex-none;
-  }
-
-  .deck-header__library > .action-pill__icon:last-child {
     @apply hidden;
   }
 }

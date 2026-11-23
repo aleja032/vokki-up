@@ -1,3 +1,4 @@
+import { actionPillClass } from '@/components/ui/action-pill';
 import { aiMessages } from '../messages';
 import type { CapturedCardSummary } from '../types';
 import { AiCaptureIcon } from './ai-capture-icon';
@@ -46,14 +47,14 @@ export function AiCreatedPanel({
       </ul>
       <div className="aipane-created__actions">
         <button
-          className="aipane-created__secondary"
+          className={actionPillClass('secondary')}
           type="button"
           onClick={onCreateMore}
         >
           {messages.createMore}
         </button>
         <button
-          className="aipane-created__primary"
+          className={actionPillClass('primary')}
           type="button"
           onClick={onDone}
         >

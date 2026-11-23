@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { actionPillClass } from '@/components/ui/action-pill';
 import { cn } from '@/lib/utils';
 import './selection-action-bar.css';
 
@@ -11,7 +12,7 @@ type SelectionActionBarProps = {
   cancelLabel: string;
   primaryLabel: string;
   primaryIcon?: ReactNode;
-  primaryTone?: 'brand' | 'danger';
+  primaryTone?: 'primary' | 'danger';
   primaryDisabled: boolean;
   onToggleAll: () => void;
   onCancel: () => void;
@@ -28,7 +29,7 @@ export function SelectionActionBar({
   cancelLabel,
   primaryLabel,
   primaryIcon,
-  primaryTone = 'brand',
+  primaryTone = 'primary',
   primaryDisabled,
   onToggleAll,
   onCancel,
@@ -40,7 +41,7 @@ export function SelectionActionBar({
         <div className="selection-bar__summary">
           <span aria-live="polite">{summary}</span>
           <button
-            className="selection-bar__toggle"
+            className={cn(actionPillClass('tertiary'), 'selection-bar__toggle')}
             disabled={toggleAllDisabled}
             onClick={onToggleAll}
             type="button"
@@ -50,7 +51,7 @@ export function SelectionActionBar({
         </div>
         <div className="selection-bar__actions">
           <button
-            className="selection-bar__cancel"
+            className={actionPillClass('secondary', 'sm')}
             onClick={onCancel}
             type="button"
           >
@@ -58,10 +59,7 @@ export function SelectionActionBar({
             {cancelLabel}
           </button>
           <button
-            className={cn(
-              'selection-bar__primary',
-              primaryTone === 'danger' && 'selection-bar__primary--danger'
-            )}
+            className={actionPillClass(primaryTone, 'sm')}
             disabled={primaryDisabled}
             onClick={onPrimary}
             type="button"

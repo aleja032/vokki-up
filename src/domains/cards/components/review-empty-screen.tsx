@@ -24,7 +24,7 @@ export function ReviewEmptyScreen() {
           <ActionPill
             className="round-results__primary"
             href="/cards"
-            variant="cta"
+            variant="primary"
           >
             {messages.action}
           </ActionPill>

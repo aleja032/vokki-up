@@ -22,29 +22,34 @@ describe('DeckPageHeader', () => {
     expect(html).toContain('46 tarjetas · 3 carpetas');
   });
 
-  // Wide screens show the pill, phones the action card; CSS swaps them.
-  it('links the review twice with the due count: phone card and wide pill', () => {
+  it('has exactly one primary action: the review', () => {
     const html = render();
-    expect(count(html, 'href="/review?from=cards"')).toBe(2);
-    expect(html).toContain('>Repasar<');
-    expect(html).toContain('>12 para hoy<');
+    expect(count(html, 'action-pill--primary')).toBe(1);
+    expect(html).toMatch(/<a[^>]*action-pill--primary[^>]*>/);
     expect(html).toContain('Repasar 12');
   });
 
-  it('offers new card actions through one menu button and one phone card', () => {
+  it('offers the three main actions: review, new card menu and import', () => {
     const html = render();
+    expect(html).toContain('href="/review?from=cards"');
     expect(count(html, 'aria-haspopup="menu"')).toBe(1);
-    expect(html).toContain('aria-label="Nueva tarjeta"');
     expect(html).toContain('Crear tarjeta');
-    expect(html).toContain('>Con IA o manual<');
-    expect(count(html, 'action-card--solid')).toBe(1);
+    expect(html).toContain('href="/import-export?from=cards"');
+    expect(html).toContain('Importar archivo');
   });
 
-  it('links the word library from the header row and from the menu', () => {
+  it('keeps the library as an extra row and as a menu item', () => {
     const html = render();
     expect(count(html, 'href="/cards/word-library"')).toBe(2);
-    expect(count(html, 'deck-header__library')).toBeGreaterThanOrEqual(2);
     expect(html).toContain('Agregar desde la biblioteca');
+  });
+
+  it('places the actions after the title and the summary', () => {
+    const html = render();
+    expect(html.indexOf('<h1>')).toBeLessThan(html.indexOf('Repasar 12'));
+    expect(html.indexOf('46 tarjetas')).toBeLessThan(
+      html.indexOf('deck-header__actions')
+    );
   });
 
   it('hides the decorative mascot from assistive tech', () => {

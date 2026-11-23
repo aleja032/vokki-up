@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
+  CARD_PARTS_OF_SPEECH,
   createCardCreateSchema,
   type CardCreateFormValues,
   type CardCreateInput
@@ -17,7 +18,25 @@ type UseCardCreateSubmitOptions = {
   existingTerms: readonly string[];
   initialGroupId?: string;
   onSave: (card: VocabularyCard) => void;
+  /** Edits this card instead of creating one (same id, new values). */
+  initialCard?: VocabularyCard;
 };
+
+function toFormValues(card: VocabularyCard): CardCreateFormValues {
+  const partOfSpeech = CARD_PARTS_OF_SPEECH.find(
+    option => option === card.partOfSpeech
+  );
+  return {
+    term: card.term,
+    meaning: card.meaning,
+    phonetics: card.phonetics,
+    example: card.example,
+    exampleEs: card.exampleEs ?? '',
+    partOfSpeech: partOfSpeech ?? 'Sustantivo',
+    groupId: card.groupId,
+    tags: card.tags.join(', ')
+  };
+}
 
 function createCardId() {
   return globalThis.crypto?.randomUUID?.() ?? String(Date.now());
@@ -34,6 +53,7 @@ export function useCardCreateSubmit({
   groups,
   existingTerms,
   initialGroupId,
+  initialCard,
   onSave
 }: UseCardCreateSubmitOptions) {
   const schema = useMemo(
@@ -51,16 +71,18 @@ export function useCardCreateSubmit({
   } = useForm<CardCreateFormValues, unknown, CardCreateInput>({
     resolver: zodResolver(schema),
     mode: 'onChange',
-    defaultValues: {
-      term: '',
-      meaning: '',
-      phonetics: '',
-      example: '',
-      exampleEs: '',
-      partOfSpeech: 'Sustantivo',
-      groupId: initialGroupId ?? groups[0]?.id ?? '',
-      tags: ''
-    }
+    defaultValues: initialCard
+      ? toFormValues(initialCard)
+      : {
+          term: '',
+          meaning: '',
+          phonetics: '',
+          example: '',
+          exampleEs: '',
+          partOfSpeech: 'Sustantivo',
+          groupId: initialGroupId ?? groups[0]?.id ?? '',
+          tags: ''
+        }
   });
   const watched = useWatch({ control });
   const values = {
@@ -80,7 +102,8 @@ export function useCardCreateSubmit({
 
   const onSubmit = handleSubmit(data => {
     onSave({
-      id: createCardId(),
+      ...initialCard,
+      id: initialCard?.id ?? createCardId(),
       ...data
     });
   });

@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { actionPillClass } from '@/components/ui/action-pill';
+import { cn } from '@/lib/utils';
 import { Eye, EyeOff } from 'lucide-react';
 import { useLoginSubmit } from '../hooks/use-login-submit';
 import type { LoginInput } from '../login.schema';
@@ -92,7 +94,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
       </div>
 
       <button
-        className="signin-form__submit"
+        className={cn(actionPillClass('primary'), 'signin-form__submit')}
         type="submit"
         disabled={!isValid || isSubmitting}
       >

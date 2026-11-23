@@ -169,7 +169,7 @@
 }
 
 .drill-actions .drill-actions__reveal {
-  @apply h-14 w-full text-base md:mx-auto md:h-14.5 md:max-w-105;
+  @apply w-full md:mx-auto md:max-w-105;
 }
 
 /* Reveal: the answer side swings in from edge-on (rotateY) around the stable card; no rotation under reduced motion. */

@@ -2,6 +2,7 @@
 
 import { TriangleAlert } from 'lucide-react';
 import { useEffect, useId, useRef } from 'react';
+import { actionPillClass } from '@/components/ui/action-pill';
 import './confirm-dialog.css';
 
 type ConfirmDialogProps = {
@@ -74,7 +75,7 @@ export function ConfirmDialog({
         </div>
         <div className="confirm-dialog__actions">
           <button
-            className="confirm-dialog__cancel"
+            className={actionPillClass('secondary')}
             ref={cancelRef}
             onClick={onCancel}
             type="button"
@@ -82,7 +83,7 @@ export function ConfirmDialog({
             {cancelLabel}
           </button>
           <button
-            className="confirm-dialog__confirm"
+            className={actionPillClass('danger')}
             onClick={onConfirm}
             type="button"
           >

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { actionPillClass } from '@/components/ui/action-pill';
 import { aiMessages } from '../messages';
 import { AiCaptureIcon } from './ai-capture-icon';
 import { AiPaneGroups } from './ai-pane-groups';
@@ -58,7 +59,7 @@ export function AiPaneFrame({
       )}
       <div className="aipane__footer">
         <button
-          className="aipane__submit"
+          className={actionPillClass('primary')}
           type="submit"
           disabled={isSubmitting || !canSubmit}
         >

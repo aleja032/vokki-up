@@ -539,24 +539,8 @@
   @apply grid shrink-0 grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-3 border-t border-t-(--line) bg-(--surface) px-6 pt-5 pb-[max(28px,env(safe-area-inset-bottom))];
 }
 
-.deck-editor__cancel,
-.deck-editor__clear,
-.deck-screen__cancel {
-  @apply flex h-13 items-center justify-center rounded-(--radius-pill) border-2 border-solid border-(--line) bg-(--surface) px-4 text-[15px] font-extrabold text-(--ink);
-}
-
-.deck-editor__clear {
+.deck-editor__footer .deck-editor__clear {
   @apply hidden;
-}
-
-.deck-editor__submit,
-.deck-screen__submit {
-  @apply flex h-13 items-center justify-center gap-2 rounded-(--radius-pill) bg-(--brand) px-4 text-[15px] font-extrabold text-(--on-indigo);
-}
-
-.deck-editor__submit[aria-disabled='true'],
-.deck-screen__submit:disabled {
-  @apply bg-(--deck-disabled);
 }
 
 @media (min-width: 761px) {
@@ -573,13 +557,15 @@
     @apply border-b-0 bg-transparent p-0;
   }
 
-  .deck-editor__back,
+  .deck-editor:not(.deck-editor--editing) .deck-editor__back,
   .deck-editor__subtitle--compact,
   .deck-preview__heading,
   .deck-preview__tags,
   .deck-preview__word > span:nth-child(2),
   .deck-preview__example,
-  .deck-editor__cancel,
+  .deck-editor:not(.deck-editor--editing)
+    .deck-editor__footer
+    .deck-editor__cancel,
   .deck-editor__ai-note,
   .deck-section__number,
   .deck-section:not(.deck-section--optional) .deck-section__heading {
@@ -591,8 +577,8 @@
     @apply block;
   }
 
-  .deck-editor__clear {
-    @apply flex;
+  .deck-editor__footer .deck-editor__clear {
+    @apply inline-flex;
   }
 
   .deck-editor__heading {
@@ -649,10 +635,6 @@
 
   .deck-editor__footer {
     @apply mt-2 gap-3 border-t-(--rule) bg-transparent p-0 pt-6;
-  }
-
-  .deck-editor__clear {
-    @apply h-[52px] bg-(--surface);
   }
 
   .deck-field__input--example {
@@ -871,11 +853,6 @@
 
 /* Hover feedback: buttons, links, tabs and chips */
 
-.deck-editor__submit,
-.deck-screen__submit,
-.deck-editor__cancel,
-.deck-editor__clear,
-.deck-screen__cancel,
 .deck-field__link,
 .deck-editor__back,
 .deck-screen__back,
@@ -891,15 +868,6 @@
 }
 
 @media (hover: hover) {
-  .deck-editor__submit:not(:disabled, [aria-disabled='true']):hover,
-  .deck-screen__submit:not(:disabled, [aria-disabled='true']):hover {
-    box-shadow: var(--hover-shadow);
-    transform: translateY(var(--lift-1));
-  }
-
-  .deck-editor__cancel:hover,
-  .deck-editor__clear:hover,
-  .deck-screen__cancel:hover,
   .deck-field__link:hover,
   .deck-editor__back:hover,
   .deck-screen__back:hover,
@@ -918,4 +886,21 @@
   .deck-colors__option[aria-pressed='false']:hover {
     border-color: color-mix(in srgb, var(--tone-strong) 45%, transparent);
   }
+}
+
+/* Editing an existing card: clear on the left, cancel and save on the right. */
+.deck-editor--editing .deck-editor__footer {
+  @apply flex flex-wrap items-center justify-end gap-3;
+}
+
+.deck-editor--editing .deck-editor__footer .deck-editor__clear {
+  @apply order-1 mr-auto;
+}
+
+.deck-editor--editing .deck-editor__footer .deck-editor__cancel {
+  @apply order-2;
+}
+
+.deck-editor--editing .deck-editor__footer .deck-editor__submit {
+  @apply order-3;
 }

@@ -1,60 +1,31 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { homeDashboardData } from '../data';
 import { HeroPanel } from './hero-panel';
 
-const session = {
-  title: 'Repasar 5 tarjetas',
-  pendingCount: 3,
-  newCount: 2,
-  estimatedMinutes: 3,
-  href: '/review'
-};
+const data = homeDashboardData.nextSession;
 
-describe('HeroPanel', () => {
-  it('announces how many words are due with an accent word', () => {
-    const html = renderToStaticMarkup(<HeroPanel data={session} />);
-
-    expect(html).toContain('5 palabras por');
-    expect(html).toContain('hero-panel__accent');
-    expect(html).toContain('rescatar');
-  });
-
-  it('links the call to action to the review route', () => {
-    const html = renderToStaticMarkup(<HeroPanel data={session} />);
-
-    expect(html).toContain('href="/review"');
-    expect(html).toContain('Empezar ronda');
-  });
-
-  it('no longer renders info chips', () => {
-    const html = renderToStaticMarkup(<HeroPanel data={session} />);
-
-    expect(html).not.toContain('hero-panel__chips');
-    expect(html).not.toContain('~3 min');
-  });
-
-  it('falls back to the caught-up title and hides the bubble', () => {
+describe('HeroPanel word tags', () => {
+  it('floats the first three words of the due hand, decoratively', () => {
     const html = renderToStaticMarkup(
-      <HeroPanel
-        data={{
-          ...session,
-          title: 'Todo al día',
-          pendingCount: 0,
-          newCount: 0
-        }}
-      />
+      <HeroPanel data={data} words={['alpha', 'beta', 'gamma', 'delta']} />
     );
-
-    expect(html).toContain('Todo al día');
-    expect(html).not.toContain('hero-panel__bubble');
-    expect(html).not.toContain('rescatar');
+    expect(html).toContain('hero-panel__tags');
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toContain('alpha');
+    expect(html).toContain('gamma');
+    expect(html).not.toContain('delta');
+    expect(html).toContain('motion-float-tag');
   });
 
-  it('uses the singular for one word', () => {
-    const html = renderToStaticMarkup(
-      <HeroPanel data={{ ...session, pendingCount: 1, newCount: 0 }} />
-    );
+  it('falls back to starter words when the hand is empty', () => {
+    const html = renderToStaticMarkup(<HeroPanel data={data} />);
+    expect(html).toContain('>receipt<');
+  });
 
-    expect(html).toContain('1 palabra por');
+  it('keeps a single primary action and the library as secondary', () => {
+    const html = renderToStaticMarkup(<HeroPanel data={data} />);
+    expect(html.split('action-pill--primary').length - 1).toBe(1);
+    expect(html).toContain('hero-panel__secondary');
   });
 });

@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Plus } from 'lucide-react';
+import { Globe, Plus } from 'lucide-react';
+import { LocationCrumb } from '@/components/ui/location-crumb';
 import { useMemo, useState } from 'react';
 import { Chip } from '@/components/ui/chip';
 import { SearchField } from '@/components/ui/search-field';
@@ -215,10 +216,13 @@ export function WordLibraryBrowser({
         </>
       ) : (
         <header className="word-library__header">
-          <Link className="word-library__back" href="/cards/word-library">
-            <ArrowLeft size={18} aria-hidden="true" />
-            {messages.backToWorlds}
-          </Link>
+          <LocationCrumb
+            ariaLabel={messages.locationLabel}
+            currentLabel={messages.title}
+            icon={<Globe size={16} />}
+            rootHref="/cards/word-library"
+            rootLabel={messages.backToWorlds}
+          />
           <h1 id="word-library-title">{messages.title}</h1>
           <p>{messages.summary}</p>
         </header>
@@ -323,6 +327,14 @@ export function WordLibraryBrowser({
             aria-live="polite"
           >
             {announcement}
+            {announcement ? (
+              <>
+                {' '}
+                <Link className="word-library__announcement-link" href="/cards">
+                  {messages.viewInDeck}
+                </Link>
+              </>
+            ) : null}
           </p>
         </div>
 

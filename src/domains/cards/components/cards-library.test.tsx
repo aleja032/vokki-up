@@ -40,7 +40,9 @@ function render(
       onStatusChange: () => undefined,
       onDeleteCards: () => undefined,
       onAddCard: () => undefined,
-      onOpenGroup: () => undefined
+      onOpenGroup: () => undefined,
+      onShowAll: () => undefined,
+      onEditCard: () => undefined
     })
   );
 }
@@ -67,11 +69,22 @@ describe('CardsLibrary toolbar', () => {
     expect(html).toMatch(/aria-pressed="true"[^>]*><span[^>]*><\/span>Hoy/);
   });
 
-  it('names the open folder in the head and offers to open its screen', () => {
+  it('shows a breadcrumb: Mi mazo as the way back, then the open folder', () => {
     const html = render([card], { activeGroup: group });
-    expect(html).toContain('<h2 id="deck-library-title">Trabajo</h2>');
+    expect(html).toContain('aria-label="Ubicación en Mi mazo"');
+    expect(html).toContain('>Carpeta<');
+    expect(html).toContain(
+      'id="deck-library-title" title="Trabajo">Trabajo</h2>'
+    );
+    expect(html).toMatch(/<button[^>]*deck-library__crumb-root[^>]*>.*Mi mazo/);
     expect(html).toContain('>Abrir carpeta<');
-    expect(render([card])).not.toContain('>Abrir carpeta<');
+  });
+
+  it('shows the whole deck as the current place without a way back', () => {
+    const html = render([card]);
+    expect(html).toContain('Todas las carpetas');
+    expect(html).not.toContain('>Abrir carpeta<');
+    expect(html).not.toMatch(/<button[^>]*deck-library__crumb-root/);
   });
 
   it('shows the visible range and a numbered pager when there are many cards', () => {

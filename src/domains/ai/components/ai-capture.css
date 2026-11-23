@@ -196,60 +196,11 @@
   @apply font-bold text-(--indigo);
 }
 
-/* Buttons */
-
-.aicap-button {
-  @apply inline-flex h-11 max-w-full cursor-pointer items-center justify-center gap-2 rounded-(--radius-pill) px-[18px] text-[14px] font-semibold;
-}
-
-.aicap-button--lg {
-  @apply h-[52px] gap-2.5 rounded-(--radius-pill) px-6 text-[16px] font-bold;
-}
-
-.aicap-button--md {
-  @apply h-12 rounded-(--radius-pill) px-5 text-[15px] font-semibold;
-}
-
-.aicap-button--sm {
-  @apply h-10 gap-1.5 px-4 text-[13px];
-}
-
-.aicap-button--xs {
-  @apply h-10 px-3.5 text-[13px];
-}
-
-.aicap-button--primary {
-  @apply bg-(--brand) text-(--aicap-on-indigo);
-}
-
-.aicap-button--primary[data-disabled='true'] {
-  @apply bg-(--aicap-disabled);
-}
+/* Buttons use the shared hierarchy (ui/action-pill). */
 
 /* Mockup only: links marked aria-disabled do not navigate. */
 .aicap a[aria-disabled='true'] {
   @apply pointer-events-none;
-}
-
-.aicap-button--outline {
-  @apply border-[1.5px] border-solid border-(--aicap-edge) bg-(--surface) text-(--ink);
-}
-
-.aicap-button--lg.aicap-button--outline {
-  @apply text-[15px] font-semibold;
-}
-
-/* The proposal outlined links are content-box anchors: height plus border. */
-a.aicap-button--outline {
-  @apply box-content;
-}
-
-.aicap-button--danger {
-  @apply bg-(--aicap-danger) text-(--aicap-on-indigo);
-}
-
-.aicap-button--danger-outline {
-  @apply border-[1.5px] border-solid border-(--aicap-danger-edge) bg-(--surface) text-(--aicap-danger-ink);
 }
 
 /* Mode tabs */
@@ -1295,14 +1246,6 @@ a.aicap-button--outline {
   .aicap-savebar__actions {
     @apply flex flex-wrap gap-3;
   }
-
-  .aicap-savebar .aicap-button--lg {
-    @apply px-[22px];
-  }
-
-  .aicap-savebar .aicap-button--primary {
-    @apply px-[26px];
-  }
 }
 
 /* The proposal desktop page uses a wider container than the shell default. */
@@ -1315,16 +1258,10 @@ a.aicap-button--outline {
 
 /* Hover feedback: buttons, links and tabs */
 
-.aicap-button--primary,
 .aicap-action--accept {
   transition: var(--hover-transition);
 }
 
-.aicap-button--danger {
-  transition: var(--hover-transition);
-}
-
-.aicap-button--outline,
 .aicap-bulk__accept,
 .aicap-action:not(.aicap-action--accept):not(.aicap-action--reject),
 .aicap-rejected__undo,
@@ -1334,21 +1271,12 @@ a.aicap-button--outline {
   transition: var(--hover-transition);
 }
 
-.aicap-button--danger-outline,
 .aicap-action--reject,
 .aicap-bulk__discard {
   transition: var(--hover-transition);
 }
 
 @media (hover: hover) {
-  .aicap-button--primary:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
   .aicap-action--accept:not(
       :disabled,
       [aria-disabled='true'],
@@ -1362,26 +1290,6 @@ a.aicap-button--outline {
     transform: translateY(var(--lift-1));
   }
 
-  .aicap-button--danger:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover {
-    box-shadow: var(--hover-shadow);
-    transform: translateY(var(--lift-1));
-  }
-
-  .aicap-button--outline:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
   .aicap-bulk__accept:not(
       :disabled,
       [aria-disabled='true'],
@@ -1435,14 +1343,6 @@ a.aicap-button--outline {
     color: var(--indigo);
   }
 
-  .aicap-button--danger-outline:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):hover,
   .aicap-action--reject:not(
       :disabled,
       [aria-disabled='true'],
@@ -1462,27 +1362,7 @@ a.aicap-button--outline {
     background-color: var(--red-soft);
   }
 
-  .aicap-button--primary:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):active,
   .aicap-action--accept:not(
-      :disabled,
-      [aria-disabled='true'],
-      [aria-pressed='true'],
-      [aria-selected='true'],
-      [aria-checked='true'],
-      [aria-current='page']
-    ):active {
-    box-shadow: none;
-    transform: none;
-  }
-
-  .aicap-button--danger:not(
       :disabled,
       [aria-disabled='true'],
       [aria-pressed='true'],

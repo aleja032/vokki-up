@@ -82,19 +82,13 @@
   @apply mt-1 flex w-full min-w-0 flex-col gap-3;
 }
 
-.hero-panel__cta,
+.hero-panel .hero-panel__cta,
 .hero-panel__secondary {
-  @apply inline-flex min-h-14 w-full min-w-0 items-center justify-center gap-2.5 rounded-(--radius-pill) px-8 text-[17px] font-extrabold;
-  transition: var(--hover-transition);
+  @apply w-full;
 }
 
-.hero-panel__cta {
-  @apply text-(--cta-ink);
-  background: var(--cta-gradient);
-}
-
-.hero-panel__secondary {
-  @apply border-[1.5px] border-solid text-white;
+.hero-panel .hero-panel__secondary {
+  @apply text-white;
   border-color: color-mix(in srgb, white 35%, transparent);
   background: color-mix(in srgb, white 8%, transparent);
 }
@@ -151,7 +145,7 @@
   }
 
   .hero-panel__copy {
-    @apply max-w-130 gap-4 px-12 pt-11 pb-16;
+    @apply max-w-150 gap-4 px-12 pt-11 pb-16;
   }
 
   .hero-panel__kicker {
@@ -170,9 +164,9 @@
     @apply w-auto flex-row flex-wrap;
   }
 
-  .hero-panel__cta,
-  .hero-panel__secondary {
-    @apply w-auto text-[18px];
+  .hero-panel .hero-panel__cta,
+  .hero-panel .hero-panel__secondary {
+    @apply w-auto;
   }
 }
 
@@ -184,5 +178,35 @@
 
   .hero-panel__bubble {
     @apply hidden;
+  }
+}
+
+/* Floating word tags over the scene: decorative, wide screens only so they
+   never cover the title, the actions or the mascot. */
+.hero-panel__tags {
+  @apply pointer-events-none absolute inset-0 m-0 hidden list-none p-0;
+}
+
+.hero-panel__tag {
+  @apply absolute rounded-(--radius-14) border-2 border-solid border-(--brand-line) bg-(--hero-surface) px-3 py-1.5 font-(family-name:--font-pixel) text-[15px] leading-none text-white;
+  box-shadow: 0 0 18px color-mix(in srgb, var(--brand-line) 55%, transparent);
+}
+
+.hero-panel__tag:nth-child(1) {
+  @apply top-[18%] left-[53%];
+}
+
+.hero-panel__tag:nth-child(2) {
+  @apply top-[52%] right-[3%] border-(--hero-accent) [animation-delay:1.2s];
+  box-shadow: 0 0 18px color-mix(in srgb, var(--hero-accent) 50%, transparent);
+}
+
+.hero-panel__tag:nth-child(3) {
+  @apply top-[72%] left-[47%] [animation-delay:2.4s];
+}
+
+@media (min-width: 1024px) {
+  .hero-panel__tags {
+    @apply block;
   }
 }

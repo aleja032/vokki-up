@@ -52,6 +52,6 @@
   @apply text-[14px];
 }
 
-.worlds-hub__all {
-  @apply self-start;
+.worlds-hub .worlds-hub__all {
+  @apply mt-4 self-start;
 }

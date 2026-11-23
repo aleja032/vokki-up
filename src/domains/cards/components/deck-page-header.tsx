@@ -1,6 +1,5 @@
 import Image from 'next/image';
-import { ChevronRight, Globe, Play, Plus } from 'lucide-react';
-import { ActionCard } from '@/components/ui/action-card';
+import { FileUp, Globe, Play } from 'lucide-react';
 import { ActionPill } from '@/components/ui/action-pill';
 import { cardsMessages } from '../messages';
 import { NewCardMenu } from './new-card-menu';
@@ -15,9 +14,10 @@ type DeckPageHeaderProps = {
   onAddCard: () => void;
 };
 
-// Mi mazo header (proposal D). Wide screens: mascot, title with the deck
-// summary and one row of actions (new card menu, library, review). Phones: the
-// title, two action cards (new card, review) and a full-width library row.
+// Mi mazo header: the mascot beside the title and the deck summary, and three
+// equal main actions directly under them (like a study home): "Repasar N" is
+// the one primary, "Nueva tarjeta" (a menu: manual, AI, library) and "Importar
+// archivo" are secondary. Phones add the library as one extra row.
 export function DeckPageHeader({
   totalCards,
   groupCount,
@@ -26,58 +26,49 @@ export function DeckPageHeader({
 }: DeckPageHeaderProps) {
   return (
     <header className="deck-header">
-      <div className="deck-header__identity">
-        <Image
-          alt=""
-          aria-hidden="true"
-          className="deck-header__mascot motion-mascot-bob"
-          height={587}
-          src="/images/noma.png"
-          width={700}
-        />
-        <div className="deck-header__copy">
-          <h1>{messages.title}</h1>
-          <p className="deck-header__summary">
-            {messages.summary(totalCards, groupCount)}
-          </p>
-        </div>
-      </div>
-      <div className="deck-header__quick">
-        <ActionCard
-          icon={<Plus size={24} />}
-          onClick={onAddCard}
-          subtitle={messages.newCardSubtitle}
-          title={messages.newCardTitle}
-          variant="solid"
-        />
-        <ActionCard
-          href="/review?from=cards"
-          icon={<Play size={24} />}
-          subtitle={messages.dueToday(dueCount)}
-          title={messages.reviewTitle}
-        />
-      </div>
-      <div className="deck-header__actions">
-        <NewCardMenu onCreate={onAddCard} />
-        <ActionPill
-          className="deck-header__library"
-          href="/cards/word-library"
-          icon={<Globe size={18} strokeWidth={2.4} />}
-          iconEnd={<ChevronRight size={20} />}
-          variant="outline"
-        >
-          <span className="deck-header__library-label">
+      <Image
+        alt=""
+        aria-hidden="true"
+        className="deck-header__mascot motion-mascot-bob"
+        height={587}
+        src="/images/noma.png"
+        width={700}
+      />
+      <div className="deck-header__copy">
+        <h1>{messages.title}</h1>
+        <p className="deck-header__summary">
+          {messages.summary(totalCards, groupCount)}
+        </p>
+        <div className="deck-header__actions">
+          <ActionPill
+            className="deck-header__review"
+            href="/review?from=cards"
+            icon={<Play size={18} strokeWidth={2.4} />}
+            pulse={dueCount > 0}
+            variant="primary"
+          >
+            {messages.reviewShort(dueCount)}
+          </ActionPill>
+          <div className="deck-header__new">
+            <NewCardMenu onCreate={onAddCard} />
+          </div>
+          <ActionPill
+            className="deck-header__import"
+            href="/import-export?from=cards"
+            icon={<FileUp size={18} strokeWidth={2.4} />}
+            variant="secondary"
+          >
+            {messages.importFile}
+          </ActionPill>
+          <ActionPill
+            className="deck-header__library"
+            href="/cards/word-library"
+            icon={<Globe size={18} strokeWidth={2.4} />}
+            variant="secondary"
+          >
             {messages.addFromLibrary}
-          </span>
-        </ActionPill>
-        <ActionPill
-          className="deck-header__cta"
-          href="/review?from=cards"
-          icon={<Play size={18} strokeWidth={2.4} />}
-          variant="cta"
-        >
-          {messages.reviewShort(dueCount)}
-        </ActionPill>
+          </ActionPill>
+        </div>
       </div>
     </header>
   );

@@ -24,10 +24,6 @@
   @apply hidden;
 }
 
-.folder-list__toggle {
-  @apply min-h-11 cursor-pointer border-0 bg-transparent px-0 py-2.5 text-[14px] font-bold text-(--ink) underline underline-offset-3;
-}
-
 /* The rail holds the folders and the add tile; it scrolls sideways on phones. */
 .folder-list__rail {
   @apply -mx-5 flex gap-2.5 overflow-x-auto px-5 pt-0.5 pb-1;
@@ -109,8 +105,7 @@
 }
 
 .folder-list__item:focus-visible,
-.folder-list__add:focus-visible,
-.folder-list__toggle:focus-visible {
+.folder-list__add:focus-visible {
   @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
 }
 
@@ -139,7 +134,7 @@
     @apply block text-[13px] text-(--ink-soft);
   }
 
-  .folder-list__toggle {
+  .folder-list .folder-list__toggle {
     @apply hidden;
   }
 
@@ -208,4 +203,12 @@
   .folder-list[data-expanded='true'] .folder-list__add {
     @apply min-h-11.5 w-full flex-row items-center justify-center gap-2 rounded-(--radius-14) font-extrabold;
   }
+}
+
+.folder-list__hint {
+  @apply m-0 text-[13px] leading-snug text-(--ink-soft);
+}
+
+.folder-list__hint-link {
+  @apply -mt-1 inline-flex min-h-11 items-center self-start text-[14px] font-bold text-(--indigo) underline underline-offset-3;
 }

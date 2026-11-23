@@ -52,4 +52,16 @@ describe('audit leak translations', () => {
     expect(translateText('Laboral')).toBe('Work');
     expect(translateText('Ahora')).toBe('Just now');
   });
+
+  it('translates the Mi mazo folder hint', () => {
+    setAppLanguage('English');
+    expect(translateText('Explorar Mundos')).toBe('Explore Worlds');
+    expect(
+      translateText(
+        'Tus grupos para ordenar las tarjetas. Las palabras nuevas salen de los Mundos, por tema.'
+      )
+    ).toBe(
+      'Your groups to organize cards. New words come from Worlds, by theme.'
+    );
+  });
 });

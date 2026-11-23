@@ -90,7 +90,7 @@ export function NoteEditor({
         <ActionPill
           icon={<Check size={16} strokeWidth={2.6} />}
           type="submit"
-          variant="brand"
+          variant="primary"
         >
           {messages.submit}
         </ActionPill>

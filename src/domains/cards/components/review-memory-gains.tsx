@@ -2,14 +2,13 @@ import { ArrowRight } from 'lucide-react';
 import { PixelLabel } from '@/components/ui/pixel-label';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { cardsMessages } from '../messages';
-import { MAX_CARD_MEMORY, getCardMemoryFromLevel } from '../card-memory';
+import { MAX_CARD_MEMORY } from '../card-memory';
 import type { MemoryGain } from '../review-memory-gains';
 import './review-memory-gains.css';
 
 const messages = cardsMessages.review.done;
 
 function MemoryBar({ level }: { level: number }) {
-  const { tone } = getCardMemoryFromLevel(level);
   return (
     <ProgressBar
       className="memory-gains__bar"
@@ -17,7 +16,7 @@ function MemoryBar({ level }: { level: number }) {
       max={MAX_CARD_MEMORY}
       segments={MAX_CARD_MEMORY}
       shape="blocks"
-      tone={tone}
+      tone={level >= MAX_CARD_MEMORY ? 'mint' : 'muted'}
       value={level}
     />
   );

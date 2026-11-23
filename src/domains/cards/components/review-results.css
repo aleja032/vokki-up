@@ -67,7 +67,7 @@
 }
 
 .round-results .round-results__primary {
-  @apply w-full px-7.5 py-4.5 text-lg md:w-auto md:self-start;
+  @apply w-full md:w-auto md:self-start;
 }
 
 .round-results__repeat-suffix {
@@ -143,4 +143,8 @@
   .round-results__badge::after {
     animation: none;
   }
+}
+
+.round-results__stats .stat-tile__value {
+  @apply text-[28px] tracking-[-1px] md:text-[32px];
 }

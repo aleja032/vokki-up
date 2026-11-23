@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowLeft, Briefcase, MessageCircle, Plane, Sun } from 'lucide-react';
+import { Briefcase, MessageCircle, Plane, Sun } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { LocationCrumb } from '@/components/ui/location-crumb';
 import { wordLibraryMessages } from '../word-library/messages';
 import {
   getWorldDisplayName,
@@ -44,10 +44,15 @@ export function WorldBanner({ world }: WorldBannerProps) {
         <span className="world-banner__shade" />
       </span>
       <div className="world-banner__content">
-        <Link className="world-banner__back" href="/cards/word-library">
-          <ArrowLeft aria-hidden="true" size={16} />
-          {messages.backToWorlds}
-        </Link>
+        <LocationCrumb
+          ariaLabel={messages.locationLabel}
+          currentLabel={getWorldDisplayName(world)}
+          icon={<Icon size={16} />}
+          kindLabel={messages.worldKind}
+          onHero
+          rootHref="/cards/word-library"
+          rootLabel={messages.backToWorlds}
+        />
         <h1 id="word-library-title">{getWorldDisplayName(world)}</h1>
         <p>
           {[

@@ -4,11 +4,11 @@
    action card of the page header). */
 
 .new-card-menu {
-  @apply relative;
+  @apply relative min-w-0;
 }
 
 .new-card-menu .new-card-menu__trigger {
-  @apply min-h-13 gap-2 border-[1.5px] pr-4.5 pl-4;
+  @apply w-full min-w-0 gap-2 px-3;
 }
 
 .new-card-menu__chevron {
@@ -16,7 +16,7 @@
 }
 
 .new-card-menu__list {
-  @apply absolute top-full right-0 z-20 mt-2 flex w-65 max-w-[calc(100vw-1.75rem)] flex-col rounded-(--radius-18) border border-solid border-(--line) bg-(--surface) p-2 shadow-lg;
+  @apply absolute top-full left-0 z-20 mt-2 flex w-65 max-w-[calc(100vw-1.75rem)] flex-col rounded-(--radius-18) border border-solid border-(--line) bg-(--surface) p-2 shadow-lg;
 }
 
 .new-card-menu__list[hidden] {

@@ -41,6 +41,21 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
     openGroupCards
   } = dashboard;
 
+  if (dashboard.editingCard)
+    return (
+      <CardEditor
+        key={dashboard.editingCard.id}
+        groups={groups}
+        existingTerms={dashboard.editingExistingTerms}
+        initialCard={dashboard.editingCard}
+        isOpen
+        onCancel={dashboard.closeCardEdit}
+        onSave={dashboard.saveEditedCard}
+        onCreateGroup={dashboard.startGroupCreation}
+        onViewExisting={dashboard.viewExistingCard}
+      />
+    );
+
   if (dashboard.groupView === 'new')
     return (
       <GroupCreateForm
@@ -118,6 +133,8 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
           onDeleteCards={dashboard.deleteCards}
           onAddCard={dashboard.openEditor}
           onOpenGroup={dashboard.openGroupById}
+          onEditCard={dashboard.editCard}
+          onShowAll={() => dashboard.setActiveGroupId(ALL_GROUPS_ID)}
         />
         {renderAddPanel ? (
           renderAddPanel(addPanelApi)

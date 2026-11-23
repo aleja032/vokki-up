@@ -33,7 +33,7 @@ export function NewCardMenu({ onCreate }: NewCardMenuProps) {
         icon={<Plus size={18} strokeWidth={2.6} />}
         iconEnd={<ChevronDown className="new-card-menu__chevron" size={18} />}
         onClick={toggle}
-        variant="outline"
+        variant="secondary"
       >
         <span className="new-card-menu__label">{messages.newCardTitle}</span>
       </ActionPill>

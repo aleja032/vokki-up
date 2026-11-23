@@ -1,8 +1,10 @@
 'use client';
 
+import Link from 'next/link';
 import { Folder, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { actionPillClass } from './action-pill';
 import { PixelLabel } from './pixel-label';
 import { SearchField } from './search-field';
 import './folder-list.css';
@@ -40,6 +42,10 @@ type FolderListProps = {
   expandLabel?: string;
   /** Phones: the link that goes back to the scrolling row. */
   collapseLabel?: string;
+  /** One line that explains what the folders are. */
+  hint?: string;
+  /** Pointer to the place where new words come from (rendered after the hint). */
+  hintLink?: { href: string; label: string };
   className?: string;
 };
 
@@ -60,6 +66,8 @@ export function FolderList({
   onAdd,
   expandLabel,
   collapseLabel,
+  hint,
+  hintLink,
   className
 }: FolderListProps) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -77,7 +85,7 @@ export function FolderList({
         {canExpand ? (
           <button
             aria-expanded={isExpanded}
-            className="folder-list__toggle"
+            className={cn(actionPillClass('tertiary'), 'folder-list__toggle')}
             onClick={() => setIsExpanded(current => !current)}
             type="button"
           >
@@ -85,6 +93,12 @@ export function FolderList({
           </button>
         ) : null}
       </div>
+      {hint ? <p className="folder-list__hint">{hint}</p> : null}
+      {hintLink ? (
+        <Link className="folder-list__hint-link" href={hintLink.href}>
+          {hintLink.label}
+        </Link>
+      ) : null}
       <SearchField
         className="folder-list__search"
         id="folder-list-search"

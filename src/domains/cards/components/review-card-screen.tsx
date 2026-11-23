@@ -311,7 +311,7 @@ export function ReviewCardScreen({
           <ActionPill
             className="drill-actions__reveal"
             onClick={onReveal}
-            variant="brand"
+            variant="primary"
           >
             {messages.revealAction}
           </ActionPill>

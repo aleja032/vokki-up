@@ -1,5 +1,6 @@
 import { Check } from 'lucide-react';
 import { PixelLabel } from '@/components/ui/pixel-label';
+import { TileEyebrow, TileEyebrowState } from '@/components/ui/tile-eyebrow';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { translateText } from '@/lib/i18n/locale';
 import { getCardLearningState, getDueDayOffset } from '../card-learning-state';
@@ -10,6 +11,7 @@ import type { CardSchedule } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
 import { getExampleEs } from '../word-library/example-es';
 import { ExampleEsToggle } from './example-es-toggle';
+import { PartOfSpeechIcon } from './part-of-speech-icon';
 import './vocabulary-card-item.css';
 
 const { learningState: stateMessages, dueLabel, overview } = cardsMessages;
@@ -22,6 +24,8 @@ type VocabularyCardItemProps = {
   isManaging: boolean;
   isSelected: boolean;
   onToggleSelect: (cardId: string) => void;
+  /** Opens the editor; the whole tile is the target while not managing. */
+  onEdit?: (cardId: string) => void;
 };
 
 function formatDueLabel(schedule: CardSchedule | undefined, now: Date) {
@@ -38,7 +42,8 @@ export function VocabularyCardItem({
   now,
   isManaging,
   isSelected,
-  onToggleSelect
+  onToggleSelect,
+  onEdit
 }: VocabularyCardItemProps) {
   const learningState = getCardLearningState(schedule);
   const memory = getCardMemory(schedule);
@@ -52,14 +57,22 @@ export function VocabularyCardItem({
       data-state={learningState}
       data-tone={memory.tone}
     >
-      <div className="deck-card__top">
-        <PixelLabel className="deck-card__category">
-          {translateText(card.partOfSpeech)}
-        </PixelLabel>
-        <PixelLabel className="deck-card__state">
-          {stateMessages[learningState]}
-        </PixelLabel>
-      </div>
+      <TileEyebrow
+        className="deck-card__top"
+        icon={<PartOfSpeechIcon partOfSpeech={card.partOfSpeech} />}
+        label={translateText(card.partOfSpeech ?? '')}
+        trailing={
+          <TileEyebrowState>{stateMessages[learningState]}</TileEyebrowState>
+        }
+      />
+      {!isManaging && onEdit ? (
+        <button
+          aria-label={overview.editCardLabel(card.term)}
+          className="deck-card__edit"
+          onClick={() => onEdit(card.id)}
+          type="button"
+        />
+      ) : null}
       {isManaging && (
         <>
           <button

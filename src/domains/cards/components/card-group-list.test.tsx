@@ -78,7 +78,9 @@ describe('CardGroupList folders', () => {
     expect(render([])).toContain('Nueva carpeta');
   });
 
-  it('no longer carries the library link (it lives in the page header)', () => {
-    expect(render([])).not.toContain('word-library');
+  it('points to the Worlds once, as the hint of where new words come from', () => {
+    const html = render([]);
+    expect(html).toContain('folder-list__hint');
+    expect(html.split('href="/cards/word-library"').length - 1).toBe(1);
   });
 });

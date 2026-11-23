@@ -1,0 +1,29 @@
+@reference 'tailwindcss';
+
+.tile-eyebrow {
+  @apply flex min-w-0 items-center justify-between gap-2;
+}
+
+.tile-eyebrow__chip {
+  @apply inline-flex h-6 max-w-full min-w-0 items-center gap-1 rounded-(--radius-pill) bg-(--indigo-soft) px-1.5 text-(--indigo);
+}
+
+.tile-eyebrow__icon {
+  @apply inline-flex size-3.5 shrink-0 items-center justify-center;
+}
+
+.tile-eyebrow__dot {
+  @apply size-1.5 rounded-full bg-current;
+}
+
+.tile-eyebrow__label {
+  @apply min-w-0 truncate text-[11px] leading-none font-bold;
+}
+
+.tile-eyebrow__trailing {
+  @apply inline-flex min-w-0 shrink-0 items-center;
+}
+
+.tile-eyebrow__state {
+  @apply inline-flex h-6 items-center rounded-(--radius-pill) border border-solid border-(--line) px-2 text-[10.5px] leading-none font-bold whitespace-nowrap text-(--ink-soft);
+}

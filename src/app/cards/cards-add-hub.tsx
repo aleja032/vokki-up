@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { actionPillClass } from '@/components/ui/action-pill';
 import { ArrowLeft } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { cardsMessages } from '@/domains/cards/messages';
@@ -301,7 +302,7 @@ export function CardsAddHub({ panel, initialMode }: CardsAddHubProps) {
             error={flow.error}
             cancel={
               <button
-                className="aicap-button aicap-button--outline aicap-button--lg"
+                className={actionPillClass('secondary')}
                 type="button"
                 onClick={handleCancelReview}
               >

@@ -41,21 +41,12 @@
 }
 
 .deck-card__top {
-  @apply flex items-center justify-between gap-2;
   grid-row: 1;
 }
 
-.deck-card__category,
-.deck-card__state {
-  @apply text-[10.5px] tracking-[1px] text-(--ink-soft);
-}
-
-.deck-card__category {
-  @apply min-w-0 truncate;
-}
-
-.deck-card__state {
-  @apply hidden shrink-0;
+/* Phones keep only the category chip; the state pill joins from 761px. */
+.deck-card__top .tile-eyebrow__state {
+  @apply hidden;
 }
 
 /* The body dissolves so term, meaning, IPA and example each take their own
@@ -185,8 +176,8 @@
     @apply px-4 pt-4.5 pb-4;
   }
 
-  .deck-card__state {
-    @apply block;
+  .deck-card__top .tile-eyebrow__state {
+    @apply inline-flex;
   }
 
   .deck-card__term {
@@ -216,4 +207,18 @@
     border-color: var(--hover-accent);
     box-shadow: 0 14px 30px var(--hover-accent-glow);
   }
+}
+
+/* Edit: an invisible button stretched over the tile. Interactive parts of the
+   tile (the Spanish example toggle) sit above it; manage mode hides it. */
+.deck-card__edit {
+  @apply absolute inset-0 z-0 m-0 cursor-pointer rounded-[inherit] border-0 bg-transparent p-0;
+}
+
+.deck-card__edit:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+.deck-card__example .es-toggle__button {
+  @apply relative z-1;
 }

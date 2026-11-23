@@ -1,31 +1,33 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { ActionPill } from './action-pill';
+import { ActionPill, actionPillClass } from './action-pill';
 
 describe('ActionPill', () => {
-  it('renders a button of type button with the outline variant by default', () => {
+  it('renders a button of type button with the secondary variant by default', () => {
     const html = renderToStaticMarkup(<ActionPill>Manual</ActionPill>);
 
     expect(html).toContain('<button');
     expect(html).toContain('type="button"');
-    expect(html).toContain('action-pill--outline');
+    expect(html).toContain('action-pill--secondary');
     expect(html).toContain('Manual');
   });
 
   it('renders a link when href is given', () => {
     const html = renderToStaticMarkup(
-      <ActionPill href="/review" variant="cta">
+      <ActionPill href="/review" pulse variant="primary">
         Repasar 12
       </ActionPill>
     );
 
     expect(html).toContain('<a');
     expect(html).toContain('href="/review"');
-    expect(html).toContain('action-pill--cta');
+    expect(html).toContain('action-pill--primary');
     expect(html).toContain('motion-cta-pulse');
   });
 
-  it.each(['brand', 'outline', 'cta', 'mint'] as const)(
+  it.each(['primary', 'secondary', 'tertiary', 'danger'] as const)(
     'applies the %s variant modifier',
     variant => {
       expect(
@@ -62,7 +64,7 @@ describe('ActionPill', () => {
         aria-expanded={false}
         aria-haspopup="menu"
         iconEnd={<svg data-end />}
-        variant="outline"
+        variant="secondary"
       >
         Nueva
       </ActionPill>
@@ -72,5 +74,45 @@ describe('ActionPill', () => {
     expect(html).toContain('aria-expanded="false"');
     expect(html).toContain('aria-controls="menu-id"');
     expect(html).toMatch(/Nueva<span[^>]*><svg data-end/);
+  });
+
+  it('only pulses when asked to', () => {
+    expect(
+      renderToStaticMarkup(<ActionPill variant="primary">x</ActionPill>)
+    ).not.toContain('motion-cta-pulse');
+  });
+
+  it('exposes the same classes for native elements', () => {
+    expect(actionPillClass('danger', 'sm')).toBe(
+      'action-pill action-pill--danger action-pill--sm'
+    );
+    expect(actionPillClass()).toBe('action-pill action-pill--secondary');
+  });
+
+  describe('fixed sizes', () => {
+    const css = readFileSync(join(__dirname, 'action-pill.css'), 'utf8');
+    const block = (selector: string) => {
+      const start = css.indexOf(`\n${selector} {`);
+      return start === -1 ? '' : css.slice(start, css.indexOf('}', start));
+    };
+
+    it('sets the md height once, on the base class', () => {
+      expect(block('.action-pill')).toMatch(/\bh-14\b/);
+      expect(block('.action-pill')).toMatch(/md:h-13/);
+    });
+
+    it.each(['primary', 'secondary', 'danger'])(
+      'the %s variant never changes height, padding scale or type size',
+      variant => {
+        const rules = block(`.action-pill--${variant}`);
+        expect(rules).not.toMatch(/(^|\s)(min-)?h-|\bpy-|text-\[/);
+      }
+    );
+
+    it('shares one compact height between sm and tertiary', () => {
+      expect(block('.action-pill--sm,\n.action-pill--tertiary')).toMatch(
+        /h-11 md:h-11/
+      );
+    });
   });
 });

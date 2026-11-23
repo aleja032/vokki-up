@@ -65,24 +65,18 @@ export function ReviewCompleteScreen({
         <div className="round-results__stats">
           <StatCard
             label={messages.done.accuracyLabel}
-            tone="mint"
             value={messages.done.accuracyValue(recalled, reviewed)}
-            variant="soft"
           />
           {bestCombo > 0 && (
             <StatCard
               label={messages.done.bestComboLabel}
-              tone="amber"
               value={messages.done.bestComboValue(bestCombo)}
-              variant="soft"
             />
           )}
           {streakDays > 0 && (
             <StatCard
               label={messages.done.streakLabel}
-              tone="coral"
               value={messages.done.streakDays(streakDays)}
-              variant="soft"
             />
           )}
         </div>
@@ -107,7 +101,7 @@ export function ReviewCompleteScreen({
           <ActionPill
             className="round-results__primary"
             href={exitHref}
-            variant="cta"
+            variant="primary"
           >
             {exitTarget === 'cards'
               ? messages.done.backCards

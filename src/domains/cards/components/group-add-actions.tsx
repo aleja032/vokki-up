@@ -18,6 +18,7 @@ export function GroupAddActions({ variant, onAdd }: GroupAddActionsProps) {
       href="/cards/word-library"
       icon={<Library size={16} strokeWidth={2.2} />}
       size="sm"
+      variant="tertiary"
     >
       {messages.addFromLibrary}
     </ActionPill>
@@ -27,7 +28,7 @@ export function GroupAddActions({ variant, onAdd }: GroupAddActionsProps) {
       icon={<Plus size={16} strokeWidth={2.4} />}
       onClick={onAdd}
       size="sm"
-      variant="brand"
+      variant="secondary"
     >
       {variant === 'empty' ? messages.emptyAction : messages.add}
     </ActionPill>

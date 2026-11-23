@@ -190,7 +190,7 @@ export function ProfilePanel(props: ProfilePanelProps) {
           <ActionPill
             disabled={props.isSaved}
             onClick={props.onSave}
-            variant="brand"
+            variant="primary"
           >
             {copy.save}
           </ActionPill>

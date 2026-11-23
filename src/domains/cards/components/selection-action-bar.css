@@ -26,62 +26,17 @@
 }
 
 .selection-bar__toggle {
-  @apply min-h-11 shrink-0 cursor-pointer rounded-(--radius-14) border-0 bg-transparent px-1.5 text-[13px] font-semibold whitespace-nowrap text-(--indigo-strong);
-}
-
-.selection-bar__toggle:disabled {
-  @apply cursor-not-allowed opacity-50;
+  @apply shrink-0 whitespace-nowrap;
 }
 
 .selection-bar__actions {
   @apply grid grid-cols-2 gap-3;
 }
 
-.selection-bar__cancel,
-.selection-bar__primary {
-  @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-(--radius-pill) border-2 border-solid border-(--line) bg-(--surface) px-4.5 text-sm font-extrabold text-(--ink);
-}
-
-.selection-bar__primary {
-  @apply border-0 bg-(--brand) font-extrabold text-(--on-indigo);
-}
-
-.selection-bar__primary--danger {
-  @apply bg-(--red-ink);
-}
-
-.selection-bar__primary:disabled {
-  @apply cursor-not-allowed opacity-50;
-}
-
-.selection-bar__toggle:focus-visible,
-.selection-bar__cancel:focus-visible,
-.selection-bar__primary:focus-visible {
-  outline: 2px solid var(--indigo);
-  outline-offset: 3px;
-}
-
-.selection-bar__toggle,
-.selection-bar__cancel,
-.selection-bar__primary {
-  transition: var(--hover-transition);
-}
-
 @keyframes selection-bar-in {
   from {
     opacity: 0;
     transform: translateY(8px);
-  }
-}
-
-@media (hover: hover) {
-  .selection-bar__cancel:hover,
-  .selection-bar__toggle:not(:disabled):hover {
-    @apply bg-(--indigo-soft);
-  }
-
-  .selection-bar__primary:not(:disabled):hover {
-    filter: brightness(1.08);
   }
 }
 

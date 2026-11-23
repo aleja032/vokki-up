@@ -1,5 +1,6 @@
 'use client';
 
+import { actionPillClass } from '@/components/ui/action-pill';
 import { GROUP_TONES } from '../group-colors';
 import { useGroupCreateSubmit } from '../hooks/use-group-create-submit';
 import { cardsMessages } from '../messages';
@@ -148,14 +149,14 @@ export function GroupCreateForm({
 
         <footer className="deck-screen__footer">
           <button
-            className="deck-screen__cancel"
+            className={actionPillClass('secondary')}
             type="button"
             onClick={onCancel}
           >
             {messages.cancel}
           </button>
           <button
-            className="deck-screen__submit"
+            className={actionPillClass('primary')}
             type="submit"
             disabled={!isValid}
           >

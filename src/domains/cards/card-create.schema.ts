@@ -6,6 +6,7 @@ export const CARD_PARTS_OF_SPEECH = [
   'Verbo',
   'Adjetivo',
   'Adverbio',
+  'Verbo frasal',
   'Expresión'
 ] as const;
 

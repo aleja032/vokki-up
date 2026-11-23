@@ -1,18 +1,27 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Library, Play } from 'lucide-react';
+import { actionPillClass } from '@/components/ui/action-pill';
 import { PixelLabel } from '@/components/ui/pixel-label';
+import { cn } from '@/lib/utils';
 import { homeDashboardData } from '../data';
 import type { HomeDashboardData } from '../types';
 import './hero-panel.css';
 
 const { copy } = homeDashboardData;
 
+// Words shown as floating tags when the due hand is empty.
+const STARTER_TAGS = ['order', 'receipt', 'table'] as const;
+
 export function HeroPanel({
-  data
+  data,
+  words = []
 }: {
   data: HomeDashboardData['nextSession'];
+  /** Real words of the due hand; the first three float over the scene. */
+  words?: readonly string[];
 }) {
+  const tags = (words.length > 0 ? words : STARTER_TAGS).slice(0, 3);
   const dueCount = data.pendingCount + data.newCount;
 
   return (
@@ -40,6 +49,13 @@ export function HeroPanel({
           <path d="M0 60 L0 34 C 140 6, 300 58, 470 32 S 760 4, 930 30 S 1110 54, 1200 24 L1200 60 Z" />
         </svg>
       </div>
+      <ul aria-hidden="true" className="hero-panel__tags">
+        {tags.map(word => (
+          <li className="hero-panel__tag motion-float-tag" key={word}>
+            {word}
+          </li>
+        ))}
+      </ul>
       <Image
         alt={copy.heroMascotAlt}
         className="hero-panel__mascot motion-mascot-bob"
@@ -68,11 +84,24 @@ export function HeroPanel({
         </h1>
         <p className="hero-panel__lead">{copy.nextSessionDescription}</p>
         <div className="hero-panel__actions">
-          <Link className="hero-panel__cta motion-cta-pulse" href={data.href}>
+          <Link
+            className={cn(
+              actionPillClass('primary'),
+              'hero-panel__cta',
+              'motion-cta-pulse'
+            )}
+            href={data.href}
+          >
             <Play aria-hidden="true" fill="currentColor" size={18} />
             {copy.startRound}
           </Link>
-          <Link className="hero-panel__secondary" href="/cards/word-library">
+          <Link
+            className={cn(
+              actionPillClass('secondary'),
+              'hero-panel__secondary'
+            )}
+            href="/cards/word-library"
+          >
             <Library aria-hidden="true" size={18} strokeWidth={2} />
             {copy.addFromLibrary}
           </Link>

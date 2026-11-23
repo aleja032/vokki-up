@@ -391,6 +391,9 @@ export const extraTranslations: Record<string, string> = {
   Tipo: 'Type',
   Carpetas: 'Folders',
   'Carpetas de tarjetas': 'Card folders',
+  'Tus grupos para ordenar las tarjetas. Las palabras nuevas salen de los Mundos, por tema.':
+    'Your groups to organize cards. New words come from Worlds, by theme.',
+  'Explorar Mundos': 'Explore Worlds',
   'Nueva carpeta': 'New folder',
   'Buscar carpeta': 'Search folder',
   'No hay carpetas con ese nombre.': 'No folders with that name.',
@@ -405,13 +408,26 @@ export const extraTranslations: Record<string, string> = {
   Aciertos: 'Correct',
   'Mejor combo': 'Best combo',
   Racha: 'Streak',
-  'Subieron de memoria': 'Memory went up'
+  'Subieron de memoria': 'Memory went up',
+  'Todas las carpetas': 'All folders',
+  'Ubicación en Mi mazo': 'Location in My deck',
+  'Ubicación en Mundos': 'Location in Worlds',
+  'Toca una tarjeta para editarla.': 'Tap a card to edit it.',
+  'Importar archivo': 'Import file',
+  'Ver Mi mazo': 'View My deck',
+  'Ver en Mi mazo': 'View in My deck',
+  Carpeta: 'Folder',
+  Mundo: 'World',
+  'Editar tarjeta': 'Edit card',
+  'Sube un archivo CSV para sumar tarjetas a tu mazo. Al terminar, vuelve a Mi mazo.':
+    'Upload a CSV file to add cards to your deck. When you are done, go back to My deck.'
 };
 
 // Interpolated messages: [Spanish pattern, English replacement].
 export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
   [/^(\d+) tarjetas? · (\d+) carpetas?$/, '$1 cards · $2 folders'],
   [/^Repasar (\d+)$/, 'Review $1'],
+  [/^Editar (.+)$/, 'Edit $1'],
   [/^Repasar (\d+) para hoy$/, 'Review $1 for today'],
   [/^(\d+) para hoy$/, '$1 for today'],
   [/^Ver las (\d+)$/, 'View all $1'],

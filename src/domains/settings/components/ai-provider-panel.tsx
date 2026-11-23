@@ -390,7 +390,7 @@ export function AiProviderPanel(props: AiProviderPanelProps) {
             <ActionPill
               disabled={isSavingCredential || !isPending}
               onClick={saveProviderSettings}
-              variant="brand"
+              variant="primary"
             >
               {copy.save}
             </ActionPill>

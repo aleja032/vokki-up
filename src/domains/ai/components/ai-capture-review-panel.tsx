@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
+import { actionPillClass } from '@/components/ui/action-pill';
 import { aiMessages } from '../messages';
 import type { CardCandidate, CaptureProposal } from '../types';
 import { AiCaptureProposalItem } from './ai-capture-proposal-item';
@@ -91,7 +92,7 @@ export function AiCaptureReviewPanel({
           <div className="aicap-savebar__actions">
             {cancel}
             <button
-              className="aicap-button aicap-button--primary aicap-button--lg"
+              className={actionPillClass('primary')}
               type="button"
               onClick={onCreate}
               disabled={!accepted}

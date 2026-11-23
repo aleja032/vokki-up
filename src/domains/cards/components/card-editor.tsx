@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { actionPillClass } from '@/components/ui/action-pill';
 import { cn } from '@/lib/utils';
 import {
   CARD_EXAMPLE_MAX_LENGTH,
@@ -35,6 +36,8 @@ type CardEditorProps = {
   existingTerms: readonly string[];
   initialGroupId?: string;
   isOpen: boolean;
+  /** Edits this card (same id) instead of creating a new one. */
+  initialCard?: VocabularyCard;
   onCancel: () => void;
   onSave: (card: VocabularyCard) => void;
   onCreateGroup: () => void;
@@ -49,6 +52,7 @@ export function CardEditor({
   groups,
   existingTerms,
   initialGroupId,
+  initialCard,
   isOpen,
   onCancel,
   onSave,
@@ -59,7 +63,9 @@ export function CardEditor({
 }: CardEditorProps) {
   // UI-only: the tag input visibility is not card data.
   const [isTagInputVisible, setIsTagInputVisible] = useState(false);
-  const [pronunciationLocale, setPronunciationLocale] = useState('en-US');
+  const [pronunciationLocale, setPronunciationLocale] = useState(
+    initialCard?.pronunciationLocale ?? 'en-US'
+  );
   const {
     register,
     onSubmit,
@@ -80,6 +86,7 @@ export function CardEditor({
     groups,
     existingTerms,
     initialGroupId,
+    initialCard,
     onSave: card =>
       onSave({
         ...card,
@@ -101,7 +108,11 @@ export function CardEditor({
 
   return (
     <section
-      className={cn('deck-editor', isEmbedded && 'deck-editor--embedded')}
+      className={cn(
+        'deck-editor',
+        isEmbedded && 'deck-editor--embedded',
+        initialCard && 'deck-editor--editing'
+      )}
       data-open={isOpen}
       aria-labelledby="deck-editor-title"
     >
@@ -116,7 +127,9 @@ export function CardEditor({
             <DeckIcon name="back" />
           </button>
           <div className="deck-editor__heading">
-            <h2 id="deck-editor-title">{messages.title}</h2>
+            <h2 id="deck-editor-title">
+              {initialCard ? messages.editTitle : messages.title}
+            </h2>
             <span className="deck-editor__subtitle deck-editor__subtitle--compact">
               {messages.subtitleCompact}
             </span>
@@ -127,48 +140,50 @@ export function CardEditor({
         </header>
 
         <div className="deck-editor__body">
-          <div
-            className="deck-modes"
-            role="tablist"
-            aria-label={messages.modesLabel}
-          >
-            {isAiEnabled ? (
-              <Link
-                className="deck-modes__tab"
-                href={AI_CAPTURE_HREF}
-                role="tab"
-                aria-selected={false}
-              >
-                <span className="deck-modes__badge">
-                  {messages.modeAiBadge}
-                </span>
-                {messages.modeAi}
-              </Link>
-            ) : (
+          {!initialCard && (
+            <div
+              className="deck-modes"
+              role="tablist"
+              aria-label={messages.modesLabel}
+            >
+              {isAiEnabled ? (
+                <Link
+                  className="deck-modes__tab"
+                  href={AI_CAPTURE_HREF}
+                  role="tab"
+                  aria-selected={false}
+                >
+                  <span className="deck-modes__badge">
+                    {messages.modeAiBadge}
+                  </span>
+                  {messages.modeAi}
+                </Link>
+              ) : (
+                <button
+                  className="deck-modes__tab"
+                  type="button"
+                  role="tab"
+                  aria-selected={false}
+                  disabled
+                  title={messages.aiDisabledHint}
+                >
+                  <span className="deck-modes__badge">
+                    {messages.modeAiBadge}
+                  </span>
+                  {messages.modeAi}
+                </button>
+              )}
               <button
                 className="deck-modes__tab"
                 type="button"
                 role="tab"
-                aria-selected={false}
-                disabled
-                title={messages.aiDisabledHint}
+                aria-selected
               >
-                <span className="deck-modes__badge">
-                  {messages.modeAiBadge}
-                </span>
-                {messages.modeAi}
+                {messages.modeManual}
               </button>
-            )}
-            <button
-              className="deck-modes__tab"
-              type="button"
-              role="tab"
-              aria-selected
-            >
-              {messages.modeManual}
-            </button>
-          </div>
-          {!isAiEnabled && (
+            </div>
+          )}
+          {!initialCard && !isAiEnabled && (
             <p className="deck-autofill__message">
               {messages.aiDisabledHint}{' '}
               <Link className="deck-field__link" href="/settings">
@@ -475,21 +490,21 @@ export function CardEditor({
 
         <footer className="deck-editor__footer">
           <button
-            className="deck-editor__cancel"
+            className={cn(actionPillClass('secondary'), 'deck-editor__cancel')}
             type="button"
             onClick={onCancel}
           >
             {messages.cancel}
           </button>
           <button
-            className="deck-editor__clear"
+            className={cn(actionPillClass('tertiary'), 'deck-editor__clear')}
             type="button"
             onClick={clearFields}
           >
             {messages.clear}
           </button>
           <button
-            className="deck-editor__submit"
+            className={cn(actionPillClass('primary'), 'deck-editor__submit')}
             type="submit"
             disabled={!isValid || !isPronunciationLocaleValid}
             aria-disabled={!isValid || !isPronunciationLocaleValid}

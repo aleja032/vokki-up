@@ -3,13 +3,19 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import './action-pill.css';
 
-type ActionPillVariant = 'brand' | 'outline' | 'cta' | 'mint';
+// The button hierarchy of the whole app (see odd/tasks/home-cards-design-d.md):
+// primary = the one main forward action of a screen (mint gradient),
+// secondary = outline, tertiary = text link, danger = destructive confirms.
+export type ActionPillVariant = 'primary' | 'secondary' | 'tertiary' | 'danger';
+export type ActionPillSize = 'md' | 'sm';
 
 type ActionPillBaseProps = {
   children: ReactNode;
   variant?: ActionPillVariant;
   /** `sm` is the 44px compact size used inside lists and empty states. */
-  size?: 'md' | 'sm';
+  size?: ActionPillSize;
+  /** Soft glow loop for the single most important primary of a screen. */
+  pulse?: boolean;
   icon?: ReactNode;
   /** Trailing icon, e.g. the chevron of a menu button. */
   iconEnd?: ReactNode;
@@ -32,12 +38,12 @@ type ActionPillButtonProps = ActionPillBaseProps & {
 
 type ActionPillProps = ActionPillLinkProps | ActionPillButtonProps;
 
-// Pill-shaped action: a button, or a link when `href` is given. `cta` is the
-// mint gradient used for the primary "start reviewing" action.
+// Pill-shaped action: a button, or a link when `href` is given.
 export function ActionPill(props: ActionPillProps) {
   const {
     children,
-    variant = 'outline',
+    variant = 'secondary',
+    pulse = false,
     size = 'md',
     icon,
     iconEnd,
@@ -45,10 +51,8 @@ export function ActionPill(props: ActionPillProps) {
     'aria-label': ariaLabel
   } = props;
   const classes = cn(
-    'action-pill',
-    `action-pill--${variant}`,
-    size === 'sm' && 'action-pill--sm',
-    variant === 'cta' && 'motion-cta-pulse',
+    actionPillClass(variant, size),
+    pulse && variant === 'primary' && 'motion-cta-pulse',
     className
   );
   const content = (
@@ -87,5 +91,17 @@ export function ActionPill(props: ActionPillProps) {
     >
       {content}
     </button>
+  );
+}
+
+/** Classes of a hierarchy variant, for native elements that cannot be an ActionPill. */
+export function actionPillClass(
+  variant: ActionPillVariant = 'secondary',
+  size: ActionPillSize = 'md'
+) {
+  return cn(
+    'action-pill',
+    `action-pill--${variant}`,
+    size === 'sm' && 'action-pill--sm'
   );
 }

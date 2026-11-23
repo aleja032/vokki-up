@@ -153,7 +153,7 @@ export function GroupDetail({
             className="deck-hero__review"
             href={`/review?groupId=${encodeURIComponent(group.id)}&from=cards`}
             icon={<ArrowRight size={18} strokeWidth={2.4} />}
-            variant="cta"
+            variant="primary"
           >
             {messages.review(dueCount)}
           </ActionPill>

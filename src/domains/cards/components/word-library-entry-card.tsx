@@ -1,6 +1,7 @@
 import { Check, LockKeyhole } from 'lucide-react';
 import { LevelDiamonds } from '@/components/ui/level-diamonds';
 import { PixelLabel } from '@/components/ui/pixel-label';
+import { TileEyebrow } from '@/components/ui/tile-eyebrow';
 import type { WordLibraryEntry } from '../word-library/catalog';
 import { getCatalogEntryExampleEs } from '../word-library/example-es';
 import { LEVEL_NUMBER, wordLibraryMessages } from '../word-library/messages';
@@ -43,15 +44,16 @@ export function WordLibraryEntryCard({
       data-selected={isSelected}
       data-existing={isAlreadyAdded}
     >
-      <div className="deck-card__top">
-        <PixelLabel className="deck-card__category">
-          {getCategoryLabel(entry)}
-        </PixelLabel>
-        <LevelDiamonds
-          label={`${messages.levelNames[entry.level]} · ${messages.levelOf(level)}`}
-          level={level}
-        />
-      </div>
+      <TileEyebrow
+        className="deck-card__top"
+        label={getCategoryLabel(entry)}
+        trailing={
+          <LevelDiamonds
+            label={`${messages.levelNames[entry.level]} · ${messages.levelOf(level)}`}
+            level={level}
+          />
+        }
+      />
       {isSelectable && (
         <>
           <button

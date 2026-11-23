@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { actionPillClass } from '@/components/ui/action-pill';
+import { cn } from '@/lib/utils';
 import { useCardCaptureFlow } from '../hooks/use-card-capture-flow';
 import type { CapturedCardSummary, CaptureLibrary } from '../types';
 import { aiMessages } from '../messages';
@@ -46,7 +48,7 @@ function AddStep({ flow }: { flow: CaptureFlow }) {
       footer={
         <>
           <button
-            className="aicap-button aicap-button--primary aicap-button--lg aicap-footer__main"
+            className={cn(actionPillClass('primary'), 'aicap-footer__main')}
             type="submit"
             form="card-ai-capture"
             disabled={flow.isSubmitting || (!flow.text.trim() && !selectedFile)}
@@ -84,7 +86,7 @@ function AddStep({ flow }: { flow: CaptureFlow }) {
                 {messages.workflow.dropzoneText}
               </span>
               <label
-                className="aicap-button aicap-button--outline"
+                className={actionPillClass('secondary')}
                 htmlFor="card-ai-image"
               >
                 <AiCaptureIcon name="upload" size={18} />
@@ -216,7 +218,7 @@ function ReviewStep({ flow }: { flow: CaptureFlow }) {
       footer={
         <>
           <button
-            className="aicap-button aicap-button--primary aicap-button--lg aicap-footer__main"
+            className={cn(actionPillClass('primary'), 'aicap-footer__main')}
             type="button"
             onClick={flow.createCards}
             disabled={!accepted}
@@ -235,10 +237,7 @@ function ReviewStep({ flow }: { flow: CaptureFlow }) {
         partsOfSpeech={flow.partsOfSpeech}
         error={flow.error}
         cancel={
-          <Link
-            className="aicap-button aicap-button--outline aicap-button--lg"
-            href="/cards"
-          >
+          <Link className={actionPillClass('secondary')} href="/cards">
             {messages.workflow.cancel}
           </Link>
         }
@@ -268,14 +267,14 @@ function CreatedStep({
       footer={
         <>
           <Link
-            className="aicap-button aicap-button--primary aicap-button--lg aicap-footer__main"
+            className={cn(actionPillClass('primary'), 'aicap-footer__main')}
             href="/cards"
           >
             {messages.workflow.viewCards}{' '}
             <AiCaptureIcon name="arrowRight" size={18} />
           </Link>
           <button
-            className="aicap-button aicap-button--outline aicap-button--md"
+            className={actionPillClass('secondary')}
             type="button"
             onClick={reset}
           >

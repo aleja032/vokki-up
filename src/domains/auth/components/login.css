@@ -84,11 +84,7 @@
 }
 
 .signin-form__submit {
-  @apply flex h-[52px] w-full cursor-pointer items-center justify-center rounded-(--radius-pill) border-0 bg-(--brand) px-6 font-[family-name:var(--font-ui),sans-serif] text-[16px] font-bold text-(--signin-on-indigo) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--indigo);
-}
-
-.signin-form__submit:disabled {
-  @apply cursor-not-allowed bg-(--signin-disabled);
+  @apply w-full;
 }
 
 .signin-form__root {

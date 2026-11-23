@@ -1,0 +1,47 @@
+@reference 'tailwindcss';
+
+.location-crumb {
+  @apply flex min-w-0 flex-wrap items-center gap-x-1.5 text-[14px] text-(--ink-soft);
+}
+
+.location-crumb__root {
+  @apply inline-flex min-h-11 items-center gap-0.5 rounded-(--radius-14) px-1 font-bold text-(--indigo) underline underline-offset-3;
+}
+
+.location-crumb__root:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+.location-crumb__sep {
+  @apply shrink-0;
+}
+
+.location-crumb__here {
+  @apply inline-flex max-w-full min-w-0 items-center gap-1.5 font-extrabold text-(--ink);
+}
+
+.location-crumb__icon {
+  @apply inline-flex shrink-0 text-(--indigo);
+}
+
+.location-crumb__kind {
+  @apply shrink-0 text-[13px] font-semibold text-(--ink-soft);
+}
+
+.location-crumb__name {
+  @apply min-w-0 truncate;
+}
+
+.location-crumb--on-hero {
+  @apply text-(--hero-lavender);
+}
+
+.location-crumb--on-hero .location-crumb__root,
+.location-crumb--on-hero .location-crumb__icon {
+  @apply text-(--hero-lavender);
+}
+
+.location-crumb--on-hero .location-crumb__here,
+.location-crumb--on-hero .location-crumb__kind {
+  @apply text-white;
+}

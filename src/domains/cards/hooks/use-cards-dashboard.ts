@@ -76,12 +76,19 @@ export function useCardsDashboard() {
   const [editorGroupId, setEditorGroupId] = useState<string | undefined>();
   const [editorReturnView, setEditorReturnView] =
     useState<GroupView>('overview');
+  const [editingCardId, setEditingCardId] = useState<string | undefined>();
 
   const now = new Date();
   const activeGroup = groups.find(group => group.id === activeGroupId);
   const openGroup = groups.find(group => group.id === openGroupId);
   const dueCount = buildDueQueue(cards, schedules, now).length;
   const existingTerms = useMemo(() => cards.map(card => card.term), [cards]);
+  const editingCard = cards.find(card => card.id === editingCardId);
+  const editingExistingTerms = useMemo(
+    () =>
+      cards.filter(card => card.id !== editingCardId).map(card => card.term),
+    [cards, editingCardId]
+  );
 
   const groupTiles = groups.map(group => {
     const groupCards = cards.filter(card => card.groupId === group.id);
@@ -136,6 +143,22 @@ export function useCardsDashboard() {
     setEditorKey(key => key + 1);
     setIsEditorOpen(true);
     if (groupView === 'detail') setGroupView('overview');
+  }
+
+  function editCard(cardId: string) {
+    setEditingCardId(cardId);
+  }
+
+  function closeCardEdit() {
+    setEditingCardId(undefined);
+  }
+
+  // Replaces the edited card in place; its schedule and history stay untouched.
+  function saveEditedCard(card: VocabularyCard) {
+    setCards(currentCards =>
+      currentCards.map(current => (current.id === card.id ? card : current))
+    );
+    setEditingCardId(undefined);
   }
 
   function closeEditor() {
@@ -259,6 +282,8 @@ export function useCardsDashboard() {
     now,
     dueCount,
     existingTerms,
+    editingCard,
+    editingExistingTerms,
     groupTiles,
     categories: CATEGORY_FILTERS,
     filteredCards,
@@ -283,6 +308,9 @@ export function useCardsDashboard() {
     setGroupSearchText,
     setGroupView,
     openEditor,
+    editCard,
+    closeCardEdit,
+    saveEditedCard,
     closeEditor,
     saveCard,
     addCards,

@@ -89,7 +89,7 @@ export function NoteCategoryManager({
                 maxLength={40}
                 {...register('name')}
               />
-              <ActionPill size="sm" type="submit" variant="brand">
+              <ActionPill size="sm" type="submit" variant="secondary">
                 {editingCategory ? messages.save : messages.create}
               </ActionPill>
               {editingCategory && (

@@ -1,6 +1,8 @@
 'use client';
 import { useRef, useState, type ChangeEvent } from 'react';
 import Link from 'next/link';
+import { actionPillClass } from '@/components/ui/action-pill';
+import { cn } from '@/lib/utils';
 import {
   ArrowLeft,
   ArrowRight,
@@ -105,7 +107,14 @@ function parseCsv(content: string): ParsedCsv {
 function escapeCsv(value: string): string {
   return `"${value.replace(/"/g, '""')}"`;
 }
-export function ImportExportWorkspace() {
+type ImportExportWorkspaceProps = {
+  /** Screen the user came from; decides the back link and the intro line. */
+  origin?: 'cards' | 'settings';
+};
+
+export function ImportExportWorkspace({
+  origin = 'settings'
+}: ImportExportWorkspaceProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [rows, setRows] = useState(SAMPLE_CSV_ROWS);
   const [validation, setValidation] = useState(SAMPLE_CSV_VALIDATION);
@@ -179,8 +188,12 @@ export function ImportExportWorkspace() {
   return (
     <div className="portability-workspace">
       <div className="portability-top">
-        <Link className="cards-back" href="/settings">
-          <ArrowLeft size={18} /> {messages.back}
+        <Link
+          className="cards-back"
+          href={origin === 'cards' ? '/cards' : '/settings'}
+        >
+          <ArrowLeft size={18} />{' '}
+          {origin === 'cards' ? messages.backToDeck : messages.back}
         </Link>
         <span className="eyebrow">{messages.topEyebrow}</span>
       </div>
@@ -188,7 +201,9 @@ export function ImportExportWorkspace() {
         <div>
           <span className="eyebrow">{messages.eyebrow}</span>
           <h1>{messages.title}</h1>
-          <p>{messages.subtitle}</p>
+          <p>
+            {origin === 'cards' ? messages.fromDeckSubtitle : messages.subtitle}
+          </p>
         </div>
         <span className="portability-heading__icon">
           <FileDown size={21} />
@@ -265,7 +280,7 @@ export function ImportExportWorkspace() {
             onChange={handleFileChange}
           />
           <button
-            className="csv-file-button"
+            className={actionPillClass('secondary')}
             type="button"
             onClick={() => inputRef.current?.click()}
           >
@@ -331,7 +346,7 @@ export function ImportExportWorkspace() {
             </div>
           )}
           <button
-            className="primary-action portability-primary"
+            className={cn(actionPillClass('primary'), 'portability-primary')}
             type="button"
             onClick={handleImport}
             disabled={
@@ -348,7 +363,10 @@ export function ImportExportWorkspace() {
           {status && (
             <p className="portability-status" aria-live="polite">
               <Check size={15} />
-              {status}
+              {status}{' '}
+              <Link className="portability-status__link" href="/cards">
+                {messages.import.viewDeck}
+              </Link>
             </p>
           )}
         </section>
@@ -372,7 +390,7 @@ export function ImportExportWorkspace() {
             <p>{messages.export.summary(rows.length, CSV_SCHEMA.length)}</p>
           </div>
           <button
-            className="secondary-action portability-export"
+            className={cn(actionPillClass('secondary'), 'portability-export')}
             type="button"
             onClick={handleExport}
           >

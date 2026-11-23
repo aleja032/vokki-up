@@ -73,3 +73,30 @@ describe('VocabularyCardItem manage mode', () => {
     expect(selected).toContain('data-selected="true"');
   });
 });
+
+describe('VocabularyCardItem edit', () => {
+  function renderWithEdit(isManaging: boolean) {
+    return renderToStaticMarkup(
+      <VocabularyCardItem
+        card={CARD}
+        isManaging={isManaging}
+        isSelected={false}
+        now={new Date('2026-01-01T00:00:00Z')}
+        onEdit={() => undefined}
+        onToggleSelect={() => undefined}
+      />
+    );
+  }
+
+  it('offers one named edit button over the tile outside manage mode', () => {
+    const html = renderWithEdit(false);
+    expect(html).toContain('deck-card__edit');
+    expect(html).toContain('aria-label="Editar handle"');
+  });
+
+  it('replaces it with the selection checkbox in manage mode', () => {
+    const html = renderWithEdit(true);
+    expect(html).not.toContain('deck-card__edit');
+    expect(html).toContain('role="checkbox"');
+  });
+});

@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight, Folder, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
+import { actionPillClass } from '@/components/ui/action-pill';
 import { SearchField } from '@/components/ui/search-field';
 import { SegmentedToggle } from '@/components/ui/segmented-toggle';
 import { SelectField } from '@/components/ui/select-field';
@@ -22,6 +23,7 @@ import { GroupEmptyState } from './group-empty-state';
 import { SelectionActionBar } from './selection-action-bar';
 import { VocabularyCardItem } from './vocabulary-card-item';
 import { translateText } from '@/lib/i18n/locale';
+import { cn } from '@/lib/utils';
 import './cards-library.css';
 
 const messages = cardsMessages.overview;
@@ -67,6 +69,10 @@ type CardsLibraryProps = {
   onAddCard: () => void;
   /** Opens the screen of the active folder (rename, recolor, delete, review). */
   onOpenGroup: (groupId: string) => void;
+  /** Goes back from a folder to the whole deck. */
+  onShowAll: () => void;
+  /** Opens the editor of one card. */
+  onEditCard: (cardId: string) => void;
 };
 
 export function CardsLibrary({
@@ -86,7 +92,9 @@ export function CardsLibrary({
   onStatusChange,
   onDeleteCards,
   onAddCard,
-  onOpenGroup
+  onOpenGroup,
+  onShowAll,
+  onEditCard
 }: CardsLibraryProps) {
   const isCompact = useCompactViewport();
   const [requestedPage, setRequestedPage] = useState({ key: '', page: 1 });
@@ -120,7 +128,7 @@ export function CardsLibrary({
     activeCategory === messages.allCategories;
   const groupTitle = activeGroup
     ? getGroupDisplayName(activeGroup)
-    : messages.allGroups;
+    : messages.allFoldersTitle;
   const firstShown =
     cards.length === 0 ? 0 : (page.page - 1) * CARDS_PAGE_SIZE + 1;
   const lastShown = firstShown + page.items.length - 1;
@@ -177,23 +185,52 @@ export function CardsLibrary({
       data-managing={isManaging}
     >
       <div className="deck-library__head">
-        <Folder
-          aria-hidden="true"
-          className="deck-library__crumb-icon"
-          size={18}
-        />
-        <span className="deck-library__crumb">{messages.groupsTitle}</span>
-        <span aria-hidden="true" className="deck-library__crumb-sep">
-          /
-        </span>
-        <h2 id="deck-library-title">{groupTitle}</h2>
-        <span className="deck-library__meta">
-          {messages.cardCount(statusCounts.all)}
-        </span>
+        <nav
+          aria-label={messages.locationLabel}
+          className="deck-library__crumbs"
+        >
+          {activeGroup ? (
+            <button
+              className="deck-library__crumb-root"
+              onClick={onShowAll}
+              type="button"
+            >
+              <ChevronLeft aria-hidden="true" size={16} />
+              {messages.title}
+            </button>
+          ) : (
+            <span className="deck-library__crumb-root deck-library__crumb-root--current">
+              {messages.title}
+            </span>
+          )}
+          <ChevronRight
+            aria-hidden="true"
+            className="deck-library__crumb-sep"
+            size={16}
+          />
+          <span aria-current="location" className="deck-library__crumb-here">
+            <Folder
+              aria-hidden="true"
+              className="deck-library__crumb-icon"
+              size={18}
+            />
+            {activeGroup ? (
+              <span className="deck-library__crumb-kind">
+                {messages.folderLabel}
+              </span>
+            ) : null}
+            <h2 id="deck-library-title" title={groupTitle}>
+              {groupTitle}
+            </h2>
+          </span>
+          <span className="deck-library__meta">
+            {messages.cardCount(statusCounts.all)}
+          </span>
+        </nav>
         <div className="deck-library__links">
           {activeGroup && (
             <button
-              className="deck-library__link"
+              className={cn(actionPillClass('tertiary'), 'deck-library__link')}
               onClick={() => onOpenGroup(activeGroup.id)}
               type="button"
             >
@@ -201,7 +238,7 @@ export function CardsLibrary({
             </button>
           )}
           <button
-            className="deck-library__link deck-library__manage"
+            className={cn(actionPillClass('tertiary'), 'deck-library__manage')}
             type="button"
             disabled={!canDeleteCards || cards.length === 0}
             inert={isManaging}
@@ -262,6 +299,9 @@ export function CardsLibrary({
           <GroupAddActions variant="header" onAdd={onAddCard} />
         </div>
       )}
+      {cards.length > 0 && !isManaging ? (
+        <p className="deck-library__hint">{messages.editHint}</p>
+      ) : null}
       <div className="deck-library__grid">
         {shownCards.map(card => (
           <VocabularyCardItem
@@ -273,6 +313,7 @@ export function CardsLibrary({
             isManaging={isManaging}
             isSelected={activeSelection.includes(card.id)}
             onToggleSelect={toggleCardSelection}
+            onEdit={onEditCard}
           />
         ))}
       </div>
@@ -286,7 +327,10 @@ export function CardsLibrary({
         <div className="deck-library__more">
           {compactRemaining > 0 && (
             <button
-              className="deck-library__more-button"
+              className={cn(
+                actionPillClass('secondary'),
+                'deck-library__more-button'
+              )}
               onClick={() =>
                 setRevealed({
                   key: pageContextKey,

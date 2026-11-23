@@ -76,35 +76,6 @@ html:has(.confirm-dialog[open]) {
   @apply grid grid-cols-2 gap-3;
 }
 
-.confirm-dialog__cancel,
-.confirm-dialog__confirm {
-  @apply h-12 cursor-pointer rounded-(--radius-pill) px-4 text-[15px] font-extrabold;
-  transition: var(--hover-transition);
-}
-
-.confirm-dialog__cancel {
-  @apply border-[1.5px] border-solid border-(--line) bg-(--surface) text-(--ink);
-}
-
-.confirm-dialog__confirm {
-  @apply border-0 bg-(--red-ink) font-bold text-(--on-indigo);
-}
-
-.confirm-dialog__cancel:focus-visible,
-.confirm-dialog__confirm:focus-visible {
-  @apply outline-2 outline-offset-2 outline-(--indigo);
-}
-
-@media (hover: hover) {
-  .confirm-dialog__cancel:hover {
-    @apply border-(--ink-soft);
-  }
-
-  .confirm-dialog__confirm:hover {
-    filter: brightness(1.08);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .confirm-dialog,
   .confirm-dialog::backdrop {

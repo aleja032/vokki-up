@@ -11,15 +11,19 @@ export const cardsMessages = createLocalizedMessages({
     newCardTitle: 'Nueva tarjeta',
     newCardMenuLabel: 'Opciones para agregar tarjetas',
     createCard: 'Crear tarjeta',
+    importFile: 'Importar archivo',
     addFromLibrary: 'Agregar desde la biblioteca',
     reviewShort: (due: number) => `Repasar ${due}`,
-    reviewTitle: 'Repasar',
-    dueToday: (due: number) => `${due} para hoy`,
-    newCardSubtitle: 'Con IA o manual',
     memoryLabel: (level: number) => `Memoria ${level} de 5`,
     groupsTitle: 'Carpetas',
+    foldersHint:
+      'Tus grupos para ordenar las tarjetas. Las palabras nuevas salen de los Mundos, por tema.',
+    exploreWorlds: 'Explorar Mundos',
     groupsLabel: 'Carpetas de tarjetas',
     allGroups: 'Todas',
+    allFoldersTitle: 'Todas las carpetas',
+    folderLabel: 'Carpeta',
+    locationLabel: 'Ubicación en Mi mazo',
     newGroup: 'Nueva carpeta',
     folderSearchLabel: 'Buscar carpeta',
     noFolders: 'No hay carpetas con ese nombre.',
@@ -60,6 +64,8 @@ export const cardsMessages = createLocalizedMessages({
         `Mostrando ${from}–${to} de ${total} ${pluralize(total, 'tarjeta', 'tarjetas')}`
     },
     manageCards: 'Gestionar',
+    editCardLabel: (term: string) => `Editar ${term}`,
+    editHint: 'Toca una tarjeta para editarla.',
     cardSelectLabel: (term: string) => `Seleccionar ${term}`,
     selectedCards: (count: number) =>
       count === 1
@@ -149,6 +155,7 @@ export const cardsMessages = createLocalizedMessages({
   cardEditor: {
     backLabel: 'Volver a Tarjetas',
     title: 'Nueva tarjeta',
+    editTitle: 'Editar tarjeta',
     subtitleCompact: 'Solo 2 campos son obligatorios',
     subtitleWide: 'Solo la palabra y el significado son obligatorios.',
     modesLabel: 'Forma de crear',

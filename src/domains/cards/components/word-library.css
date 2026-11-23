@@ -5,15 +5,6 @@
   @apply mx-auto flex w-full min-w-0 flex-col gap-5 pt-3 text-(--ink) md:gap-6 md:pt-5;
 }
 
-.word-library__back {
-  @apply inline-flex min-h-9 w-fit items-center gap-2 text-[14px] font-semibold text-(--ink-soft) no-underline;
-}
-
-.word-library__back:hover {
-  @apply text-(--indigo);
-}
-
-.word-library__back:focus-visible,
 .word-library__empty button:focus-visible,
 .word-library__add-toggle:focus-visible,
 .word-library__pagination button:focus-visible {
@@ -114,8 +105,11 @@
 }
 
 .word-library__announcement {
-  @apply absolute size-px overflow-hidden whitespace-nowrap;
-  clip: rect(0, 0, 0, 0);
+  @apply m-0 text-[14px] font-semibold text-(--ink);
+}
+
+.word-library__announcement-link {
+  @apply inline-flex min-h-11 items-center font-bold text-(--indigo) underline underline-offset-3;
 }
 
 @media (max-width: 420px) {

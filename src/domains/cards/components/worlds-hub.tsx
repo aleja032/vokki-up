@@ -51,6 +51,14 @@ export function WorldsHub({ worlds, levelTotals }: WorldsHubProps) {
               messages.inYourDeck(inDeck)
             ].join(' · ')}
           </p>
+          <ActionPill
+            className="worlds-hub__all"
+            href="/cards/word-library?world=all"
+            icon={<Library size={18} />}
+            variant="primary"
+          >
+            {messages.openWholeLibrary}
+          </ActionPill>
         </div>
         <div className="worlds-hub__overall">
           <div className="worlds-hub__overall-text">
@@ -107,15 +115,6 @@ export function WorldsHub({ worlds, levelTotals }: WorldsHubProps) {
           </div>
         ))}
       </section>
-
-      <ActionPill
-        className="worlds-hub__all"
-        href="/cards/word-library?world=all"
-        icon={<Library size={18} />}
-        variant="outline"
-      >
-        {messages.openWholeLibrary}
-      </ActionPill>
     </div>
   );
 }

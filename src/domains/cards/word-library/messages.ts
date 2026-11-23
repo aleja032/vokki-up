@@ -65,6 +65,9 @@ export const wordLibraryMessages = createLocalizedMessages({
   searchInWorld: (name: string) => `Buscar en ${name}`,
   openWholeLibrary: 'Ver toda la biblioteca',
   backToWorlds: 'Mundos',
+  viewInDeck: 'Ver en Mi mazo',
+  locationLabel: 'Ubicación en Mundos',
+  worldKind: 'Mundo',
   worldProgress: (name: string, inDeck: number, total: number) =>
     `${name}: ${inDeck}/${total}`,
   worldDescriptions: {

@@ -27,7 +27,7 @@ export function HomeDashboard({ summary }: HomeDashboardProps) {
 
   return (
     <div className="home-dashboard">
-      <HeroPanel data={nextSession} />
+      <HeroPanel data={nextSession} words={dueHand.map(word => word.term)} />
       <div className="home-dashboard__hand-row">
         <DueCardsHand
           hand={dueHand}

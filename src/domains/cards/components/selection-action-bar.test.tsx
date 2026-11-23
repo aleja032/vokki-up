@@ -45,8 +45,6 @@ describe('SelectionActionBar', () => {
   });
 
   it('marks a danger primary action', () => {
-    expect(render({ primaryTone: 'danger' })).toContain(
-      'selection-bar__primary--danger'
-    );
+    expect(render({ primaryTone: 'danger' })).toContain('action-pill--danger');
   });
 });
