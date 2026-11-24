@@ -7,6 +7,11 @@ export const extraTranslations: Record<string, string> = {
   Modelo: 'Model',
   'Modelos GPT': 'GPT models',
 
+  // Review round ratings
+  'Otra vez': 'Again',
+  'otra vez': 'again',
+  '¿Qué tan fácil lo recordaste?': 'How easy was it to remember?',
+
   // Notes: label stored when a note is saved
   Ahora: 'Just now',
 

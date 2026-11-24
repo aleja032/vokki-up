@@ -12,6 +12,7 @@ const messages = cardsMessages.review;
 
 type ReviewCompleteScreenProps = {
   reviewed: number;
+  again: number;
   hard: number;
   good: number;
   easy: number;
@@ -28,6 +29,7 @@ type ReviewCompleteScreenProps = {
 // streak = the real streak derived from the review events.
 export function ReviewCompleteScreen({
   reviewed,
+  again,
   hard,
   good,
   easy,
@@ -101,6 +103,9 @@ export function ReviewCompleteScreen({
           {messages.done.nextReturn}
         </p>
         <div className="round-results__chips">
+          <Pill tone="neutral">
+            {again} {messages.done.againChipSuffix}
+          </Pill>
           <Pill tone="neutral">{messages.done.hardChip(hard)}</Pill>
           <Pill tone="brand">{messages.done.goodChip(good)}</Pill>
           <Pill tone="mint">{messages.done.easyChip(easy)}</Pill>

@@ -49,6 +49,7 @@ export function CardReview() {
           {isComplete && (
             <ReviewCompleteScreen
               reviewed={results.reviewed}
+              again={results.again}
               hard={results.hard}
               good={results.good}
               easy={results.easy}

@@ -30,15 +30,14 @@ import { writeBrowserValue } from '@/lib/storage/browser-storage';
 import { cardsMessages } from '../messages';
 import { resolveReviewExit } from '../review-exit';
 import { getCardMemory } from '../card-memory';
+import { requeueForAgain, summarizeRatings } from '../review-queue';
 import {
   recordMemoryGain,
   selectMemoryGains,
   type MemoryGain
 } from '../review-memory-gains';
 
-export type ReviewRating = Exclude<CardRating, 'hard'>;
-
-export const REVIEW_RATINGS: ReviewRating[] = ['again', 'good', 'easy'];
+export const REVIEW_RATINGS: CardRating[] = ['again', 'hard', 'good', 'easy'];
 
 const intervalMessages = cardsMessages.review.intervals;
 
@@ -101,7 +100,6 @@ export function useCardReview() {
         : new URLSearchParams(window.location.search).get('from')
     )
   );
-  const repeatedCardIds = useRef(new Set<string>());
   const reviewSessionsRef = useRef(reviewSessions);
   useEffect(() => {
     reviewSessionsRef.current = reviewSessions;
@@ -205,26 +203,12 @@ export function useCardReview() {
         entityId: recorded.event.id,
         payload: serializeSyncPayload(recorded.event)
       });
-      if (
-        rating === 'again' &&
-        index < queue.length - 1 &&
-        !repeatedCardIds.current.has(card.id)
-      ) {
-        repeatedCardIds.current.add(card.id);
-        setQueue(current => [...current, card]);
-      }
+      if (rating === 'again')
+        setQueue(current => requeueForAgain(current, index, card));
       setIsRevealed(false);
       setIndex(current => current + 1);
     },
-    [
-      card,
-      index,
-      queue.length,
-      reviewEvents,
-      schedules,
-      setReviewEvents,
-      setSchedules
-    ]
+    [card, index, reviewEvents, schedules, setReviewEvents, setSchedules]
   );
 
   const finishReviewSession = useCallback(() => {
@@ -283,15 +267,15 @@ export function useCardReview() {
       }
       if (!isRevealed) return;
       if (event.key === '1') handleRateRef.current('again');
-      if (event.key === '2') handleRateRef.current('good');
-      if (event.key === '3') handleRateRef.current('easy');
+      if (event.key === '2') handleRateRef.current('hard');
+      if (event.key === '3') handleRateRef.current('good');
+      if (event.key === '4') handleRateRef.current('easy');
     }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [card, isRevealed]);
 
   function handleRestart() {
-    repeatedCardIds.current.clear();
     setQueue(sessionCards);
     setIndex(0);
     setRatings({ again: 0, hard: 0, good: 0, easy: 0 });
@@ -301,8 +285,6 @@ export function useCardReview() {
   }
 
   const total = queue.length;
-  const reviewedCount =
-    ratings.again + ratings.hard + ratings.good + ratings.easy;
   const status = !isSessionLoaded
     ? 'loading'
     : sessionCards.length === 0
@@ -336,12 +318,7 @@ export function useCardReview() {
     combo: combo.current,
     bestCombo: combo.best,
     memoryGains: selectMemoryGains(memoryGains),
-    results: {
-      reviewed: reviewedCount,
-      hard: ratings.again + ratings.hard,
-      good: ratings.good,
-      easy: ratings.easy
-    },
+    results: summarizeRatings(ratings),
     streakDays
   };
 }

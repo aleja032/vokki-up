@@ -234,8 +234,13 @@ export const cardsMessages = createLocalizedMessages({
     revealHint: 'Intenta recordarla, luego toca para ver',
     revealAction: 'Mostrar significado',
     ratingsLabel: 'Califica esta tarjeta',
-    ratingPrompt: '¿Qué tan fácil fue recordarla?',
-    ratings: { again: 'Difícil', good: 'Bien', easy: 'Fácil' },
+    ratingPrompt: '¿Qué tan fácil lo recordaste?',
+    ratings: {
+      again: 'Otra vez',
+      hard: 'Difícil',
+      good: 'Bien',
+      easy: 'Fácil'
+    },
     intervals: {
       again: '<10 min',
       underHour: '<1 hora',
@@ -270,6 +275,7 @@ export const cardsMessages = createLocalizedMessages({
       streakPrefix: 'Tu racha sube a',
       streakDays: (days: number) => `${days} ${pluralize(days, 'día', 'días')}`,
       nextReturn: 'Lo próximo vuelve mañana.',
+      againChipSuffix: 'otra vez',
       hardChip: (count: number) =>
         `${count} ${pluralize(count, 'difícil', 'difíciles')}`,
       goodChip: (count: number) => `${count} bien`,

@@ -9,6 +9,7 @@ function render(overrides: Overrides = {}) {
   return renderToStaticMarkup(
     <ReviewCompleteScreen
       bestCombo={5}
+      again={3}
       easy={4}
       exitHref="/"
       exitTarget="home"
@@ -45,6 +46,7 @@ describe('ReviewCompleteScreen', () => {
     expect(html).toContain('12 tarjetas repasadas.');
     expect(html).toContain('Tu racha sube a');
     expect(html).toContain('Lo próximo vuelve mañana.');
+    expect(html).toContain('3 otra vez');
     expect(html).toContain('2 difíciles');
     expect(html).toContain('6 bien');
     expect(html).toContain('4 fáciles');
