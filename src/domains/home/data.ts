@@ -77,6 +77,7 @@ export const homeDashboardData = createLocalizedMessages<HomeDashboardData>({
     handHint: 'Mientras más baja la barra de memoria, más urgente.',
     handViewAll: count => `Ver las ${count}`,
     handEmpty: 'Tu mano de hoy está vacía.',
+    handSample: 'Ejemplo · así se verá tu mano cuando repases',
     dueNewLabel: 'Nueva',
     dueForgettingLabel: 'Se olvida hoy',
     dueTodayLabel: 'Repasa hoy',

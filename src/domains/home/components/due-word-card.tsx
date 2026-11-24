@@ -14,15 +14,25 @@ function dueLabel(word: DueWord): string {
   return word.tone === 'coral' ? copy.dueForgettingLabel : copy.dueTodayLabel;
 }
 
-export function DueWordCard({ word, href }: { word: DueWord; href: string }) {
+interface DueWordCardProps {
+  word: DueWord;
+  href: string;
+  /** Sample words are not the user's: render a plain card, not a link. */
+  sample?: boolean;
+}
+
+export function DueWordCard({ word, href, sample = false }: DueWordCardProps) {
   const label = dueLabel(word);
+  const Root = sample ? 'article' : Link;
+  const rootProps = sample ? {} : { href };
 
   return (
-    <Link
+    <Root
       aria-label={`${word.term}, ${label}`}
       className="due-card"
+      data-sample={sample ? 'true' : undefined}
       data-tone={word.tone}
-      href={href}
+      {...(rootProps as { href: string })}
     >
       <PixelLabel className="due-card__tag">
         {translateText(word.partOfSpeech)}
@@ -45,6 +55,6 @@ export function DueWordCard({ word, href }: { word: DueWord; href: string }) {
           <PixelLabel className="due-card__due-label">{label}</PixelLabel>
         </span>
       </span>
-    </Link>
+    </Root>
   );
 }

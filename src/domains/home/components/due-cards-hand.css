@@ -31,6 +31,17 @@
   @apply m-0 py-8 text-center text-(--ink-soft);
 }
 
+.due-hand__sample {
+  @apply m-0 self-start rounded-(--radius-pill) bg-(--indigo-soft) px-3 py-1 text-[12px] font-bold text-(--indigo);
+  margin-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .due-hand__sample {
+    margin-inline: 1.75rem;
+  }
+}
+
 /* The fan: cards overlap by a fixed step and tilt around a low pivot, then
    breathe between a closed and an open fan. Five cards on phones, six wide. */
 .due-hand__fan {

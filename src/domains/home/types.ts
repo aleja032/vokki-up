@@ -85,6 +85,7 @@ export type HomeDashboardData = {
     handHint: string;
     handViewAll: (count: number) => string;
     handEmpty: string;
+    handSample: string;
     dueNewLabel: string;
     dueForgettingLabel: string;
     dueTodayLabel: string;
