@@ -96,7 +96,10 @@ export function NoteDetail({
         description={messages.deleteBody}
         confirmLabel={messages.confirmDelete}
         cancelLabel={messages.cancel}
-        onConfirm={onDelete}
+        onConfirm={() => {
+          setIsConfirmingDelete(false);
+          onDelete();
+        }}
         onCancel={() => setIsConfirmingDelete(false)}
       />
       <div className="note-detail__body">
