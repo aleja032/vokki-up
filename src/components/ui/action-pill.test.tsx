@@ -89,6 +89,38 @@ describe('ActionPill', () => {
     expect(actionPillClass()).toBe('action-pill action-pill--secondary');
   });
 
+  describe('mint tone', () => {
+    it('adds the mint modifier only when asked', () => {
+      expect(
+        renderToStaticMarkup(<ActionPill tone="mint">x</ActionPill>)
+      ).toContain('action-pill--mint');
+      expect(renderToStaticMarkup(<ActionPill>x</ActionPill>)).not.toContain(
+        'action-pill--mint'
+      );
+    });
+
+    it('exposes the tone for native elements', () => {
+      expect(actionPillClass('secondary', 'md', 'mint')).toBe(
+        'action-pill action-pill--secondary action-pill--mint'
+      );
+      expect(actionPillClass('tertiary', 'sm', 'mint')).toBe(
+        'action-pill action-pill--tertiary action-pill--sm action-pill--mint'
+      );
+    });
+
+    it('recolors only through tokens, never size or spacing', () => {
+      const css = readFileSync(join(__dirname, 'action-pill.css'), 'utf8');
+      const rules = css
+        .split('}')
+        .filter(rule => rule.includes('.action-pill--mint'))
+        .join('}');
+      expect(rules).toContain('--mint');
+      expect(rules).not.toMatch(
+        /(^|\s)(min-)?h-|\bp[xy]?-|text-\[|#[0-9a-f]{3,6}\b/i
+      );
+    });
+  });
+
   describe('fixed sizes', () => {
     const css = readFileSync(join(__dirname, 'action-pill.css'), 'utf8');
     const block = (selector: string) => {

@@ -12,7 +12,7 @@
 }
 
 .new-card-menu__chevron {
-  @apply text-(--ink-soft);
+  @apply text-current;
 }
 
 .new-card-menu__list {

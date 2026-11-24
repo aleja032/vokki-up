@@ -95,8 +95,10 @@
   @apply flex justify-end;
 }
 
+/* Wide tiles: one column on phones (the minimum only fits two columns from
+   about 540px), generous gaps so the tiles never look crowded. */
 .deck-library__grid {
-  @apply grid grid-cols-2 gap-3;
+  @apply grid grid-cols-[repeat(auto-fill,minmax(min(260px,100%),1fr))] gap-4;
 }
 
 .deck-library__empty {
@@ -157,17 +159,18 @@
     @apply flex-[1_1_560px] gap-4.5;
   }
 
-  /* Wide screens: one wrapping row, the status filter first and the rest pushed right. */
+  /* Wide screens: search and type on the first row (as the artboard), the
+     status filter on its own row below, left aligned. */
   .deck-library__toolbar {
-    @apply flex flex-wrap gap-3;
+    @apply gap-x-3 gap-y-3;
   }
 
   .deck-library .deck-library__status {
-    @apply mr-auto ml-0 max-w-full p-1.25;
+    @apply m-0 w-fit max-w-full justify-self-start p-1.25;
   }
 
   .deck-library__search {
-    @apply min-h-12 w-auto flex-[1_1_300px] gap-2.5;
+    @apply min-h-12 gap-2.5;
   }
 
   .deck-library__type {
@@ -175,7 +178,7 @@
   }
 
   .deck-library__grid {
-    @apply grid-cols-[repeat(auto-fill,minmax(min(210px,100%),1fr))] gap-4;
+    @apply grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-5;
   }
 
   .deck-library__empty {

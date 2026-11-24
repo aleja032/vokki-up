@@ -9,7 +9,7 @@
  */
 
 .deck-card {
-  @apply relative row-span-6 grid min-h-42 min-w-0 grid-rows-subgrid items-start gap-1.25 rounded-3xl border border-l-5 border-solid border-(--line) bg-(--surface-muted) px-3.5 pt-4 pb-3.5 text-(--ink);
+  @apply relative row-span-6 grid min-h-42 min-w-0 grid-rows-subgrid items-start gap-1.5 rounded-3xl border border-l-5 border-solid border-(--line) bg-(--surface-muted) px-4 pt-4.5 pb-4 text-(--ink);
   border-left-color: var(--due-now);
   animation: enter-rise var(--enter-duration) var(--ease-out)
     var(--enter-delay, 0ms) backwards;
@@ -57,12 +57,12 @@
 }
 
 .deck-card__term {
-  @apply m-0 mt-1 line-clamp-2 text-[18px] leading-[1.1] font-extrabold tracking-[-0.5px] wrap-anywhere;
+  @apply m-0 mt-1 line-clamp-2 text-[20px] leading-[1.1] font-extrabold tracking-[-0.5px] wrap-anywhere;
   grid-row: 2;
 }
 
 .deck-card__meaning {
-  @apply m-0 line-clamp-3 text-[13px] leading-snug font-bold wrap-anywhere text-(--ink);
+  @apply m-0 line-clamp-3 text-[14px] leading-snug font-bold wrap-anywhere text-(--ink);
   grid-row: 3;
 }
 
@@ -103,7 +103,8 @@
 }
 
 .deck-card__group::before {
-  @apply size-2 shrink-0 rounded-full bg-(--tone-strong);
+  /* Always the brand hue: a group's own tone can be amber, and Mi mazo has no orange. */
+  @apply size-2 shrink-0 rounded-full bg-(--indigo);
 
   content: '';
 }
@@ -184,7 +185,7 @@
 
 @media (min-width: 761px) {
   .deck-card {
-    @apply px-4 pt-4.5 pb-4;
+    @apply px-6 pt-5.5 pb-5;
   }
 
   .deck-card[data-selected='true'] {

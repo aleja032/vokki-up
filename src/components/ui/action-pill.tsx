@@ -8,10 +8,14 @@ import './action-pill.css';
 // secondary = outline, tertiary = text link, danger = destructive confirms.
 export type ActionPillVariant = 'primary' | 'secondary' | 'tertiary' | 'danger';
 export type ActionPillSize = 'md' | 'sm';
+// `mint` recolors a secondary or tertiary pill with the green family (border and
+// ink); it never changes size, so the CTA heights stay equal.
+export type ActionPillTone = 'default' | 'mint';
 
 type ActionPillBaseProps = {
   children: ReactNode;
   variant?: ActionPillVariant;
+  tone?: ActionPillTone;
   /** `sm` is the 44px compact size used inside lists and empty states. */
   size?: ActionPillSize;
   /** Soft glow loop for the single most important primary of a screen. */
@@ -45,13 +49,14 @@ export function ActionPill(props: ActionPillProps) {
     variant = 'secondary',
     pulse = false,
     size = 'md',
+    tone = 'default',
     icon,
     iconEnd,
     className,
     'aria-label': ariaLabel
   } = props;
   const classes = cn(
-    actionPillClass(variant, size),
+    actionPillClass(variant, size, tone),
     pulse && variant === 'primary' && 'motion-cta-pulse',
     className
   );
@@ -97,11 +102,13 @@ export function ActionPill(props: ActionPillProps) {
 /** Classes of a hierarchy variant, for native elements that cannot be an ActionPill. */
 export function actionPillClass(
   variant: ActionPillVariant = 'secondary',
-  size: ActionPillSize = 'md'
+  size: ActionPillSize = 'md',
+  tone: ActionPillTone = 'default'
 ) {
   return cn(
     'action-pill',
     `action-pill--${variant}`,
-    size === 'sm' && 'action-pill--sm'
+    size === 'sm' && 'action-pill--sm',
+    tone === 'mint' && 'action-pill--mint'
   );
 }

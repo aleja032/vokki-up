@@ -41,7 +41,10 @@ export function SelectionActionBar({
         <div className="selection-bar__summary">
           <span aria-live="polite">{summary}</span>
           <button
-            className={cn(actionPillClass('tertiary'), 'selection-bar__toggle')}
+            className={cn(
+              actionPillClass('tertiary', 'md', 'mint'),
+              'selection-bar__toggle'
+            )}
             disabled={toggleAllDisabled}
             onClick={onToggleAll}
             type="button"
@@ -51,7 +54,7 @@ export function SelectionActionBar({
         </div>
         <div className="selection-bar__actions">
           <button
-            className={actionPillClass('secondary', 'sm')}
+            className={actionPillClass('secondary', 'sm', 'mint')}
             onClick={onCancel}
             type="button"
           >

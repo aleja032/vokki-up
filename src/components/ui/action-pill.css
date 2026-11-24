@@ -58,6 +58,16 @@
   @apply px-4.5;
 }
 
+/* Mint tone (opt-in, e.g. Mi mazo): the supporting actions join the primary in
+   the green family. Color only: sizes stay those of the base class. */
+.action-pill--secondary.action-pill--mint {
+  @apply border-(--mint) bg-(--mint-soft) text-(--mint);
+}
+
+.action-pill--tertiary.action-pill--mint {
+  @apply text-(--mint);
+}
+
 .action-pill:disabled {
   @apply cursor-not-allowed opacity-50;
 }
@@ -83,5 +93,14 @@
 
   .action-pill--tertiary:not(:disabled):hover {
     @apply bg-(--indigo-soft);
+  }
+
+  .action-pill--secondary.action-pill--mint:not(:disabled):hover {
+    border-color: var(--mint);
+    box-shadow: 0 8px 20px var(--cta-glow);
+  }
+
+  .action-pill--tertiary.action-pill--mint:not(:disabled):hover {
+    @apply bg-(--mint-soft);
   }
 }

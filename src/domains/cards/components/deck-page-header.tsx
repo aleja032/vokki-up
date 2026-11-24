@@ -16,8 +16,8 @@ type DeckPageHeaderProps = {
 
 // Mi mazo header: the mascot beside the title and the deck summary, and three
 // equal main actions directly under them (like a study home): "Repasar N" is
-// the one primary, "Nueva tarjeta" (a menu: manual, AI, library) and "Importar
-// archivo" are secondary. Phones add the library as one extra row.
+// the one primary (filled mint), "Nueva tarjeta" (a menu: manual, AI, library)
+// and "Importar archivo" are secondary in the mint tone (outlined green). Phones add the library as one extra row.
 export function DeckPageHeader({
   totalCards,
   groupCount,
@@ -56,6 +56,7 @@ export function DeckPageHeader({
             className="deck-header__import"
             href="/import-export?from=cards"
             icon={<FileUp size={18} strokeWidth={2.4} />}
+            tone="mint"
             variant="secondary"
           >
             {messages.importFile}
@@ -64,6 +65,7 @@ export function DeckPageHeader({
             className="deck-header__library"
             href="/cards/word-library"
             icon={<Globe size={18} strokeWidth={2.4} />}
+            tone="mint"
             variant="secondary"
           >
             {messages.addFromLibrary}

@@ -230,7 +230,10 @@ export function CardsLibrary({
         <div className="deck-library__links">
           {activeGroup && (
             <button
-              className={cn(actionPillClass('tertiary'), 'deck-library__link')}
+              className={cn(
+                actionPillClass('tertiary', 'md', 'mint'),
+                'deck-library__link'
+              )}
               onClick={() => onOpenGroup(activeGroup.id)}
               type="button"
             >
@@ -238,7 +241,10 @@ export function CardsLibrary({
             </button>
           )}
           <button
-            className={cn(actionPillClass('tertiary'), 'deck-library__manage')}
+            className={cn(
+              actionPillClass('tertiary', 'md', 'mint'),
+              'deck-library__manage'
+            )}
             type="button"
             disabled={!canDeleteCards || cards.length === 0}
             inert={isManaging}
@@ -328,7 +334,7 @@ export function CardsLibrary({
           {compactRemaining > 0 && (
             <button
               className={cn(
-                actionPillClass('secondary'),
+                actionPillClass('secondary', 'md', 'mint'),
                 'deck-library__more-button'
               )}
               onClick={() =>
