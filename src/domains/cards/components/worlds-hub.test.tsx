@@ -99,9 +99,9 @@ describe('WorldsHub information architecture', () => {
     );
 
     expect(html).toContain('world-park-day.png');
-    expect(html).toContain('world-work.svg');
-    expect(html).toContain('world-travel.svg');
-    expect(html).toContain('world-phrases.svg');
+    expect(html).toContain('world-work-day.png');
+    expect(html).toContain('world-travel-day.png');
+    expect(html).toContain('world-phrases-day.png');
     expect(html).toContain('/images/noma.png');
     expect(html).toContain('200 palabras · 5 en tu mazo');
   });
@@ -124,7 +124,7 @@ describe('WorldBanner and WorldStages', () => {
     const work = summarizeWorlds(wordLibraryCatalog, new Set())[1];
     const html = renderToStaticMarkup(<WorldBanner world={work} />);
 
-    expect(html).toContain('world-work.svg');
+    expect(html).toContain('world-work-day.png');
     expect(html.match(/motion-float-tag/g)).toHaveLength(3);
   });
 
