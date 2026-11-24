@@ -98,7 +98,7 @@ describe('WorldsHub information architecture', () => {
       />
     );
 
-    expect(html).toContain('world-cafe-words.png');
+    expect(html).toContain('world-cafe-day.png');
     expect(html).toContain('world-work.svg');
     expect(html).toContain('world-travel.svg');
     expect(html).toContain('world-phrases.svg');
@@ -116,7 +116,7 @@ describe('WorldBanner and WorldStages', () => {
     expect(html).toContain('href="/cards/word-library"');
     expect(html).toContain('Día a día');
     expect(html).toContain(`${daily.total} palabras · 4 en tu mazo`);
-    expect(html).toContain('world-cafe-words.png');
+    expect(html).toContain('world-cafe-day.png');
     expect(html).not.toContain('motion-float-tag');
   });
 
