@@ -1,3 +1,4 @@
+import { WORLD_IMAGES } from '@/lib/worlds/world-images';
 import type { WordLibraryCategory, WordLibraryEntry } from './catalog';
 import type { WorldId } from './worlds';
 
@@ -14,14 +15,14 @@ export type WorldArt = {
 
 export const WORLD_ART: Record<WorldId, WorldArt> = {
   daily: {
-    src: '/images/world-cafe-words.png',
+    src: WORLD_IMAGES.daily,
     accent: 'lavender',
     hasWords: true
   },
-  work: { src: '/images/world-work.svg', accent: 'amber', hasWords: false },
-  travel: { src: '/images/world-travel.svg', accent: 'mint', hasWords: false },
+  work: { src: WORLD_IMAGES.work, accent: 'amber', hasWords: false },
+  travel: { src: WORLD_IMAGES.travel, accent: 'mint', hasWords: false },
   phrases: {
-    src: '/images/world-phrases.svg',
+    src: WORLD_IMAGES.phrases,
     accent: 'brand',
     hasWords: false
   }

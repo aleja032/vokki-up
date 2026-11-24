@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { PixelLabel } from '@/components/ui/pixel-label';
 import { ProgressBar } from '@/components/ui/progress-bar';
+import { WORLD_IMAGES } from '@/lib/worlds/world-images';
 import { translateText } from '@/lib/i18n/locale';
 import type { WorldId, WorldProgress } from '@/lib/home/home-hand.types';
 import { homeDashboardData } from '../data';
@@ -40,7 +41,7 @@ export function WorldArchCard({ world }: { world: WorldProgress }) {
             className="world-arch__image"
             fill
             sizes="(min-width: 768px) 25vw, 176px"
-            src="/images/world-daily.png"
+            src={WORLD_IMAGES[world.id]}
             unoptimized
           />
           <span aria-hidden="true" className="world-arch__shade" />
