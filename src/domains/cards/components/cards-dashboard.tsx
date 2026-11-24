@@ -111,7 +111,6 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
         />
         <CardsLibrary
           cards={dashboard.filteredCards}
-          groups={groups}
           schedules={schedules}
           now={now}
           activeGroup={activeGroup}

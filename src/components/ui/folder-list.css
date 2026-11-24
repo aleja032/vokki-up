@@ -210,5 +210,5 @@
 }
 
 .folder-list__hint-link {
-  @apply -mt-1 inline-flex min-h-11 items-center self-start text-[14px] font-bold text-(--indigo) underline underline-offset-3;
+  @apply -mt-1 hidden min-h-11 items-center self-start text-[14px] font-bold text-(--indigo) underline underline-offset-3 min-[761px]:inline-flex;
 }

@@ -2,31 +2,32 @@
 
 /*
  * Mi mazo library (proposal D), on the page ground: a head with the open
- * folder and its links, a toolbar (status filter, type select, search) and the
- * cards. Phones: search and type on top, underlined status tabs, a two-column
- * grid of tiles and a "show more" step. From 761px: a status pill filter, a
- * grid of tiles and a numbered pager.
+ * folder and its links, a toolbar (search, type select, status filter) and the
+ * cards. The status filter takes the place of the artboard legend (dot and
+ * label per state). Phones: search and type on top, the filter below, a
+ * two-column grid of tiles and a "show more" step. From 761px: one wrapping
+ * toolbar row, a grid of tiles (250px minimum) and a numbered pager.
  */
 
 .deck-library {
   --selection-dock-gap: 1rem;
-  @apply flex min-w-0 flex-1 flex-col gap-3;
-  /* Location bar: "Mi mazo > Carpeta: name" with the card count, and the
-   tertiary actions of the folder on the right behind a divider. */
+  @apply flex min-w-0 flex-1 flex-col gap-4;
+  /* Location line: "Mi mazo / name" with the card count in plain text, and
+   the tertiary actions of the folder on the right. */
   .deck-library__head {
-    @apply flex min-w-0 flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-(--radius-18) border border-solid border-(--line) bg-(--surface) px-4 py-1.5;
+    @apply flex min-w-0 flex-wrap items-center justify-between gap-x-4 gap-y-0;
   }
 
   .deck-library__crumbs {
-    @apply flex min-w-0 flex-1 flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[14px] text-(--ink-soft);
+    @apply flex min-w-0 flex-1 flex-wrap items-center gap-x-2.5 gap-y-0.5 text-[14px] text-(--ink-soft);
   }
 
   .deck-library__crumb-root {
-    @apply inline-flex min-h-11 cursor-pointer items-center gap-0.5 rounded-(--radius-14) border-0 bg-transparent px-1 text-[14px] font-bold text-(--indigo) underline underline-offset-3;
+    @apply inline-flex min-h-11 cursor-pointer items-center gap-0.5 rounded-(--radius-14) border-0 bg-transparent px-0 text-[14px] font-semibold text-(--ink-soft) hover:text-(--indigo);
   }
 
   .deck-library__crumb-root--current {
-    @apply cursor-default font-semibold text-(--ink-soft) no-underline;
+    @apply cursor-default hover:text-(--ink-soft);
   }
 
   .deck-library__crumb-sep {
@@ -34,11 +35,11 @@
   }
 
   .deck-library__crumb-here {
-    @apply inline-flex max-w-full min-w-0 items-center gap-1.5 text-(--ink);
+    @apply inline-flex max-w-full min-w-0 items-center gap-2 text-(--ink);
   }
 
   .deck-library__crumb-icon {
-    @apply shrink-0 text-(--indigo);
+    @apply shrink-0 text-(--ink-soft);
   }
 
   .deck-library__crumb-kind {
@@ -46,15 +47,15 @@
   }
 
   .deck-library__head h2 {
-    @apply m-0 min-w-0 truncate text-[17px] leading-tight font-extrabold;
+    @apply m-0 min-w-0 truncate text-[20px] leading-tight font-extrabold tracking-[-0.3px];
   }
 
   .deck-library__meta {
-    @apply inline-flex h-6 shrink-0 items-center rounded-(--radius-pill) bg-(--surface-muted) px-2.5 text-[12px] font-bold whitespace-nowrap text-(--ink-soft);
+    @apply shrink-0 text-[14px] whitespace-nowrap text-(--ink-soft);
   }
 
   .deck-library__links {
-    @apply ml-auto flex items-center gap-1 border-l border-solid border-(--line) pl-3;
+    @apply ml-auto flex items-center gap-1;
   }
 
   .deck-library__link,
@@ -68,16 +69,16 @@
   @apply invisible;
 }
 
-/* Phones: search and type on the first row, the status tabs below. */
+/* Phones: search and type on the first row, the status filter below. */
 .deck-library__toolbar {
-  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2.5 gap-y-1;
+  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2.5 gap-y-3;
   grid-template-areas:
     'search type'
     'status status';
 }
 
 .deck-library .deck-library__status {
-  @apply -mx-5 w-auto max-w-none px-5;
+  @apply w-auto max-w-full;
   grid-area: status;
 }
 
@@ -95,10 +96,10 @@
   @apply flex justify-end;
 }
 
-/* Wide tiles: one column on phones (the minimum only fits two columns from
-   about 540px), generous gaps so the tiles never look crowded. */
+/* Phones: the two-up grid of the artboard; a single column under 360px, where
+   two tiles would be too narrow for a term and its memory row. */
 .deck-library__grid {
-  @apply grid grid-cols-[repeat(auto-fill,minmax(min(260px,100%),1fr))] gap-4;
+  @apply grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 max-[359px]:grid-cols-1;
 }
 
 .deck-library__empty {
@@ -159,26 +160,26 @@
     @apply flex-[1_1_560px] gap-4.5;
   }
 
-  /* Wide screens: search and type on the first row (as the artboard), the
-     status filter on its own row below, left aligned. */
+  /* Wide screens, as the artboard: search and type on the first row, the status
+     filter (legend) on the row below. */
   .deck-library__toolbar {
-    @apply gap-x-3 gap-y-3;
+    @apply flex flex-wrap gap-x-3 gap-y-3;
   }
 
   .deck-library .deck-library__status {
-    @apply m-0 w-fit max-w-full justify-self-start p-1.25;
+    @apply order-3 w-full;
   }
 
   .deck-library__search {
-    @apply min-h-12 gap-2.5;
+    @apply order-1 min-h-12 flex-[1_1_300px] gap-2.5;
   }
 
   .deck-library__type {
-    @apply w-auto;
+    @apply order-2 w-auto;
   }
 
   .deck-library__grid {
-    @apply grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-5;
+    @apply grid-cols-[repeat(auto-fill,minmax(min(250px,100%),1fr))] gap-4;
   }
 
   .deck-library__empty {
@@ -194,6 +195,20 @@
   }
 }
 
+/* Phones (VokkiDMazoMobile): the head is just the folder name and "Gestionar". */
+@media (max-width: 760px) {
+  .deck-library .deck-library__crumb-root,
+  .deck-library .deck-library__crumb-sep,
+  .deck-library .deck-library__crumb-icon,
+  .deck-library .deck-library__crumb-kind {
+    @apply hidden;
+  }
+
+  .deck-library__head h2 {
+    @apply text-[17px];
+  }
+}
+
 .deck-library__hint {
-  @apply m-0 -mb-1 text-[13px] text-(--ink-soft);
+  @apply m-0 -mb-2 text-[12.5px] text-(--ink-soft);
 }

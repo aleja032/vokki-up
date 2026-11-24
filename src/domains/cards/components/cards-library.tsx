@@ -52,7 +52,6 @@ function getStatusOptions(counts: CardStatusCounts) {
 
 type CardsLibraryProps = {
   cards: VocabularyCard[];
-  groups: CardGroup[];
   schedules: CardScheduleMap;
   now: Date;
   activeGroup?: CardGroup;
@@ -77,7 +76,6 @@ type CardsLibraryProps = {
 
 export function CardsLibrary({
   cards,
-  groups,
   schedules,
   now,
   activeGroup,
@@ -203,11 +201,9 @@ export function CardsLibrary({
               {messages.title}
             </span>
           )}
-          <ChevronRight
-            aria-hidden="true"
-            className="deck-library__crumb-sep"
-            size={16}
-          />
+          <span aria-hidden="true" className="deck-library__crumb-sep">
+            /
+          </span>
           <span aria-current="location" className="deck-library__crumb-here">
             <Folder
               aria-hidden="true"
@@ -313,7 +309,6 @@ export function CardsLibrary({
           <VocabularyCardItem
             key={card.id}
             card={card}
-            group={groups.find(group => group.id === card.groupId)}
             schedule={schedules[card.id]}
             now={now}
             isManaging={isManaging}

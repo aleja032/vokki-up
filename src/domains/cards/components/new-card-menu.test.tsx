@@ -17,12 +17,16 @@ describe('NewCardMenu', () => {
     expect(html).toMatch(/role="menu"[^>]*hidden|hidden=""[^>]*role="menu"/);
   });
 
-  it('lists both ways to add cards as menu items', () => {
+  it('lists the manual and the file ways to add cards as menu items', () => {
     const html = render();
 
     expect(html.match(/role="menuitem"/g)).toHaveLength(2);
     expect(html).toContain('Crear tarjeta');
-    expect(html).toContain('href="/cards/word-library"');
-    expect(html).toContain('Agregar desde la biblioteca');
+    expect(html).toContain('href="/import-export?from=cards"');
+    expect(html).toContain('Importar archivo');
+  });
+
+  it('leaves the library to its own action of the page header', () => {
+    expect(render()).not.toContain('href="/cards/word-library"');
   });
 });

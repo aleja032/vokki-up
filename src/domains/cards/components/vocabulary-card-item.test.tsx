@@ -36,7 +36,7 @@ describe('VocabularyCardItem memory', () => {
     const html = render(false, false);
     expect(html).toContain('data-tone="brand"');
     expect(html).toContain('aria-label="Memoria 0 de 5"');
-    expect(html).toContain('>Nueva<');
+    expect(html).toContain('deck-card__due');
   });
 
   it('derives tone, memory bar and due label from the schedule', () => {
@@ -98,5 +98,31 @@ describe('VocabularyCardItem edit', () => {
     const html = renderWithEdit(true);
     expect(html).not.toContain('deck-card__edit');
     expect(html).toContain('role="checkbox"');
+  });
+});
+
+describe('VocabularyCardItem anatomy', () => {
+  const html = renderToStaticMarkup(
+    <VocabularyCardItem
+      card={{ ...CARD, example: 'I can handle it.', phonetics: '/ˈhændl/' }}
+      isManaging={false}
+      isSelected={false}
+      now={new Date('2026-01-01T00:00:00Z')}
+      onToggleSelect={() => undefined}
+    />
+  );
+
+  it('shows the category, term, meaning, IPA and memory row of the proposal', () => {
+    expect(html).toContain('deck-card__top');
+    expect(html).toContain('handle');
+    expect(html).toContain('manejar');
+    expect(html).toContain('/ˈhændl/');
+    expect(html).toContain('deck-card__memory-row');
+  });
+
+  it('leaves the example and the folder name to the editor', () => {
+    expect(html).not.toContain('deck-card__example');
+    expect(html).not.toContain('deck-card__group');
+    expect(html).not.toContain('tile-eyebrow__state');
   });
 });

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronDown, Library, Plus, SquarePen } from 'lucide-react';
+import { ChevronDown, FileUp, Plus, SquarePen } from 'lucide-react';
 import { ActionPill } from '@/components/ui/action-pill';
 import { useNewCardMenu } from '../hooks/use-new-card-menu';
 import { cardsMessages } from '../messages';
@@ -16,9 +16,9 @@ type NewCardMenuProps = {
 };
 
 // "Nueva tarjeta" menu button (proposal D): one outlined trigger that offers
-// the ways to add cards. Icon-only on phones, labelled with a chevron on wide
-// screens. The list stays in the DOM (hidden) so both actions are always in
-// the markup.
+// the ways to add cards by hand or from a file (the library is its own action
+// of the page header). The list stays in the DOM (hidden) so both actions are
+// always in the markup.
 export function NewCardMenu({ onCreate }: NewCardMenuProps) {
   const { isOpen, rootRef, toggle, close } = useNewCardMenu();
 
@@ -59,12 +59,12 @@ export function NewCardMenu({ onCreate }: NewCardMenuProps) {
         </button>
         <Link
           className="new-card-menu__item"
-          href="/cards/word-library"
+          href="/import-export?from=cards"
           onClick={close}
           role="menuitem"
         >
-          <Library aria-hidden="true" size={18} />
-          {messages.addFromLibrary}
+          <FileUp aria-hidden="true" size={18} />
+          {messages.importFile}
         </Link>
       </div>
     </div>

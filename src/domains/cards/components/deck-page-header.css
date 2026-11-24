@@ -1,11 +1,15 @@
 @reference 'tailwindcss';
 
-/* Mobile first: title, summary, then the three main actions (review on its own
-   row, new card and import side by side) and the library as one extra row. From
-   761px the mascot sits at the left and the three actions share one row of
-   equal columns under the summary; the library lives in the new card menu. */
+/* Mobile first (VokkiDMazoMobile): title and summary, then "Nueva tarjeta" and
+   "Repasar" side by side, and the library as a full row with a chevron. From
+   761px (VokkiDMazo) the mascot and the title sit at the left and the three
+   actions at the right of the same row, the review last. */
 
 .deck-header {
+  @apply flex min-w-0 flex-col gap-4;
+}
+
+.deck-header__brand {
   @apply flex min-w-0 items-center gap-4;
 }
 
@@ -26,33 +30,36 @@
 }
 
 .deck-header__actions {
-  @apply mt-4 grid min-w-0 grid-cols-2 gap-3;
-}
-
-.deck-header .deck-header__review {
-  @apply col-span-2;
+  @apply grid min-w-0 grid-cols-2 gap-3;
 }
 
 .deck-header__new {
   @apply min-w-0;
 }
 
-.deck-header .deck-header__import,
-.deck-header .deck-header__library {
+.deck-header .deck-header__review {
   @apply px-3;
 }
 
 .deck-header .deck-header__library {
-  @apply col-span-2;
+  @apply order-3 col-span-2 justify-start gap-3 px-5 text-[15.5px];
+}
+
+.deck-header .deck-header__library > .action-pill__icon:last-child {
+  @apply ml-auto text-(--ink-soft);
 }
 
 @media (min-width: 761px) {
   .deck-header {
-    @apply gap-5;
+    @apply flex-row flex-wrap items-center justify-between gap-x-5 gap-y-4;
   }
 
   .deck-header__mascot {
     @apply block;
+  }
+
+  .deck-header__brand {
+    @apply flex-none;
   }
 
   .deck-header h1 {
@@ -64,14 +71,18 @@
   }
 
   .deck-header__actions {
-    @apply mt-4 max-w-170 grid-cols-3;
-  }
-
-  .deck-header .deck-header__review {
-    @apply col-span-1;
+    @apply flex flex-wrap items-center justify-end gap-3;
   }
 
   .deck-header .deck-header__library {
+    @apply order-none justify-center gap-2 px-5 text-[15px];
+  }
+
+  .deck-header .deck-header__library > .action-pill__icon:last-child {
     @apply hidden;
+  }
+
+  .deck-header .deck-header__review {
+    @apply px-7;
   }
 }

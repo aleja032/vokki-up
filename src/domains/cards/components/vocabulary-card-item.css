@@ -1,15 +1,14 @@
 @reference 'tailwindcss';
 
 /*
- * Vocabulary card (proposal D, Mi mazo): a neutral tile. The six subgrid rows
- * (top, term, meaning, IPA, example, footer) keep tiles of one grid row
- * aligned. Phones: a compact tile of the two-column grid; from 761px: the wide
- * tile with the state label, the example and the folder. The only color on the
- * card is the due dot, which follows the memory strength.
+ * Vocabulary card (proposal D, Mi mazo): a neutral tile. The subgrid rows (top,
+ * term, meaning, IPA, footer; Mundos entries add the example row) keep tiles of
+ * one grid row aligned. The only color on the card is the due colour (left
+ * edge, memory bar and dot), which follows the memory strength.
  */
 
 .deck-card {
-  @apply relative row-span-6 grid min-h-42 min-w-0 grid-rows-subgrid items-start gap-1.5 rounded-3xl border border-l-5 border-solid border-(--line) bg-(--surface-muted) px-4 pt-4.5 pb-4 text-(--ink);
+  @apply relative row-span-6 grid min-h-42 min-w-0 grid-rows-subgrid items-start gap-1.25 rounded-3xl border border-l-5 border-solid border-(--line) bg-(--surface-muted) px-3.5 pt-4 pb-3.5 text-(--ink);
   border-left-color: var(--due-now);
   animation: enter-rise var(--enter-duration) var(--ease-out)
     var(--enter-delay, 0ms) backwards;
@@ -57,12 +56,12 @@
 }
 
 .deck-card__term {
-  @apply m-0 mt-1 line-clamp-2 text-[20px] leading-[1.1] font-extrabold tracking-[-0.5px] wrap-anywhere;
+  @apply m-0 mt-1 line-clamp-2 text-[18px] leading-[1.1] font-extrabold tracking-[-0.5px] wrap-anywhere;
   grid-row: 2;
 }
 
 .deck-card__meaning {
-  @apply m-0 line-clamp-3 text-[14px] leading-snug font-bold wrap-anywhere text-(--ink);
+  @apply m-0 line-clamp-3 text-[13px] leading-snug font-bold wrap-anywhere text-(--ink);
   grid-row: 3;
 }
 
@@ -98,23 +97,30 @@
   grid-row: 6;
 }
 
-.deck-card__group {
-  @apply hidden max-w-full min-w-0 items-center gap-1.5 text-[12px] font-semibold text-(--ink-soft);
+/* Mi mazo tile: five rows, the memory row is the footer; the category reads as
+   the pixel label of the proposal instead of a chip. */
+.deck-card--deck {
+  @apply row-span-5;
 }
 
-.deck-card__group::before {
-  /* Always the brand hue: a group's own tone can be amber, and Mi mazo has no orange. */
-  @apply size-2 shrink-0 rounded-full bg-(--indigo);
-
-  content: '';
+.deck-card--deck .deck-card__footer {
+  grid-row: 5;
 }
 
-.deck-card__group-name {
-  @apply min-w-0 truncate;
+.deck-card--deck .tile-eyebrow__chip {
+  @apply h-auto bg-transparent p-0 text-(--ink-soft);
+}
+
+.deck-card--deck .tile-eyebrow__icon {
+  @apply hidden;
+}
+
+.deck-card--deck .tile-eyebrow__label {
+  @apply font-[family-name:var(--font-pixel)] text-[10.5px] tracking-[1px] uppercase;
 }
 
 .deck-card__memory-row {
-  @apply flex flex-row items-center justify-between gap-1.5;
+  @apply flex flex-row flex-wrap items-center justify-between gap-x-1.5 gap-y-1;
 }
 
 .deck-card__memory {
@@ -145,6 +151,19 @@
 
 .deck-card:has(.deck-card__dot[data-tone='mint']) {
   border-left-color: var(--due-safe);
+}
+
+.deck-card[data-tone='coral'] .deck-card__memory,
+.deck-card[data-tone='brand'] .deck-card__memory {
+  --bar-fill: var(--due-now);
+}
+
+.deck-card[data-tone='amber'] .deck-card__memory {
+  --bar-fill: var(--due-soon);
+}
+
+.deck-card[data-tone='mint'] .deck-card__memory {
+  --bar-fill: var(--due-safe);
 }
 
 .deck-card__dot[data-tone='coral'] {
@@ -185,7 +204,7 @@
 
 @media (min-width: 761px) {
   .deck-card {
-    @apply px-6 pt-5.5 pb-5;
+    @apply px-4 pt-4.5 pb-4;
   }
 
   .deck-card[data-selected='true'] {
@@ -206,10 +225,6 @@
 
   .deck-card__example {
     @apply block;
-  }
-
-  .deck-card__group {
-    @apply inline-flex;
   }
 
   .deck-card__memory {

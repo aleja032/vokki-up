@@ -29,7 +29,7 @@ describe('DeckPageHeader', () => {
     expect(html).toContain('Repasar 12');
   });
 
-  it('offers the three main actions: review, new card menu and import', () => {
+  it('offers the main actions: review, new card menu (with import) and library', () => {
     const html = render();
     expect(html).toContain('href="/review?from=cards"');
     expect(count(html, 'aria-haspopup="menu"')).toBe(1);
@@ -38,9 +38,9 @@ describe('DeckPageHeader', () => {
     expect(html).toContain('Importar archivo');
   });
 
-  it('keeps the library as an extra row and as a menu item', () => {
+  it('shows the library as its own action', () => {
     const html = render();
-    expect(count(html, 'href="/cards/word-library"')).toBe(2);
+    expect(count(html, 'href="/cards/word-library"')).toBe(1);
     expect(html).toContain('Agregar desde la biblioteca');
   });
 
@@ -50,6 +50,12 @@ describe('DeckPageHeader', () => {
     expect(html.indexOf('46 tarjetas')).toBeLessThan(
       html.indexOf('deck-header__actions')
     );
+  });
+
+  it('puts the green tone on the supporting actions only', () => {
+    const html = render();
+    expect(count(html, 'action-pill--mint')).toBe(2);
+    expect(html).not.toMatch(/action-pill--primary[^"]*action-pill--mint/);
   });
 
   it('hides the decorative mascot from assistive tech', () => {

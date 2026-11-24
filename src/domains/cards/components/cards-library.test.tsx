@@ -25,7 +25,6 @@ function render(
   return renderToStaticMarkup(
     createElement(CardsLibrary, {
       cards,
-      groups: [group],
       schedules: {},
       now: new Date('2026-01-01T00:00:00Z'),
       activeGroup: options.activeGroup,

@@ -49,7 +49,6 @@ export function CardGroupList({
       addLabel={messages.newGroup}
       collapseLabel={messages.viewFewerFolders}
       emptyLabel={messages.noFolders}
-      hint={messages.foldersHint}
       hintLink={{ href: '/cards/word-library', label: messages.exploreWorlds }}
       expandLabel={
         tiles.length > 1 ? messages.viewAllFolders(tiles.length) : undefined

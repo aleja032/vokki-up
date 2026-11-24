@@ -1,24 +1,20 @@
 import { Check } from 'lucide-react';
 import { PixelLabel } from '@/components/ui/pixel-label';
-import { TileEyebrow, TileEyebrowState } from '@/components/ui/tile-eyebrow';
+import { TileEyebrow } from '@/components/ui/tile-eyebrow';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { translateText } from '@/lib/i18n/locale';
 import { getCardLearningState, getDueDayOffset } from '../card-learning-state';
 import { getCardMemory, MAX_CARD_MEMORY } from '../card-memory';
-import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardSchedule } from '../scheduling/types';
-import type { CardGroup, VocabularyCard } from '../types';
-import { getExampleEs } from '../word-library/example-es';
-import { ExampleEsToggle } from './example-es-toggle';
+import type { VocabularyCard } from '../types';
 import { PartOfSpeechIcon } from './part-of-speech-icon';
 import './vocabulary-card-item.css';
 
-const { learningState: stateMessages, dueLabel, overview } = cardsMessages;
+const { dueLabel, overview } = cardsMessages;
 
 type VocabularyCardItemProps = {
   card: VocabularyCard;
-  group?: CardGroup;
   schedule?: CardSchedule;
   now: Date;
   isManaging: boolean;
@@ -37,7 +33,6 @@ function formatDueLabel(schedule: CardSchedule | undefined, now: Date) {
 
 export function VocabularyCardItem({
   card,
-  group,
   schedule,
   now,
   isManaging,
@@ -47,11 +42,10 @@ export function VocabularyCardItem({
 }: VocabularyCardItemProps) {
   const learningState = getCardLearningState(schedule);
   const memory = getCardMemory(schedule);
-  const groupName = group ? getGroupDisplayName(group) : overview.noGroup;
 
   return (
     <article
-      className="deck-card"
+      className="deck-card deck-card--deck"
       data-managing={isManaging}
       data-selected={isSelected}
       data-state={learningState}
@@ -61,9 +55,6 @@ export function VocabularyCardItem({
         className="deck-card__top"
         icon={<PartOfSpeechIcon partOfSpeech={card.partOfSpeech} />}
         label={translateText(card.partOfSpeech ?? '')}
-        trailing={
-          <TileEyebrowState>{stateMessages[learningState]}</TileEyebrowState>
-        }
       />
       {!isManaging && onEdit ? (
         <button
@@ -96,20 +87,8 @@ export function VocabularyCardItem({
         {card.phonetics && (
           <span className="deck-card__ipa">{card.phonetics}</span>
         )}
-        {card.example && (
-          <div className="deck-card__example">
-            <ExampleEsToggle key={card.id} sentence={getExampleEs(card)}>
-              <p className="deck-card__example-text">{card.example}</p>
-            </ExampleEsToggle>
-          </div>
-        )}
       </div>
       <div className="deck-card__footer">
-        <span className="deck-card__group" data-tone={group?.tone ?? 'neutral'}>
-          <span className="deck-card__group-name" title={groupName}>
-            {groupName}
-          </span>
-        </span>
         <div className="deck-card__memory-row">
           <ProgressBar
             className="deck-card__memory"
