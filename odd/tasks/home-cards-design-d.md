@@ -123,3 +123,16 @@ Layout changes: (1) Tiles: grid `repeat(auto-fill, minmax(min(250px,100%),1fr))`
 Not turned: the tile eyebrow for Mundos entries (still the chip), the review round.
 TDD: tests changed first (header, new card menu, tile anatomy) and observed RED (5 failing), then GREEN.
 Verification: see the T16 report.
+
+- [x] T18 Daytime art for world `daily`: scripts/generate-world-cafe-day.mjs recolors world-cafe-words.png (palette mapping, nearest-neighbour, labels redrawn cream with dark ink) into public/images/world-cafe-day.png (415x234); world-images.ts and tests point to it. Night file kept (still used by review-complete-screen). Browser check pending (parent).
+
+- [x] T19 New daytime art for world `daily`: scripts/generate-world-park-day.mjs draws Noma in a sunny park (tree, bench with coffee cup, path, flowers, sun, clouds; 208x117 logical px scaled x2 to public/images/world-park-day.png, 416x234). world-images.ts and tests point to it; `hasWords` for daily is now false (no words drawn; the UI overlays tags). Old cafe images kept on disk. Browser check pending (parent).
+
+- [x] T20 New daytime art for worlds `work`, `travel`, `phrases` (same pixel-art style as the park): scripts/generate-world-{work,travel,phrases}-day.mjs on shared helpers scripts/lib/pixel-art.mjs (park/cafe generators untouched). Outputs public/images/world-{work,travel,phrases}-day.png (416x234). Work: coworking desk with window skyline, laptop code, plant, mug, sticky-note board. Travel: airport window with plane, suitcase, backpack, luggage cart, ticket. Phrases: Noma on a meadow with three speech bubbles (dots, text lines, check). world-images.ts and worlds-hub tests point to them; `hasWords` stays false. Old SVGs kept. Browser check pending (parent).
+
+### T17 - No Spanish in English mode
+
+- Leaks fixed: home Worlds row, hero kicker and mission card showed raw Spanish world names (`getWorldDisplayName` in `src/lib/home/derive-worlds.ts`); AI capture group chips and select showed Spanish seed group names (`createCapturedCardsLibrary` now maps through `getGroupDisplayName`); card editor tag suggestions and placeholder (`trabajo/viajes/entrevistas` -> `work/travel/interviews`, matching the English seed card tags); import/export sample preview group column (`getSampleGroupLabel`).
+- Static audit: `src/lib/i18n/app-labels-english.test.ts` runs every `messages.ts` string (wide Spanish marker list) plus parts of speech, levels, categories, worlds and seed group names through `translateText` in English.
+- Left in Spanish by design: learning data (meanings, example translations), seed notes content, sample CSV file name, manifest `lang`.
+- Checks: vitest 721 passed, tsc and eslint clean; English smoke pass over every route at 1440 and 390; Spanish still shown for Español on /, /cards, /review.

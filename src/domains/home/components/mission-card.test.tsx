@@ -16,11 +16,7 @@ describe('MissionCard world name in English', () => {
   it('shows the world name and alt text in English', () => {
     setAppLanguage('English');
     const html = renderToStaticMarkup(
-      <MissionCard
-        mission={mission}
-        worldName="Día a día"
-        href="/review"
-      />
+      <MissionCard mission={mission} worldName="Día a día" href="/review" />
     );
     expect(html).toContain('Daily life');
     expect(html).not.toContain('Día a día');

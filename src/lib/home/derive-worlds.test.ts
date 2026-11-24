@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { deriveWorldProgress } from './derive-worlds';
+import { afterEach, describe, expect, it } from 'vitest';
+import { setAppLanguage } from '../i18n/locale';
+import { deriveWorldProgress, getWorldDisplayName } from './derive-worlds';
 
 const catalog = [
   { term: 'Deadline', category: 'Trabajo' },
@@ -27,5 +28,23 @@ describe('deriveWorldProgress', () => {
     expect(worlds[1]).toMatchObject({ learned: 1, total: 2 });
     expect(worlds[2]).toMatchObject({ learned: 0, total: 1 });
     expect(worlds[3]).toMatchObject({ learned: 0, total: 0 });
+  });
+});
+
+describe('getWorldDisplayName', () => {
+  afterEach(() => setAppLanguage('Español'));
+
+  it('keeps the Spanish category name in Spanish', () => {
+    expect(getWorldDisplayName('Día a día')).toBe('Día a día');
+  });
+
+  it.each([
+    ['Día a día', 'Daily life'],
+    ['Trabajo', 'Work'],
+    ['Viajes', 'Travel'],
+    ['Frases útiles', 'Useful phrases']
+  ])('shows %s as %s in English', (category, english) => {
+    setAppLanguage('English');
+    expect(getWorldDisplayName(category)).toBe(english);
   });
 });

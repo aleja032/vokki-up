@@ -13,7 +13,12 @@ import {
   Info,
   Upload
 } from 'lucide-react';
-import { CSV_SCHEMA, SAMPLE_CSV_ROWS, SAMPLE_CSV_VALIDATION } from '../data';
+import {
+  CSV_SCHEMA,
+  getSampleGroupLabel,
+  SAMPLE_CSV_ROWS,
+  SAMPLE_CSV_VALIDATION
+} from '../data';
 import { importExportMessages as messages } from '../messages';
 import type { CsvCardRow, CsvValidation } from '../types';
 const REQUIRED_COLUMNS = ['word', 'meaning'];
@@ -122,6 +127,10 @@ export function ImportExportWorkspace({
   const [fileName, setFileName] = useState<string>(messages.sampleFileName);
   const [status, setStatus] = useState('');
   const [isExportReady, setIsExportReady] = useState(false);
+  function groupLabel(group: string) {
+    if (!group) return messages.import.noGroup;
+    return isSample ? getSampleGroupLabel(group) : group;
+  }
   async function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -337,8 +346,8 @@ export function ImportExportWorkspace({
                   >
                     <strong title={row.word}>{row.word}</strong>
                     <span title={row.meaning}>{row.meaning}</span>
-                    <em title={row.group || messages.import.noGroup}>
-                      {row.group || messages.import.noGroup}
+                    <em title={groupLabel(row.group)}>
+                      {groupLabel(row.group)}
                     </em>
                   </div>
                 ))}

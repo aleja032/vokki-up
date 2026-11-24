@@ -1,3 +1,4 @@
+import { getAppLanguage } from '../i18n/locale';
 import type { WorldId, WorldProgress } from './home-hand.types';
 
 // Worlds are the default word-library categories, in the order the home shows.
@@ -7,6 +8,22 @@ const WORLDS: { id: WorldId; category: string }[] = [
   { id: 'travel', category: 'Viajes' },
   { id: 'phrases', category: 'Frases útiles' }
 ];
+
+// The categories are stored in Spanish. A dedicated map is used because the
+// global translation table falls back to substring replacement and does not
+// carry bare category names such as "Trabajo" or "Viajes".
+const ENGLISH_WORLD_NAMES: Record<string, string> = {
+  'Día a día': 'Daily life',
+  Trabajo: 'Work',
+  Viajes: 'Travel',
+  'Frases útiles': 'Useful phrases'
+};
+
+export function getWorldDisplayName(category: string): string {
+  return getAppLanguage() === 'English'
+    ? (ENGLISH_WORLD_NAMES[category] ?? category)
+    : category;
+}
 
 type CatalogEntry = { term: string; category: string };
 

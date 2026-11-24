@@ -1,3 +1,4 @@
+import { getAppLanguage } from '@/lib/i18n/locale';
 import type { CsvCardRow, CsvValidation } from './types';
 export type CsvColumnName =
   | 'word'
@@ -63,3 +64,17 @@ export const SAMPLE_CSV_VALIDATION: CsvValidation = {
   issues: [],
   missingHeaders: []
 };
+
+const ENGLISH_SAMPLE_GROUPS: Record<string, string> = {
+  Trabajo: 'Work',
+  Viajes: 'Travel',
+  'Día a día': 'Daily life',
+  'Frases útiles': 'Useful phrases'
+};
+
+/** Sample rows ship Spanish seed group names; show them in the app language. */
+export function getSampleGroupLabel(group: string): string {
+  return getAppLanguage() === 'English'
+    ? (ENGLISH_SAMPLE_GROUPS[group] ?? group)
+    : group;
+}

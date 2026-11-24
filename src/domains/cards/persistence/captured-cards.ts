@@ -1,6 +1,7 @@
 import { CARD_PARTS_OF_SPEECH } from '../card-create.schema';
 import type { CardGroup, VocabularyCard } from '../types';
 import { normalizePronunciationLocale } from '@/lib/i18n/locale';
+import { getGroupDisplayName } from '../group-display';
 
 export type CapturedCardCandidate = {
   word: string;
@@ -47,7 +48,11 @@ export function createCapturedCardsLibrary({
   addCards
 }: CapturedCardsLibraryOptions) {
   return {
-    groups,
+    // Seed group names are shown in the app language; ids stay untouched.
+    groups: groups.map(group => ({
+      ...group,
+      name: getGroupDisplayName(group)
+    })),
     isReady,
     partsOfSpeech: CARD_PARTS_OF_SPEECH,
     saveAccepted(candidates: CapturedCardCandidate[], groupId: string) {

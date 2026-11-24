@@ -1,4 +1,4 @@
-import { createLocalizedMessages } from '@/lib/i18n/locale';
+import { createLocalizedMessages, getAppLanguage } from '@/lib/i18n/locale';
 function pluralize(count: number, singular: string, plural: string) {
   return count === 1 ? singular : plural;
 }
@@ -202,7 +202,12 @@ export const cardsMessages = createLocalizedMessages({
     newGroup: 'Nuevo grupo',
     categoryLegend: 'Categoría',
     tagsLegend: 'Etiquetas por tema',
-    tagsSuggestions: ['trabajo', 'viajes', 'entrevistas'],
+    // English tags match the English seed card tags.
+    get tagsSuggestions() {
+      return getAppLanguage() === 'English'
+        ? ['work', 'travel', 'interviews']
+        : ['trabajo', 'viajes', 'entrevistas'];
+    },
     newTag: 'Nueva etiqueta',
     tagsInputLabel: 'Etiquetas separadas por comas',
     tagsPlaceholder: 'trabajo, viajes, entrevistas',

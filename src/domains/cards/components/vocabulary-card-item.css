@@ -79,13 +79,21 @@
   font-size: 13px;
 }
 
-/* The eye toggle sits centered under the example instead of floating right. */
+/* The eye toggle sits at the right of the example, centered on its text, with
+   no background (hover only tints the icon). */
 .deck-card__example .es-toggle__row {
-  @apply flex-col items-stretch gap-0;
+  @apply items-center gap-1;
 }
 
 .deck-card__example .es-toggle__button {
-  @apply mx-auto mt-1 mb-0;
+  @apply bg-transparent;
+  margin: 0 -8px 0 0;
+}
+
+@media (hover: hover) {
+  .deck-card__example .es-toggle__button:hover {
+    @apply bg-transparent;
+  }
 }
 
 .deck-card__example-text {

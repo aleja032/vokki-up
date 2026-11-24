@@ -2,6 +2,9 @@
 // Merged over the base map in `locale.ts`; keep each key identical to the
 // Spanish source string used in the domain messages.
 export const extraTranslations: Record<string, string> = {
+  // Card editor tag placeholder
+  'trabajo, viajes, entrevistas': 'work, travel, interviews',
+
   // Settings provider panel
   Proveedor: 'Provider',
   Modelo: 'Model',
@@ -364,8 +367,6 @@ export const extraTranslations: Record<string, string> = {
   'Mientras más baja la barra de memoria, más urgente.':
     'The lower the memory bar, the more urgent.',
   'Tu mano de hoy está vacía.': 'Your hand for today is empty.',
-  'Ejemplo · así se verá tu mano cuando repases':
-    'Example · this is how your hand will look once you review',
   'Responde tus cartas antes de que se olviden y abre el cofre de la meta.':
     'Answer your cards before they fade and open the goal chest.',
   Dominio: 'Mastery',

@@ -102,3 +102,8 @@
     @apply flex;
   }
 }
+
+/* The arch crops the wide scene to a tall frame; the park keeps Noma in view. */
+.world-arch[data-world='daily'] .world-arch__image {
+  object-position: 72% 50%;
+}
