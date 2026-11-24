@@ -40,6 +40,26 @@ describe('buildDueHand', () => {
     expect(fresh).toMatchObject({ isNew: true, tone: 'brand', memoryLevel: 0 });
   });
 
+  it('spreads a full hand across memory levels like the design', () => {
+    const cards = ['w1', 'w2', 'w3', 'm1', 'm2', 's1', 'n1', 'n2'].map(card);
+    const hand = buildDueHand(
+      cards,
+      {
+        w1: { repetitions: 0 },
+        w2: { repetitions: 1 },
+        w3: { repetitions: 1 },
+        m1: { repetitions: 2 },
+        m2: { repetitions: 2 },
+        s1: { repetitions: 5 }
+      },
+      4
+    );
+    expect(new Set(hand.map(word => word.tone)).size).toBe(4);
+    // Still weakest first so the mission and the "most urgent" hint hold.
+    expect(hand[0].tone).toBe('coral');
+    expect(hand[hand.length - 1].isNew).toBe(true);
+  });
+
   it('caps the hand at the limit', () => {
     const cards = Array.from({ length: 9 }, (_, index) => card(`c${index}`));
     expect(buildDueHand(cards, {})).toHaveLength(6);

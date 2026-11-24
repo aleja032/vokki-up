@@ -35,7 +35,8 @@ export function DueCardsHand({ hand, totalDue, href }: DueCardsHandProps) {
       <p className="due-hand__hint">{copy.handHint}</p>
       {hand.length > 0 ? (
         <ul className="due-hand__fan">
-          {hand.map(word => (
+          {/* The artboard fans from the firmest word on the left to the most urgent on the right. */}
+          {[...hand].reverse().map(word => (
             <li className="due-hand__item" key={word.id}>
               <DueWordCard href={href} word={word} />
             </li>

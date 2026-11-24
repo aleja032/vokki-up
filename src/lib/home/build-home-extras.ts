@@ -43,7 +43,7 @@ export function buildDueHand(
   schedules: Record<string, HandSchedule | undefined>,
   limit: number = DEFAULT_HAND_SIZE
 ): DueWord[] {
-  return dueCards
+  const ranked = dueCards
     .map((card, index) => {
       const schedule = schedules[card.id];
       const isNew = !schedule;
@@ -63,14 +63,39 @@ export function buildDueHand(
       };
       return { word, index };
     })
-    .sort(
-      (left, right) =>
-        Number(left.word.isNew) - Number(right.word.isNew) ||
-        left.word.memoryLevel - right.word.memoryLevel ||
-        left.index - right.index
-    )
-    .slice(0, Math.max(0, limit))
-    .map(entry => entry.word);
+    .sort(byUrgency);
+
+  // Take words round-robin from every memory bucket so the hand shows the
+  // whole range (fragile to mastered, plus new) instead of one level only,
+  // then put the picks back in urgency order.
+  const buckets = new Map<string, Ranked[]>();
+  for (const entry of ranked) {
+    const key = entry.word.isNew ? 'new' : entry.word.tone;
+    buckets.set(key, [...(buckets.get(key) ?? []), entry]);
+  }
+  const queues = [...buckets.values()];
+  const picked: Ranked[] = [];
+  const size = Math.max(0, limit);
+  for (
+    let round = 0;
+    picked.length < size && queues.some(q => q[round]);
+    round++
+  ) {
+    for (const queue of queues) {
+      if (queue[round] && picked.length < size) picked.push(queue[round]);
+    }
+  }
+  return picked.sort(byUrgency).map(entry => entry.word);
+}
+
+type Ranked = { word: DueWord; index: number };
+
+function byUrgency(left: Ranked, right: Ranked): number {
+  return (
+    Number(left.word.isNew) - Number(right.word.isNew) ||
+    left.word.memoryLevel - right.word.memoryLevel ||
+    left.index - right.index
+  );
 }
 
 type MissionEvent = { cardId: string; rating: string; localDate: string };
