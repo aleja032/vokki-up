@@ -9,7 +9,7 @@ import {
 import { PixelLabel } from '@/components/ui/pixel-label';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { WORLD_IMAGES } from '@/lib/worlds/world-images';
-import { translateText } from '@/lib/i18n/locale';
+import { getWorldDisplayName } from '@/lib/home/derive-worlds';
 import type { WorldId, WorldProgress } from '@/lib/home/home-hand.types';
 import { homeDashboardData } from '../data';
 import './world-arch-card.css';
@@ -26,7 +26,7 @@ const WORLD_ICONS: Record<WorldId, LucideIcon> = {
 export function WorldArchCard({ world }: { world: WorldProgress }) {
   const Icon = WORLD_ICONS[world.id];
   const isActive = world.learned > 0;
-  const name = translateText(world.name);
+  const name = getWorldDisplayName(world.name);
 
   return (
     <article

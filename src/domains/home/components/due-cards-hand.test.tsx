@@ -37,7 +37,7 @@ describe('DueCardsHand', () => {
     expect(html).toContain('lend, Repasa hoy');
   });
 
-  it('shows a labelled sample hand while fewer than three due words have been reviewed', () => {
+  it('shows a sample hand while fewer than three due words have been reviewed', () => {
     const html = renderToStaticMarkup(
       <DueCardsHand
         hand={[word('fresh', { isNew: true, memoryLevel: 0, tone: 'brand' })]}
@@ -46,7 +46,7 @@ describe('DueCardsHand', () => {
       />
     );
 
-    expect(html).toContain('Ejemplo · así se verá tu mano cuando repases');
+    expect(html).not.toContain('Ejemplo');
     expect(html).not.toContain('fresh');
     expect(html.match(/class="due-card"/g)).toHaveLength(6);
     for (const tone of ['coral', 'amber', 'brand', 'mint'])

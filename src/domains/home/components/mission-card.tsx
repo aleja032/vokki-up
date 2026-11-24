@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import { ActionPill } from '@/components/ui/action-pill';
-import { translateText } from '@/lib/i18n/locale';
+import { getWorldDisplayName } from '@/lib/home/derive-worlds';
 import type { HomeMission } from '@/lib/home/home-hand.types';
 import { homeDashboardData } from '../data';
 import './advance-card.css';
@@ -18,7 +18,7 @@ export function MissionCard({
   worldName: string;
   href: string;
 }) {
-  const world = translateText(worldName);
+  const world = getWorldDisplayName(worldName);
 
   return (
     <article className="advance-card mission-card">

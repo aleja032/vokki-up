@@ -59,7 +59,6 @@ function collectHomeStrings(): string[] {
     copy.handHint,
     copy.handViewAll(12),
     copy.handEmpty,
-    copy.handSample,
     copy.dueNewLabel,
     copy.dueForgettingLabel,
     copy.dueTodayLabel,

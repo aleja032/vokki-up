@@ -43,7 +43,6 @@ export function DueCardsHand({ hand, totalDue, href }: DueCardsHandProps) {
         title={copy.handHeading}
       />
       <p className="due-hand__hint">{copy.handHint}</p>
-      {isSample ? <p className="due-hand__sample">{copy.handSample}</p> : null}
       {shownHand.length > 0 ? (
         <ul className="due-hand__fan">
           {/* The artboard fans from the firmest word on the left to the most urgent on the right. */}

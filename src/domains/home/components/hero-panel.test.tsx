@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+import { setAppLanguage } from '@/lib/i18n/locale';
 import { homeDashboardData } from '../data';
 import { HeroPanel } from './hero-panel';
 
@@ -27,5 +28,18 @@ describe('HeroPanel word tags', () => {
     const html = renderToStaticMarkup(<HeroPanel data={data} />);
     expect(html.split('action-pill--primary').length - 1).toBe(1);
     expect(html).toContain('hero-panel__secondary');
+  });
+});
+
+describe('HeroPanel world name in English', () => {
+  afterEach(() => setAppLanguage('Español'));
+
+  it('shows the world in English in the kicker', () => {
+    setAppLanguage('English');
+    const html = renderToStaticMarkup(
+      <HeroPanel data={data} worldName="Día a día" />
+    );
+    expect(html).toContain('Daily life');
+    expect(html).not.toContain('Día a día');
   });
 });

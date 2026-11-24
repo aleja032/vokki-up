@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Library, Play } from 'lucide-react';
 import { actionPillClass } from '@/components/ui/action-pill';
 import { PixelLabel } from '@/components/ui/pixel-label';
-import { translateText } from '@/lib/i18n/locale';
+import { getWorldDisplayName } from '@/lib/home/derive-worlds';
 import { cn } from '@/lib/utils';
 import { homeDashboardData } from '../data';
 import type { HomeDashboardData } from '../types';
@@ -74,7 +74,7 @@ export function HeroPanel({
       <div className="hero-panel__copy">
         <PixelLabel className="hero-panel__kicker">
           {worldName
-            ? copy.heroKicker(translateText(worldName))
+            ? copy.heroKicker(getWorldDisplayName(worldName))
             : copy.nextSessionHeading}
         </PixelLabel>
         <h1 className="hero-panel__title" id="hero-title">

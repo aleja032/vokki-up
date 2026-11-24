@@ -23,7 +23,7 @@ describe('WorldsRow', () => {
 
     expect(html).toContain('data-state="active"');
     expect(html).toContain('En curso');
-    expect(html).toContain('world-cafe-words.png');
+    expect(html).toContain('world-cafe-day.png');
     expect(html).toContain('data-state="new"');
     expect(html).toContain('Nuevo mundo');
   });
