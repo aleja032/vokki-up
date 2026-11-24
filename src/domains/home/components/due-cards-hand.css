@@ -41,7 +41,17 @@
 .due-hand__item {
   @apply -ml-25 flex-none first:ml-0 [&:nth-child(n+6)]:hidden;
   transform-origin: 50% 170%;
-  animation: hand-spread 6s ease-in-out infinite;
+  /* "backwards" holds the first keyframe during the stagger delay; without it
+     cards 2-6 sit unrotated for up to half a second and then snap into the fan. */
+  animation: hand-spread 6s ease-in-out infinite backwards;
+}
+
+/* Phones: the tilted corners of the outer cards reach past the 347px panel
+   and get clipped, so the whole fan is drawn slightly smaller and nudged right. */
+.due-hand__fan {
+  scale: 0.9;
+  translate: 8px 0;
+  transform-origin: 50% 100%;
 }
 
 .due-hand__item:nth-child(1) {
@@ -150,6 +160,8 @@
 
   .due-hand__fan {
     @apply my-auto h-67 items-start pt-5.5 pb-2;
+    scale: 1;
+    translate: 0 0;
   }
 
   .due-hand__item {
