@@ -98,7 +98,7 @@ describe('WorldsHub information architecture', () => {
       />
     );
 
-    expect(html).toContain('world-cafe-day.png');
+    expect(html).toContain('world-park-day.png');
     expect(html).toContain('world-work.svg');
     expect(html).toContain('world-travel.svg');
     expect(html).toContain('world-phrases.svg');
@@ -110,14 +110,14 @@ describe('WorldsHub information architecture', () => {
 describe('WorldBanner and WorldStages', () => {
   const [daily] = summarizeWorlds(wordLibraryCatalog, owned(4));
 
-  it('shows the world name, a link back to the hub and its counts', () => {
+  it('shows the world name, a link back to the hub, its counts and floating words', () => {
     const html = renderToStaticMarkup(<WorldBanner world={daily} />);
 
     expect(html).toContain('href="/cards/word-library"');
     expect(html).toContain('Día a día');
     expect(html).toContain(`${daily.total} palabras · 4 en tu mazo`);
-    expect(html).toContain('world-cafe-day.png');
-    expect(html).not.toContain('motion-float-tag');
+    expect(html).toContain('world-park-day.png');
+    expect(html.match(/motion-float-tag/g)).toHaveLength(3);
   });
 
   it('floats real words over the art of worlds without words in it', () => {

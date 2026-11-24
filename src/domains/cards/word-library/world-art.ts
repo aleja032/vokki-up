@@ -17,7 +17,7 @@ export const WORLD_ART: Record<WorldId, WorldArt> = {
   daily: {
     src: WORLD_IMAGES.daily,
     accent: 'lavender',
-    hasWords: true
+    hasWords: false
   },
   work: { src: WORLD_IMAGES.work, accent: 'amber', hasWords: false },
   travel: { src: WORLD_IMAGES.travel, accent: 'mint', hasWords: false },

@@ -19,7 +19,7 @@ describe('world art', () => {
   });
 
   it('uses the cafe scene for daily life', () => {
-    expect(WORLD_ART.daily.src).toBe('/images/world-cafe-day.png');
+    expect(WORLD_ART.daily.src).toBe('/images/world-park-day.png');
   });
 
   it('picks short real words of the world for the floating tags', () => {
