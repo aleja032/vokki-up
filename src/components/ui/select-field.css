@@ -30,3 +30,9 @@
     border-color: var(--hover-accent);
   }
 }
+
+/* The compact face (icon and chosen option) is opt-in: the caller shows it for
+   the widths where it replaces the caption. */
+.select-field__face {
+  @apply hidden;
+}

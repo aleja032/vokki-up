@@ -7,7 +7,9 @@ import type { CardsAddPanelApi } from './cards-add-panel.types';
 import { CardGroupList } from './card-group-list';
 import { CardsLibrary } from './cards-library';
 import { DeckPageHeader } from './deck-page-header';
+import { FolderChipRow } from './folder-chip-row';
 import { GroupCreateForm } from './group-create-form';
+import { NewCardFab } from './new-card-fab';
 import './cards.css';
 
 type CardsDashboardProps = {
@@ -80,6 +82,15 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
         onAddCard={dashboard.openEditor}
       />
 
+      <FolderChipRow
+        tiles={groupTiles}
+        totalCards={cards.length}
+        totalDue={dueCount}
+        activeGroupId={activeGroupId}
+        onSelectGroup={dashboard.setActiveGroupId}
+        onAddGroup={dashboard.startGroupCreation}
+      />
+
       <div className="deck-page__workspace">
         <CardGroupList
           tiles={groupTiles}
@@ -132,6 +143,8 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
           />
         )}
       </div>
+
+      <NewCardFab onCreate={dashboard.openEditor} />
     </div>
   );
 }

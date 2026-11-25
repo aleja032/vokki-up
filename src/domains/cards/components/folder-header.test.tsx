@@ -72,6 +72,14 @@ describe('FolderHeader for a real folder', () => {
     expect(coral).not.toContain('data-folder-color="amber"');
   });
 
+  it('keeps a short summary for phones: cards and due today', () => {
+    expect(render({ group })).toContain('>17 tarjetas · 4 hoy<');
+  });
+
+  it('puts Gestionar inside the folder menu for phones', () => {
+    expect(render({ group })).toMatch(/role="menuitem"[^>]*>Gestionar</);
+  });
+
   it('has the folder menu at the end of the heading row', () => {
     const html = render({ group });
     expect(html).toContain('aria-label="Opciones de carpeta"');

@@ -1,6 +1,12 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  ListChecks,
+  SlidersHorizontal,
+  Trash2
+} from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
 import { actionPillClass } from '@/components/ui/action-pill';
@@ -12,6 +18,7 @@ import {
   type CardStatusCounts,
   type CardStatusFilter
 } from '../card-status';
+import { getStatusOptions } from '../status-filter-options';
 import { getPageNumbers, paginateItems } from '../hooks/pagination';
 import { useCompactViewport } from '../hooks/use-compact-viewport';
 import { getGroupDisplayName } from '../group-display';
@@ -30,26 +37,8 @@ import './cards-library.css';
 const messages = cardsMessages.overview;
 const CARDS_PAGE_SIZE = 12;
 // Phones show a short list that grows by steps instead of numbered pages.
-const COMPACT_INITIAL_COUNT = 4;
+const COMPACT_INITIAL_COUNT = 8;
 const COMPACT_STEP = 10;
-
-// Dot colors follow the due dot of the cards: coral is due today, violet is
-// due this week, mint is safe. Read at render time so the labels follow the
-// selected language.
-function getStatusOptions(counts: CardStatusCounts) {
-  const labels = messages.statusFilters;
-  return [
-    { value: 'all', label: labels.all, count: counts.all },
-    { value: 'due', label: labels.due, count: counts.due, dot: 'coral' },
-    { value: 'week', label: labels.week, count: counts.week, dot: 'brand' },
-    { value: 'safe', label: labels.safe, count: counts.safe, dot: 'mint' }
-  ] as const satisfies readonly {
-    value: CardStatusFilter;
-    label: string;
-    count: number;
-    dot?: 'coral' | 'brand' | 'mint';
-  }[];
-}
 
 export type { ActiveGroupStats };
 
@@ -209,6 +198,47 @@ export function CardsLibrary({
         stats={activeGroupStats}
       />
       <div className="deck-library__toolbar">
+        <div className="deck-library__find">
+          <SearchField
+            className="deck-library__search"
+            id="deck-search-input"
+            label={messages.searchLabel}
+            onChange={changeSearch}
+            placeholder={
+              activeGroup
+                ? messages.searchInGroup(groupTitle)
+                : messages.searchPlaceholder
+            }
+            shape="soft"
+            value={searchText}
+          />
+          <SelectField
+            className="deck-library__type"
+            icon={<SlidersHorizontal size={20} />}
+            id="deck-type-select"
+            isActive={activeCategory !== categories[0]}
+            label={messages.typeLabel}
+            onChange={changeCategory}
+            options={categories.map(category => ({
+              value: category,
+              label:
+                category === messages.allCategories
+                  ? messages.allTypes
+                  : translateText(category)
+            }))}
+            value={activeCategory}
+          />
+        </div>
+        {!activeGroup && canDeleteCards && cards.length > 0 && !isManaging ? (
+          <button
+            aria-label={messages.manageCards}
+            className="deck-library__manage"
+            onClick={startManaging}
+            type="button"
+          >
+            <ListChecks aria-hidden="true" size={20} />
+          </button>
+        ) : null}
         <SegmentedToggle
           ariaLabel={messages.statusFiltersLabel}
           className="deck-library__status"
@@ -216,33 +246,6 @@ export function CardsLibrary({
           options={getStatusOptions(statusCounts)}
           value={activeStatus}
           variant="filter"
-        />
-        <SelectField
-          className="deck-library__type"
-          id="deck-type-select"
-          label={messages.typeLabel}
-          onChange={changeCategory}
-          options={categories.map(category => ({
-            value: category,
-            label:
-              category === messages.allCategories
-                ? messages.allTypes
-                : translateText(category)
-          }))}
-          value={activeCategory}
-        />
-        <SearchField
-          className="deck-library__search"
-          id="deck-search-input"
-          label={messages.searchLabel}
-          onChange={changeSearch}
-          placeholder={
-            activeGroup
-              ? messages.searchInGroup(groupTitle)
-              : messages.searchPlaceholder
-          }
-          shape="soft"
-          value={searchText}
         />
       </div>
       <ConfirmDialog
@@ -282,7 +285,7 @@ export function CardsLibrary({
           {compactRemaining > 0 && (
             <button
               className={cn(
-                actionPillClass('secondary', 'md', 'mint'),
+                actionPillClass('tertiary', 'md', 'mint'),
                 'deck-library__more-button'
               )}
               onClick={() =>
@@ -295,7 +298,7 @@ export function CardsLibrary({
               }
               type="button"
             >
-              {messages.showMore(Math.min(COMPACT_STEP, compactRemaining))}
+              {messages.showMoreCards}
             </button>
           )}
           <span

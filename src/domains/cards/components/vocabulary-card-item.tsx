@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react';
+import { Check, ChevronRight } from 'lucide-react';
 import { PixelLabel } from '@/components/ui/pixel-label';
 import { TileEyebrow } from '@/components/ui/tile-eyebrow';
 import { ProgressBar } from '@/components/ui/progress-bar';
@@ -108,6 +108,11 @@ export function VocabularyCardItem({
           </span>
         </div>
       </div>
+      <ChevronRight
+        aria-hidden="true"
+        className="deck-card__chevron"
+        size={18}
+      />
     </article>
   );
 }

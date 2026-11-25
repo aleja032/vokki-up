@@ -1,0 +1,80 @@
+@reference 'tailwindcss';
+
+/*
+ * Phone folder chips: one 44px row that scrolls sideways, bleeding to the screen
+ * edges. The dot and the selected chip use the folder color (--folder-ink /
+ * --folder-bg from [data-folder-color] in globals.css); "Todas" has no folder
+ * color and uses the brand tint. Wide screens use the side list instead.
+ */
+
+.folder-chips {
+  @apply min-w-0 min-[761px]:hidden;
+}
+
+.folder-chips__row {
+  @apply -mx-5 flex gap-2 overflow-x-auto px-5 py-0.5;
+
+  scrollbar-width: none;
+}
+
+.folder-chips__row::-webkit-scrollbar {
+  @apply hidden;
+}
+
+.folder-chips__chip,
+.folder-chips__add {
+  @apply box-border inline-flex h-11 shrink-0 cursor-pointer items-center gap-2 rounded-(--radius-pill) border-[1.5px] border-solid px-3.5 text-[14px] leading-none font-bold whitespace-nowrap;
+  transition: var(--hover-transition);
+}
+
+/* Brand tint by default; a folder chip takes its own color. */
+.folder-chips__chip {
+  @apply max-w-[70vw] border-(--line) bg-(--surface) text-(--ink);
+  --chip-ink: var(--brand);
+  --chip-bg: var(--indigo-soft);
+}
+
+.folder-chips__chip[data-folder-color] {
+  --chip-ink: var(--folder-ink);
+  --chip-bg: var(--folder-bg);
+}
+
+.folder-chips__dot {
+  @apply size-2.5 shrink-0 rounded-full;
+  background-color: var(--chip-ink);
+}
+
+.folder-chips__label {
+  @apply min-w-0 truncate;
+}
+
+.folder-chips__count {
+  @apply shrink-0 text-[13px] font-bold text-(--ink-soft) tabular-nums;
+}
+
+.folder-chips__chip[aria-pressed='true'] {
+  @apply font-extrabold;
+  border-color: var(--chip-ink);
+  background-color: var(--chip-bg);
+}
+
+.folder-chips__chip[aria-pressed='true'] .folder-chips__count {
+  @apply text-(--ink);
+}
+
+.folder-chips__add {
+  @apply border-dashed border-(--line) bg-transparent text-(--indigo);
+}
+
+.folder-chips__chip:focus-visible,
+.folder-chips__add:focus-visible {
+  @apply outline-3 outline-offset-0 outline-(--focus-ring) outline-solid;
+}
+
+@media (hover: hover) {
+  .folder-chips__chip[aria-pressed='false']:hover,
+  .folder-chips__add:hover {
+    border-color: var(--hover-accent);
+    color: var(--indigo);
+  }
+}

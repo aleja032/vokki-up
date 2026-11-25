@@ -3,6 +3,7 @@ import { ChevronRight, Globe, Play } from 'lucide-react';
 import { ActionPill } from '@/components/ui/action-pill';
 import { cardsMessages } from '../messages';
 import { NewCardMenu } from './new-card-menu';
+import { ReviewBanner } from './review-banner';
 import './deck-page-header.css';
 
 const messages = cardsMessages.overview;
@@ -82,6 +83,7 @@ export function DeckPageHeader({
           {messages.reviewShort(reviewCount)}
         </ActionPill>
       </div>
+      <ReviewBanner count={reviewCount} folder={reviewFolder} />
     </header>
   );
 }

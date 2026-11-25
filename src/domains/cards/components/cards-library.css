@@ -4,43 +4,116 @@
  * Mi mazo library (proposal D), on the page ground: below the folder header
  * (folder-header.css), a toolbar (search, type select, status filter) and the
  * cards. The status filter takes the place of the artboard legend (dot and
- * label per state). Phones: search and type on top, the filter below, a
- * two-column grid of tiles and a "show more" step. From 761px: one wrapping
- * toolbar row, a grid of tiles (250px minimum) and a numbered pager.
+ * label per state). Phones: the search box (the type select sits inside its
+ * right side), the status as underlined text tabs with counts, then a single
+ * column of rows and a "show more" link. The only chips of the page are the
+ * folders. From 761px: one wrapping toolbar row, a grid of tiles (250px
+ * minimum) and a numbered pager.
  */
 
 .deck-library {
   --selection-dock-gap: 1rem;
-  @apply flex min-w-0 flex-1 flex-col gap-4;
+  @apply flex min-w-0 flex-1 flex-col gap-3;
 }
 
-/* Phones: search and type on the first row, the status filter below. */
+/* Phones: the search box (and, for the whole deck, the manage button) on one
+   row, the status tabs on the next. */
 .deck-library__toolbar {
-  @apply grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2.5 gap-y-3;
-  grid-template-areas:
-    'search type'
-    'status status';
+  @apply flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1;
 }
 
-.deck-library .deck-library__status {
-  @apply w-auto max-w-full;
-  grid-area: status;
+.deck-library__find {
+  @apply relative min-w-0 flex-1;
 }
 
 .deck-library__search {
-  @apply min-h-12.5 gap-3;
-  grid-area: search;
+  @apply min-h-12 w-full min-w-0 gap-3;
 }
 
-.deck-library__type {
-  @apply w-34.5;
-  grid-area: type;
+.deck-library__manage {
+  @apply inline-flex size-12 shrink-0 cursor-pointer items-center justify-center rounded-2xl border-[1.5px] border-solid border-(--line) bg-(--surface) p-0 text-(--ink-soft) min-[761px]:hidden;
+  transition: var(--hover-transition);
 }
 
-/* Phones: the two-up grid of the artboard; a single column under 360px, where
-   two tiles would be too narrow for a term and its memory row. */
+.deck-library__manage:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+@media (max-width: 760px) {
+  /* Type filter: the native select laid transparent over a 44px face inside the
+     right side of the search box (a filter icon; the chosen type next to it
+     while one narrows the list). The browser still provides the menu. */
+  .deck-library .deck-library__find .deck-library__type {
+    @apply absolute top-1/2 right-1 h-11 min-h-0 min-w-11 -translate-y-1/2 justify-center rounded-xl border-0 bg-transparent px-2.5 text-(--ink-soft);
+  }
+
+  .deck-library__find .select-field__label,
+  .deck-library__find .select-field__icon {
+    @apply hidden;
+  }
+
+  .deck-library__find .select-field__face {
+    @apply flex items-center gap-1.5;
+  }
+
+  .deck-library__find .select-field__current {
+    @apply hidden max-w-24 truncate text-[13px] font-bold;
+  }
+
+  .deck-library__find .select-field__control {
+    @apply absolute inset-0 size-full cursor-pointer p-0 opacity-0;
+  }
+
+  .deck-library .deck-library__find .deck-library__type[data-active='true'] {
+    @apply bg-(--indigo-soft) text-(--indigo);
+  }
+
+  .deck-library__type[data-active='true'] .select-field__current {
+    @apply block;
+  }
+
+  .deck-library__search {
+    @apply pr-14;
+  }
+
+  .deck-library__find:has([data-active='true']) .deck-library__search {
+    @apply pr-32;
+  }
+
+  /* Status: text tabs, not chips. One row with the counts, ink for the
+     selected one and a 2px indigo underline. */
+  .deck-library .deck-library__status {
+    @apply w-full basis-full flex-nowrap gap-x-5 self-auto overflow-x-auto border-b border-solid border-b-(--line);
+    scrollbar-width: none;
+  }
+
+  .deck-library .deck-library__status::-webkit-scrollbar {
+    @apply hidden;
+  }
+
+  .deck-library .deck-library__status .segmented-toggle__option {
+    @apply min-h-11 px-0.5 text-[14px] font-semibold text-(--ink-soft);
+  }
+
+  .deck-library
+    .deck-library__status
+    .segmented-toggle__option[aria-pressed='true'] {
+    @apply font-extrabold text-(--ink);
+    box-shadow: inset 0 -2px 0 var(--indigo);
+  }
+
+  .deck-library .deck-library__status .segmented-toggle__dot {
+    @apply hidden;
+  }
+
+  .deck-library .deck-library__status .segmented-toggle__count {
+    @apply inline text-[13px] opacity-100;
+  }
+}
+
+/* Phones: one column of rows (vocabulary-card-item.css). */
 .deck-library__grid {
-  @apply grid grid-cols-[repeat(2,minmax(0,1fr))] gap-3 max-[359px]:grid-cols-1;
+  @apply grid grid-cols-1 gap-2.5;
 }
 
 .deck-library__empty {
@@ -48,15 +121,11 @@
 }
 
 .deck-library__more {
-  @apply flex flex-col items-stretch gap-3;
-}
-
-.deck-library__more-button {
-  @apply w-full;
+  @apply flex items-center justify-between gap-3;
 }
 
 .deck-library__shown {
-  @apply text-center text-[13px] text-(--ink-soft);
+  @apply ml-auto text-[13px] text-(--ink-soft);
 }
 
 .deck-pagination {
@@ -107,16 +176,22 @@
     @apply flex flex-wrap gap-x-3 gap-y-3;
   }
 
+  /* The search box wrapper is a phone concept: here the search and the type
+     select are toolbar items of their own. */
+  .deck-library__find {
+    @apply contents;
+  }
+
   .deck-library .deck-library__status {
-    @apply order-3 w-full;
+    @apply order-3 flex w-full max-w-full;
   }
 
   .deck-library__search {
-    @apply order-1 min-h-12 flex-[1_1_300px] gap-2.5;
+    @apply order-1 flex-[1_1_300px] gap-2.5;
   }
 
-  .deck-library__type {
-    @apply order-2 w-auto;
+  .deck-library .deck-library__type {
+    @apply order-2 flex w-auto;
   }
 
   .deck-library__grid {
@@ -136,6 +211,7 @@
   }
 }
 
+/* Phones show a chevron on every row instead of this hint. */
 .deck-library__hint {
-  @apply m-0 -mb-2 text-[12.5px] text-(--ink-soft);
+  @apply m-0 -mb-2 hidden text-[12.5px] text-(--ink-soft) min-[761px]:block;
 }

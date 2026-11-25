@@ -115,6 +115,11 @@ export function FolderHeader({
             {title}
           </h2>
           <p className="folder-header__summary">{summary}</p>
+          {group ? (
+            <p className="folder-header__meta">
+              {messages.groupMeta(cardCount, stats?.dueCount ?? 0)}
+            </p>
+          ) : null}
         </div>
         {group && stats ? (
           <FolderMenu
@@ -122,6 +127,7 @@ export function FolderHeader({
             group={group}
             isDeletable={stats.isDeletable}
             onDelete={onDeleteGroup}
+            onManage={canManage && !isManaging ? onManage : undefined}
             onUpdate={onUpdateGroup}
             otherGroupNames={otherGroupNames}
           />

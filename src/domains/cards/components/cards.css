@@ -168,19 +168,31 @@
     @apply hidden;
   }
 
+  /* Room under the last row for the bottom navigation (77px, floating 14px) and
+     the floating add button above it (16px gap, 56px, 16px clearance). */
   .app-main:has(.deck-page) {
-    @apply px-5 pt-6.5 pb-[calc(77px+40px+env(safe-area-inset-bottom))];
+    @apply px-5 pt-6.5 pb-[calc(77px+14px+16px+56px+16px+env(safe-area-inset-bottom))];
+  }
+
+  /* Phones use the folder chips (folder-chip-row.css) instead of the side list. */
+  .deck-page .folder-list {
+    @apply hidden;
+  }
+
+  /* Selecting cards docks its own action bar at the bottom: no floating button. */
+  .deck-page:has(.deck-library[data-managing='true']) .new-card-fab {
+    @apply hidden;
   }
 }
 
 /* Page */
 
 .deck-page {
-  @apply flex flex-col gap-4.5 leading-[normal];
+  @apply flex flex-col gap-3.5 leading-[normal];
 }
 
 .deck-page__workspace {
-  @apply flex flex-col gap-4.5;
+  @apply flex flex-col gap-3.5;
 }
 
 @media (min-width: 761px) {

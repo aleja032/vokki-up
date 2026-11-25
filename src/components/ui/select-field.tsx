@@ -1,4 +1,5 @@
 import { ChevronDown } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import './select-field.css';
 
@@ -14,6 +15,14 @@ type SelectFieldProps = {
   options: readonly SelectFieldOption[];
   value: string;
   onChange: (value: string) => void;
+  /** A non-default option is chosen (a highlighted state on phones). */
+  isActive?: boolean;
+  /**
+   * Compact face for phones: the icon, and the chosen option next to it while
+   * active. The native select stays on top, transparent, so the browser still
+   * provides the menu. Wide screens keep the caption and the value.
+   */
+  icon?: ReactNode;
   className?: string;
 };
 
@@ -24,11 +33,25 @@ export function SelectField({
   options,
   value,
   onChange,
+  isActive,
+  icon,
   className
 }: SelectFieldProps) {
+  const current = options.find(option => option.value === value);
+
   return (
-    <label className={cn('select-field', className)} htmlFor={id}>
+    <label
+      className={cn('select-field', className)}
+      data-active={isActive || undefined}
+      htmlFor={id}
+    >
       <span className="select-field__label">{label}</span>
+      {icon ? (
+        <span aria-hidden="true" className="select-field__face">
+          {icon}
+          <span className="select-field__current">{current?.label}</span>
+        </span>
+      ) : null}
       <select
         className="select-field__control"
         id={id}

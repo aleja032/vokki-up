@@ -37,3 +37,29 @@
     @apply bg-(--surface-muted) text-(--indigo);
   }
 }
+
+/* Phone floating variant: a 56px round primary (mint gradient, as the CTA
+   system's primary) whose menu opens upward and keeps the right edge. */
+
+.new-card-menu .new-card-menu__trigger--fab {
+  @apply flex size-14 cursor-pointer items-center justify-center rounded-full border-0 p-0 text-(--cta-ink);
+  background: var(--cta-gradient);
+  box-shadow: 0 8px 18px var(--cta-fab-glow);
+  transition: var(--hover-transition);
+}
+
+.new-card-menu__trigger--fab > svg {
+  transition: rotate var(--hover-duration) var(--ease-out);
+}
+
+.new-card-menu__trigger--fab[aria-expanded='true'] > svg {
+  rotate: 45deg;
+}
+
+.new-card-menu__trigger--fab:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+.new-card-menu--fab .new-card-menu__list {
+  @apply top-auto right-0 bottom-full left-auto mt-0 mb-3;
+}

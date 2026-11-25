@@ -1,0 +1,10 @@
+@reference 'tailwindcss';
+
+/* Phones only: pinned to the right edge, one gap above the bottom navigation
+   (77px tall, floating max(14px, safe area) from the bottom). The page keeps
+   room under its last row (cards.css) so the button never covers content. */
+
+.new-card-fab {
+  @apply fixed right-4 z-10 min-[761px]:hidden;
+  bottom: calc(max(14px, env(safe-area-inset-bottom)) + 77px + 16px);
+}

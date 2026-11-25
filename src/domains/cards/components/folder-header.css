@@ -86,3 +86,53 @@
 .folder-header[data-scope='all'] .folder-header__chip {
   @apply size-11;
 }
+
+/* The short summary is for phones only. */
+.folder-header__meta {
+  @apply m-0 hidden;
+}
+
+/*
+ * Phones: the folder chips already say where you are and the floating button
+ * adds cards, so the header shrinks to one line under them (colored dot, name,
+ * "N tarjetas · M hoy" and the menu, which also holds "Gestionar"). The whole
+ * deck needs no header at all (its title stays for assistive tech).
+ */
+@media (max-width: 760px) {
+  .folder-header[data-scope='all'] {
+    @apply hidden;
+  }
+
+  /* The dot carries the color, so the 5px edge goes back to the plain border. */
+  .folder-header[data-scope='folder'] {
+    @apply gap-0 rounded-(--radius-18) border-l border-l-(--line) py-1.5 pr-1.5 pl-3.5;
+  }
+
+  .folder-header__nav,
+  .folder-header__kind,
+  .folder-header__summary,
+  .folder-header__actions {
+    @apply hidden;
+  }
+
+  .folder-header__meta {
+    @apply block text-[13px] leading-snug text-(--ink-soft);
+  }
+
+  .folder-header__main {
+    @apply gap-2.5;
+  }
+
+  /* The chip becomes the colored dot of the line. */
+  .folder-header__chip {
+    @apply size-3 rounded-full bg-(--folder-ink);
+  }
+
+  .folder-header__chip > svg {
+    @apply hidden;
+  }
+
+  .folder-header__copy h2 {
+    @apply text-[17px];
+  }
+}

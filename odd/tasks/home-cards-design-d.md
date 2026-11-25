@@ -161,3 +161,14 @@ Verification: see the T16 report.
 - Folder list: color chip per folder, colored selection; new `FolderHeader` (back button "Todas las carpetas", chip, name, "N tarjetas · M para hoy · P% dominadas", kebab, "Agregar tarjeta a esta carpeta" + Gestionar; lighter header for Todas). Removed the old crumb/chips head and the header "Anadir"/library row (library link stays in the page header and the empty state).
 - Kept: "Toca una tarjeta para editarla." hint.
 - Verification: vitest 128 files / 807 tests, tsc, eslint, prettier clean; browser (English, light/dark, 1440/390): create, rename, duplicate error, recolor, reload persistence, delete, add-to-folder preselect, back; 0 horizontal overflow, 0 console errors; header CTA/Gestionar/kebab all 44px. Spanish not checked in the browser.
+
+## T24 - Mi mazo phone proposal (experiment branch feat/mazo-mobile-proposal)
+
+- Phones only (< 761px); desktop markup/CSS results unchanged (1440/1024 measured against the main tree).
+- Header: title + "N tarjetas · M carpetas", then a Noma review banner (hero surface tokens, noma-cheer with bob, kicker "Hoy" or the folder name, "N tarjetas listas", "~M min · disponible sin conexión" (half a minute per capped card), primary Repasar N with pulse; "Todo al día" when 0). Follows the selected folder (link, count, accessible name). The header buttons are desktop-only.
+- Floating + (56px primary, above the bottom nav, hidden while managing) opens the new-card menu upward: Crear tarjeta (preselects the folder), Importar archivo, Desde la biblioteca. The menu has a fab variant with its own id.
+- Folders: one scrolling chip row (colored dot, name, count, "+ Carpeta" chip). The side list is hidden on phones (folder search dropped there). In a folder: one compact line (dot, name, N tarjetas · M hoy, kebab with Gestionar first). For Todas, Gestionar is an icon button next to the search.
+- Filters: no sheet and no second chip row. Status = the existing segmented-toggle filter restyled as underlined text tabs with counts (short label "Semana"); type = the native select laid over a filter icon inside the search box (shows the type name when active). Hint line hidden on phones.
+- List: single-column rows (~72px, due-color edge, term + part of speech, meaning, memory bar + due label, chevron; no IPA); manage mode shows a left circle; 8 rows then "Ver más" (+10) with "N de M".
+- TDD: tests first (RED) for each pivot, then GREEN. Known unrelated failures in this CRLF worktree: design-tokens.test (35) and action-pill.test (1) read CSS with LF regexes.
+- Verification: vitest, tsc, eslint, prettier on changed files; browser at 320/360/390/430 dark/light, es/en: 0 console errors, no horizontal overflow, CTA 56px, banner/FAB/nav never overlap.

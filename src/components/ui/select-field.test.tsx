@@ -19,6 +19,41 @@ function render(value = 'all') {
   );
 }
 
+describe('SelectField icon face', () => {
+  it('adds a face with the icon and the current option only when given an icon', () => {
+    const withIcon = renderToStaticMarkup(
+      <SelectField
+        icon={<svg data-testid="face" />}
+        id="type"
+        label="Tipo"
+        onChange={() => undefined}
+        options={options}
+        value="verb"
+      />
+    );
+    expect(withIcon).toContain('select-field__face');
+    expect(withIcon).toMatch(/select-field__current[^>]*>Verbo</);
+    expect(render()).not.toContain('select-field__face');
+  });
+});
+
+describe('SelectField active state', () => {
+  it('marks the field when a non-default option is chosen', () => {
+    const html = renderToStaticMarkup(
+      <SelectField
+        id="type"
+        isActive
+        label="Tipo"
+        onChange={() => undefined}
+        options={options}
+        value="verb"
+      />
+    );
+    expect(html).toContain('data-active="true"');
+    expect(render()).not.toContain('data-active');
+  });
+});
+
 describe('SelectField', () => {
   it('names the select with its visible caption', () => {
     const html = render();

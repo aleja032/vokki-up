@@ -29,6 +29,31 @@ function render(
   );
 }
 
+describe('FolderMenu manage item', () => {
+  function renderWith(onManage?: () => void) {
+    return renderToStaticMarkup(
+      createElement(FolderMenu, {
+        group,
+        cardCount: 1,
+        isDeletable: true,
+        otherGroupNames: [],
+        onUpdate: () => undefined,
+        onDelete: () => undefined,
+        onManage
+      })
+    );
+  }
+
+  it('lists Gestionar first, for phones, only when it can manage', () => {
+    const html = renderWith(() => undefined);
+    expect(html).toContain('folder-menu__item--manage');
+    expect(html.indexOf('>Gestionar<')).toBeLessThan(
+      html.indexOf('>Renombrar<')
+    );
+    expect(renderWith()).not.toContain('>Gestionar<');
+  });
+});
+
 describe('FolderMenu', () => {
   it('has a named trigger that opens a menu and starts closed', () => {
     const html = render();

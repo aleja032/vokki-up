@@ -23,9 +23,10 @@ describe('DeckPageHeader', () => {
     expect(html).toContain('46 tarjetas · 3 carpetas');
   });
 
-  it('has exactly one primary action: the review', () => {
+  it('has one primary action per layout: the header review and the phone banner', () => {
     const html = render();
-    expect(count(html, 'action-pill--primary')).toBe(1);
+    expect(count(html, 'action-pill--primary')).toBe(2);
+    expect(html).toContain('review-banner');
     expect(html).toMatch(/<a[^>]*action-pill--primary[^>]*>/);
     expect(html).toContain('Repasar 12');
   });
@@ -35,6 +36,7 @@ describe('DeckPageHeader', () => {
     expect(html).toContain('href="/review?from=cards"');
     expect(count(html, 'aria-haspopup="menu"')).toBe(1);
     expect(html).toContain('Crear tarjeta');
+    expect(html.match(/role="menuitem"/g)).toHaveLength(2);
     expect(html).toContain('href="/import-export?from=cards"');
     expect(html).toContain('Importar archivo');
   });
@@ -72,7 +74,7 @@ describe('DeckPageHeader', () => {
     expect(html).toContain('aria-label="Repasar 3 · Trabajo"');
     expect(html).toContain('Repasar 3');
     expect(html).not.toContain('Repasar 12');
-    expect(count(html, 'action-pill--primary')).toBe(1);
+    expect(html).toContain('>Trabajo<');
   });
 
   it('keeps the review link of a folder with nothing due', () => {

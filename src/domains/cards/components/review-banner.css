@@ -1,0 +1,51 @@
+@reference 'tailwindcss';
+
+/*
+ * Phone review banner: the home hero's dark surface (--hero-surface, fixed in
+ * both themes) with its soft violet glow and lavender kicker. The card does not
+ * clip, so Noma can rise over the top edge; the copy keeps room on the right so
+ * she never covers text. Wide screens use the header button instead.
+ */
+
+.review-banner {
+  @apply relative isolate flex min-w-0 flex-col gap-4 px-5 pt-5 pb-5 text-white min-[761px]:hidden;
+}
+
+.review-banner__backdrop {
+  @apply absolute inset-0 -z-10 overflow-hidden rounded-(--radius-30) bg-(--hero-surface);
+}
+
+.review-banner__glow {
+  @apply absolute -top-12 -right-10 size-56 rounded-full;
+  background: radial-gradient(
+    circle,
+    var(--hero-glow) 0%,
+    color-mix(in srgb, var(--hero-glow) 33%, transparent) 45%,
+    transparent 68%
+  );
+}
+
+.review-banner__mascot {
+  @apply absolute -top-4 right-4 h-24 w-auto;
+  filter: drop-shadow(0 10px 14px var(--shadow-mascot));
+}
+
+.review-banner__copy {
+  @apply flex min-w-0 flex-col gap-1 pr-26;
+}
+
+.review-banner__kicker {
+  @apply block truncate text-[11px] tracking-[0.1em] text-(--hero-lavender);
+}
+
+.review-banner__title {
+  @apply m-0 text-[24px] leading-[1.1] font-extrabold tracking-[-0.02em] wrap-anywhere;
+}
+
+.review-banner__lead {
+  @apply m-0 text-[13px] leading-snug text-(--hero-text-soft);
+}
+
+.review-banner .review-banner__cta {
+  @apply w-full;
+}

@@ -111,6 +111,33 @@ describe('CardsLibrary toolbar', () => {
   });
 });
 
+describe('CardsLibrary phone filters', () => {
+  it('puts the type select inside the search box, on its right', () => {
+    const html = render([card]);
+    const find = html.slice(html.indexOf('deck-library__find'));
+    expect(find.indexOf('id="deck-search-input"')).toBeGreaterThan(-1);
+    expect(find.indexOf('id="deck-search-input"')).toBeLessThan(
+      find.indexOf('id="deck-type-select"')
+    );
+    expect(html).toContain('select-field__face');
+  });
+
+  it('keeps the status as text tabs after the search, with a short week label', () => {
+    const html = render([card]);
+    expect(html.indexOf('deck-library__find')).toBeLessThan(
+      html.indexOf('deck-library__status')
+    );
+    expect(html).toContain('segmented-toggle__short">Semana<');
+  });
+
+  it('keeps Gestionar reachable on phones for the whole deck', () => {
+    expect(render([card])).toContain('deck-library__manage');
+    expect(render([card], { activeGroup: group })).not.toContain(
+      'deck-library__manage'
+    );
+  });
+});
+
 describe('CardsLibrary folder tools', () => {
   it('shows the folder menu only for a real folder', () => {
     const inFolder = render([card], { activeGroup: group });

@@ -48,6 +48,11 @@
   @apply hidden font-bold opacity-75;
 }
 
+/* An option with a short label shows it on phones and the long one from 761px. */
+.segmented-toggle__long {
+  @apply hidden;
+}
+
 .segmented-toggle__option:focus-visible {
   @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
 }
@@ -63,6 +68,14 @@
 
   .segmented-toggle__count {
     @apply inline;
+  }
+
+  .segmented-toggle__long {
+    @apply inline;
+  }
+
+  .segmented-toggle__short {
+    @apply hidden;
   }
 }
 

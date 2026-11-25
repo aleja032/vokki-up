@@ -32,6 +32,13 @@
   @apply cursor-not-allowed opacity-50;
 }
 
+/* "Gestionar" lives in the menu on phones; wide screens keep the header button. */
+@media (min-width: 761px) {
+  .folder-menu__list .folder-menu__item--manage {
+    @apply hidden;
+  }
+}
+
 .folder-menu__item--danger {
   @apply text-(--red-ink);
 }

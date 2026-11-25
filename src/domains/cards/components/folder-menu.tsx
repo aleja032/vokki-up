@@ -33,6 +33,8 @@ type FolderMenuProps = {
   /** Applies a rename and/or recolor of the folder. */
   onUpdate: (groupId: string, patch: GroupPatch) => void;
   onDelete: (groupId: string) => void;
+  /** Phones: starts selecting cards of this folder (wide screens use the header button). */
+  onManage?: () => void;
 };
 
 // Options of the selected folder: rename and change color (one edit dialog,
@@ -46,7 +48,8 @@ export function FolderMenu({
   isDeletable,
   otherGroupNames,
   onUpdate,
-  onDelete
+  onDelete,
+  onManage
 }: FolderMenuProps) {
   const { isOpen, rootRef, toggle, close } = useNewCardMenu();
   const {
@@ -98,6 +101,19 @@ export function FolderMenu({
         id={MENU_ID}
         role="menu"
       >
+        {onManage ? (
+          <button
+            className="folder-menu__item folder-menu__item--manage"
+            onClick={() => {
+              close();
+              onManage();
+            }}
+            role="menuitem"
+            type="button"
+          >
+            {cardsMessages.overview.manageCards}
+          </button>
+        ) : null}
         <button
           aria-describedby={isRenamable ? undefined : RENAME_LOCKED_HINT_ID}
           className="folder-menu__item"

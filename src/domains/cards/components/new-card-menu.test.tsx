@@ -30,3 +30,23 @@ describe('NewCardMenu', () => {
     expect(render()).not.toContain('href="/cards/word-library"');
   });
 });
+
+describe('NewCardMenu floating variant', () => {
+  const html = renderToStaticMarkup(
+    <NewCardMenu onCreate={() => undefined} variant="fab" />
+  );
+
+  it('is an icon-only trigger named Agregar with its own menu id', () => {
+    expect(html).toContain('new-card-menu__trigger--fab');
+    expect(html).toContain('aria-label="Agregar"');
+    expect(html).toContain('id="new-card-menu-fab"');
+    expect(html).toContain('aria-controls="new-card-menu-fab"');
+    expect(html).not.toContain('new-card-menu__label');
+  });
+
+  it('adds the library as a third way to add cards', () => {
+    expect(html.match(/role="menuitem"/g)).toHaveLength(3);
+    expect(html).toContain('href="/cards/word-library"');
+    expect(html).toContain('Desde la biblioteca');
+  });
+});

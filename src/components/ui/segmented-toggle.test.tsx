@@ -59,3 +59,22 @@ describe('SegmentedToggle', () => {
     expect(html.match(/aria-pressed="true"/g)).toHaveLength(1);
   });
 });
+
+describe('SegmentedToggle short labels', () => {
+  it('renders the long and the short label only when a short one is given', () => {
+    const html = renderToStaticMarkup(
+      <SegmentedToggle
+        onChange={() => undefined}
+        options={[
+          { value: 'a', label: 'Esta semana', shortLabel: 'Semana' },
+          { value: 'b', label: 'Hoy' }
+        ]}
+        value="a"
+        variant="filter"
+      />
+    );
+    expect(html).toContain('segmented-toggle__long">Esta semana<');
+    expect(html).toContain('segmented-toggle__short">Semana<');
+    expect(html.match(/segmented-toggle__short/g)).toHaveLength(1);
+  });
+});

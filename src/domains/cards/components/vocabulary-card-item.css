@@ -263,3 +263,68 @@
 .deck-card__example .es-toggle__button {
   @apply relative z-1;
 }
+
+/* The chevron only tells phone rows they open the editor. */
+.deck-card__chevron {
+  @apply hidden;
+}
+
+/*
+ * Phones: the tile becomes a row of ~72px in a single column. The top line
+ * holds the term (bold) and the part of speech (tiny pixel label); the meaning
+ * sits below; the memory bar with the due label and a chevron close the row on
+ * the right. The IPA stays out (the editor shows it). Manage mode puts a
+ * checkbox circle on the left. Placed last so it overrides the tile subgrid.
+ */
+@media (max-width: 760px) {
+  .deck-card.deck-card--deck {
+    @apply min-h-18 grid-cols-[minmax(0,max-content)_auto_minmax(0,1fr)_auto_auto] grid-rows-[auto_auto] items-center gap-x-2 gap-y-0.5 rounded-(--radius-22) py-2.5 pr-3 pl-3.5;
+    grid-row: auto;
+  }
+
+  .deck-card--deck .deck-card__top {
+    @apply col-start-2 row-start-1 min-w-0 self-center;
+    grid-row: 1;
+  }
+
+  .deck-card--deck .deck-card__term {
+    @apply col-start-1 mt-0 line-clamp-1 text-[17px] leading-tight;
+    grid-row: 1;
+  }
+
+  .deck-card--deck .deck-card__meaning {
+    @apply col-span-3 col-start-1 line-clamp-2 text-[13.5px] font-semibold text-(--ink-soft);
+    grid-row: 2;
+  }
+
+  .deck-card--deck .deck-card__ipa {
+    @apply hidden;
+  }
+
+  .deck-card--deck .deck-card__footer {
+    @apply col-start-4 mt-0 items-end justify-center pt-0;
+    grid-row: 1 / span 2;
+  }
+
+  .deck-card--deck .deck-card__memory-row {
+    @apply flex-col items-end gap-1.5;
+  }
+
+  .deck-card--deck .deck-card__chevron {
+    @apply col-start-5 block text-(--ink-faint);
+    grid-row: 1 / span 2;
+  }
+
+  /* Manage mode: the circle moves to the left and the chevron goes away. */
+  .deck-card--deck[data-managing='true'] {
+    @apply pl-12;
+  }
+
+  .deck-card--deck[data-managing='true'] .deck-card__chevron {
+    @apply hidden;
+  }
+
+  .deck-card--deck .deck-card__check {
+    @apply top-1/2 right-auto left-3 -translate-y-1/2;
+  }
+}

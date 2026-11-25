@@ -13,6 +13,7 @@ export const cardsMessages = createLocalizedMessages({
     createCard: 'Crear tarjeta',
     importFile: 'Importar archivo',
     addFromLibrary: 'Agregar desde la biblioteca',
+    fromLibrary: 'Desde la biblioteca',
     reviewShort: (due: number) => `Repasar ${due}`,
     reviewFolderLabel: (due: number, name: string) =>
       `Repasar ${due} · ${name}`,
@@ -38,7 +39,19 @@ export const cardsMessages = createLocalizedMessages({
     viewAllFolders: (count: number) => `Ver las ${count}`,
     viewFewerFolders: 'Ver menos',
     folderDue: (due: number) => `${due} hoy`,
-    showMore: (count: number) => `Ver ${count} más`,
+    showMoreCards: 'Ver más',
+    addFolderChip: 'Carpeta',
+    addShort: 'Agregar',
+    reviewBannerLabel: 'Repaso de hoy',
+    reviewBannerKicker: 'Hoy',
+    reviewBannerTitle: (count: number) =>
+      count === 0
+        ? 'Todo al día'
+        : `${count} ${pluralize(count, 'tarjeta lista', 'tarjetas listas')}`,
+    reviewBannerLead: (count: number, minutes: number) =>
+      count === 0
+        ? 'Vuelve mañana o agrega tarjetas'
+        : `~${minutes} min · disponible sin conexión`,
     shownOfTotal: (shown: number, total: number) =>
       `${shown} de ${total} ${pluralize(total, 'tarjeta', 'tarjetas')}`,
     groupMeta: (cards: number, due: number) =>
@@ -55,6 +68,7 @@ export const cardsMessages = createLocalizedMessages({
       all: 'Todas',
       due: 'Hoy',
       week: 'Esta semana',
+      weekShort: 'Semana',
       safe: 'Seguras'
     },
     typeLabel: 'Tipo',

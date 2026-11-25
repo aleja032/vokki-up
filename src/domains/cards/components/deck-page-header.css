@@ -1,9 +1,10 @@
 @reference 'tailwindcss';
 
-/* Mobile first (VokkiDMazoMobile): title and summary, then "Nueva tarjeta" and
-   "Repasar" side by side, and the library as a full row with a chevron. From
-   761px (VokkiDMazo) the mascot and the title sit at the left and the three
-   actions at the right of the same row, the review last. */
+/* Mobile first: the title and "N tarjetas · M carpetas", then the review
+   banner (review-banner.tsx), the only review action of phones. Adding cards is
+   the floating button (new-card-fab.css), so the three header actions are for
+   wide screens. From 761px (VokkiDMazo) the mascot and the title sit at the
+   left and the three actions at the right of the same row, the review last. */
 
 .deck-header {
   @apply flex min-w-0 flex-col gap-4;
@@ -22,31 +23,19 @@
 }
 
 .deck-header h1 {
-  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[36px] leading-[1.1] font-bold tracking-[-0.8px] wrap-anywhere;
+  @apply m-0 font-[family-name:var(--font-display),Georgia,serif] text-[32px] leading-[1.1] font-bold tracking-[-0.8px] wrap-anywhere;
 }
 
 .deck-header__summary {
-  @apply m-0 mt-1 text-[14.5px] text-(--ink-soft);
+  @apply m-0 mt-1 text-[14px] text-(--ink-soft);
 }
 
 .deck-header__actions {
-  @apply grid min-w-0 grid-cols-2 gap-3;
+  @apply hidden min-w-0;
 }
 
 .deck-header__new {
   @apply min-w-0;
-}
-
-.deck-header .deck-header__review {
-  @apply px-3;
-}
-
-.deck-header .deck-header__library {
-  @apply order-3 col-span-2 justify-start gap-3 px-5 text-[15.5px];
-}
-
-.deck-header .deck-header__library > .action-pill__icon:last-child {
-  @apply ml-auto text-(--ink-soft);
 }
 
 @media (min-width: 761px) {
@@ -54,12 +43,12 @@
     @apply flex-row flex-wrap items-center justify-between gap-x-5 gap-y-4;
   }
 
-  .deck-header__mascot {
-    @apply block;
+  .deck-header__brand {
+    @apply flex-none gap-4;
   }
 
-  .deck-header__brand {
-    @apply flex-none;
+  .deck-header__mascot {
+    @apply block;
   }
 
   .deck-header h1 {
@@ -75,7 +64,7 @@
   }
 
   .deck-header .deck-header__library {
-    @apply order-none justify-center gap-2 px-5 text-[15px];
+    @apply justify-center gap-2 px-5 text-[15px];
   }
 
   .deck-header .deck-header__library > .action-pill__icon:last-child {

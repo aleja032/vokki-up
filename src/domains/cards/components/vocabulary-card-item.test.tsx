@@ -120,6 +120,10 @@ describe('VocabularyCardItem anatomy', () => {
     expect(html).toContain('deck-card__memory-row');
   });
 
+  it('ends with a chevron that tells the row opens the editor on phones', () => {
+    expect(html).toContain('deck-card__chevron');
+  });
+
   it('leaves the example and the folder name to the editor', () => {
     expect(html).not.toContain('deck-card__example');
     expect(html).not.toContain('deck-card__group');

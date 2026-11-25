@@ -5,6 +5,8 @@ import './segmented-toggle.css';
 type SegmentedToggleOption<T extends string> = {
   value: T;
   label: string;
+  /** Shorter label for phones; the long one shows from 761px (filter variant). */
+  shortLabel?: string;
   /** Optional count shown after the label (filter variant). */
   count?: number;
   /** Optional colored dot in front of the label (filter variant). */
@@ -61,7 +63,16 @@ export function SegmentedToggle<T extends string>({
                 data-dot={option.dot}
               />
             ) : null}
-            {option.label}
+            {option.shortLabel ? (
+              <>
+                <span className="segmented-toggle__long">{option.label}</span>
+                <span className="segmented-toggle__short">
+                  {option.shortLabel}
+                </span>
+              </>
+            ) : (
+              option.label
+            )}
             {option.count !== undefined ? (
               <span className="segmented-toggle__count">{option.count}</span>
             ) : null}
