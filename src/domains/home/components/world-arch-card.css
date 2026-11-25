@@ -1,17 +1,21 @@
 @reference 'tailwindcss';
 
-/* Arch card of the artboard: dark scene with progress when the world is in
-   progress, otherwise a plain surface with its icon. Phone first. */
+/* Arch card of the artboard: dark scene with progress. A world not started
+   shows the same scene grayed out under a veil. Phone first. */
 .world-arch {
-  @apply relative box-border flex h-62.5 w-44 flex-none flex-col items-center justify-end overflow-hidden rounded-t-(--radius-pill) rounded-b-(--radius-30) border-[1.5px] border-solid border-(--line) bg-(--surface) text-center text-(--ink);
+  @apply relative box-border flex h-62.5 w-44 flex-none flex-col items-center justify-end overflow-hidden rounded-t-(--radius-pill) rounded-b-(--radius-30) border-[1.5px] border-solid border-(--line) text-center;
   transition:
     translate 180ms var(--ease-out),
     border-color 180ms var(--ease-out),
     box-shadow 180ms var(--ease-out);
 }
 
+.world-arch {
+  @apply bg-(--hero-surface) text-white;
+}
+
 .world-arch[data-state='active'] {
-  @apply border-[3px] border-(--brand-line) bg-(--hero-surface) text-white;
+  @apply border-[3px] border-(--brand-line);
 }
 
 @media (hover: hover) {
@@ -27,17 +31,17 @@
   image-rendering: pixelated;
 }
 
+.world-arch[data-state='new'] .world-arch__image {
+  filter: grayscale(1);
+}
+
+.world-arch__veil {
+  @apply absolute inset-0 bg-(--surface-muted) opacity-55;
+}
+
 .world-arch__shade {
   @apply absolute inset-0;
   background: linear-gradient(0deg, var(--hero-shade-95) 6%, transparent 62%);
-}
-
-.world-arch__icon {
-  @apply absolute top-12.5 left-1/2 -translate-x-1/2 text-(--indigo);
-}
-
-.world-arch__icon svg {
-  @apply size-12;
 }
 
 .world-arch__info {
@@ -45,11 +49,7 @@
 }
 
 .world-arch__state {
-  @apply text-[11px] text-(--ink-soft);
-}
-
-.world-arch[data-state='active'] .world-arch__state {
-  @apply text-(--hero-lavender);
+  @apply text-[11px] text-(--hero-lavender);
 }
 
 .world-arch__name {
@@ -65,7 +65,7 @@
   @apply h-2 w-27.5;
 }
 
-.world-arch[data-state='active'] .world-arch__bar {
+.world-arch__bar {
   @apply bg-(--on-hero-track);
 }
 
@@ -76,14 +76,6 @@
 @media (min-width: 768px) {
   .world-arch {
     @apply h-80 w-auto;
-  }
-
-  .world-arch__icon {
-    @apply top-21;
-  }
-
-  .world-arch__icon svg {
-    @apply size-15;
   }
 
   .world-arch__info {

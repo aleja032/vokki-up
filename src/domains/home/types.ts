@@ -88,6 +88,7 @@ export type HomeDashboardData = {
     dueNewLabel: string;
     dueForgettingLabel: string;
     dueTodayLabel: string;
+    dueSampleLabel: string;
     memoryLabel: (level: number) => string;
     goalCount: (completed: number, target: number) => string;
     goalDone: string;

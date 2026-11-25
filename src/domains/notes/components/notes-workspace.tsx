@@ -8,6 +8,7 @@ import { translateText } from '@/lib/i18n/locale';
 import { NOTE_FILTERS } from '../data';
 import { useNotesWorkspace } from '../hooks/use-notes-workspace';
 import { notesMessages } from '../messages';
+import { getNoteDisplay } from '../seed-note-display';
 import { NoteCategoryManager } from './note-category-manager';
 import { NoteDetail } from './note-detail';
 import { NoteEditor } from './note-editor';
@@ -53,7 +54,7 @@ export function NotesWorkspace() {
         <NoteEditor
           categories={categories}
           key={editingNote.id}
-          note={editingNote}
+          note={getNoteDisplay(editingNote)}
           onChange={handleChange}
           onSave={() => {
             handleSave();

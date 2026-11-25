@@ -9,7 +9,8 @@ import './due-word-card.css';
 
 const { copy } = homeDashboardData;
 
-function dueLabel(word: DueWord): string {
+function dueLabel(word: DueWord, sample: boolean): string {
+  if (sample) return copy.dueSampleLabel;
   if (word.isNew) return copy.dueNewLabel;
   return word.tone === 'coral' ? copy.dueForgettingLabel : copy.dueTodayLabel;
 }
@@ -22,7 +23,7 @@ interface DueWordCardProps {
 }
 
 export function DueWordCard({ word, href, sample = false }: DueWordCardProps) {
-  const label = dueLabel(word);
+  const label = dueLabel(word, sample);
   const Root = sample ? 'article' : Link;
   const rootProps = sample ? {} : { href };
 

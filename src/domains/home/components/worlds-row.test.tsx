@@ -28,6 +28,19 @@ describe('WorldsRow', () => {
     expect(html).toContain('Nuevo mundo');
   });
 
+  it('shows the scene of a world not started under a gray veil', () => {
+    const html = renderToStaticMarkup(<WorldsRow worlds={worlds} />);
+    const newCard = html.slice(html.indexOf('data-state="new"'));
+
+    expect(newCard).toContain('world-work-day.png');
+    expect(newCard).toContain('world-arch__veil');
+    expect(newCard).toContain('Nuevo mundo');
+    expect(newCard).toContain('0/180');
+    // Started worlds keep their full colour: no veil.
+    const activeCard = html.slice(0, html.indexOf('data-state="new"'));
+    expect(activeCard).not.toContain('world-arch__veil');
+  });
+
   it('renders nothing without worlds', () => {
     expect(renderToStaticMarkup(<WorldsRow worlds={[]} />)).toBe('');
   });

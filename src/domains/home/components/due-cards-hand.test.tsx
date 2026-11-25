@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
+import { setAppLanguage } from '@/lib/i18n/locale';
 import type { DueWord } from '@/lib/home/home-hand.types';
 import { DueCardsHand } from './due-cards-hand';
 
@@ -16,6 +17,8 @@ const word = (id: string, overrides: Partial<DueWord> = {}): DueWord => ({
 });
 
 describe('DueCardsHand', () => {
+  afterEach(() => setAppLanguage('Español'));
+
   it('renders one linked card per word with term, meaning, phonetics and memory', () => {
     const html = renderToStaticMarkup(
       <DueCardsHand
@@ -46,15 +49,32 @@ describe('DueCardsHand', () => {
       />
     );
 
-    expect(html).not.toContain('Ejemplo');
+    // No banner: each sample card says it is an example in its own footer.
+    expect(html).not.toContain('así se verá');
+    expect(html.match(/>Ejemplo</g)).toHaveLength(6);
+    expect(html).not.toContain('Repasa hoy');
     expect(html).not.toContain('fresh');
     expect(html.match(/class="due-card"/g)).toHaveLength(6);
     for (const tone of ['coral', 'amber', 'brand', 'mint'])
       expect(html).toContain(`data-tone="${tone}"`);
     // Sample cards are not links: they are not the user's words.
     expect(html).not.toMatch(/<a [^>]*class="due-card"/);
-    expect(html).toContain('<article aria-label="receipt');
+    expect(html).toContain('<article aria-label="receipt, Ejemplo"');
     expect(html).toContain('Ver las 9');
+  });
+
+  it('labels sample cards as an example in English too', () => {
+    setAppLanguage('English');
+    const html = renderToStaticMarkup(
+      <DueCardsHand
+        hand={[word('fresh', { isNew: true, memoryLevel: 0, tone: 'brand' })]}
+        href="/review"
+        totalDue={9}
+      />
+    );
+
+    expect(html.match(/>Example</g)).toHaveLength(6);
+    expect(html).not.toContain('>Ejemplo<');
   });
 
   it('keeps the real hand once three due words have been reviewed', () => {

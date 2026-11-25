@@ -14,6 +14,7 @@ import {
   renameNoteCategory,
   sortNotesFavoritesFirst
 } from '../data';
+import { getNoteDisplay } from '../seed-note-display';
 import type { Note, NoteFilter } from '../types';
 
 const noteChanges = collectionChangeBuilder<Note>('note');
@@ -56,7 +57,7 @@ export function useNotesWorkspace() {
         return (
           matchesFilter &&
           (!query ||
-            `${note.title} ${note.body} ${note.category}`
+            `${getNoteDisplay(note).title} ${getNoteDisplay(note).body} ${note.category}`
               .toLocaleLowerCase()
               .includes(query))
         );

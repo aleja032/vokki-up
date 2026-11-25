@@ -62,6 +62,7 @@ function collectHomeStrings(): string[] {
     copy.dueNewLabel,
     copy.dueForgettingLabel,
     copy.dueTodayLabel,
+    copy.dueSampleLabel,
     copy.memoryLabel(3),
     copy.goalCount(8, 20),
     copy.goalDone,

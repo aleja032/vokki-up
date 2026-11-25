@@ -9,6 +9,7 @@ import {
   getNoteSectionTone
 } from '../note-category-tone.util';
 import { notesMessages } from '../messages';
+import { getNoteDisplay } from '../seed-note-display';
 import type { Note } from '../types';
 import { StarIcon } from './note-icons';
 import { NoteInlineText } from './note-inline-text';
@@ -24,13 +25,14 @@ type NoteDetailProps = {
 };
 
 export function NoteDetail({
-  note,
+  note: storedNote,
   onEdit,
   onToggleFavorite,
   onDelete
 }: NoteDetailProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const note = getNoteDisplay(storedNote);
   const isFavorite = note.favorite === true;
 
   return (

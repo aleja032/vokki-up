@@ -2,6 +2,7 @@ import { translateText } from '@/lib/i18n/locale';
 import { getNotePreview } from '../note-content.util';
 import { getNoteCategoryTone } from '../note-category-tone.util';
 import { notesMessages } from '../messages';
+import { getNoteDisplay } from '../seed-note-display';
 import type { Note } from '../types';
 import { StarIcon } from './note-icons';
 import './notes.css';
@@ -23,7 +24,8 @@ export function NoteList({
 }: NoteListProps) {
   return (
     <div className="notes-cards" aria-label={messages.label}>
-      {notes.map(note => {
+      {notes.map(storedNote => {
+        const note = getNoteDisplay(storedNote);
         const isFavorite = note.favorite === true;
         const title = note.title || messages.untitled;
         return (

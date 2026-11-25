@@ -80,6 +80,7 @@ export const homeDashboardData = createLocalizedMessages<HomeDashboardData>({
     dueNewLabel: 'Nueva',
     dueForgettingLabel: 'Se olvida hoy',
     dueTodayLabel: 'Repasa hoy',
+    dueSampleLabel: 'Ejemplo',
     memoryLabel: level => `Memoria ${level} de 5`,
     goalCount: (completed, target) => `${completed} / ${target} tarjetas`,
     goalDone: '¡Meta cumplida! Abriste el cofre.',

@@ -136,3 +136,10 @@ Verification: see the T16 report.
 - Static audit: `src/lib/i18n/app-labels-english.test.ts` runs every `messages.ts` string (wide Spanish marker list) plus parts of speech, levels, categories, worlds and seed group names through `translateText` in English.
 - Left in Spanish by design: learning data (meanings, example translations), seed notes content, sample CSV file name, manifest `lang`.
 - Checks: vitest 721 passed, tsc and eslint clean; English smoke pass over every route at 1440 and 390; Spanish still shown for Español on /, /cards, /review.
+
+## T21 - Sample data gaps (sample hand, seed notes, new worlds)
+
+- Sample hand cards show "Ejemplo"/"Example" in the footer due label (`copy.dueSampleLabel`), aria-label `term, Ejemplo`; no banner.
+- Seed notes display in English via `src/domains/notes/seed-note-display.ts` (`getNoteDisplay`), only while id+title+body equal the seed; edited/user notes untouched. Wired in list, detail, editor, search.
+- Worlds not started show their scene grayscale under a `--surface-muted` veil; icon path removed from `world-arch-card`.
+- Checks: vitest 728 passed, tsc clean, eslint clean; browser verified home (dark/light, 1440/390, no overflow, 0 errors) and /notes en/es + edit persistence.
