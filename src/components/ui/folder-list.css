@@ -61,8 +61,18 @@
   @apply w-full;
 }
 
-.folder-list__icon {
-  @apply size-6 shrink-0 text-(--ink-soft);
+/* Color marker: a soft chip behind the folder icon, in the folder color. "Todas"
+   has no color and keeps the muted surface. */
+.folder-list__chip {
+  @apply flex size-9 shrink-0 items-center justify-center rounded-(--radius-14) bg-(--surface-muted) text-(--ink-soft);
+}
+
+.folder-list__chip--colored {
+  @apply bg-(--folder-bg) text-(--folder-ink);
+}
+
+.folder-list__item[data-folder-color][aria-pressed='true'] {
+  @apply border-(--folder-ink);
 }
 
 /* On phones the label and the long count stack inside one block. */
@@ -165,8 +175,8 @@
     @apply contents;
   }
 
-  .folder-list__icon {
-    @apply size-5;
+  .folder-list__chip {
+    @apply size-8 rounded-[10px];
   }
 
   .folder-list__item,
@@ -180,6 +190,20 @@
 
   .folder-list__item[aria-pressed='true']::before {
     @apply absolute inset-y-2.5 left-0 w-1 rounded-full bg-(--brand-line) content-[''];
+  }
+
+  /* A colored folder paints its own selection: its bar, its tint. */
+  .folder-list__item[data-folder-color][aria-pressed='true'] {
+    @apply bg-(--folder-bg) text-(--ink);
+  }
+
+  .folder-list__item[data-folder-color][aria-pressed='true']::before {
+    @apply bg-(--folder-ink);
+  }
+
+  .folder-list__item[data-folder-color][aria-pressed='true']
+    .folder-list__chip {
+    @apply bg-(--surface);
   }
 
   .folder-list__label {

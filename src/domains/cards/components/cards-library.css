@@ -1,8 +1,8 @@
 @reference 'tailwindcss';
 
 /*
- * Mi mazo library (proposal D), on the page ground: a head with the open
- * folder and its links, a toolbar (search, type select, status filter) and the
+ * Mi mazo library (proposal D), on the page ground: below the folder header
+ * (folder-header.css), a toolbar (search, type select, status filter) and the
  * cards. The status filter takes the place of the artboard legend (dot and
  * label per state). Phones: search and type on top, the filter below, a
  * two-column grid of tiles and a "show more" step. From 761px: one wrapping
@@ -12,69 +12,6 @@
 .deck-library {
   --selection-dock-gap: 1rem;
   @apply flex min-w-0 flex-1 flex-col gap-4;
-  /* Location line: "Mi mazo / name" with the card count in plain text, and
-   the tertiary actions of the folder on the right. */
-  .deck-library__head {
-    @apply flex min-w-0 flex-wrap items-center justify-between gap-x-4 gap-y-0;
-  }
-
-  .deck-library__crumbs {
-    @apply flex min-w-0 flex-1 flex-wrap items-center gap-x-2.5 gap-y-0.5 text-[14px] text-(--ink-soft);
-  }
-
-  .deck-library__crumb-root {
-    @apply inline-flex min-h-11 cursor-pointer items-center gap-0.5 rounded-(--radius-14) border-0 bg-transparent px-0 text-[14px] font-semibold text-(--ink-soft) hover:text-(--indigo);
-  }
-
-  .deck-library__crumb-root--current {
-    @apply cursor-default hover:text-(--ink-soft);
-  }
-
-  .deck-library__crumb-sep {
-    @apply shrink-0 text-(--ink-soft);
-  }
-
-  .deck-library__crumb-here {
-    @apply inline-flex max-w-full min-w-0 items-center gap-2 text-(--ink);
-  }
-
-  .deck-library__crumb-icon {
-    @apply shrink-0 text-(--ink-soft);
-  }
-
-  .deck-library__crumb-kind {
-    @apply shrink-0 text-[13px] font-semibold text-(--ink-soft);
-  }
-
-  .deck-library__head h2 {
-    @apply m-0 min-w-0 truncate text-[20px] leading-tight font-extrabold tracking-[-0.3px];
-  }
-
-  .deck-library__meta {
-    @apply shrink-0 text-[14px] whitespace-nowrap text-(--ink-soft);
-  }
-
-  /* Quick stats of the open folder: wide screens only. */
-  .deck-library__chips {
-    @apply hidden shrink-0 items-center gap-2 min-[761px]:flex;
-  }
-
-  .deck-library__chip {
-    @apply rounded-full border border-solid border-(--line) bg-(--surface-muted) px-2.5 py-0.5 text-[12.5px] font-semibold whitespace-nowrap text-(--ink-soft);
-  }
-
-  .deck-library__links {
-    @apply ml-auto flex items-center gap-1;
-  }
-
-  .deck-library__manage {
-    @apply px-2;
-  }
-}
-
-/* The entry button keeps its slot while managing so the head never shifts. */
-.deck-library__manage[inert] {
-  @apply invisible;
 }
 
 /* Phones: search and type on the first row, the status filter below. */
@@ -98,10 +35,6 @@
 .deck-library__type {
   @apply w-34.5;
   grid-area: type;
-}
-
-.deck-library__group-actions {
-  @apply flex justify-end;
 }
 
 /* Phones: the two-up grid of the artboard; a single column under 360px, where
@@ -200,20 +133,6 @@
 
   .deck-pagination__status {
     @apply text-[14px];
-  }
-}
-
-/* Phones (VokkiDMazoMobile): the head is just the folder name and "Gestionar". */
-@media (max-width: 760px) {
-  .deck-library .deck-library__crumb-root,
-  .deck-library .deck-library__crumb-sep,
-  .deck-library .deck-library__crumb-icon,
-  .deck-library .deck-library__crumb-kind {
-    @apply hidden;
-  }
-
-  .deck-library__head h2 {
-    @apply text-[17px];
   }
 }
 

@@ -74,6 +74,31 @@ describe('CardGroupList folders', () => {
     expect(html).toContain('No hay carpetas con ese nombre.');
   });
 
+  it('gives every folder its color and leaves Todas neutral', () => {
+    const html = render([
+      { group, cardCount: 17, dueCount: 3 },
+      { group: travel, cardCount: 9, dueCount: 0 }
+    ]);
+    // legacy coral is shown as lavender, never as coral or amber
+    expect(html).toContain('data-folder-color="lavender"');
+    expect(html).toContain('data-folder-color="blue"');
+    expect(html).not.toContain('data-folder-color="coral"');
+    expect(html).not.toContain('data-folder-color="amber"');
+    expect(html.match(/data-folder-color=/g)).toHaveLength(2);
+  });
+
+  it('shows a seed folder stored as amber in an allowed color', () => {
+    const html = render([
+      {
+        group: { ...travel, tone: 'amber' },
+        cardCount: 9,
+        dueCount: 0
+      }
+    ]);
+    expect(html).toContain('data-folder-color="teal"');
+    expect(html).not.toContain('amber');
+  });
+
   it('keeps a visible control to create a folder', () => {
     expect(render([])).toContain('Nueva carpeta');
   });

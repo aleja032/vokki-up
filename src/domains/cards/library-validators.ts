@@ -8,7 +8,8 @@ const GROUP_TONE_VALUES = [
   'blue',
   'teal',
   'coral',
-  'gray'
+  'gray',
+  'lavender'
 ];
 
 function isRecord(value: unknown): value is Record<string, unknown> {

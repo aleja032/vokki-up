@@ -18,6 +18,10 @@ export const cardsMessages = createLocalizedMessages({
       `Repasar ${due} · ${name}`,
     folderDueChip: (due: number) => `${due} para hoy`,
     folderMasteredChip: (percent: number) => `${percent}% dominadas`,
+    folderSummary: (cards: number, due: number, percent: number) =>
+      `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} · ${due} para hoy · ${percent}% dominadas`,
+    backToAllLabel: 'Volver a todas las carpetas',
+    addToFolder: 'Agregar tarjeta a esta carpeta',
     memoryLabel: (level: number) => `Memoria ${level} de 5`,
     groupsTitle: 'Carpetas',
     foldersHint:
@@ -108,10 +112,10 @@ export const cardsMessages = createLocalizedMessages({
     colorLegend: 'Color',
     colorNames: {
       indigo: 'Índigo',
-      green: 'Verde',
-      amber: 'Ámbar',
+      lavender: 'Lavanda',
+      blue: 'Azul',
       teal: 'Turquesa',
-      coral: 'Coral',
+      green: 'Verde',
       gray: 'Gris'
     },
     descriptionLabel: 'Descripción',
@@ -132,6 +136,13 @@ export const cardsMessages = createLocalizedMessages({
     menuRecolor: 'Cambiar color',
     menuDelete: 'Eliminar carpeta',
     menuDeleteBlocked: 'Elimina sus tarjetas para poder borrar esta carpeta.',
+    menuRenameLocked:
+      'Esta carpeta recibe las tarjetas de las eliminadas: su nombre no cambia.',
+    editTitle: 'Editar carpeta',
+    editNameLabel: 'Nombre de la carpeta',
+    editColorLegend: 'Color de la carpeta',
+    editSave: 'Guardar',
+    editCancel: 'Cancelar',
     deleteTitle: 'Eliminar grupo',
     deleteBody: (name: string, count: number) => {
       if (count === 0)

@@ -452,6 +452,15 @@ export const extraTranslations: Record<string, string> = {
   Racha: 'Streak',
   'Subieron de memoria': 'Memory went up',
   'Todas las carpetas': 'All folders',
+  'Volver a todas las carpetas': 'Back to all folders',
+  'Agregar tarjeta a esta carpeta': 'Add a card to this folder',
+  'Esta carpeta recibe las tarjetas de las eliminadas: su nombre no cambia.':
+    'This folder receives the cards of deleted folders: its name does not change.',
+  'Editar carpeta': 'Edit folder',
+  'Nombre de la carpeta': 'Folder name',
+  'Color de la carpeta': 'Folder color',
+  Lavanda: 'Lavender',
+  Azul: 'Blue',
   'Ubicación en Mi mazo': 'Location in My deck',
   'Ubicación en Mundos': 'Location in Worlds',
   'Toca una tarjeta para editarla.': 'Tap a card to edit it.',
@@ -472,6 +481,10 @@ export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
   [/^Editar (.+)$/, 'Edit $1'],
   [/^Repasar (\d+) para hoy$/, 'Review $1 for today'],
   [/^(\d+) para hoy$/, '$1 for today'],
+  [
+    /^(\d+) tarjetas? · (\d+) para hoy · (\d+)% dominadas$/,
+    '$1 cards · $2 due today · $3% mastered'
+  ],
   [/^Ver las (\d+)$/, 'View all $1'],
   [/^Ver (\d+) más$/, 'Show $1 more'],
   [/^(\d+) hoy$/, '$1 today'],

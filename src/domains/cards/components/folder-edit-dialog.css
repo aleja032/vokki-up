@@ -1,0 +1,19 @@
+@reference 'tailwindcss';
+
+/* Edit-folder dialog: name field, color swatches and the two actions. */
+
+.folder-edit {
+  @apply flex min-w-0 flex-col gap-5;
+}
+
+.folder-edit .deck-field__input[readonly] {
+  @apply cursor-not-allowed bg-(--surface-muted) text-(--ink-soft);
+}
+
+.folder-edit__hint {
+  @apply m-0 text-[13px] leading-[1.4] text-(--ink-soft);
+}
+
+.folder-edit__actions {
+  @apply grid grid-cols-2 gap-3;
+}

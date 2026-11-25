@@ -186,6 +186,45 @@ describe('violet palette, whole site', () => {
   });
 });
 
+// Folder colors (Mi mazo): six hues, none of them orange, amber or coral. Each
+// one has a strong and a soft token in light and in dark (system dark too).
+const folderColors: Record<string, { light: string[]; dark: string[] }> = {
+  indigo: { light: ['#5b3fe0', '#ede8ff'], dark: ['#9b87ff', '#2b2350'] },
+  lavender: { light: ['#a15fd3', '#f4e8fb'], dark: ['#d19af0', '#3a2147'] },
+  blue: { light: ['#2563c9', '#e1ebfb'], dark: ['#7aa7f5', '#1c2a47'] },
+  teal: { light: ['#0e7490', '#d8eff5'], dark: ['#5cc8dd', '#12303a'] },
+  green: { light: ['#3f7d1f', '#e6f3d9'], dark: ['#9ad46b', '#243319'] },
+  gray: { light: ['#5b5873', '#ece9e2'], dark: ['#a8a2bd', '#2a2636'] }
+};
+
+describe('folder colors', () => {
+  it.each(Object.entries(folderColors))(
+    '%s has its strong and soft token in light and dark',
+    (name, { light, dark }) => {
+      const tokens = [`--folder-${name}`, `--folder-${name}-soft`];
+      tokens.forEach((token, index) => {
+        expect(declared(lightBlock, token)).toBe(light[index]);
+        expect(declared(darkBlock, token)).toBe(dark[index]);
+        expect(declared(mediaDarkBlock, token)).toBe(dark[index]);
+      });
+    }
+  );
+
+  it.each(Object.keys(folderColors))(
+    'maps data-folder-color=%s to --folder-ink and --folder-bg in one place',
+    name => {
+      const rule = css.slice(css.indexOf(`[data-folder-color='${name}'] {`));
+      expect(rule).toContain(`--folder-ink: var(--folder-${name});`);
+      expect(rule).toContain(`--folder-bg: var(--folder-${name}-soft);`);
+    }
+  );
+
+  it('has no orange, amber or coral folder color', () => {
+    expect(Object.keys(folderColors)).toHaveLength(6);
+    expect(css).not.toMatch(/--folder-(amber|coral|orange|red)/);
+  });
+});
+
 describe('design tokens', () => {
   it.each(themedTokens)('defines %s in light, dark and system dark', token => {
     expect(lightBlock).toContain(`${token}:`);

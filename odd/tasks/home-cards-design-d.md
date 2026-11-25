@@ -152,3 +152,12 @@ Verification: see the T16 report.
 - Rename and Recolor only close the menu, exactly as in the old GroupDetail (they never had logic): pending a real feature.
 - Fixed: the empty-folder state (and folder add actions) never showed in English (compared against a localized "Todas"); it now compares with the first category.
 - TDD: tests first, 7 RED, then GREEN. Verification: vitest 121 files / 736 tests, tsc and eslint clean, browser check at 1440 and 390.
+
+## T23 - Folder colors, edit dialog and folder header
+
+- Palette: closed set of 6 (`FOLDER_COLORS`: indigo, lavender, blue, teal, green, gray), `--folder-*` tokens (light + dark + system dark) and one `[data-folder-color]` mapping in globals.css (`--folder-ink`, `--folder-bg`). `displayTone()` shows legacy amber as teal and coral as lavender; stored value untouched until the user recolors. Create form uses the same palette (default indigo).
+- `updateGroup(groupId, {name?, tone?})` in the dashboard through the tracked `setGroups` (sync upsert + local storage). Pure rules in `update-group.ts`: trim, 1..30 chars, no duplicate (stored and displayed names, case-insensitive), "Otros"/"Others" reserved; the catch-all "Otros" keeps its name (rename disabled with a hint) but can be recolored.
+- One "Editar carpeta" dialog (`FormDialog` overlay + `SwatchPicker` radio group + RHF/Zod), opened by Renombrar (focus name) or Cambiar color (focus selected swatch).
+- Folder list: color chip per folder, colored selection; new `FolderHeader` (back button "Todas las carpetas", chip, name, "N tarjetas · M para hoy · P% dominadas", kebab, "Agregar tarjeta a esta carpeta" + Gestionar; lighter header for Todas). Removed the old crumb/chips head and the header "Anadir"/library row (library link stays in the page header and the empty state).
+- Kept: "Toca una tarjeta para editarla." hint.
+- Verification: vitest 128 files / 807 tests, tsc, eslint, prettier clean; browser (English, light/dark, 1440/390): create, rename, duplicate error, recolor, reload persistence, delete, add-to-folder preselect, back; 0 horizontal overflow, 0 console errors; header CTA/Gestionar/kebab all 44px. Spanish not checked in the browser.

@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { DEFAULT_GROUP_TONE, type GroupTone } from '../group-colors';
+import { DEFAULT_GROUP_TONE, type FolderColor } from '../group-colors';
 import {
   createGroupCreateSchema,
   type GroupCreateInput
@@ -45,7 +45,7 @@ export function useGroupCreateSubmit({
     onCreate({ id: createGroupId(), ...values });
   });
 
-  function selectTone(nextTone: GroupTone) {
+  function selectTone(nextTone: FolderColor) {
     setValue('tone', nextTone, { shouldDirty: true });
   }
 

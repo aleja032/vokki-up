@@ -1,8 +1,7 @@
 import { z } from 'zod';
-import { GROUP_TONES } from './group-colors';
+import { FOLDER_COLORS } from './group-colors';
+import { GROUP_NAME_MAX_LENGTH } from './group-name-rules';
 import { cardsValidationMessages } from './validation-messages';
-
-const GROUP_NAME_MAX_LENGTH = 30;
 
 // Factory because the duplicate-name rule depends on the groups that exist.
 export function createGroupCreateSchema(existingNames: readonly string[]) {
@@ -25,7 +24,7 @@ export function createGroupCreateSchema(existingNames: readonly string[]) {
           cardsValidationMessages.groupNameDuplicate(String(issue.input))
       }),
     description: z.string().trim(),
-    tone: z.enum(GROUP_TONES, {
+    tone: z.enum(FOLDER_COLORS, {
       error: () => cardsValidationMessages.groupToneInvalid
     })
   });

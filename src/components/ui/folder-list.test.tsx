@@ -18,6 +18,7 @@ const items: FolderListItem[] = [
     ariaLabel: 'Trabajo · 17 tarjetas',
     countLabel: '17 tarjetas',
     dueLabel: '4 hoy',
+    color: 'teal',
     onSelect: () => undefined
   }
 ];
@@ -69,6 +70,22 @@ describe('FolderList', () => {
     expect(html).toContain('folder-list__dot');
     // "Todas" has no due label, so only one due block is rendered.
     expect(html.match(/folder-list__due/g)).toHaveLength(1);
+  });
+
+  it('marks each folder with its color and leaves the all folder neutral', () => {
+    const html = render([
+      ...items,
+      { ...items[1], id: 'trip', label: 'Viajes', color: 'lavender' }
+    ]);
+
+    expect(html.match(/data-folder-color="/g)).toHaveLength(2);
+    expect(html).toContain('data-folder-color="teal"');
+    expect(html).toContain('data-folder-color="lavender"');
+    // one color chip behind the icon of every folder, plain for "Todas"
+    expect(
+      html.match(/<span aria-hidden="true" class="folder-list__chip/g)
+    ).toHaveLength(3);
+    expect(html.match(/folder-list__chip--colored/g)).toHaveLength(2);
   });
 
   it('offers the link that expands the phone list only when it is given', () => {

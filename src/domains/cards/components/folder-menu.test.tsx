@@ -10,12 +10,20 @@ const group = {
   tone: 'indigo'
 } as unknown as CardGroup;
 
-function render(options: { cardCount?: number; isDeletable?: boolean } = {}) {
+function render(
+  options: {
+    cardCount?: number;
+    isDeletable?: boolean;
+    group?: CardGroup;
+  } = {}
+) {
   return renderToStaticMarkup(
     createElement(FolderMenu, {
-      group,
+      group: options.group ?? group,
       cardCount: options.cardCount ?? 1,
       isDeletable: options.isDeletable ?? true,
+      otherGroupNames: ['Viajes'],
+      onUpdate: () => undefined,
       onDelete: () => undefined
     })
   );
@@ -35,6 +43,28 @@ describe('FolderMenu', () => {
     expect(html).toContain('>Cambiar color<');
     expect(html).toContain('>Eliminar carpeta<');
     expect(html).not.toContain('Elimina sus tarjetas');
+  });
+
+  it('opens the edit dialog from rename and recolor, closed until then', () => {
+    const html = render();
+    expect(html).toContain('>Editar carpeta<');
+    expect(html).not.toContain('folder-edit-name');
+    expect(html).not.toContain('type="radio"');
+  });
+
+  it('keeps rename available for a normal folder', () => {
+    const html = render();
+    expect(html).not.toMatch(/<button[^>]*disabled[^>]*>Renombrar</);
+    expect(html).not.toContain('su nombre no cambia.</span>');
+  });
+
+  it('blocks rename for the catch-all Otros, and says why, but keeps recolor', () => {
+    const html = render({
+      group: { id: 'others', name: 'Otros', description: '', tone: 'gray' }
+    });
+    expect(html).toMatch(/<button[^>]*disabled[^>]*>Renombrar</);
+    expect(html).toContain('su nombre no cambia.');
+    expect(html).not.toMatch(/<button[^>]*disabled[^>]*>Cambiar color</);
   });
 
   it('blocks the delete and says why when the folder cannot be deleted', () => {

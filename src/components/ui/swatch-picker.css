@@ -1,0 +1,56 @@
+@reference 'tailwindcss';
+
+/*
+ * Swatch picker: a native radio group of color swatches. The input is visually
+ * hidden but stays focusable (one tab stop, arrow keys move the choice); the
+ * label draws the swatch. Colors: --folder-ink / --folder-bg, set by
+ * [data-folder-color] in globals.css.
+ */
+
+.swatch-picker {
+  @apply m-0 min-w-0 border-0 p-0;
+}
+
+.swatch-picker__legend {
+  @apply mb-2 p-0 text-[14px] font-bold text-(--ink);
+}
+
+/* Phones: three per row; from 480px all six on one row. */
+.swatch-picker__options {
+  @apply grid grid-cols-3 gap-2 min-[480px]:grid-cols-6;
+}
+
+.swatch-picker__option {
+  @apply relative box-border flex min-h-16 min-w-0 cursor-pointer flex-col items-center justify-center gap-1.5 rounded-(--radius-14) border-2 border-solid border-transparent bg-(--folder-bg) px-0.5 py-2 text-(--ink);
+  transition: var(--hover-transition);
+}
+
+.swatch-picker__input {
+  @apply absolute inset-0 m-0 size-full cursor-pointer opacity-0;
+}
+
+.swatch-picker__dot {
+  @apply flex size-6 items-center justify-center rounded-full bg-(--folder-ink) text-(--surface);
+}
+
+.swatch-picker__name {
+  @apply max-w-full text-[12px] leading-none font-semibold wrap-anywhere;
+}
+
+.swatch-picker__option:has(.swatch-picker__input:checked) {
+  @apply border-(--folder-ink);
+}
+
+.swatch-picker__option:has(.swatch-picker__input:checked) .swatch-picker__name {
+  @apply font-extrabold;
+}
+
+.swatch-picker__option:has(.swatch-picker__input:focus-visible) {
+  @apply outline-3 outline-offset-2 outline-(--focus-ring) outline-solid;
+}
+
+@media (hover: hover) {
+  .swatch-picker__option:not(:has(.swatch-picker__input:checked)):hover {
+    border-color: color-mix(in srgb, var(--folder-ink) 45%, transparent);
+  }
+}

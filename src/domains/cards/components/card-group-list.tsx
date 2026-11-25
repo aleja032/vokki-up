@@ -2,6 +2,7 @@
 
 import { FolderList } from '@/components/ui/folder-list';
 import { ALL_GROUPS_ID } from '../hooks/use-cards-dashboard';
+import { displayTone } from '../group-colors';
 import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardGroup } from '../types';
@@ -72,6 +73,7 @@ export function CardGroupList({
           countLabel: messages.cardCount(cardCount),
           dueLabel: dueCount > 0 ? messages.folderDue(dueCount) : undefined,
           pressed: activeGroupId === group.id,
+          color: displayTone(group.tone),
           ariaLabel: `${getGroupDisplayName(group)} · ${messages.groupMeta(cardCount, dueCount)}`,
           onSelect: () => onSelectGroup(group.id)
         }))

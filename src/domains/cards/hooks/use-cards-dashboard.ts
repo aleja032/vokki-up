@@ -12,6 +12,11 @@ import { STARTER_CARDS, STARTER_GROUPS } from '../data';
 import { canDeleteGroup, deleteGroupMovingCards } from '../delete-group';
 import { getGroupDisplayName } from '../group-display';
 import { isCardList, isGroupList } from '../library-validators';
+import {
+  collectOtherGroupNames,
+  updateGroupDetails,
+  type GroupPatch
+} from '../update-group';
 import { cardsMessages } from '../messages';
 import { isMastered } from '../scheduling/mastery';
 import { buildDueQueue } from '../scheduling/progress';
@@ -256,6 +261,14 @@ export function useCardsDashboard() {
     setGroupView('overview');
   }
 
+  // Renames and/or recolors a group through the same tracked setter as create
+  // and delete, so the sync queue gets one upsert and local storage follows.
+  function updateGroup(groupId: string, patch: GroupPatch) {
+    if (!areGroupsLoaded) return;
+    const nextGroups = updateGroupDetails(groups, groupId, patch);
+    if (nextGroups !== groups) setGroups(nextGroups);
+  }
+
   function startGroupCreation() {
     setIsEditorOpen(false);
     setGroupView('new');
@@ -289,6 +302,9 @@ export function useCardsDashboard() {
     activeGroup,
     activeGroupId,
     activeGroupStats,
+    activeGroupOtherNames: activeGroup
+      ? collectOtherGroupNames(groups, activeGroup.id)
+      : [],
     reviewGroup,
     activeCategory,
     activeStatus,
@@ -314,6 +330,7 @@ export function useCardsDashboard() {
     addWordLibraryEntries,
     isLibraryReady: areCardsLoaded && areGroupsLoaded,
     createGroup,
+    updateGroup,
     deleteGroup,
     startGroupCreation,
     viewExistingCard

@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, Folder, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
 import { actionPillClass } from '@/components/ui/action-pill';
@@ -18,8 +18,8 @@ import { getGroupDisplayName } from '../group-display';
 import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
-import { GroupAddActions } from './group-add-actions';
-import { FolderMenu } from './folder-menu';
+import type { GroupPatch } from '../update-group';
+import { FolderHeader, type ActiveGroupStats } from './folder-header';
 import { GroupEmptyState } from './group-empty-state';
 import { SelectionActionBar } from './selection-action-bar';
 import { VocabularyCardItem } from './vocabulary-card-item';
@@ -51,11 +51,7 @@ function getStatusOptions(counts: CardStatusCounts) {
   }[];
 }
 
-export type ActiveGroupStats = {
-  dueCount: number;
-  masteredPercent: number;
-  isDeletable: boolean;
-};
+export type { ActiveGroupStats };
 
 type CardsLibraryProps = {
   cards: VocabularyCard[];
@@ -75,6 +71,10 @@ type CardsLibraryProps = {
   onStatusChange: (status: CardStatusFilter) => void;
   onDeleteCards: (cardIds: readonly string[]) => void;
   onAddCard: () => void;
+  /** Names the active folder cannot take when renamed. */
+  otherGroupNames: readonly string[];
+  /** Renames and/or recolors the active folder. */
+  onUpdateGroup: (groupId: string, patch: GroupPatch) => void;
   /** Deletes the active folder (its cards move to "Otros"). */
   onDeleteGroup: (groupId: string) => void;
   /** Goes back from a folder to the whole deck. */
@@ -100,6 +100,8 @@ export function CardsLibrary({
   onStatusChange,
   onDeleteCards,
   onAddCard,
+  otherGroupNames,
+  onUpdateGroup,
   onDeleteGroup,
   onShowAll,
   onEditCard
@@ -192,80 +194,20 @@ export function CardsLibrary({
       aria-labelledby="deck-library-title"
       data-managing={isManaging}
     >
-      <div className="deck-library__head">
-        <nav
-          aria-label={messages.locationLabel}
-          className="deck-library__crumbs"
-        >
-          {activeGroup ? (
-            <button
-              className="deck-library__crumb-root"
-              onClick={onShowAll}
-              type="button"
-            >
-              <ChevronLeft aria-hidden="true" size={16} />
-              {messages.title}
-            </button>
-          ) : (
-            <span className="deck-library__crumb-root deck-library__crumb-root--current">
-              {messages.title}
-            </span>
-          )}
-          <span aria-hidden="true" className="deck-library__crumb-sep">
-            /
-          </span>
-          <span aria-current="location" className="deck-library__crumb-here">
-            <Folder
-              aria-hidden="true"
-              className="deck-library__crumb-icon"
-              size={18}
-            />
-            {activeGroup ? (
-              <span className="deck-library__crumb-kind">
-                {messages.folderLabel}
-              </span>
-            ) : null}
-            <h2 id="deck-library-title" title={groupTitle}>
-              {groupTitle}
-            </h2>
-          </span>
-          <span className="deck-library__meta">
-            {messages.cardCount(statusCounts.all)}
-          </span>
-          {activeGroupStats ? (
-            <span className="deck-library__chips">
-              <span className="deck-library__chip">
-                {messages.folderDueChip(activeGroupStats.dueCount)}
-              </span>
-              <span className="deck-library__chip">
-                {messages.folderMasteredChip(activeGroupStats.masteredPercent)}
-              </span>
-            </span>
-          ) : null}
-        </nav>
-        <div className="deck-library__links">
-          {activeGroup && activeGroupStats ? (
-            <FolderMenu
-              cardCount={statusCounts.all}
-              group={activeGroup}
-              isDeletable={activeGroupStats.isDeletable}
-              onDelete={onDeleteGroup}
-            />
-          ) : null}
-          <button
-            className={cn(
-              actionPillClass('tertiary', 'md', 'mint'),
-              'deck-library__manage'
-            )}
-            type="button"
-            disabled={!canDeleteCards || cards.length === 0}
-            inert={isManaging}
-            onClick={startManaging}
-          >
-            {messages.manageCards}
-          </button>
-        </div>
-      </div>
+      <FolderHeader
+        canAddCard={!(isUnfilteredGroup && cards.length === 0)}
+        canManage={canDeleteCards && cards.length > 0}
+        cardCount={statusCounts.all}
+        group={activeGroup}
+        isManaging={isManaging}
+        onAddCard={onAddCard}
+        onDeleteGroup={onDeleteGroup}
+        onManage={startManaging}
+        onShowAll={onShowAll}
+        onUpdateGroup={onUpdateGroup}
+        otherGroupNames={otherGroupNames}
+        stats={activeGroupStats}
+      />
       <div className="deck-library__toolbar">
         <SegmentedToggle
           ariaLabel={messages.statusFiltersLabel}
@@ -312,11 +254,6 @@ export function CardsLibrary({
         onConfirm={confirmDelete}
         onCancel={() => setIsConfirmingDelete(false)}
       />
-      {isUnfilteredGroup && cards.length > 0 && (
-        <div className="deck-library__group-actions">
-          <GroupAddActions variant="header" onAdd={onAddCard} />
-        </div>
-      )}
       {cards.length > 0 && !isManaging ? (
         <p className="deck-library__hint">{messages.editHint}</p>
       ) : null}

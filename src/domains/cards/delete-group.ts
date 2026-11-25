@@ -17,7 +17,8 @@ export type DeleteGroupResult = {
   destinationGroupId: string | undefined;
 };
 
-function isOthers(group: CardGroup) {
+/** The catch-all group: matched by id, or by name for one created by hand. */
+export function isOthers(group: CardGroup) {
   return (
     group.id === OTHERS_GROUP_ID ||
     group.name.trim().toLocaleLowerCase() ===

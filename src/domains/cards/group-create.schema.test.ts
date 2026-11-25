@@ -4,7 +4,7 @@ import { cardsValidationMessages } from './validation-messages';
 
 const schema = createGroupCreateSchema(['Laboral', 'Vida diaria']);
 
-const validInput = { name: 'Viajes', description: '', tone: 'coral' };
+const validInput = { name: 'Viajes', description: '', tone: 'lavender' };
 
 describe('createGroupCreateSchema', () => {
   it('accepts a valid group and trims name and description', () => {
@@ -60,6 +60,11 @@ describe('createGroupCreateSchema', () => {
         'Ya tienes un grupo llamado “laboral”.'
       );
     }
+  });
+
+  it('offers only the closed folder palette: no amber and no coral', () => {
+    for (const tone of ['amber', 'coral'])
+      expect(schema.safeParse({ ...validInput, tone }).success).toBe(false);
   });
 
   it('rejects an unknown tone', () => {

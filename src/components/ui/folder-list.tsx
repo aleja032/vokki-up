@@ -19,6 +19,8 @@ export type FolderListItem = {
   dueLabel?: string;
   /** The selected folder is the one whose content is shown. */
   pressed: boolean;
+  /** Folder color key read by `data-folder-color`; absent for the neutral "all" item. */
+  color?: string;
   ariaLabel?: string;
   onSelect: () => void;
 };
@@ -116,15 +118,20 @@ export function FolderList({
                 aria-label={item.ariaLabel}
                 aria-pressed={item.pressed}
                 className="folder-list__item"
+                data-folder-color={item.color}
                 key={item.id}
                 onClick={item.onSelect}
                 type="button"
               >
-                <Folder
+                <span
                   aria-hidden="true"
-                  className="folder-list__icon"
-                  size={20}
-                />
+                  className={cn(
+                    'folder-list__chip',
+                    item.color && 'folder-list__chip--colored'
+                  )}
+                >
+                  <Folder className="folder-list__icon" size={20} />
+                </span>
                 <span className="folder-list__text">
                   <span className="folder-list__label">{item.label}</span>
                   <span className="folder-list__count">{item.count}</span>

@@ -47,6 +47,8 @@ function render(
             isDeletable: options.isDeletable ?? true
           }
         : undefined,
+      otherGroupNames: ['Viajes'],
+      onUpdateGroup: () => undefined,
       onDeleteGroup: () => undefined,
       onShowAll: () => undefined,
       onEditCard: () => undefined
@@ -83,7 +85,9 @@ describe('CardsLibrary toolbar', () => {
     expect(html).toContain(
       'id="deck-library-title" title="Trabajo">Trabajo</h2>'
     );
-    expect(html).toMatch(/<button[^>]*deck-library__crumb-root[^>]*>.*Mi mazo/);
+    expect(html).toMatch(
+      /<button[^>]*aria-label="Volver a todas las carpetas"[^>]*>.*Todas las carpetas/
+    );
     expect(html).not.toContain('Abrir carpeta');
   });
 
@@ -91,7 +95,8 @@ describe('CardsLibrary toolbar', () => {
     const html = render([card]);
     expect(html).toContain('Todas las carpetas');
     expect(html).not.toContain('Abrir carpeta');
-    expect(html).not.toMatch(/<button[^>]*deck-library__crumb-root/);
+    expect(html).not.toContain('Volver a todas las carpetas');
+    expect(html).not.toContain('folder-header__back');
   });
 
   it('shows the visible range and a numbered pager when there are many cards', () => {
@@ -152,11 +157,24 @@ describe('CardsLibrary group add actions', () => {
     expect(html).not.toContain('No hay tarjetas con ese filtro.');
   });
 
-  it('offers Añadir and the library link for a group with cards', () => {
+  it('offers one add action in the folder header for a group with cards', () => {
     const html = render([card], { activeGroup: group });
-    expect(count(html, '>Añadir<')).toBe(1);
+    expect(count(html, 'Agregar tarjeta a esta carpeta')).toBe(1);
+    expect(count(html, '>Añadir<')).toBe(0);
     expect(count(html, '>Añadir tarjeta<')).toBe(0);
-    expect(count(html, 'href="/cards/word-library"')).toBe(1);
+    // the library link lives in the page header, not here
+    expect(count(html, 'href="/cards/word-library"')).toBe(0);
+  });
+
+  it('does not repeat the add action in the header of an empty folder', () => {
+    const html = render([], { activeGroup: group });
+    expect(count(html, 'Agregar tarjeta a esta carpeta')).toBe(0);
+    expect(count(html, '>Añadir tarjeta<')).toBe(1);
+  });
+
+  it('keeps the header add action while a filter empties the folder', () => {
+    const html = render([], { activeGroup: group, searchText: 'zzz' });
+    expect(count(html, 'Agregar tarjeta a esta carpeta')).toBe(1);
   });
 
   it('keeps the filter message, without CTAs, when a search empties a group', () => {

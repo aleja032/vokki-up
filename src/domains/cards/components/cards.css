@@ -54,30 +54,33 @@
 
 /* Group tones (data-tone) and part-of-speech colors (data-category). */
 
+/* Folder colors come from the --folder-* tokens. A legacy amber is shown as
+   teal and a legacy coral as lavender (same mapping as displayTone()). */
 [class*='deck-'][data-tone='indigo'] {
-  --tone-soft: var(--deck-indigo-soft);
-  --tone-strong: var(--deck-indigo-strong);
+  --tone-soft: var(--folder-indigo-soft);
+  --tone-strong: var(--folder-indigo);
 }
 
-[class*='deck-'][data-tone='green'] {
-  --tone-soft: var(--deck-green-soft);
-  --tone-strong: var(--deck-green-strong);
+[class*='deck-'][data-tone='lavender'],
+[class*='deck-'][data-tone='coral'] {
+  --tone-soft: var(--folder-lavender-soft);
+  --tone-strong: var(--folder-lavender);
 }
 
-[class*='deck-'][data-tone='amber'] {
-  --tone-soft: var(--deck-amber-soft);
-  --tone-strong: var(--deck-amber-strong);
+[class*='deck-'][data-tone='blue'] {
+  --tone-soft: var(--folder-blue-soft);
+  --tone-strong: var(--folder-blue);
 }
 
 [class*='deck-'][data-tone='teal'],
-[class*='deck-'][data-tone='blue'] {
-  --tone-soft: var(--deck-teal-soft);
-  --tone-strong: var(--deck-teal-strong);
+[class*='deck-'][data-tone='amber'] {
+  --tone-soft: var(--folder-teal-soft);
+  --tone-strong: var(--folder-teal);
 }
 
-[class*='deck-'][data-tone='coral'] {
-  --tone-soft: var(--deck-coral-soft);
-  --tone-strong: var(--deck-coral-strong);
+[class*='deck-'][data-tone='green'] {
+  --tone-soft: var(--folder-green-soft);
+  --tone-strong: var(--folder-green);
 }
 
 [class*='deck-'][data-tone='gray'],
@@ -729,22 +732,6 @@
   @apply h-9 rounded-full border border-solid border-(--line) bg-(--surface) px-3.5 text-[13px] font-semibold text-(--ink);
 }
 
-.deck-colors {
-  @apply grid grid-cols-6 gap-2.5;
-}
-
-.deck-colors__option {
-  @apply flex h-[52px] items-center justify-center rounded-(--radius-14) border-[3px] border-solid border-transparent bg-(--tone-soft) p-0;
-}
-
-.deck-colors__option > span {
-  @apply size-[22px] rounded-full bg-(--tone-strong);
-}
-
-.deck-colors__option[aria-pressed='true'] {
-  @apply border-(--tone-strong);
-}
-
 @media (min-width: 761px) {
   .deck-screen,
   .deck-screen--form,
@@ -862,8 +849,7 @@
 .deck-modes__tab,
 .deck-choice__category,
 .deck-choice__tag,
-.deck-choice__group,
-.deck-colors__option {
+.deck-choice__group {
   transition: var(--hover-transition);
 }
 
@@ -881,10 +867,6 @@
     border-color: var(--hover-accent);
     background-color: var(--indigo-soft);
     color: var(--indigo);
-  }
-
-  .deck-colors__option[aria-pressed='false']:hover {
-    border-color: color-mix(in srgb, var(--tone-strong) 45%, transparent);
   }
 }
 

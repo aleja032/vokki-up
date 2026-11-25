@@ -108,6 +108,8 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
           onStatusChange={dashboard.setActiveStatus}
           onDeleteCards={dashboard.deleteCards}
           onAddCard={dashboard.openEditor}
+          otherGroupNames={dashboard.activeGroupOtherNames}
+          onUpdateGroup={dashboard.updateGroup}
           onDeleteGroup={dashboard.deleteGroup}
           onEditCard={dashboard.editCard}
           onShowAll={() => dashboard.setActiveGroupId(ALL_GROUPS_ID)}

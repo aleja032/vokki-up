@@ -2,7 +2,15 @@ export type CardGroup = {
   id: string;
   name: string;
   description: string;
-  tone: 'indigo' | 'amber' | 'green' | 'blue' | 'teal' | 'coral' | 'gray';
+  tone:
+    | 'indigo'
+    | 'amber'
+    | 'green'
+    | 'blue'
+    | 'teal'
+    | 'coral'
+    | 'gray'
+    | 'lavender';
 };
 
 export type VocabularyCard = {

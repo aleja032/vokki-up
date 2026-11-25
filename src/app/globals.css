@@ -60,6 +60,20 @@
   --blue-soft: #d9eef2;
   --red-soft: #ffe8e3;
   --red-ink: #b5402d;
+  /* Folder colors (Mi mazo): a closed palette without orange, amber or coral.
+     `ink` draws dots, icons and rings; `soft` the chip behind them. */
+  --folder-indigo: #5b3fe0;
+  --folder-indigo-soft: #ede8ff;
+  --folder-lavender: #a15fd3;
+  --folder-lavender-soft: #f4e8fb;
+  --folder-blue: #2563c9;
+  --folder-blue-soft: #e1ebfb;
+  --folder-teal: #0e7490;
+  --folder-teal-soft: #d8eff5;
+  --folder-green: #3f7d1f;
+  --folder-green-soft: #e6f3d9;
+  --folder-gray: #5b5873;
+  --folder-gray-soft: #ece9e2;
   --urgency-coral: #ff7a59;
   --urgency-amber: #ffb84d;
   --urgency-green: #2fcb9b;
@@ -175,6 +189,18 @@
   --blue-soft: #1d3439;
   --red-soft: #36202a;
   --red-ink: #ffab9c;
+  --folder-indigo: #9b87ff;
+  --folder-indigo-soft: #2b2350;
+  --folder-lavender: #d19af0;
+  --folder-lavender-soft: #3a2147;
+  --folder-blue: #7aa7f5;
+  --folder-blue-soft: #1c2a47;
+  --folder-teal: #5cc8dd;
+  --folder-teal-soft: #12303a;
+  --folder-green: #9ad46b;
+  --folder-green-soft: #243319;
+  --folder-gray: #a8a2bd;
+  --folder-gray-soft: #2a2636;
   --focus-ring: #c3b4ff;
   --hover-accent: #a99bff;
   --hover-accent-glow: rgb(169 155 255 / 0.22);
@@ -213,11 +239,55 @@
     --blue-soft: #1d3439;
     --red-soft: #36202a;
     --red-ink: #ffab9c;
+    --folder-indigo: #9b87ff;
+    --folder-indigo-soft: #2b2350;
+    --folder-lavender: #d19af0;
+    --folder-lavender-soft: #3a2147;
+    --folder-blue: #7aa7f5;
+    --folder-blue-soft: #1c2a47;
+    --folder-teal: #5cc8dd;
+    --folder-teal-soft: #12303a;
+    --folder-green: #9ad46b;
+    --folder-green-soft: #243319;
+    --folder-gray: #a8a2bd;
+    --folder-gray-soft: #2a2636;
     --focus-ring: #c3b4ff;
     --hover-accent: #a99bff;
     --hover-accent-glow: rgb(169 155 255 / 0.22);
     --hover-shadow: 0 6px 18px rgb(0 0 0 / 0.45);
   }
+}
+
+/* One place that turns a folder color key into the two values components read:
+   --folder-ink (dots, icons, rings) and --folder-bg (the chip behind them). */
+[data-folder-color='indigo'] {
+  --folder-ink: var(--folder-indigo);
+  --folder-bg: var(--folder-indigo-soft);
+}
+
+[data-folder-color='lavender'] {
+  --folder-ink: var(--folder-lavender);
+  --folder-bg: var(--folder-lavender-soft);
+}
+
+[data-folder-color='blue'] {
+  --folder-ink: var(--folder-blue);
+  --folder-bg: var(--folder-blue-soft);
+}
+
+[data-folder-color='teal'] {
+  --folder-ink: var(--folder-teal);
+  --folder-bg: var(--folder-teal-soft);
+}
+
+[data-folder-color='green'] {
+  --folder-ink: var(--folder-green);
+  --folder-bg: var(--folder-green-soft);
+}
+
+[data-folder-color='gray'] {
+  --folder-ink: var(--folder-gray);
+  --folder-bg: var(--folder-gray-soft);
 }
 
 * {

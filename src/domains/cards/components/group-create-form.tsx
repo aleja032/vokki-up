@@ -1,7 +1,8 @@
 'use client';
 
 import { actionPillClass } from '@/components/ui/action-pill';
-import { GROUP_TONES } from '../group-colors';
+import { SwatchPicker } from '@/components/ui/swatch-picker';
+import { FOLDER_COLORS, type FolderColor } from '../group-colors';
 import { useGroupCreateSubmit } from '../hooks/use-group-create-submit';
 import { cardsMessages } from '../messages';
 import type { CardGroup } from '../types';
@@ -10,6 +11,15 @@ import { DeckIcon } from './deck-icon';
 
 const messages = cardsMessages.groupCreate;
 const NAME_COUNTER_LIMIT = 30;
+
+// Read at render time so the names follow the selected language.
+function getColorOptions() {
+  return FOLDER_COLORS.map(color => ({
+    value: color,
+    label: messages.colorNames[color],
+    color
+  }));
+}
 
 type GroupCreateFormProps = {
   groups: CardGroup[];
@@ -111,24 +121,13 @@ export function GroupCreateForm({
             </div>
           </div>
 
-          <fieldset className="deck-choice">
-            <legend>{messages.colorLegend}</legend>
-            <div className="deck-colors">
-              {GROUP_TONES.map(groupTone => (
-                <button
-                  key={groupTone}
-                  type="button"
-                  className="deck-colors__option"
-                  data-tone={groupTone}
-                  onClick={() => selectTone(groupTone)}
-                  aria-label={messages.colorNames[groupTone]}
-                  aria-pressed={tone === groupTone}
-                >
-                  <span />
-                </button>
-              ))}
-            </div>
-          </fieldset>
+          <SwatchPicker
+            legend={messages.colorLegend}
+            name="group-color"
+            onChange={value => selectTone(value as FolderColor)}
+            options={getColorOptions()}
+            value={tone}
+          />
 
           <div className="deck-field">
             <label htmlFor="group-description">

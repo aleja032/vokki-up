@@ -53,6 +53,21 @@ describe('audit leak translations', () => {
     expect(translateText('1 de 1 tarjeta')).toBe('1 of 1 cards');
     expect(translateText('Con IA o manual')).toBe('With AI or manually');
   });
+  it('translates the folder header, edit dialog and color names', () => {
+    setAppLanguage('English');
+    expect(translateText('17 tarjetas · 4 para hoy · 25% dominadas')).toBe(
+      '17 cards · 4 due today · 25% mastered'
+    );
+    expect(translateText('Editar carpeta')).toBe('Edit folder');
+    expect(translateText('Agregar tarjeta a esta carpeta')).toBe(
+      'Add a card to this folder'
+    );
+    expect(translateText('Volver a todas las carpetas')).toBe(
+      'Back to all folders'
+    );
+    expect(translateText('Lavanda')).toBe('Lavender');
+    expect(translateText('Azul')).toBe('Blue');
+  });
   it('translates the settings provider labels', () => {
     setAppLanguage('English');
     expect(translateText('Proveedor')).toBe('Provider');

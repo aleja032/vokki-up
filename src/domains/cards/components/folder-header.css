@@ -1,0 +1,88 @@
+@reference 'tailwindcss';
+
+/*
+ * Folder header of Mi mazo. Inside a folder: a card with a 5px edge, a chip and
+ * the actions in the folder color (--folder-ink / --folder-bg come from
+ * [data-folder-color] in globals.css); stacked on every width so the way out,
+ * the folder and its actions read top to bottom. For the whole deck: a lighter
+ * row with no card and no folder tools.
+ */
+
+.folder-header {
+  @apply flex min-w-0 flex-col gap-3;
+}
+
+.folder-header[data-scope='folder'] {
+  @apply rounded-(--card-radius) border border-l-[5px] border-solid border-(--line) border-l-(--folder-ink) bg-(--surface) p-4 min-[761px]:p-5;
+}
+
+.folder-header__nav {
+  @apply -mt-1 flex min-w-0;
+}
+
+.folder-header__back {
+  @apply -ml-1 inline-flex min-h-11 cursor-pointer items-center gap-0.5 rounded-(--radius-14) border-0 bg-transparent pr-2 pl-1 text-[14px] font-semibold text-(--ink-soft);
+  transition: var(--hover-transition);
+}
+
+.folder-header__back:focus-visible {
+  @apply outline-3 outline-offset-0 outline-(--focus-ring) outline-solid;
+}
+
+@media (hover: hover) {
+  .folder-header__back:hover {
+    @apply text-(--indigo);
+  }
+}
+
+.folder-header__main {
+  @apply flex min-w-0 items-center gap-3;
+}
+
+.folder-header__chip {
+  @apply flex size-12 shrink-0 items-center justify-center rounded-(--radius-18) bg-(--surface-muted) text-(--ink-soft);
+}
+
+.folder-header__chip--colored {
+  @apply bg-(--folder-bg) text-(--folder-ink);
+}
+
+.folder-header__copy {
+  @apply flex min-w-0 flex-1 flex-col gap-0.5;
+}
+
+.folder-header__kind {
+  @apply text-[12.5px] leading-none font-semibold text-(--ink-soft);
+}
+
+.folder-header__copy h2 {
+  @apply m-0 min-w-0 truncate text-[20px] leading-tight font-extrabold tracking-[-0.3px] min-[761px]:text-[22px];
+}
+
+.folder-header__summary {
+  @apply m-0 text-[14px] leading-snug text-(--ink-soft);
+}
+
+/* The actions that act on this folder: the mint add action grows, Gestionar
+   keeps its size. Same pill height, so no action is taller than its neighbour. */
+.folder-header__actions {
+  @apply flex min-w-0 flex-wrap items-center gap-2;
+}
+
+.folder-header__add {
+  @apply min-w-0 flex-1 min-[761px]:flex-none;
+}
+
+.folder-header__manage {
+  @apply shrink-0 px-3;
+}
+
+/* The entry button keeps its slot while managing so the header never shifts. */
+.folder-header__manage[inert] {
+  @apply invisible;
+}
+
+/* The whole deck: the header is a plain row, Gestionar at its end. */
+.folder-header[data-scope='all'] .folder-header__chip {
+  @apply size-11;
+}
