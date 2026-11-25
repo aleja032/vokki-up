@@ -161,14 +161,15 @@
     @apply relative block;
   }
 
-  /* A soft fade tells the list can scroll. */
+  /* A soft fade tells the list can scroll. The list keeps the fade's height as
+     bottom padding, so the last folder always scrolls clear of it. */
   .folder-list__scroller::after {
     @apply pointer-events-none absolute inset-x-0 bottom-0 h-9 content-[''];
     background: linear-gradient(180deg, transparent, var(--surface));
   }
 
   .folder-list__nav {
-    @apply flex max-h-115 flex-col items-stretch gap-0.5 overflow-y-auto pr-0.5;
+    @apply flex max-h-125 flex-col items-stretch gap-0.5 overflow-y-auto pr-0.5 pb-9;
   }
 
   .folder-list__text {
