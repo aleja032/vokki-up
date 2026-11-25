@@ -19,6 +19,7 @@ import { cardsMessages } from '../messages';
 import type { CardScheduleMap } from '../scheduling/types';
 import type { CardGroup, VocabularyCard } from '../types';
 import { GroupAddActions } from './group-add-actions';
+import { FolderMenu } from './folder-menu';
 import { GroupEmptyState } from './group-empty-state';
 import { SelectionActionBar } from './selection-action-bar';
 import { VocabularyCardItem } from './vocabulary-card-item';
@@ -50,11 +51,19 @@ function getStatusOptions(counts: CardStatusCounts) {
   }[];
 }
 
+export type ActiveGroupStats = {
+  dueCount: number;
+  masteredPercent: number;
+  isDeletable: boolean;
+};
+
 type CardsLibraryProps = {
   cards: VocabularyCard[];
   schedules: CardScheduleMap;
   now: Date;
   activeGroup?: CardGroup;
+  /** Quick stats and delete rule of the active folder. */
+  activeGroupStats?: ActiveGroupStats;
   categories: readonly string[];
   activeCategory: string;
   activeStatus: CardStatusFilter;
@@ -66,8 +75,8 @@ type CardsLibraryProps = {
   onStatusChange: (status: CardStatusFilter) => void;
   onDeleteCards: (cardIds: readonly string[]) => void;
   onAddCard: () => void;
-  /** Opens the screen of the active folder (rename, recolor, delete, review). */
-  onOpenGroup: (groupId: string) => void;
+  /** Deletes the active folder (its cards move to "Otros"). */
+  onDeleteGroup: (groupId: string) => void;
   /** Goes back from a folder to the whole deck. */
   onShowAll: () => void;
   /** Opens the editor of one card. */
@@ -79,6 +88,7 @@ export function CardsLibrary({
   schedules,
   now,
   activeGroup,
+  activeGroupStats,
   categories,
   activeCategory,
   activeStatus,
@@ -90,7 +100,7 @@ export function CardsLibrary({
   onStatusChange,
   onDeleteCards,
   onAddCard,
-  onOpenGroup,
+  onDeleteGroup,
   onShowAll,
   onEditCard
 }: CardsLibraryProps) {
@@ -123,7 +133,7 @@ export function CardsLibrary({
     Boolean(activeGroup) &&
     searchText.trim() === '' &&
     activeStatus === ALL_CARD_STATUSES &&
-    activeCategory === messages.allCategories;
+    activeCategory === categories[0];
   const groupTitle = activeGroup
     ? getGroupDisplayName(activeGroup)
     : messages.allFoldersTitle;
@@ -222,20 +232,26 @@ export function CardsLibrary({
           <span className="deck-library__meta">
             {messages.cardCount(statusCounts.all)}
           </span>
+          {activeGroupStats ? (
+            <span className="deck-library__chips">
+              <span className="deck-library__chip">
+                {messages.folderDueChip(activeGroupStats.dueCount)}
+              </span>
+              <span className="deck-library__chip">
+                {messages.folderMasteredChip(activeGroupStats.masteredPercent)}
+              </span>
+            </span>
+          ) : null}
         </nav>
         <div className="deck-library__links">
-          {activeGroup && (
-            <button
-              className={cn(
-                actionPillClass('tertiary', 'md', 'mint'),
-                'deck-library__link'
-              )}
-              onClick={() => onOpenGroup(activeGroup.id)}
-              type="button"
-            >
-              {messages.openFolder}
-            </button>
-          )}
+          {activeGroup && activeGroupStats ? (
+            <FolderMenu
+              cardCount={statusCounts.all}
+              group={activeGroup}
+              isDeletable={activeGroupStats.isDeletable}
+              onDelete={onDeleteGroup}
+            />
+          ) : null}
           <button
             className={cn(
               actionPillClass('tertiary', 'md', 'mint'),

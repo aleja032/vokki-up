@@ -143,3 +143,12 @@ Verification: see the T16 report.
 - Seed notes display in English via `src/domains/notes/seed-note-display.ts` (`getNoteDisplay`), only while id+title+body equal the seed; edited/user notes untouched. Wired in list, detail, editor, search.
 - Worlds not started show their scene grayscale under a `--surface-muted` veil; icon path removed from `world-arch-card`.
 - Checks: vitest 728 passed, tsc clean, eslint clean; browser verified home (dark/light, 1440/390, no overflow, 0 errors) and /notes en/es + edit persistence.
+
+## T22 - Review follows the folder; folder view merged into Mi mazo
+
+- Review CTA of Mi mazo follows the selected folder: link `/review?groupId=<id>&from=cards`, count = that folder's round (due, capped at the round size like the global one), accessible name "Repasar N · carpeta". "Todas" keeps `/review?from=cards`.
+- Removed the "Abrir carpeta" button and the `detail` view: `GroupDetail` (tsx, css, test), `openGroupById`, `openGroup*`, `editorGroupId`, `editorReturnView`. Creating a folder now selects it in Mi mazo.
+- New `FolderMenu` (kebab "Opciones de carpeta", mint tertiary 44px) in the library bar, only for a real folder: Renombrar, Cambiar color, Eliminar carpeta (blocked hint for a non-empty "Otros", shared confirm dialog). Quick stat chips (para hoy, % dominadas) from 761px. Gestionar unchanged.
+- Rename and Recolor only close the menu, exactly as in the old GroupDetail (they never had logic): pending a real feature.
+- Fixed: the empty-folder state (and folder add actions) never showed in English (compared against a localized "Todas"); it now compares with the first category.
+- TDD: tests first, 7 RED, then GREEN. Verification: vitest 121 files / 736 tests, tsc and eslint clean, browser check at 1440 and 390.

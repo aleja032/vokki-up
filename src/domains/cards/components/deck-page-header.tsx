@@ -11,20 +11,26 @@ type DeckPageHeaderProps = {
   totalCards: number;
   groupCount: number;
   dueCount: number;
+  /** The selected folder: the review button then follows it. */
+  reviewFolder?: { id: string; name: string; dueCount: number };
   onAddCard: () => void;
 };
 
 // Mi mazo header (proposal D): the mascot, the title and the deck summary on
 // the left; the main actions on the right of the same row on wide screens and
-// under the title on phones. "Repasar N" is the one primary (filled mint); the
+// under the title on phones. "Repasar N" is the one primary (filled mint) and
+// follows the selected folder (its link, its due count, its name as the
+// accessible label); the
 // new card menu (manual, import) and the library are secondary in the mint
 // tone (outlined green).
 export function DeckPageHeader({
   totalCards,
   groupCount,
   dueCount,
+  reviewFolder,
   onAddCard
 }: DeckPageHeaderProps) {
+  const reviewCount = reviewFolder ? reviewFolder.dueCount : dueCount;
   return (
     <header className="deck-header">
       <div className="deck-header__brand">
@@ -59,12 +65,21 @@ export function DeckPageHeader({
         </ActionPill>
         <ActionPill
           className="deck-header__review"
-          href="/review?from=cards"
+          aria-label={
+            reviewFolder
+              ? messages.reviewFolderLabel(reviewCount, reviewFolder.name)
+              : undefined
+          }
+          href={
+            reviewFolder
+              ? `/review?groupId=${encodeURIComponent(reviewFolder.id)}&from=cards`
+              : '/review?from=cards'
+          }
           icon={<Play size={18} strokeWidth={2.4} />}
-          pulse={dueCount > 0}
+          pulse={reviewCount > 0}
           variant="primary"
         >
-          {messages.reviewShort(dueCount)}
+          {messages.reviewShort(reviewCount)}
         </ActionPill>
       </div>
     </header>

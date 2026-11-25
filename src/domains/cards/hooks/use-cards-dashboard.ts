@@ -9,7 +9,8 @@ import {
   type CardStatusFilter
 } from '../card-status';
 import { STARTER_CARDS, STARTER_GROUPS } from '../data';
-import { deleteGroupMovingCards } from '../delete-group';
+import { canDeleteGroup, deleteGroupMovingCards } from '../delete-group';
+import { getGroupDisplayName } from '../group-display';
 import { isCardList, isGroupList } from '../library-validators';
 import { cardsMessages } from '../messages';
 import { isMastered } from '../scheduling/mastery';
@@ -38,7 +39,7 @@ export const ALL_GROUPS_ID = 'all';
 const ALL_CATEGORIES = cardsMessages.overview.allCategories;
 const CATEGORY_FILTERS = [ALL_CATEGORIES, ...CARD_PARTS_OF_SPEECH];
 
-export type GroupView = 'overview' | 'new' | 'detail';
+export type GroupView = 'overview' | 'new';
 
 export function useCardsDashboard() {
   const [cards, setCards, areCardsLoaded] = useTrackedBrowserState(
@@ -68,19 +69,13 @@ export function useCardsDashboard() {
   const [searchText, setSearchText] = useState('');
   const [groupSearchText, setGroupSearchText] = useState('');
   const [groupView, setGroupView] = useState<GroupView>('overview');
-  // The open group detail is independent from the library filter above.
-  const [openGroupId, setOpenGroupId] = useState<string | undefined>();
   // Editor UI state: it only overlays the page on narrow screens.
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editorKey, setEditorKey] = useState(0);
-  const [editorGroupId, setEditorGroupId] = useState<string | undefined>();
-  const [editorReturnView, setEditorReturnView] =
-    useState<GroupView>('overview');
   const [editingCardId, setEditingCardId] = useState<string | undefined>();
 
   const now = new Date();
   const activeGroup = groups.find(group => group.id === activeGroupId);
-  const openGroup = groups.find(group => group.id === openGroupId);
   const dueCount = buildDueQueue(cards, schedules, now).length;
   const existingTerms = useMemo(() => cards.map(card => card.term), [cards]);
   const editingCard = cards.find(card => card.id === editingCardId);
@@ -122,27 +117,37 @@ export function useCardsDashboard() {
     return belongsToStatus && belongsToCategory && matchesSearch;
   });
 
-  const openGroupCards = openGroup
-    ? cards.filter(card => card.groupId === openGroup.id)
+  // Quick stats and rules of the selected folder (none for "Todas"). The
+  // review count is what one round holds, so the review button matches it.
+  const activeGroupCards = activeGroup
+    ? cards.filter(card => card.groupId === activeGroup.id)
     : [];
-  const openGroupStats = {
-    dueCount: buildDueQueue(openGroupCards, schedules, now, Infinity).length,
-    masteredPercent: openGroupCards.length
-      ? Math.round(
-          (openGroupCards.filter(card => isMastered(schedules[card.id]))
-            .length /
-            openGroupCards.length) *
-            100
-        )
-      : 0
-  };
+  const activeGroupStats = activeGroup
+    ? {
+        dueCount: buildDueQueue(activeGroupCards, schedules, now, Infinity)
+          .length,
+        masteredPercent: activeGroupCards.length
+          ? Math.round(
+              (activeGroupCards.filter(card => isMastered(schedules[card.id]))
+                .length /
+                activeGroupCards.length) *
+                100
+            )
+          : 0,
+        isDeletable: canDeleteGroup(activeGroup, activeGroupCards)
+      }
+    : undefined;
+  const reviewGroup = activeGroup
+    ? {
+        id: activeGroup.id,
+        name: getGroupDisplayName(activeGroup),
+        dueCount: buildDueQueue(activeGroupCards, schedules, now).length
+      }
+    : undefined;
 
   function openEditor() {
-    setEditorReturnView(groupView);
-    setEditorGroupId(groupView === 'detail' ? openGroup?.id : undefined);
     setEditorKey(key => key + 1);
     setIsEditorOpen(true);
-    if (groupView === 'detail') setGroupView('overview');
   }
 
   function editCard(cardId: string) {
@@ -164,8 +169,6 @@ export function useCardsDashboard() {
   function closeEditor() {
     setIsEditorOpen(false);
     setEditorKey(key => key + 1);
-    setEditorGroupId(undefined);
-    setGroupView(editorReturnView);
   }
 
   function saveCard(card: VocabularyCard) {
@@ -176,7 +179,6 @@ export function useCardsDashboard() {
     setSearchText('');
     setIsEditorOpen(false);
     setEditorKey(key => key + 1);
-    setEditorGroupId(undefined);
     setGroupView('overview');
   }
 
@@ -234,8 +236,11 @@ export function useCardsDashboard() {
 
   function createGroup(newGroup: CardGroup) {
     setGroups(currentGroups => [...currentGroups, newGroup]);
-    setOpenGroupId(newGroup.id);
-    setGroupView('detail');
+    setActiveGroupId(newGroup.id);
+    setActiveCategory(ALL_CATEGORIES);
+    setActiveStatus(ALL_CARD_STATUSES);
+    setSearchText('');
+    setGroupView('overview');
   }
 
   // Removes a group and moves its cards to "Otros". Both lists go through the
@@ -247,15 +252,8 @@ export function useCardsDashboard() {
     if (result.groups === groups) return;
     setGroups(result.groups);
     if (result.cards !== cards) setCards(result.cards);
-    if (openGroupId === groupId) setOpenGroupId(undefined);
     if (activeGroupId === groupId) setActiveGroupId(ALL_GROUPS_ID);
-    if (editorGroupId === groupId) setEditorGroupId(undefined);
     setGroupView('overview');
-  }
-
-  function openGroupById(groupId: string) {
-    setOpenGroupId(groupId);
-    setGroupView('detail');
   }
 
   function startGroupCreation() {
@@ -290,9 +288,8 @@ export function useCardsDashboard() {
     statusCounts,
     activeGroup,
     activeGroupId,
-    openGroup,
-    openGroupCards,
-    openGroupStats,
+    activeGroupStats,
+    reviewGroup,
     activeCategory,
     activeStatus,
     searchText,
@@ -300,7 +297,6 @@ export function useCardsDashboard() {
     groupView,
     isEditorOpen,
     editorKey,
-    editorGroupId,
     setActiveGroupId,
     setActiveCategory,
     setActiveStatus,
@@ -319,7 +315,6 @@ export function useCardsDashboard() {
     isLibraryReady: areCardsLoaded && areGroupsLoaded,
     createGroup,
     deleteGroup,
-    openGroupById,
     startGroupCreation,
     viewExistingCard
   };

@@ -8,7 +8,6 @@ import { CardGroupList } from './card-group-list';
 import { CardsLibrary } from './cards-library';
 import { DeckPageHeader } from './deck-page-header';
 import { GroupCreateForm } from './group-create-form';
-import { GroupDetail } from './group-detail';
 import './cards.css';
 
 type CardsDashboardProps = {
@@ -30,9 +29,7 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
     dueCount,
     groupTiles,
     activeGroup,
-    activeGroupId,
-    openGroup,
-    openGroupCards
+    activeGroupId
   } = dashboard;
 
   if (dashboard.editingCard)
@@ -59,26 +56,10 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
       />
     );
 
-  if (dashboard.groupView === 'detail' && openGroup)
-    return (
-      <GroupDetail
-        group={openGroup}
-        cards={openGroupCards}
-        schedules={schedules}
-        dueCount={dashboard.openGroupStats.dueCount}
-        masteredPercent={dashboard.openGroupStats.masteredPercent}
-        onBack={() => dashboard.setGroupView('overview')}
-        onAddCard={dashboard.openEditor}
-        onDelete={dashboard.deleteGroup}
-      />
-    );
-
   const addPanelApi: CardsAddPanelApi = {
     groups,
     existingTerms: dashboard.existingTerms,
-    initialGroupId:
-      dashboard.editorGroupId ??
-      (activeGroupId === ALL_GROUPS_ID ? undefined : activeGroupId),
+    initialGroupId: activeGroupId === ALL_GROUPS_ID ? undefined : activeGroupId,
     editorKey: dashboard.editorKey,
     isOpen: dashboard.isEditorOpen,
     isLibraryReady: dashboard.isLibraryReady,
@@ -94,6 +75,7 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
       <DeckPageHeader
         totalCards={cards.length}
         dueCount={dueCount}
+        reviewFolder={dashboard.reviewGroup}
         groupCount={groups.length}
         onAddCard={dashboard.openEditor}
       />
@@ -114,6 +96,7 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
           schedules={schedules}
           now={now}
           activeGroup={activeGroup}
+          activeGroupStats={dashboard.activeGroupStats}
           categories={dashboard.categories}
           activeCategory={dashboard.activeCategory}
           activeStatus={dashboard.activeStatus}
@@ -125,7 +108,7 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
           onStatusChange={dashboard.setActiveStatus}
           onDeleteCards={dashboard.deleteCards}
           onAddCard={dashboard.openEditor}
-          onOpenGroup={dashboard.openGroupById}
+          onDeleteGroup={dashboard.deleteGroup}
           onEditCard={dashboard.editCard}
           onShowAll={() => dashboard.setActiveGroupId(ALL_GROUPS_ID)}
         />
@@ -137,8 +120,7 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
             groups={groups}
             existingTerms={dashboard.existingTerms}
             initialGroupId={
-              dashboard.editorGroupId ??
-              (activeGroupId === ALL_GROUPS_ID ? undefined : activeGroupId)
+              activeGroupId === ALL_GROUPS_ID ? undefined : activeGroupId
             }
             isOpen={dashboard.isEditorOpen}
             onCancel={dashboard.closeEditor}

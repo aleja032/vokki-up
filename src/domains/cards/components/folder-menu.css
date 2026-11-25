@@ -1,0 +1,52 @@
+@reference 'tailwindcss';
+
+/* Folder options: a 44px kebab trigger (mint tertiary, same height as its
+   neighbour "Gestionar") and a small menu that opens under it. */
+
+.folder-menu {
+  @apply relative shrink-0;
+}
+
+.folder-menu .folder-menu__trigger {
+  @apply w-11 px-0;
+}
+
+.folder-menu__list {
+  @apply absolute top-full right-0 z-20 mt-2 flex w-60 max-w-[calc(100vw-2rem)] flex-col rounded-(--radius-18) border border-solid border-(--line) bg-(--surface) p-2 shadow-lg;
+}
+
+.folder-menu__list[hidden] {
+  @apply hidden;
+}
+
+.folder-menu__item {
+  @apply flex min-h-11 w-full cursor-pointer items-center rounded-(--radius-14) border-0 bg-transparent px-3.5 text-left text-[15px] font-semibold text-(--ink);
+  transition: var(--hover-transition);
+}
+
+.folder-menu__item:focus-visible {
+  @apply outline-3 outline-offset-0 outline-(--focus-ring) outline-solid;
+}
+
+.folder-menu__item:disabled {
+  @apply cursor-not-allowed opacity-50;
+}
+
+.folder-menu__item--danger {
+  @apply text-(--red-ink);
+}
+
+.folder-menu__hint {
+  @apply px-3.5 pt-1 pb-2 text-[13px] leading-[1.4] text-(--ink-soft);
+}
+
+@media (hover: hover) {
+  .folder-menu__item:not(:disabled):hover {
+    @apply bg-(--surface-muted) text-(--indigo);
+  }
+
+  .folder-menu__item--danger:not(:disabled):hover {
+    background-color: var(--red-soft);
+    color: var(--red-ink);
+  }
+}

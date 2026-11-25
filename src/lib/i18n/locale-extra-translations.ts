@@ -435,7 +435,11 @@ export const extraTranslations: Record<string, string> = {
   'Nueva carpeta': 'New folder',
   'Buscar carpeta': 'Search folder',
   'No hay carpetas con ese nombre.': 'No folders with that name.',
-  'Abrir carpeta': 'Open folder',
+  'Opciones de carpeta': 'Folder options',
+  'Acciones de la carpeta': 'Folder actions',
+  'Eliminar carpeta': 'Delete folder',
+  'Elimina sus tarjetas para poder borrar esta carpeta.':
+    'Delete its cards to be able to delete this folder.',
 
   // Review round and results (proposal D)
   'Palabra nueva': 'New word',

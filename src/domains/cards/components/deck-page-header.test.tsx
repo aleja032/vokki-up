@@ -2,10 +2,11 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { DeckPageHeader } from './deck-page-header';
 
-function render() {
+function render(reviewFolder?: { id: string; name: string; dueCount: number }) {
   return renderToStaticMarkup(
     <DeckPageHeader
       dueCount={12}
+      reviewFolder={reviewFolder}
       groupCount={3}
       onAddCard={() => undefined}
       totalCards={46}
@@ -56,6 +57,28 @@ describe('DeckPageHeader', () => {
     const html = render();
     expect(count(html, 'action-pill--mint')).toBe(2);
     expect(html).not.toMatch(/action-pill--primary[^"]*action-pill--mint/);
+  });
+
+  it('reviews the whole deck when no folder is selected', () => {
+    const html = render();
+    expect(html).toContain('href="/review?from=cards"');
+    expect(html).not.toContain('groupId=');
+    expect(html).not.toContain('aria-label="Repasar');
+  });
+
+  it('follows the selected folder: its link, its due count and its name', () => {
+    const html = render({ id: 'g 1', name: 'Trabajo', dueCount: 3 });
+    expect(html).toContain('href="/review?groupId=g%201&amp;from=cards"');
+    expect(html).toContain('aria-label="Repasar 3 · Trabajo"');
+    expect(html).toContain('Repasar 3');
+    expect(html).not.toContain('Repasar 12');
+    expect(count(html, 'action-pill--primary')).toBe(1);
+  });
+
+  it('keeps the review link of a folder with nothing due', () => {
+    const html = render({ id: 'g1', name: 'Trabajo', dueCount: 0 });
+    expect(html).toContain('href="/review?groupId=g1&amp;from=cards"');
+    expect(html).toContain('Repasar 0');
   });
 
   it('hides the decorative mascot from assistive tech', () => {

@@ -1,0 +1,115 @@
+'use client';
+
+import { Ellipsis } from 'lucide-react';
+import { ConfirmDialog } from '@/components/overlay/confirm-dialog';
+import { actionPillClass } from '@/components/ui/action-pill';
+import { cn } from '@/lib/utils';
+import { getGroupDisplayName } from '../group-display';
+import { useGroupActionsMenu } from '../hooks/use-group-actions-menu';
+import { useNewCardMenu } from '../hooks/use-new-card-menu';
+import { cardsMessages } from '../messages';
+import type { CardGroup } from '../types';
+import './folder-menu.css';
+
+const messages = cardsMessages.groupDetail;
+const MENU_ID = 'folder-menu';
+const BLOCKED_HINT_ID = 'folder-menu-blocked';
+
+type FolderMenuProps = {
+  group: CardGroup;
+  /** Cards of the folder: the confirm dialog says how many move to "Otros". */
+  cardCount: number;
+  /** False for a folder that cannot be deleted yet (a non-empty "Otros"). */
+  isDeletable: boolean;
+  onDelete: (groupId: string) => void;
+};
+
+// Options of the selected folder: rename, change color and delete (with the
+// shared confirm dialog). The list stays in the DOM (hidden) while closed, like
+// the new card menu. Open, Escape and outside press come from the new card menu
+// hook; the delete confirmation from the folder actions hook.
+export function FolderMenu({
+  group,
+  cardCount,
+  isDeletable,
+  onDelete
+}: FolderMenuProps) {
+  const { isOpen, rootRef, toggle, close } = useNewCardMenu();
+  const { isConfirmingDelete, askDelete, dismissDelete } =
+    useGroupActionsMenu();
+
+  function handleDeleteClick() {
+    close();
+    askDelete();
+  }
+
+  return (
+    <div className="folder-menu" ref={rootRef}>
+      <button
+        aria-controls={MENU_ID}
+        aria-expanded={isOpen}
+        aria-haspopup="menu"
+        aria-label={messages.menuLabel}
+        className={cn(
+          actionPillClass('tertiary', 'md', 'mint'),
+          'folder-menu__trigger'
+        )}
+        onClick={toggle}
+        type="button"
+      >
+        <Ellipsis aria-hidden="true" size={22} />
+      </button>
+      <div
+        aria-label={messages.menuAriaLabel}
+        className="folder-menu__list"
+        hidden={!isOpen}
+        id={MENU_ID}
+        role="menu"
+      >
+        <button
+          className="folder-menu__item"
+          onClick={close}
+          role="menuitem"
+          type="button"
+        >
+          {messages.menuRename}
+        </button>
+        <button
+          className="folder-menu__item"
+          onClick={close}
+          role="menuitem"
+          type="button"
+        >
+          {messages.menuRecolor}
+        </button>
+        <button
+          aria-describedby={isDeletable ? undefined : BLOCKED_HINT_ID}
+          className="folder-menu__item folder-menu__item--danger"
+          disabled={!isDeletable}
+          onClick={handleDeleteClick}
+          role="menuitem"
+          type="button"
+        >
+          {messages.menuDelete}
+        </button>
+        {!isDeletable && (
+          <span className="folder-menu__hint" id={BLOCKED_HINT_ID}>
+            {messages.menuDeleteBlocked}
+          </span>
+        )}
+      </div>
+      <ConfirmDialog
+        open={isConfirmingDelete}
+        title={messages.deleteTitle}
+        description={messages.deleteBody(getGroupDisplayName(group), cardCount)}
+        confirmLabel={messages.deleteConfirm}
+        cancelLabel={messages.deleteCancel}
+        onConfirm={() => {
+          dismissDelete();
+          onDelete(group.id);
+        }}
+        onCancel={dismissDelete}
+      />
+    </div>
+  );
+}

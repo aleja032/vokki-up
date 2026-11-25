@@ -14,6 +14,10 @@ export const cardsMessages = createLocalizedMessages({
     importFile: 'Importar archivo',
     addFromLibrary: 'Agregar desde la biblioteca',
     reviewShort: (due: number) => `Repasar ${due}`,
+    reviewFolderLabel: (due: number, name: string) =>
+      `Repasar ${due} · ${name}`,
+    folderDueChip: (due: number) => `${due} para hoy`,
+    folderMasteredChip: (percent: number) => `${percent}% dominadas`,
     memoryLabel: (level: number) => `Memoria ${level} de 5`,
     groupsTitle: 'Carpetas',
     foldersHint:
@@ -27,7 +31,6 @@ export const cardsMessages = createLocalizedMessages({
     newGroup: 'Nueva carpeta',
     folderSearchLabel: 'Buscar carpeta',
     noFolders: 'No hay carpetas con ese nombre.',
-    openFolder: 'Abrir carpeta',
     viewAllFolders: (count: number) => `Ver las ${count}`,
     viewFewerFolders: 'Ver menos',
     folderDue: (due: number) => `${due} hoy`,
@@ -123,14 +126,12 @@ export const cardsMessages = createLocalizedMessages({
     libraryLink: 'Ir a la biblioteca'
   },
   groupDetail: {
-    backLabel: 'Volver a grupos',
-    eyebrow: 'Grupo',
-    menuLabel: 'Más opciones del grupo',
-    menuAriaLabel: 'Opciones del grupo',
+    menuLabel: 'Opciones de carpeta',
+    menuAriaLabel: 'Acciones de la carpeta',
     menuRename: 'Renombrar',
     menuRecolor: 'Cambiar color',
-    menuDelete: 'Eliminar grupo',
-    menuDeleteBlocked: 'Elimina sus tarjetas para poder borrar este grupo.',
+    menuDelete: 'Eliminar carpeta',
+    menuDeleteBlocked: 'Elimina sus tarjetas para poder borrar esta carpeta.',
     deleteTitle: 'Eliminar grupo',
     deleteBody: (name: string, count: number) => {
       if (count === 0)
@@ -141,11 +142,6 @@ export const cardsMessages = createLocalizedMessages({
     },
     deleteCancel: 'Cancelar',
     deleteConfirm: 'Eliminar',
-    statCards: (count: number) => pluralize(count, 'tarjeta', 'tarjetas'),
-    statDue: 'para hoy',
-    statMastered: 'dominadas',
-    review: (due: number) => `Repasar este grupo · ${due}`,
-    listTitle: 'Tarjetas del grupo',
     add: 'Añadir',
     addFromLibrary: 'Agregar desde la biblioteca',
     emptyTitle: 'Este grupo todavía está vacío',
