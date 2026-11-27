@@ -17,7 +17,7 @@ export function StreakPill({ days, className }: StreakPillProps) {
       className={cn('streak-pill', className)}
       role="img"
     >
-      <Pill icon={<Flame size={18} strokeWidth={2.2} />} tone="soft">
+      <Pill icon={<Flame size={18} strokeWidth={2.2} />} tone="amber">
         {days}
       </Pill>
     </span>

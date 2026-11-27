@@ -14,12 +14,17 @@ export const cardsMessages = createLocalizedMessages({
     importFile: 'Importar archivo',
     addFromLibrary: 'Agregar desde la biblioteca',
     fromLibrary: 'Desde la biblioteca',
-    reviewShort: (due: number) => `Repasar ${due}`,
+    reviewShort: (due: number) =>
+      due === 0
+        ? 'Repasar tarjetas'
+        : due === 1
+          ? 'Repasar 1 tarjeta'
+          : `Repasar ${due} tarjetas`,
     roundSizeLabel: 'Ronda de:',
     roundSizeGroupLabel: 'Tamaño de la ronda',
     roundSizeAll: 'Todas',
     reviewFolderLabel: (due: number, name: string) =>
-      `Repasar ${due} · ${name}`,
+      `${due === 1 ? 'Repasar 1 tarjeta' : `Repasar ${due} tarjetas`} · ${name}`,
     folderDueChip: (due: number) => `${due} para hoy`,
     folderMasteredChip: (percent: number) => `${percent}% dominadas`,
     folderSummary: (cards: number, due: number, percent: number) =>

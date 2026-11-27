@@ -40,7 +40,7 @@ describe('ReviewBanner', () => {
     const html = render({ count: 7 });
     expect(html).toMatch(/<a[^>]*action-pill--primary[^>]*>/);
     expect(html).toContain('href="/review?from=cards"');
-    expect(html).toContain('Repasar 7');
+    expect(html).toContain('Repasar 7 tarjetas');
     expect(html).toContain('motion-cta-pulse');
     expect(html.match(/action-pill--primary/g)).toHaveLength(1);
   });
@@ -50,7 +50,7 @@ describe('ReviewBanner', () => {
     expect(html).toContain('>Trabajo<');
     expect(html).not.toContain('>Hoy<');
     expect(html).toContain('href="/review?groupId=g%201&amp;from=cards"');
-    expect(html).toContain('aria-label="Repasar 3 · Trabajo"');
+    expect(html).toContain('aria-label="Repasar 3 tarjetas · Trabajo"');
   });
 
   it('is calm when nothing is due and keeps the same link', () => {
@@ -58,7 +58,7 @@ describe('ReviewBanner', () => {
     expect(html).toContain('Todo al día');
     expect(html).toContain('Vuelve mañana o agrega tarjetas');
     expect(html).not.toContain('disponible sin conexión');
-    expect(html).toContain('Repasar 0');
+    expect(html).toContain('Repasar tarjetas');
     expect(html).toContain('href="/review?from=cards"');
     expect(html).not.toContain('motion-cta-pulse');
   });

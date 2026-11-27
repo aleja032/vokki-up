@@ -18,6 +18,19 @@ describe('audit leak translations', () => {
     );
   });
 
+  it('translates the review CTA labels with their noun', () => {
+    setAppLanguage('English');
+    expect(translateText('Repasar 1 tarjeta')).toBe('Review 1 card');
+    expect(translateText('Repasar 10 tarjetas')).toBe('Review 10 cards');
+    expect(translateText('Repasar tarjetas')).toBe('Review cards');
+    expect(translateText('Repasar 3 tarjetas · Work')).toBe(
+      'Review 3 cards · Work'
+    );
+    expect(translateText('Repasar 1 tarjeta · Work')).toBe(
+      'Review 1 card · Work'
+    );
+  });
+
   it('translates the worlds labels', () => {
     setAppLanguage('English');
     expect(translateText('Mundos')).toBe('Worlds');

@@ -28,7 +28,7 @@ describe('DeckPageHeader', () => {
     expect(count(html, 'action-pill--primary')).toBe(2);
     expect(html).toContain('review-banner');
     expect(html).toMatch(/<a[^>]*action-pill--primary[^>]*>/);
-    expect(html).toContain('Repasar 12');
+    expect(html).toContain('Repasar 12 tarjetas');
   });
 
   it('offers the main actions: review, new card menu (with import) and library', () => {
@@ -49,7 +49,9 @@ describe('DeckPageHeader', () => {
 
   it('places the actions after the title and the summary', () => {
     const html = render();
-    expect(html.indexOf('<h1>')).toBeLessThan(html.indexOf('Repasar 12'));
+    expect(html.indexOf('<h1>')).toBeLessThan(
+      html.indexOf('Repasar 12 tarjetas')
+    );
     expect(html.indexOf('46 tarjetas')).toBeLessThan(
       html.indexOf('deck-header__actions')
     );
@@ -71,8 +73,8 @@ describe('DeckPageHeader', () => {
   it('follows the selected folder: its link, its due count and its name', () => {
     const html = render({ id: 'g 1', name: 'Trabajo', dueCount: 3 });
     expect(html).toContain('href="/review?groupId=g%201&amp;from=cards"');
-    expect(html).toContain('aria-label="Repasar 3 · Trabajo"');
-    expect(html).toContain('Repasar 3');
+    expect(html).toContain('aria-label="Repasar 3 tarjetas · Trabajo"');
+    expect(html).toContain('Repasar 3 tarjetas');
     expect(html).not.toContain('Repasar 12');
     expect(html).toContain('>Trabajo<');
   });
@@ -80,7 +82,7 @@ describe('DeckPageHeader', () => {
   it('keeps the review link of a folder with nothing due', () => {
     const html = render({ id: 'g1', name: 'Trabajo', dueCount: 0 });
     expect(html).toContain('href="/review?groupId=g1&amp;from=cards"');
-    expect(html).toContain('Repasar 0');
+    expect(html).toContain('Repasar tarjetas');
   });
 
   it('hides the decorative mascot from assistive tech', () => {

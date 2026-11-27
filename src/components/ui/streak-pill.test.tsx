@@ -8,6 +8,6 @@ describe('StreakPill', () => {
 
     expect(html).toContain('>12</span>');
     expect(html).toContain('aria-label="Racha de 12 días"');
-    expect(html).toContain('pill--soft');
+    expect(html).toContain('pill--amber');
   });
 });

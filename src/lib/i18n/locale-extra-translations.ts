@@ -492,6 +492,9 @@ export const extraTranslations: Record<string, string> = {
 export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
   [/^(\d+) tarjetas? · (\d+) carpetas?$/, '$1 cards · $2 folders'],
   [/^Repasar (\d+)$/, 'Review $1'],
+  [/^Repasar 1 tarjeta$/, 'Review 1 card'],
+  [/^Repasar 1 tarjeta · (.+)$/, 'Review 1 card · $1'],
+  [/^Repasar (\d+) tarjetas · (.+)$/, 'Review $1 cards · $2'],
   [/^Repasar (\d+) más$/, 'Review $1 more'],
   [/^Te quedan (\d+) por repasar hoy$/, 'You have $1 left to review today'],
   [/^Editar (.+)$/, 'Edit $1'],
