@@ -1,7 +1,7 @@
 'use client';
 
-import { ChevronLeft, Folder, FolderOpen, Plus } from 'lucide-react';
-import { ActionPill, actionPillClass } from '@/components/ui/action-pill';
+import { ChevronLeft, Folder, FolderOpen } from 'lucide-react';
+import { actionPillClass } from '@/components/ui/action-pill';
 import { cn } from '@/lib/utils';
 import { displayTone } from '../group-colors';
 import { getGroupDisplayName } from '../group-display';
@@ -31,10 +31,7 @@ type FolderHeaderProps = {
   /** False while there is nothing to manage. */
   canManage: boolean;
   isManaging: boolean;
-  /** False when the empty state already offers the add actions. */
-  canAddCard?: boolean;
   onShowAll: () => void;
-  onAddCard: () => void;
   onManage: () => void;
   onUpdateGroup: (groupId: string, patch: GroupPatch) => void;
   onDeleteGroup: (groupId: string) => void;
@@ -42,7 +39,7 @@ type FolderHeaderProps = {
 
 // Where you are in Mi mazo. Inside a folder it is a card in the folder color:
 // a way out ("Todas las carpetas"), the folder as the heading with a summary and
-// its menu, and the actions that act on this folder. For the whole deck it is a
+// its menu, and Gestionar. Adding cards is the floating button. For the whole deck it is a
 // lighter header (title and total, no folder tools).
 export function FolderHeader({
   group,
@@ -51,9 +48,7 @@ export function FolderHeader({
   otherGroupNames,
   canManage,
   isManaging,
-  canAddCard = true,
   onShowAll,
-  onAddCard,
   onManage,
   onUpdateGroup,
   onDeleteGroup
@@ -135,21 +130,7 @@ export function FolderHeader({
         {group ? null : manageButton}
       </div>
       {group ? (
-        <div className="folder-header__actions">
-          {canAddCard ? (
-            <ActionPill
-              className="folder-header__add"
-              icon={<Plus size={18} strokeWidth={2.4} />}
-              onClick={onAddCard}
-              size="sm"
-              tone="mint"
-              variant="secondary"
-            >
-              {messages.addToFolder}
-            </ActionPill>
-          ) : null}
-          {manageButton}
-        </div>
+        <div className="folder-header__actions">{manageButton}</div>
       ) : null}
     </header>
   );

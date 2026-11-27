@@ -63,14 +63,9 @@
   @apply m-0 text-[14px] leading-snug text-(--ink-soft);
 }
 
-/* The actions that act on this folder: the mint add action grows, Gestionar
-   keeps its size. Same pill height, so no action is taller than its neighbour. */
+/* Gestionar keeps its size and its slot at the end of the row. */
 .folder-header__actions {
-  @apply flex min-w-0 flex-wrap items-center gap-2;
-}
-
-.folder-header__add {
-  @apply min-w-0 flex-1 min-[761px]:flex-none;
+  @apply flex min-w-0 flex-wrap items-center justify-end gap-2;
 }
 
 .folder-header__manage {

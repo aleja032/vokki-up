@@ -8,7 +8,6 @@ function render(reviewFolder?: { id: string; name: string; dueCount: number }) {
       dueCount={12}
       reviewFolder={reviewFolder}
       groupCount={3}
-      onAddCard={() => undefined}
       totalCards={46}
     />
   );
@@ -31,20 +30,16 @@ describe('DeckPageHeader', () => {
     expect(html).toContain('Repasar 12 tarjetas');
   });
 
-  it('offers the main actions: review, new card menu (with import) and library', () => {
+  it('has one desktop CTA: the review, with no add actions (the floating button adds cards)', () => {
     const html = render();
     expect(html).toContain('href="/review?from=cards"');
-    expect(count(html, 'aria-haspopup="menu"')).toBe(1);
-    expect(html).toContain('Crear tarjeta');
-    expect(html.match(/role="menuitem"/g)).toHaveLength(2);
-    expect(html).toContain('href="/import-export?from=cards"');
-    expect(html).toContain('Importar archivo');
-  });
-
-  it('shows the library as its own action', () => {
-    const html = render();
-    expect(count(html, 'href="/cards/word-library"')).toBe(1);
-    expect(html).toContain('Agregar desde la biblioteca');
+    expect(html).not.toContain('aria-haspopup="menu"');
+    expect(html).not.toContain('Nueva tarjeta');
+    expect(html).not.toContain('Agregar desde la biblioteca');
+    expect(html).not.toContain('href="/cards/word-library"');
+    expect(html).not.toContain('href="/import-export');
+    expect(html).not.toContain('role="menuitem"');
+    expect(html).not.toContain('action-pill--mint');
   });
 
   it('places the actions after the title and the summary', () => {
@@ -55,12 +50,6 @@ describe('DeckPageHeader', () => {
     expect(html.indexOf('46 tarjetas')).toBeLessThan(
       html.indexOf('deck-header__actions')
     );
-  });
-
-  it('puts the green tone on the supporting actions only', () => {
-    const html = render();
-    expect(count(html, 'action-pill--mint')).toBe(2);
-    expect(html).not.toMatch(/action-pill--primary[^"]*action-pill--mint/);
   });
 
   it('reviews the whole deck when no folder is selected', () => {

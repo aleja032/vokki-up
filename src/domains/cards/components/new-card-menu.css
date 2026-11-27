@@ -1,31 +1,148 @@
 @reference 'tailwindcss';
 
-/* The labelled outline pill with a chevron (wide screens only; phones use the
-   action card of the page header). */
+/* The floating add button and its menu: a round primary "+" (the mint gradient
+   of the CTA system, the same as the bottom navigation center button). Phones
+   56px; from 761px 60px with a ring in the page ground so it separates from the
+   cards under it. The menu opens upward and keeps the right edge. Motion is
+   CSS only and paint-only (transform, opacity, box-shadow): no layout shift.
+   Every animation is switched off under prefers-reduced-motion (end of file). */
 
 .new-card-menu {
   @apply relative min-w-0;
 }
 
 .new-card-menu .new-card-menu__trigger {
-  @apply w-full min-w-0 gap-2 px-3;
+  @apply relative flex size-14 cursor-pointer items-center justify-center rounded-full border-0 p-0 text-(--cta-ink);
+  background: var(--cta-gradient);
+  box-shadow: 0 8px 18px var(--cta-fab-glow);
+  transition:
+    transform var(--hover-duration) var(--ease-out),
+    box-shadow var(--hover-duration) var(--ease-out);
 }
 
-.new-card-menu__chevron {
-  @apply text-current;
+.new-card-menu__trigger:active {
+  transform: scale(0.96);
+}
+
+.new-card-menu__trigger > svg {
+  transition: rotate 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.new-card-menu__trigger[aria-expanded='true'] > svg {
+  rotate: 45deg;
+}
+
+.new-card-menu__trigger:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+/* Idle attention: a soft ring that expands and fades, then a long rest. It
+   only exists until the menu was opened once in the session. */
+.new-card-menu--pulse .new-card-menu__trigger::before {
+  @apply pointer-events-none absolute inset-0 rounded-full content-[''];
+  animation: new-card-ring 2.4s var(--ease-out) 1.2s infinite;
+}
+
+.new-card-menu--pulse .new-card-menu__trigger:hover::before,
+.new-card-menu--pulse .new-card-menu__trigger:focus-visible::before,
+.new-card-menu--pulse .new-card-menu__trigger[aria-expanded='true']::before {
+  animation: none;
+}
+
+@keyframes new-card-ring {
+  0% {
+    box-shadow: 0 0 0 0 var(--cta-fab-glow);
+  }
+
+  35%,
+  100% {
+    box-shadow: 0 0 0 18px transparent;
+  }
+}
+
+/* Name tooltip: wide screens with a pointer only, above the button. */
+.new-card-menu__tooltip {
+  @apply pointer-events-none absolute right-0 bottom-full mb-3 hidden rounded-(--radius-14) border border-solid border-(--line) bg-(--surface) px-3 py-2 text-[11px] leading-none tracking-[0.08em] whitespace-nowrap text-(--ink) uppercase opacity-0 shadow-lg;
+  font-family: var(--font-pixel), monospace;
+  transition: opacity var(--hover-duration) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .new-card-menu .new-card-menu__trigger:hover {
+    transform: translateY(var(--lift-2));
+    box-shadow: 0 12px 26px var(--cta-fab-glow);
+  }
+
+  .new-card-menu .new-card-menu__trigger:active:hover {
+    transform: scale(0.96);
+  }
+}
+
+@media (min-width: 761px) {
+  .new-card-menu .new-card-menu__trigger {
+    @apply size-15;
+    box-shadow:
+      0 0 0 4px var(--ground),
+      0 10px 24px var(--cta-fab-glow);
+  }
+
+  /* Noma is 84px tall here: the menu starts above her head. */
+  .new-card-menu .new-card-menu__list {
+    @apply mb-7;
+  }
+}
+
+@media (min-width: 761px) and (hover: hover) {
+  .new-card-menu .new-card-menu__trigger:hover {
+    box-shadow:
+      0 0 0 4px var(--ground),
+      0 14px 28px var(--cta-fab-glow);
+  }
+
+  .new-card-menu__trigger[aria-expanded='false']:hover
+    > .new-card-menu__tooltip,
+  .new-card-menu__trigger[aria-expanded='false']:focus-visible
+    > .new-card-menu__tooltip {
+    @apply block opacity-100;
+  }
 }
 
 .new-card-menu__list {
-  @apply absolute top-full left-0 z-20 mt-2 flex w-65 max-w-[calc(100vw-1.75rem)] flex-col rounded-(--radius-18) border border-solid border-(--line) bg-(--surface) p-2 shadow-lg;
+  @apply absolute right-0 bottom-full z-20 mb-3 flex w-65 max-w-[calc(100vw-1.75rem)] flex-col rounded-(--radius-18) border border-solid border-(--line) bg-(--surface) p-2 shadow-lg;
+  transform-origin: bottom right;
+  animation: new-card-menu-in 180ms var(--ease-out) backwards;
 }
 
 .new-card-menu__list[hidden] {
   @apply hidden;
 }
 
+@keyframes new-card-menu-in {
+  from {
+    opacity: 0;
+    scale: 0.92;
+  }
+}
+
 .new-card-menu__item {
-  @apply flex min-h-11 w-full cursor-pointer items-center gap-2.5 rounded-(--radius-14) border-0 bg-transparent px-3.5 text-left text-[15px] font-semibold text-(--ink);
+  @apply flex min-h-12 w-full cursor-pointer items-center gap-2.5 rounded-(--radius-14) border-0 bg-transparent px-3.5 text-left text-[15px] font-semibold text-(--ink);
   transition: var(--hover-transition);
+  animation: new-card-item-in 200ms var(--ease-out) backwards;
+}
+
+.new-card-menu__item:nth-child(2) {
+  animation-delay: 40ms;
+}
+
+.new-card-menu__item:nth-child(3) {
+  animation-delay: 80ms;
+}
+
+@keyframes new-card-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 .new-card-menu__item:focus-visible {
@@ -34,32 +151,23 @@
 
 @media (hover: hover) {
   .new-card-menu__item:hover {
-    @apply bg-(--surface-muted) text-(--indigo);
+    @apply bg-(--indigo-soft) text-(--indigo);
   }
 }
 
-/* Phone floating variant: a 56px round primary (mint gradient, as the CTA
-   system's primary) whose menu opens upward and keeps the right edge. */
+@media (prefers-reduced-motion: reduce) {
+  .new-card-menu--pulse .new-card-menu__trigger::before,
+  .new-card-menu__list,
+  .new-card-menu__item {
+    animation: none;
+  }
 
-.new-card-menu .new-card-menu__trigger--fab {
-  @apply flex size-14 cursor-pointer items-center justify-center rounded-full border-0 p-0 text-(--cta-ink);
-  background: var(--cta-gradient);
-  box-shadow: 0 8px 18px var(--cta-fab-glow);
-  transition: var(--hover-transition);
-}
+  .new-card-menu__trigger > svg {
+    transition: none;
+  }
 
-.new-card-menu__trigger--fab > svg {
-  transition: rotate var(--hover-duration) var(--ease-out);
-}
-
-.new-card-menu__trigger--fab[aria-expanded='true'] > svg {
-  rotate: 45deg;
-}
-
-.new-card-menu__trigger--fab:focus-visible {
-  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
-}
-
-.new-card-menu--fab .new-card-menu__list {
-  @apply top-auto right-0 bottom-full left-auto mt-0 mb-3;
+  .new-card-menu .new-card-menu__trigger:hover,
+  .new-card-menu__trigger:active {
+    transform: none;
+  }
 }

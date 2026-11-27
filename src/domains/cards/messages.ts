@@ -8,11 +8,9 @@ export const cardsMessages = createLocalizedMessages({
     title: 'Mi mazo',
     summary: (cards: number, folders: number) =>
       `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} · ${folders} ${pluralize(folders, 'carpeta', 'carpetas')}`,
-    newCardTitle: 'Nueva tarjeta',
     newCardMenuLabel: 'Opciones para agregar tarjetas',
     createCard: 'Crear tarjeta',
     importFile: 'Importar archivo',
-    addFromLibrary: 'Agregar desde la biblioteca',
     fromLibrary: 'Desde la biblioteca',
     reviewShort: (due: number) =>
       due === 0
@@ -30,7 +28,6 @@ export const cardsMessages = createLocalizedMessages({
     folderSummary: (cards: number, due: number, percent: number) =>
       `${cards} ${pluralize(cards, 'tarjeta', 'tarjetas')} · ${due} para hoy · ${percent}% dominadas`,
     backToAllLabel: 'Volver a todas las carpetas',
-    addToFolder: 'Agregar tarjeta a esta carpeta',
     memoryLabel: (level: number) => `Memoria ${level} de 5`,
     groupsTitle: 'Carpetas',
     foldersHint:

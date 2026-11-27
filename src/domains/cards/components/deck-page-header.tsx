@@ -1,8 +1,7 @@
 import Image from 'next/image';
-import { ChevronRight, Globe, Play } from 'lucide-react';
+import { Play } from 'lucide-react';
 import { ActionPill } from '@/components/ui/action-pill';
 import { cardsMessages } from '../messages';
-import { NewCardMenu } from './new-card-menu';
 import { useReviewRoundSize } from '../hooks/use-review-round-size';
 import { buildCardsReviewHref } from '../review-round-size';
 import { ReviewBanner } from './review-banner';
@@ -17,22 +16,18 @@ type DeckPageHeaderProps = {
   dueCount: number;
   /** The selected folder: the review button then follows it. */
   reviewFolder?: { id: string; name: string; dueCount: number };
-  onAddCard: () => void;
 };
 
 // Mi mazo header (proposal D): the mascot, the title and the deck summary on
 // the left; the main actions on the right of the same row on wide screens and
 // under the title on phones. "Repasar N" is the one primary (filled mint) and
 // follows the selected folder (its link, its due count, its name as the
-// accessible label); the
-// new card menu (manual, import) and the library are secondary in the mint
-// tone (outlined green).
+// accessible label). Adding cards is the floating button, not a header action.
 export function DeckPageHeader({
   totalCards,
   groupCount,
   dueCount,
-  reviewFolder,
-  onAddCard
+  reviewFolder
 }: DeckPageHeaderProps) {
   const [roundSize, setRoundSize] = useReviewRoundSize();
   const reviewCount = reviewFolder ? reviewFolder.dueCount : dueCount;
@@ -56,19 +51,6 @@ export function DeckPageHeader({
       </div>
       <div className="deck-header__side">
         <div className="deck-header__actions">
-          <div className="deck-header__new">
-            <NewCardMenu onCreate={onAddCard} />
-          </div>
-          <ActionPill
-            className="deck-header__library"
-            href="/cards/word-library"
-            icon={<Globe size={18} strokeWidth={2.4} />}
-            iconEnd={<ChevronRight size={18} />}
-            tone="mint"
-            variant="secondary"
-          >
-            {messages.addFromLibrary}
-          </ActionPill>
           <ActionPill
             className="deck-header__review"
             aria-label={

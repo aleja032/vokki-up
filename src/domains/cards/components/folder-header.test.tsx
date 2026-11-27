@@ -17,7 +17,6 @@ function render(
     isDeletable?: boolean;
     canManage?: boolean;
     isManaging?: boolean;
-    canAddCard?: boolean;
   } = {}
 ) {
   const activeGroup = options.group;
@@ -35,9 +34,7 @@ function render(
       otherGroupNames: ['Viajes'],
       canManage: options.canManage ?? true,
       isManaging: options.isManaging ?? false,
-      canAddCard: options.canAddCard ?? true,
       onShowAll: () => undefined,
-      onAddCard: () => undefined,
       onManage: () => undefined,
       onUpdateGroup: () => undefined,
       onDeleteGroup: () => undefined
@@ -96,18 +93,11 @@ describe('FolderHeader for a real folder', () => {
     );
   });
 
-  it('adds a card to this folder with a secondary mint action and keeps Gestionar', () => {
+  it('has no add action (the floating button adds to this folder) and keeps Gestionar', () => {
     const html = render({ group });
-    expect(html).toMatch(
-      /<button(?=[^>]*action-pill--secondary)(?=[^>]*action-pill--mint)[^>]*>.*Agregar tarjeta a esta carpeta/
-    );
+    expect(html).not.toContain('Agregar tarjeta a esta carpeta');
+    expect(html).toContain('aria-label="Opciones de carpeta"');
     expect(html).toContain('>Gestionar<');
-  });
-
-  it('leaves the add action to the empty state when asked', () => {
-    expect(render({ group, canAddCard: false })).not.toContain(
-      'Agregar tarjeta a esta carpeta'
-    );
   });
 
   it('disables Gestionar when there is nothing to manage and hides it while managing', () => {

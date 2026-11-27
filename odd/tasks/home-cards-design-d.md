@@ -181,3 +181,11 @@ Verification: see the T16 report.
 - Next round starts in place (hook resets queue/tallies, tracks every id already put in a round); no navigation, no reload. Ahead rounds show the notice and rate through the normal scheduler.
 - Kept: Otra vez requeue, keys, Volver a tarjetas exit, repeat button, eyebrow untouched.
 - Verification: vitest 136 files / 862+ tests, tsc, eslint clean; browser es 1440 and 390: size control, persistence, folder scope, full 10-card round, Repasar 10 más, ahead notice and scheduling, Estudiar por adelantado then plain exit. English not switchable in the harness browser; covered by unit tests.
+
+## T26 - One floating add button on every width
+
+- Adding cards is now only the floating button (`NewCardFab`, round primary mint gradient, 56px phones / 60px desktop with a ground-colour ring and glow, 28px from the bottom-right on desktop, above the bottom nav on phones). Accessible name "Agregar"; desktop hover/focus tooltip above it. Menu opens upward (Crear tarjeta preselecting the active folder, Importar archivo, Desde la biblioteca). Hidden while managing cards on every width. Page bottom padding keeps the last row clear (phones +20px, desktop pb-34).
+- Removed: `NewCardMenu` pill variant, the header "Nueva tarjeta" menu and "Agregar desde la biblioteca" pill (desktop header keeps one primary Repasar + round size), the folder header "Agregar tarjeta a esta carpeta" CTA and its props (`onAddCard`, `canAddCard`), unused messages (`newCardTitle`, overview `addFromLibrary`, `addToFolder`). Kept: kebab, Gestionar, empty-folder and empty-library add actions.
+- Motion (CSS only, off under prefers-reduced-motion): FAB spring pop, attention ring until the menu is opened once (sessionStorage flag in try/catch), plus -> x spring, menu scale-in with item stagger, hover lift, press scale. Curious Noma (`public/images/noma-curious.png`) stands fully visible left of the button (never covered; z-index above ring/glow), subtle float + one tilt per ~9s, soft entrance, sinks away while the menu is open.
+- Left in place: `'Agregar tarjeta a esta carpeta'` entry in locale-extra-translations.ts (its test in locale-extra.test.ts is outside the allowed surface).
+- Verification: vitest, tsc, eslint clean; browser 1440/1024/768/390 light+dark, last row never covered, no horizontal overflow.

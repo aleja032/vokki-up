@@ -1,10 +1,116 @@
 @reference 'tailwindcss';
 
-/* Phones only: pinned to the right edge, one gap above the bottom navigation
-   (77px tall, floating max(14px, safe area) from the bottom). The page keeps
-   room under its last row (cards.css) so the button never covers content. */
+/* Phones: pinned to the right edge, one gap above the bottom navigation (77px
+   tall, floating max(14px, safe area) from the bottom). From 761px: 28px from
+   the right and bottom of the viewport. z-10 sits above the page and below the
+   dialogs and the add hub (z-30). The page keeps room under its last row
+   (cards.css) so the button never covers content. */
 
 .new-card-fab {
-  @apply fixed right-4 z-10 min-[761px]:hidden;
+  @apply fixed right-4 z-10 min-[761px]:right-7;
   bottom: calc(max(14px, env(safe-area-inset-bottom)) + 77px + 16px);
+  /* Entrance: a spring pop shortly after the page paints. Paint-only. */
+  animation: new-card-fab-pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) 250ms
+    backwards;
+}
+
+@media (min-width: 761px) {
+  .new-card-fab {
+    bottom: 28px;
+  }
+}
+
+@keyframes new-card-fab-pop {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+/* Curious Noma sits fully visible to the left of the button, feet on its
+   baseline, above the button, its ring and its glow (z-index), so nothing ever
+   covers her. Subtle, transform-only motion: a slow float (wrapper), a soft
+   rise on entrance and one gentle head tilt every ~9s (image). She never takes
+   pointer events and sinks away while the menu is open (the menu also clears
+   her: see new-card-menu.css). */
+.new-card-fab__noma {
+  @apply pointer-events-none absolute bottom-0 z-1 block h-16 w-auto min-[761px]:h-21;
+  right: calc(100% + 8px);
+  aspect-ratio: 700 / 649;
+  rotate: -2deg;
+  will-change: transform;
+  transition:
+    opacity 160ms ease-out,
+    translate 160ms ease-out,
+    visibility 0s;
+  animation: new-card-noma-float 4.6s ease-in-out 1s infinite alternate;
+}
+
+.new-card-fab__noma-image {
+  @apply block h-full w-full max-w-none;
+  transition: translate 180ms ease-out;
+  animation:
+    new-card-noma-peek 450ms cubic-bezier(0.33, 1, 0.68, 1) 950ms backwards,
+    new-card-noma-tilt 9s ease-out 3s infinite;
+}
+
+.new-card-fab:has([aria-expanded='true']) .new-card-fab__noma {
+  @apply invisible opacity-0;
+  translate: 0 4px;
+  transition:
+    opacity 160ms ease-out,
+    translate 160ms ease-out,
+    visibility 0s 160ms;
+}
+
+@media (hover: hover) {
+  .new-card-fab:has(.new-card-menu__trigger:is(:hover, :focus-visible))
+    .new-card-fab__noma-image {
+    translate: 2px 0;
+  }
+}
+
+@keyframes new-card-noma-peek {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes new-card-noma-float {
+  from {
+    transform: translateY(0);
+    rotate: -2deg;
+  }
+
+  to {
+    transform: translateY(-3px);
+    rotate: 1deg;
+  }
+}
+
+/* Rests at the idle pose most of the cycle, then one gentle tilt (~0.7s). */
+@keyframes new-card-noma-tilt {
+  0%,
+  82%,
+  100% {
+    rotate: 0deg;
+  }
+
+  86.5% {
+    rotate: 4deg;
+  }
+
+  90% {
+    rotate: 0deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .new-card-fab,
+  .new-card-fab__noma,
+  .new-card-fab__noma-image {
+    animation: none;
+    transition: none;
+  }
 }

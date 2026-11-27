@@ -184,12 +184,10 @@ export function CardsLibrary({
       data-managing={isManaging}
     >
       <FolderHeader
-        canAddCard={!(isUnfilteredGroup && cards.length === 0)}
         canManage={canDeleteCards && cards.length > 0}
         cardCount={statusCounts.all}
         group={activeGroup}
         isManaging={isManaging}
-        onAddCard={onAddCard}
         onDeleteGroup={onDeleteGroup}
         onManage={startManaging}
         onShowAll={onShowAll}

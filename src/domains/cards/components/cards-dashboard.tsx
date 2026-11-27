@@ -79,7 +79,6 @@ function CardsDashboardView({ renderAddPanel }: CardsDashboardProps) {
         dueCount={dueCount}
         reviewFolder={dashboard.reviewGroup}
         groupCount={groups.length}
-        onAddCard={dashboard.openEditor}
       />
 
       <FolderChipRow

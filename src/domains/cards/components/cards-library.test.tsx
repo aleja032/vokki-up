@@ -184,24 +184,22 @@ describe('CardsLibrary group add actions', () => {
     expect(html).not.toContain('No hay tarjetas con ese filtro.');
   });
 
-  it('offers one add action in the folder header for a group with cards', () => {
-    const html = render([card], { activeGroup: group });
-    expect(count(html, 'Agregar tarjeta a esta carpeta')).toBe(1);
-    expect(count(html, '>Añadir<')).toBe(0);
-    expect(count(html, '>Añadir tarjeta<')).toBe(0);
-    // the library link lives in the page header, not here
-    expect(count(html, 'href="/cards/word-library"')).toBe(0);
+  it('has no add action in the folder header (the floating button adds)', () => {
+    for (const html of [
+      render([card], { activeGroup: group }),
+      render([], { activeGroup: group, searchText: 'zzz' })
+    ]) {
+      expect(count(html, 'Agregar tarjeta a esta carpeta')).toBe(0);
+      expect(count(html, '>Añadir<')).toBe(0);
+      expect(count(html, '>Añadir tarjeta<')).toBe(0);
+      expect(count(html, 'href="/cards/word-library"')).toBe(0);
+    }
   });
 
-  it('does not repeat the add action in the header of an empty folder', () => {
+  it('keeps the empty-folder state add action only', () => {
     const html = render([], { activeGroup: group });
     expect(count(html, 'Agregar tarjeta a esta carpeta')).toBe(0);
     expect(count(html, '>Añadir tarjeta<')).toBe(1);
-  });
-
-  it('keeps the header add action while a filter empties the folder', () => {
-    const html = render([], { activeGroup: group, searchText: 'zzz' });
-    expect(count(html, 'Agregar tarjeta a esta carpeta')).toBe(1);
   });
 
   it('keeps the filter message, without CTAs, when a search empties a group', () => {

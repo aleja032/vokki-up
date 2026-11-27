@@ -171,18 +171,18 @@
   /* Room under the last row for the bottom navigation (77px, floating 14px) and
      the floating add button above it (16px gap, 56px, 16px clearance). */
   .app-main:has(.deck-page) {
-    @apply px-5 pt-6.5 pb-[calc(77px+14px+16px+56px+16px+env(safe-area-inset-bottom))];
+    @apply px-5 pt-6.5 pb-[calc(77px+14px+16px+56px+16px+20px+env(safe-area-inset-bottom))];
   }
 
   /* Phones use the folder chips (folder-chip-row.css) instead of the side list. */
   .deck-page .folder-list {
     @apply hidden;
   }
+}
 
-  /* Selecting cards docks its own action bar at the bottom: no floating button. */
-  .deck-page:has(.deck-library[data-managing='true']) .new-card-fab {
-    @apply hidden;
-  }
+/* Selecting cards docks its own action bar: no floating button on any width. */
+.deck-page:has(.deck-library[data-managing='true']) .new-card-fab {
+  @apply hidden;
 }
 
 /* Page */
@@ -196,8 +196,10 @@
 }
 
 @media (min-width: 761px) {
+  /* Room under the last row: the floating add button (60px, 28px from the
+     bottom) plus 32px, so it never covers a card. */
   .app-main:has(.deck-page) {
-    @apply pt-7.5;
+    @apply pt-7.5 pb-34;
   }
 
   /* The proposal main is 1240px wide with 24px gutters: a 1192px content frame. */

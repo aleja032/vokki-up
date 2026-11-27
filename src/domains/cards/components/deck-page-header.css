@@ -2,9 +2,9 @@
 
 /* Mobile first: the title and "N tarjetas · M carpetas", then the review
    banner (review-banner.tsx), the only review action of phones. Adding cards is
-   the floating button (new-card-fab.css), so the three header actions are for
-   wide screens. From 761px (VokkiDMazo) the mascot and the title sit at the
-   left and the three actions at the right of the same row, the review last. */
+   the floating button (new-card-fab.css) on every width. From 761px (VokkiDMazo)
+   the mascot and the title sit at the left and the one action, the review with
+   its round size, at the right of the same row. */
 
 .deck-header {
   @apply flex min-w-0 flex-col gap-4;
@@ -38,10 +38,6 @@
   @apply hidden min-w-0;
 }
 
-.deck-header__new {
-  @apply min-w-0;
-}
-
 @media (min-width: 761px) {
   .deck-header {
     @apply flex-row flex-wrap items-center justify-between gap-x-5 gap-y-4;
@@ -69,14 +65,6 @@
 
   .deck-header__actions {
     @apply flex flex-wrap items-center justify-end gap-3;
-  }
-
-  .deck-header .deck-header__library {
-    @apply justify-center gap-2 px-5 text-[15px];
-  }
-
-  .deck-header .deck-header__library > .action-pill__icon:last-child {
-    @apply hidden;
   }
 
   .deck-header .deck-header__review {
