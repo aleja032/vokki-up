@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Settings } from 'lucide-react';
 import { VokkiLogo } from '@/components/brand/vokki-logo';
 import { siteConfig, siteMessages } from '@/config/site';
 import { ConnectionStatus } from './connection-status';
@@ -8,7 +9,8 @@ import { HeaderStreakPill } from './header-streak-pill';
 import {
   AuthenticatedOnly,
   AvatarInitialSlot,
-  ProfileActionSlot
+  ProfileActionSlot,
+  UnauthenticatedOnly
 } from './shell-slots';
 
 export function AppHeader() {
@@ -36,6 +38,15 @@ export function AppHeader() {
             <AvatarInitialSlot />
           </Link>
         </AuthenticatedOnly>
+        <UnauthenticatedOnly>
+          <Link
+            aria-label={siteMessages.settings}
+            className="app-header__settings"
+            href="/settings"
+          >
+            <Settings aria-hidden="true" size={20} strokeWidth={2} />
+          </Link>
+        </UnauthenticatedOnly>
         <ProfileActionSlot />
       </div>
     </header>

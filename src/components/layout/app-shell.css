@@ -31,6 +31,25 @@
   @apply flex size-11 shrink-0 items-center justify-center rounded-full bg-(--brand) text-[16px] font-extrabold text-(--on-brand);
 }
 
+/* Settings gear next to the sign in action on phones */
+
+.app-header__settings {
+  @apply flex size-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-solid border-(--line) bg-(--surface) text-(--ink);
+  transition:
+    border-color var(--hover-duration) var(--ease-out),
+    color var(--hover-duration) var(--ease-out);
+}
+
+.app-header__settings:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
+}
+
+@media (hover: hover) {
+  .app-header__settings:hover {
+    @apply border-(--hover-accent) text-(--indigo);
+  }
+}
+
 /* Connection pill */
 
 .connection-status {
@@ -85,6 +104,14 @@
 
 .app-header__actions {
   @apply flex min-w-0 items-center gap-2;
+}
+
+/* With the streak, the gear and the sign in action on the right there is no room
+   for the wordmark on narrow phones; the logo mark keeps the brand. */
+@media (max-width: 399px) {
+  .app-header .brand__wordmark {
+    @apply sr-only;
+  }
 }
 
 /* Main area */

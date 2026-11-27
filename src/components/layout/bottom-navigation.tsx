@@ -6,17 +6,14 @@ import { usePathname } from 'next/navigation';
 import { Play } from 'lucide-react';
 import { siteConfig, siteMessages } from '@/config/site';
 import { isCurrentRoute } from './is-current-route.util';
-import { navigationIcons, SettingsIcon } from './navigation-icons';
-import { useShellSlots } from './shell-slots';
+import { navigationIcons } from './navigation-icons';
 
-const settingsHref = '/settings';
 const reviewHref = '/review';
 // Destinations shown to the left of the raised center action.
 const DESTINATIONS_BEFORE_ACTION = 2;
 
 export function BottomNavigation() {
   const pathname = usePathname();
-  const { sessionStatus } = useShellSlots();
 
   function renderItem(href: string, label: string, icon: ReactNode) {
     return (
@@ -36,11 +33,6 @@ export function BottomNavigation() {
     const Icon = navigationIcons[item.icon];
     return renderItem(item.href, item.label, <Icon size={20} />);
   });
-  const settings = renderItem(
-    settingsHref,
-    siteMessages.settings,
-    <SettingsIcon size={20} />
-  );
 
   return (
     <nav
@@ -59,7 +51,6 @@ export function BottomNavigation() {
         <span aria-hidden="true">{siteMessages.roundShort}</span>
       </Link>
       {destinations.slice(DESTINATIONS_BEFORE_ACTION)}
-      {sessionStatus === 'authenticated' ? null : settings}
     </nav>
   );
 }
