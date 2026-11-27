@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { PixelLabel } from '@/components/ui/pixel-label';
 import { ProgressBar } from '@/components/ui/progress-bar';
 import { WORLD_IMAGES } from '@/lib/worlds/world-images';
@@ -14,10 +15,11 @@ export function WorldArchCard({ world }: { world: WorldProgress }) {
   const name = getWorldDisplayName(world.name);
 
   return (
-    <article
+    <Link
       className="world-arch"
       data-state={isActive ? 'active' : 'new'}
       data-world={world.id}
+      href={`/cards/word-library?world=${world.id}`}
     >
       <Image
         alt=""
@@ -48,6 +50,6 @@ export function WorldArchCard({ world }: { world: WorldProgress }) {
           </span>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }

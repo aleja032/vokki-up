@@ -3,7 +3,7 @@
 /* Arch card of the artboard: dark scene with progress. A world not started
    shows the same scene grayed out under a veil. Phone first. */
 .world-arch {
-  @apply relative box-border flex h-62.5 w-44 flex-none flex-col items-center justify-end overflow-hidden rounded-t-(--radius-pill) rounded-b-(--radius-30) border-[1.5px] border-solid border-(--line) text-center;
+  @apply relative box-border flex h-62.5 w-44 flex-none flex-col items-center justify-end overflow-hidden rounded-t-(--radius-pill) rounded-b-(--radius-30) border-[1.5px] border-solid border-(--line) text-center no-underline;
   transition:
     translate 180ms var(--ease-out),
     border-color 180ms var(--ease-out),
@@ -12,6 +12,10 @@
 
 .world-arch {
   @apply bg-(--hero-surface) text-white;
+}
+
+.world-arch:focus-visible {
+  @apply outline-3 outline-offset-3 outline-(--focus-ring) outline-solid;
 }
 
 .world-arch[data-state='active'] {

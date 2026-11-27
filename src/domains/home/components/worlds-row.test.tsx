@@ -18,6 +18,14 @@ describe('WorldsRow', () => {
     expect(html).toContain('0/180');
   });
 
+  it('links every world, started or not, to its Mundos screen', () => {
+    const html = renderToStaticMarkup(<WorldsRow worlds={worlds} />);
+
+    expect(html).toContain('href="/cards/word-library?world=daily"');
+    expect(html).toContain('href="/cards/word-library?world=work"');
+    expect(html.match(/<a [^>]*class="world-arch"/g)).toHaveLength(2);
+  });
+
   it('marks started worlds as in progress with the pixel image', () => {
     const html = renderToStaticMarkup(<WorldsRow worlds={worlds} />);
 
