@@ -20,13 +20,17 @@ describe('NewCardFab', () => {
     expect(html).not.toContain('new-card-menu__label');
   });
 
-  it('has no mascot beside the button and stills the entrance for reduced motion', () => {
-    expect(html).not.toContain('noma');
+  it('has a decorative Noma beside the button: aria-hidden, empty alt, no pointer events class contract', () => {
+    expect(html).toMatch(
+      /<span aria-hidden="true" class="new-card-fab__noma">/
+    );
+    expect(html).toContain('alt=""');
+    expect(html).toContain('noma-curious.png');
     const css = readFileSync(
       join(process.cwd(), 'src/domains/cards/components/new-card-fab.css'),
       'utf8'
     );
-    expect(css).toMatch(/prefers-reduced-motion: reduce/);
+    expect(css).toMatch(/\.new-card-fab__noma \{[^}]*pointer-events-none/);
   });
 
   it('is not hidden on any width', () => {

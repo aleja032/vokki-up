@@ -85,6 +85,11 @@
       0 0 0 4px var(--ground),
       0 10px 24px var(--cta-fab-glow);
   }
+
+  /* Noma is 84px tall here: the menu starts above her head. */
+  .new-card-menu .new-card-menu__list {
+    @apply mb-7;
+  }
 }
 
 @media (min-width: 761px) and (hover: hover) {

@@ -27,8 +27,90 @@
   }
 }
 
+/* Curious Noma sits fully visible to the left of the button, feet on its
+   baseline, above the button, its ring and its glow (z-index), so nothing ever
+   covers her. Subtle, transform-only motion: a slow float (wrapper), a soft
+   rise on entrance and one gentle head tilt every ~9s (image). She never takes
+   pointer events and sinks away while the menu is open (the menu also clears
+   her: see new-card-menu.css). Desktop only: on phones she would float over the
+   list, so she is hidden below 761px. */
+.new-card-fab__noma {
+  @apply pointer-events-none absolute bottom-0 z-1 hidden h-21 w-auto min-[761px]:block;
+  right: calc(100% + 8px);
+  aspect-ratio: 700 / 649;
+  rotate: -2deg;
+  will-change: transform;
+  transition:
+    opacity 160ms ease-out,
+    translate 160ms ease-out,
+    visibility 0s;
+  animation: new-card-noma-float 4.6s ease-in-out 1s infinite alternate;
+}
+
+.new-card-fab__noma-image {
+  @apply block h-full w-full max-w-none;
+  transition: translate 180ms ease-out;
+  animation:
+    new-card-noma-peek 450ms cubic-bezier(0.33, 1, 0.68, 1) 950ms backwards,
+    new-card-noma-tilt 9s ease-out 3s infinite;
+}
+
+.new-card-fab:has([aria-expanded='true']) .new-card-fab__noma {
+  @apply invisible opacity-0;
+  translate: 0 4px;
+  transition:
+    opacity 160ms ease-out,
+    translate 160ms ease-out,
+    visibility 0s 160ms;
+}
+
+@media (hover: hover) {
+  .new-card-fab:has(.new-card-menu__trigger:is(:hover, :focus-visible))
+    .new-card-fab__noma-image {
+    translate: 2px 0;
+  }
+}
+
+@keyframes new-card-noma-peek {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes new-card-noma-float {
+  from {
+    transform: translateY(0);
+    rotate: -2deg;
+  }
+
+  to {
+    transform: translateY(-3px);
+    rotate: 1deg;
+  }
+}
+
+/* Rests at the idle pose most of the cycle, then one gentle tilt (~0.7s). */
+@keyframes new-card-noma-tilt {
+  0%,
+  82%,
+  100% {
+    rotate: 0deg;
+  }
+
+  86.5% {
+    rotate: 4deg;
+  }
+
+  90% {
+    rotate: 0deg;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .new-card-fab {
+  .new-card-fab,
+  .new-card-fab__noma,
+  .new-card-fab__noma-image {
     animation: none;
     transition: none;
   }
