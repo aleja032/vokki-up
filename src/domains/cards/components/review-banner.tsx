@@ -4,6 +4,12 @@ import { ActionPill } from '@/components/ui/action-pill';
 import { PixelLabel } from '@/components/ui/pixel-label';
 import { cardsMessages } from '../messages';
 import { estimateReviewMinutes } from '../review-estimate';
+import {
+  DEFAULT_ROUND_SIZE,
+  buildCardsReviewHref,
+  type RoundSize
+} from '../review-round-size';
+import { RoundSizeControl } from './round-size-control';
 import './review-banner.css';
 
 const messages = cardsMessages.overview;
@@ -13,13 +19,21 @@ type ReviewBannerProps = {
   count: number;
   /** The selected folder: the banner then names it and reviews only it. */
   folder?: { id: string; name: string };
+  /** Round size of the review link; the control shows when a handler is given. */
+  roundSize?: RoundSize;
+  onRoundSizeChange?: (size: RoundSize) => void;
 };
 
 // Phones: the review as a small hero card (the dark game surface of the home
 // hero, in both themes) with Noma peeking over its corner. It is the only
 // page-level review action on phones and follows the selected folder; wide
 // screens keep the header button instead.
-export function ReviewBanner({ count, folder }: ReviewBannerProps) {
+export function ReviewBanner({
+  count,
+  folder,
+  roundSize = DEFAULT_ROUND_SIZE,
+  onRoundSizeChange
+}: ReviewBannerProps) {
   return (
     <section aria-label={messages.reviewBannerLabel} className="review-banner">
       <div aria-hidden="true" className="review-banner__backdrop">
@@ -44,16 +58,19 @@ export function ReviewBanner({ count, folder }: ReviewBannerProps) {
           {messages.reviewBannerLead(count, estimateReviewMinutes(count))}
         </p>
       </div>
+      {onRoundSizeChange ? (
+        <RoundSizeControl
+          className="review-banner__size"
+          onChange={onRoundSizeChange}
+          size={roundSize}
+        />
+      ) : null}
       <ActionPill
         aria-label={
           folder ? messages.reviewFolderLabel(count, folder.name) : undefined
         }
         className="review-banner__cta"
-        href={
-          folder
-            ? `/review?groupId=${encodeURIComponent(folder.id)}&from=cards`
-            : '/review?from=cards'
-        }
+        href={buildCardsReviewHref(folder?.id, roundSize)}
         icon={<Play fill="currentColor" size={18} strokeWidth={2.4} />}
         pulse={count > 0}
         variant="primary"

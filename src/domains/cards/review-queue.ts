@@ -1,4 +1,5 @@
 import type { CardRating } from './types';
+import { countRoundCards, type RoundSize } from './review-round-size';
 
 // How many other cards come before a card rated "again" returns in the round.
 export const AGAIN_REQUEUE_GAP = 3;
@@ -27,4 +28,29 @@ export function summarizeRatings(
     good: ratings.good,
     easy: ratings.easy
   };
+}
+
+export type NextRound =
+  | { kind: 'due'; count: number; remaining: number }
+  | { kind: 'ahead'; count: number };
+
+// What the finished-round screen offers next: the rest of today's due cards
+// first, then studying ahead, else nothing (the plain finish state).
+export function resolveNextRound(input: {
+  size: RoundSize;
+  dueRemaining: number;
+  aheadAvailable: number;
+}): NextRound | null {
+  if (input.dueRemaining > 0)
+    return {
+      kind: 'due',
+      count: countRoundCards(input.size, input.dueRemaining),
+      remaining: input.dueRemaining
+    };
+  if (input.aheadAvailable > 0)
+    return {
+      kind: 'ahead',
+      count: countRoundCards(input.size, input.aheadAvailable)
+    };
+  return null;
 }

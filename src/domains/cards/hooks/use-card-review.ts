@@ -1,11 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { STARTER_CARDS, STARTER_GROUPS } from '../data';
 import { deriveCardsHomeSummary } from '../home-summary';
 import type { CardRating, VocabularyCard } from '../types';
 import { useBrowserState } from '@/lib/storage/use-browser-state';
 import {
+  buildAheadQueue,
   buildDueQueue,
   getLocalDateKey,
   recordReviewEvent
@@ -29,8 +30,14 @@ import { serializeSyncPayload } from '@/lib/sync/change-builders';
 import { writeBrowserValue } from '@/lib/storage/browser-storage';
 import { cardsMessages } from '../messages';
 import { resolveReviewExit } from '../review-exit';
+import { parseReviewParams, type ReviewMode } from '../review-params';
+import type { RoundSize } from '../review-round-size';
 import { getCardMemory } from '../card-memory';
-import { requeueForAgain, summarizeRatings } from '../review-queue';
+import {
+  requeueForAgain,
+  resolveNextRound,
+  summarizeRatings
+} from '../review-queue';
 import {
   recordMemoryGain,
   selectMemoryGains,
@@ -65,6 +72,19 @@ export function getNextIntervalLabel(
   return days === 1 ? intervalMessages.oneDay : intervalMessages.days(days);
 }
 
+function buildRoundQueue(
+  mode: ReviewMode,
+  cards: VocabularyCard[],
+  schedules: CardScheduleMap,
+  now: Date,
+  size: RoundSize,
+  excludeIds?: ReadonlySet<string>
+): VocabularyCard[] {
+  return mode === 'ahead'
+    ? buildAheadQueue(cards, schedules, now, size, excludeIds)
+    : buildDueQueue(cards, schedules, now, size, excludeIds);
+}
+
 export function useCardReview() {
   const [cards, , cardsLoaded] = useBrowserState(
     'cards/library',
@@ -88,17 +108,25 @@ export function useCardReview() {
   >('cards/review-sessions', [], isReviewSessionList);
   const [sessionCards, setSessionCards] = useState<VocabularyCard[]>([]);
   const [queue, setQueue] = useState<VocabularyCard[]>([]);
-  const [requestedGroupId] = useState<string | null>(() =>
-    typeof window === 'undefined'
-      ? null
-      : new URLSearchParams(window.location.search).get('groupId')
-  );
-  const [reviewExit] = useState(() =>
-    resolveReviewExit(
-      typeof window === 'undefined'
-        ? null
-        : new URLSearchParams(window.location.search).get('from')
+  const [reviewParams] = useState(() =>
+    parseReviewParams(
+      typeof window === 'undefined' ? '' : window.location.search
     )
+  );
+  const requestedGroupId = reviewParams.groupId;
+  const roundSize = reviewParams.size;
+  const [reviewExit] = useState(() => resolveReviewExit(reviewParams.from));
+  const [mode, setMode] = useState<ReviewMode>(reviewParams.mode);
+  // Every card put in a round of this visit: follow-up rounds skip them.
+  const [answeredIds, setAnsweredIds] = useState<ReadonlySet<string>>(
+    () => new Set()
+  );
+  const scopeCards = useMemo(
+    () =>
+      requestedGroupId
+        ? cards.filter(item => item.groupId === requestedGroupId)
+        : cards,
+    [cards, requestedGroupId]
   );
   const reviewSessionsRef = useRef(reviewSessions);
   useEffect(() => {
@@ -132,26 +160,31 @@ export function useCardReview() {
     let isMounted = true;
     queueMicrotask(() => {
       if (!isMounted) return;
-      const reviewCards = requestedGroupId
-        ? cards.filter(item => item.groupId === requestedGroupId)
-        : cards;
-      const dueCards = buildDueQueue(reviewCards, schedules, new Date());
-      setSessionCards(dueCards);
-      setQueue(dueCards);
+      const firstRound = buildRoundQueue(
+        mode,
+        scopeCards,
+        schedules,
+        new Date(),
+        roundSize
+      );
+      setSessionCards(firstRound);
+      setQueue(firstRound);
+      setAnsweredIds(new Set(firstRound.map(item => item.id)));
       setIsSessionLoaded(true);
     });
     return () => {
       isMounted = false;
     };
   }, [
-    cards,
     cardsLoaded,
     eventsLoaded,
     groupsLoaded,
     isSessionLoaded,
-    requestedGroupId,
+    mode,
+    roundSize,
     schedules,
     schedulesLoaded,
+    scopeCards,
     sessionsLoaded
   ]);
 
@@ -284,6 +317,31 @@ export function useCardReview() {
     setIsRevealed(false);
   }
 
+  // Next round, in place: a fresh queue of cards not yet seen this visit, with
+  // the round tallies reset. No navigation, so nothing reloads.
+  function handleStartNextRound() {
+    if (!nextRound) return;
+    const nextMode: ReviewMode = nextRound.kind === 'ahead' ? 'ahead' : 'due';
+    const next = buildRoundQueue(
+      nextMode,
+      scopeCards,
+      schedules,
+      new Date(),
+      roundSize,
+      answeredIds
+    );
+    if (next.length === 0) return;
+    setMode(nextMode);
+    setSessionCards(next);
+    setQueue(next);
+    setAnsweredIds(current => new Set([...current, ...next.map(c => c.id)]));
+    setIndex(0);
+    setRatings({ again: 0, hard: 0, good: 0, easy: 0 });
+    setCombo({ current: 0, best: 0 });
+    setMemoryGains([]);
+    setIsRevealed(false);
+  }
+
   const total = queue.length;
   const status = !isSessionLoaded
     ? 'loading'
@@ -292,6 +350,27 @@ export function useCardReview() {
       : !card || index >= total
         ? 'complete'
         : 'reviewing';
+  const now = new Date();
+  const nextRound =
+    status !== 'complete'
+      ? null
+      : resolveNextRound({
+          size: roundSize,
+          dueRemaining: buildDueQueue(
+            scopeCards,
+            schedules,
+            now,
+            Infinity,
+            answeredIds
+          ).length,
+          aheadAvailable: buildAheadQueue(
+            scopeCards,
+            schedules,
+            now,
+            Infinity,
+            answeredIds
+          ).length
+        });
   const position = status === 'reviewing' ? Math.min(index + 1, total) : total;
   const streakDays =
     status === 'complete'
@@ -302,6 +381,9 @@ export function useCardReview() {
   return {
     status,
     reviewExit,
+    isAhead: mode === 'ahead',
+    nextRound,
+    startNextRound: handleStartNextRound,
     card,
     position,
     total,

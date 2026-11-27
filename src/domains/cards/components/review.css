@@ -23,6 +23,10 @@
   @apply mx-auto flex min-h-0 w-full max-w-225 min-w-0 flex-1 flex-col gap-3.5 md:gap-5.5;
 }
 
+.drill-ahead-notice {
+  @apply m-0 rounded-full bg-(--indigo-soft) px-4 py-2 text-center text-[13px] font-semibold text-(--indigo);
+}
+
 .drill-loading {
   @apply m-0 text-[13px] text-(--ink-soft);
 }

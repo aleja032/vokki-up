@@ -62,4 +62,20 @@ describe('ReviewBanner', () => {
     expect(html).toContain('href="/review?from=cards"');
     expect(html).not.toContain('motion-cta-pulse');
   });
+
+  it('follows the round size in the link and shows the size control', () => {
+    const html = renderToStaticMarkup(
+      createElement(ReviewBanner, {
+        count: 20,
+        folder: { id: 'g1', name: 'Trabajo' },
+        roundSize: 20,
+        onRoundSizeChange: () => undefined
+      })
+    );
+    expect(html).toContain(
+      'href="/review?groupId=g1&amp;from=cards&amp;size=20"'
+    );
+    expect(html).toContain('Ronda de:');
+    expect(html.match(/action-pill--primary/g)).toHaveLength(1);
+  });
 });

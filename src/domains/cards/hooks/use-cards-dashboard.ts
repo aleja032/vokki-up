@@ -36,6 +36,7 @@ import { enqueueLocalSyncOperation } from '@/lib/sync/local-queue';
 import { useTrackedBrowserState } from '@/lib/sync/use-tracked-browser-state';
 import { useBrowserState } from '@/lib/storage/use-browser-state';
 import { removePersonalCards } from '../personal-card-removal';
+import { useReviewRoundSize } from './use-review-round-size';
 
 const cardChanges = collectionChangeBuilder<VocabularyCard>('card');
 const groupChanges = collectionChangeBuilder<CardGroup>('card-group');
@@ -67,6 +68,7 @@ export function useCardsDashboard() {
       [],
       isReviewEventList
     );
+  const [roundSize] = useReviewRoundSize();
   const [activeGroupId, setActiveGroupId] = useState(ALL_GROUPS_ID);
   const [activeCategory, setActiveCategory] = useState<string>(ALL_CATEGORIES);
   const [activeStatus, setActiveStatus] =
@@ -81,7 +83,8 @@ export function useCardsDashboard() {
 
   const now = new Date();
   const activeGroup = groups.find(group => group.id === activeGroupId);
-  const dueCount = buildDueQueue(cards, schedules, now).length;
+  // What one round holds: the picked round size or what is due, the smaller.
+  const dueCount = buildDueQueue(cards, schedules, now, roundSize).length;
   const existingTerms = useMemo(() => cards.map(card => card.term), [cards]);
   const editingCard = cards.find(card => card.id === editingCardId);
   const editingExistingTerms = useMemo(
@@ -146,7 +149,8 @@ export function useCardsDashboard() {
     ? {
         id: activeGroup.id,
         name: getGroupDisplayName(activeGroup),
-        dueCount: buildDueQueue(activeGroupCards, schedules, now).length
+        dueCount: buildDueQueue(activeGroupCards, schedules, now, roundSize)
+          .length
       }
     : undefined;
 

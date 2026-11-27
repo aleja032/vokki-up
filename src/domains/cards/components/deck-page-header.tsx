@@ -3,7 +3,10 @@ import { ChevronRight, Globe, Play } from 'lucide-react';
 import { ActionPill } from '@/components/ui/action-pill';
 import { cardsMessages } from '../messages';
 import { NewCardMenu } from './new-card-menu';
+import { useReviewRoundSize } from '../hooks/use-review-round-size';
+import { buildCardsReviewHref } from '../review-round-size';
 import { ReviewBanner } from './review-banner';
+import { RoundSizeControl } from './round-size-control';
 import './deck-page-header.css';
 
 const messages = cardsMessages.overview;
@@ -31,6 +34,7 @@ export function DeckPageHeader({
   reviewFolder,
   onAddCard
 }: DeckPageHeaderProps) {
+  const [roundSize, setRoundSize] = useReviewRoundSize();
   const reviewCount = reviewFolder ? reviewFolder.dueCount : dueCount;
   return (
     <header className="deck-header">
@@ -50,40 +54,44 @@ export function DeckPageHeader({
           </p>
         </div>
       </div>
-      <div className="deck-header__actions">
-        <div className="deck-header__new">
-          <NewCardMenu onCreate={onAddCard} />
+      <div className="deck-header__side">
+        <div className="deck-header__actions">
+          <div className="deck-header__new">
+            <NewCardMenu onCreate={onAddCard} />
+          </div>
+          <ActionPill
+            className="deck-header__library"
+            href="/cards/word-library"
+            icon={<Globe size={18} strokeWidth={2.4} />}
+            iconEnd={<ChevronRight size={18} />}
+            tone="mint"
+            variant="secondary"
+          >
+            {messages.addFromLibrary}
+          </ActionPill>
+          <ActionPill
+            className="deck-header__review"
+            aria-label={
+              reviewFolder
+                ? messages.reviewFolderLabel(reviewCount, reviewFolder.name)
+                : undefined
+            }
+            href={buildCardsReviewHref(reviewFolder?.id, roundSize)}
+            icon={<Play size={18} strokeWidth={2.4} />}
+            pulse={reviewCount > 0}
+            variant="primary"
+          >
+            {messages.reviewShort(reviewCount)}
+          </ActionPill>
         </div>
-        <ActionPill
-          className="deck-header__library"
-          href="/cards/word-library"
-          icon={<Globe size={18} strokeWidth={2.4} />}
-          iconEnd={<ChevronRight size={18} />}
-          tone="mint"
-          variant="secondary"
-        >
-          {messages.addFromLibrary}
-        </ActionPill>
-        <ActionPill
-          className="deck-header__review"
-          aria-label={
-            reviewFolder
-              ? messages.reviewFolderLabel(reviewCount, reviewFolder.name)
-              : undefined
-          }
-          href={
-            reviewFolder
-              ? `/review?groupId=${encodeURIComponent(reviewFolder.id)}&from=cards`
-              : '/review?from=cards'
-          }
-          icon={<Play size={18} strokeWidth={2.4} />}
-          pulse={reviewCount > 0}
-          variant="primary"
-        >
-          {messages.reviewShort(reviewCount)}
-        </ActionPill>
+        <RoundSizeControl onChange={setRoundSize} size={roundSize} />
       </div>
-      <ReviewBanner count={reviewCount} folder={reviewFolder} />
+      <ReviewBanner
+        count={reviewCount}
+        folder={reviewFolder}
+        onRoundSizeChange={setRoundSize}
+        roundSize={roundSize}
+      />
     </header>
   );
 }

@@ -476,6 +476,14 @@ export const extraTranslations: Record<string, string> = {
   Carpeta: 'Folder',
   Mundo: 'World',
   'Editar tarjeta': 'Edit card',
+  'Ronda de:': 'Round of:',
+  'Tamaño de la ronda': 'Round size',
+  'Te queda 1 por repasar hoy': 'You have 1 left to review today',
+  'Estudiar por adelantado': 'Study ahead',
+  'Adelanta las próximas tarjetas. Cuentan para tu calendario.':
+    'Get ahead on upcoming cards. They count toward your schedule.',
+  'Estás adelantando tarjetas que aún no tocan.':
+    'You are studying cards that are not due yet.',
   'Sube un archivo CSV para sumar tarjetas a tu mazo. Al terminar, vuelve a Mi mazo.':
     'Upload a CSV file to add cards to your deck. When you are done, go back to My deck.'
 };
@@ -484,6 +492,8 @@ export const extraTranslations: Record<string, string> = {
 export const extraDynamicTranslations: ReadonlyArray<[RegExp, string]> = [
   [/^(\d+) tarjetas? · (\d+) carpetas?$/, '$1 cards · $2 folders'],
   [/^Repasar (\d+)$/, 'Review $1'],
+  [/^Repasar (\d+) más$/, 'Review $1 more'],
+  [/^Te quedan (\d+) por repasar hoy$/, 'You have $1 left to review today'],
   [/^Editar (.+)$/, 'Edit $1'],
   [/^Repasar (\d+) para hoy$/, 'Review $1 for today'],
   [/^(\d+) para hoy$/, '$1 for today'],

@@ -37,6 +37,11 @@ export function CardReview() {
             exitHref={review.reviewExit.href}
           />
         )}
+        {review.isAhead && !isComplete && (
+          <p className="drill-ahead-notice" role="status">
+            {cardsMessages.review.aheadNotice}
+          </p>
+        )}
         {isReviewing && (
           <ReviewStatusChips
             combo={review.combo}
@@ -57,6 +62,8 @@ export function CardReview() {
               bestCombo={review.bestCombo}
               memoryGains={review.memoryGains}
               onRestart={review.restart}
+              nextRound={review.nextRound}
+              onNextRound={review.startNextRound}
               exitHref={review.reviewExit.href}
               exitTarget={review.reviewExit.target}
             />

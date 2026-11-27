@@ -5,7 +5,9 @@ import { PixelLabel } from '@/components/ui/pixel-label';
 import { StatCard } from '@/components/ui/stat-card';
 import { cardsMessages } from '../messages';
 import type { MemoryGain } from '../review-memory-gains';
+import type { NextRound } from '../review-queue';
 import { ReviewMemoryGains } from './review-memory-gains';
+import './review-complete-screen.css';
 import './review-results.css';
 
 const messages = cardsMessages.review;
@@ -20,6 +22,9 @@ type ReviewCompleteScreenProps = {
   bestCombo: number;
   memoryGains: MemoryGain[];
   onRestart: () => void;
+  /** What comes after this round (more due cards, or studying ahead). */
+  nextRound?: NextRound | null;
+  onNextRound?: () => void;
   exitHref: string;
   exitTarget: 'cards' | 'home';
 };
@@ -37,6 +42,8 @@ export function ReviewCompleteScreen({
   bestCombo,
   memoryGains,
   onRestart,
+  nextRound = null,
+  onNextRound,
   exitHref,
   exitTarget
 }: ReviewCompleteScreenProps) {
@@ -111,11 +118,29 @@ export function ReviewCompleteScreen({
           <Pill tone="mint">{messages.done.easyChip(easy)}</Pill>
         </div>
         <ReviewMemoryGains gains={memoryGains} />
+        {nextRound && onNextRound ? (
+          <p className="round-results__next-hint">
+            {nextRound.kind === 'due'
+              ? messages.done.remainingDue(nextRound.remaining)
+              : messages.done.studyAheadHint}
+          </p>
+        ) : null}
         <div className="round-results__actions">
+          {nextRound && onNextRound ? (
+            <ActionPill
+              className="round-results__primary"
+              onClick={onNextRound}
+              variant="primary"
+            >
+              {nextRound.kind === 'due'
+                ? messages.done.continueDue(nextRound.count)
+                : messages.done.studyAhead}
+            </ActionPill>
+          ) : null}
           <ActionPill
             className="round-results__primary"
             href={exitHref}
-            variant="primary"
+            variant={nextRound && onNextRound ? 'secondary' : 'primary'}
           >
             {exitTarget === 'cards'
               ? messages.done.backCards

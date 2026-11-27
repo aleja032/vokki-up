@@ -15,6 +15,9 @@ export const cardsMessages = createLocalizedMessages({
     addFromLibrary: 'Agregar desde la biblioteca',
     fromLibrary: 'Desde la biblioteca',
     reviewShort: (due: number) => `Repasar ${due}`,
+    roundSizeLabel: 'Ronda de:',
+    roundSizeGroupLabel: 'Tamaño de la ronda',
+    roundSizeAll: 'Todas',
     reviewFolderLabel: (due: number, name: string) =>
       `Repasar ${due} · ${name}`,
     folderDueChip: (due: number) => `${due} para hoy`,
@@ -311,8 +314,17 @@ export const cardsMessages = createLocalizedMessages({
       backCards: 'Volver a tarjetas',
       repeat: 'Repasar otra vez',
       repeatSuffix: '(no cuenta para la meta)',
-      repeatNote: 'Repasar otra vez no cuenta para la meta diaria.'
+      repeatNote: 'Repasar otra vez no cuenta para la meta diaria.',
+      continueDue: (count: number) => `Repasar ${count} más`,
+      remainingDue: (count: number) =>
+        count === 1
+          ? 'Te queda 1 por repasar hoy'
+          : `Te quedan ${count} por repasar hoy`,
+      studyAhead: 'Estudiar por adelantado',
+      studyAheadHint:
+        'Adelanta las próximas tarjetas. Cuentan para tu calendario.'
     },
+    aheadNotice: 'Estás adelantando tarjetas que aún no tocan.',
     empty: {
       title: 'Por ahora, ya estás al día.',
       body: 'Las tarjetas volverán cuando llegue su próximo momento de repaso.',

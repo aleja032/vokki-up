@@ -21,7 +21,15 @@ describe('review round English entries', () => {
     ['Aciertos', 'Correct'],
     ['Mejor combo', 'Best combo'],
     ['Racha', 'Streak'],
-    ['Subieron de memoria', 'Memory went up']
+    ['Subieron de memoria', 'Memory went up'],
+    ['Ronda de:', 'Round of:'],
+    ['Tamaño de la ronda', 'Round size'],
+    ['Estudiar por adelantado', 'Study ahead'],
+    ['Te queda 1 por repasar hoy', 'You have 1 left to review today'],
+    [
+      'Estás adelantando tarjetas que aún no tocan.',
+      'You are studying cards that are not due yet.'
+    ]
   ])('translates %s', (spanish, english) => {
     expect(extraTranslations[spanish]).toBe(english);
   });
@@ -31,7 +39,9 @@ describe('review round English entries', () => {
     ['1 de 1 acierto', '1 of 1 correct'],
     ['¡Combo x3! Vas sin fallar.', 'Combo x3! No misses so far.'],
     ['¡Rescataste 1 palabra!', 'You rescued 1 word!'],
-    ['¡Rescataste 12 palabras!', 'You rescued 12 words!']
+    ['¡Rescataste 12 palabras!', 'You rescued 12 words!'],
+    ['Repasar 10 más', 'Review 10 more'],
+    ['Te quedan 14 por repasar hoy', 'You have 14 left to review today']
   ])('translates the interpolated %s', (spanish, english) => {
     expect(dynamic(spanish)).toBe(english);
   });

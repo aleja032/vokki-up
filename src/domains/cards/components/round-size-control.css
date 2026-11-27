@@ -1,0 +1,36 @@
+@reference 'tailwindcss';
+
+/* Compact "Ronda de: 10 20 Todas" radio group. Neutral on the page; the phone
+   banner (dark hero surface) recolours it with the hero tokens. */
+
+.round-size {
+  @apply flex min-w-0 items-center gap-2 text-[13px] font-semibold text-(--ink-soft);
+}
+
+.round-size__options {
+  @apply flex items-center gap-1 rounded-full bg-(--surface-muted) p-0.5;
+}
+
+.round-size__option {
+  @apply inline-flex h-8 min-w-9 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent px-3 text-[13px] font-bold text-(--ink-soft) transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--indigo);
+}
+
+.round-size__option--on {
+  @apply bg-(--indigo) text-white;
+}
+
+.review-banner .round-size {
+  @apply text-(--hero-text-soft);
+}
+
+.review-banner .round-size__options {
+  background-color: color-mix(in srgb, white 12%, transparent);
+}
+
+.review-banner .round-size__option {
+  @apply text-(--hero-text-soft);
+}
+
+.review-banner .round-size__option--on {
+  @apply bg-white text-(--hero-surface);
+}

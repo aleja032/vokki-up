@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { requeueForAgain, summarizeRatings } from './review-queue';
+import {
+  requeueForAgain,
+  resolveNextRound,
+  summarizeRatings
+} from './review-queue';
 
 describe('requeueForAgain', () => {
   it('brings the card back after a few other cards', () => {
@@ -40,5 +44,39 @@ describe('summarizeRatings', () => {
       good: 3,
       easy: 4
     });
+  });
+});
+
+describe('resolveNextRound', () => {
+  it('offers the rest of the due cards first, capped at the round size', () => {
+    expect(
+      resolveNextRound({ size: 10, dueRemaining: 25, aheadAvailable: 4 })
+    ).toEqual({
+      kind: 'due',
+      count: 10,
+      remaining: 25
+    });
+    expect(
+      resolveNextRound({ size: 10, dueRemaining: 3, aheadAvailable: 4 })
+    ).toEqual({
+      kind: 'due',
+      count: 3,
+      remaining: 3
+    });
+  });
+
+  it('offers studying ahead when nothing is due but cards are upcoming', () => {
+    expect(
+      resolveNextRound({ size: 20, dueRemaining: 0, aheadAvailable: 5 })
+    ).toEqual({
+      kind: 'ahead',
+      count: 5
+    });
+  });
+
+  it('offers nothing when neither exists', () => {
+    expect(
+      resolveNextRound({ size: 10, dueRemaining: 0, aheadAvailable: 0 })
+    ).toBeNull();
   });
 });

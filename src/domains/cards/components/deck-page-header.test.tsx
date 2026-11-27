@@ -86,4 +86,11 @@ describe('DeckPageHeader', () => {
   it('hides the decorative mascot from assistive tech', () => {
     expect(render()).toContain('alt=""');
   });
+
+  it('offers the round size control for the desktop and the phone banner', () => {
+    const html = render();
+    expect(count(html, 'Ronda de:')).toBe(2);
+    expect(html).toContain('>Todas<');
+    expect(html).toContain('href="/review?from=cards"');
+  });
 });

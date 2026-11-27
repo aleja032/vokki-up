@@ -79,6 +79,47 @@ describe('ReviewCompleteScreen', () => {
     );
   });
 
+  it('offers the rest of the due cards as the primary action', () => {
+    const html = render({
+      exitTarget: 'cards',
+      exitHref: '/cards',
+      nextRound: { kind: 'due', count: 10, remaining: 14 },
+      onNextRound: () => undefined
+    });
+    expect(html).toContain('Repasar 10 más');
+    expect(html).toContain('Te quedan 14 por repasar hoy');
+    expect(html).toContain('Volver a tarjetas');
+    expect(html.match(/action-pill--primary/g)).toHaveLength(1);
+  });
+
+  it('handles one remaining due card', () => {
+    const html = render({
+      nextRound: { kind: 'due', count: 1, remaining: 1 },
+      onNextRound: () => undefined
+    });
+    expect(html).toContain('Repasar 1 más');
+    expect(html).toContain('Te queda 1 por repasar hoy');
+  });
+
+  it('offers studying ahead when nothing is due but cards are upcoming', () => {
+    const html = render({
+      nextRound: { kind: 'ahead', count: 5 },
+      onNextRound: () => undefined
+    });
+    expect(html).toContain('Estudiar por adelantado');
+    expect(html).toContain(
+      'Adelanta las próximas tarjetas. Cuentan para tu calendario.'
+    );
+    expect(html).not.toContain('por repasar hoy');
+  });
+
+  it('keeps the plain finish state when there is nothing more to offer', () => {
+    const html = render({ nextRound: null });
+    expect(html).not.toContain('Estudiar por adelantado');
+    expect(html).not.toContain(' más<');
+    expect(html.match(/action-pill--primary/g)).toHaveLength(1);
+  });
+
   it('never claims a daily-goal chest it cannot measure', () => {
     expect(render()).not.toContain('Cofre');
   });

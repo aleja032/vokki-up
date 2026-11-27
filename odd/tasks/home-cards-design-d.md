@@ -172,3 +172,12 @@ Verification: see the T16 report.
 - List: single-column rows (~72px, due-color edge, term + part of speech, meaning, memory bar + due label, chevron; no IPA); manage mode shows a left circle; 8 rows then "Ver más" (+10) with "N de M".
 - TDD: tests first (RED) for each pivot, then GREEN. Known unrelated failures in this CRLF worktree: design-tokens.test (35) and action-pill.test (1) read CSS with LF regexes.
 - Verification: vitest, tsc, eslint, prettier on changed files; browser at 320/360/390/430 dark/light, es/en: 0 console errors, no horizontal overflow, CTA 56px, banner/FAB/nav never overlap.
+
+## T25 - Longer review rounds and study ahead
+
+- Round size: Mi mazo review CTA keeps 10 by default; a "Ronda de: 10 / 20 / Todas" radio group (RoundSizeControl) sits under the desktop header actions and between the copy and the CTA in the phone banner. Todas = 50 (hard cap). Shared persisted value (key cards/review-round-size) through useReviewRoundSize (useSyncExternalStore, so dashboard, header and banner stay in sync). The link gets &size=N only when not 10; CTA count = min(size, due) (also what the Todas chip and the folder rounds show).
+- Route params parsed by parseReviewParams (size whitelist 10|20|50, "all" = 50, mode due|ahead, invalid = defaults).
+- buildDueQueue takes excludeIds; new buildAheadQueue (not-due scheduled cards, soonest first; new cards are already due so never appear). resolveNextRound picks the results CTA: due remaining ("Repasar N más" + hint), else upcoming ("Estudiar por adelantado" + hint), else none.
+- Next round starts in place (hook resets queue/tallies, tracks every id already put in a round); no navigation, no reload. Ahead rounds show the notice and rate through the normal scheduler.
+- Kept: Otra vez requeue, keys, Volver a tarjetas exit, repeat button, eyebrow untouched.
+- Verification: vitest 136 files / 862+ tests, tsc, eslint clean; browser es 1440 and 390: size control, persistence, folder scope, full 10-card round, Repasar 10 más, ahead notice and scheduling, Estudiar por adelantado then plain exit. English not switchable in the harness browser; covered by unit tests.
