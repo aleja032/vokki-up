@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
+  getReplayExample,
   initialSpeechAttemptState,
   speakPronunciation,
   speechAttemptReducer
@@ -22,6 +23,17 @@ function setupSpeechSynthesis() {
 }
 
 afterEach(() => vi.unstubAllGlobals());
+
+describe('replay example', () => {
+  it('reads only the word while the meaning is hidden', () => {
+    expect(getReplayExample(false, 'She is reliable.')).toBeUndefined();
+  });
+
+  it('reads the example after the word once the meaning is revealed', () => {
+    expect(getReplayExample(true, 'She is reliable.')).toBe('She is reliable.');
+    expect(getReplayExample(true, undefined)).toBeUndefined();
+  });
+});
 
 describe('review pronunciation speech', () => {
   it('speaks the example only after the term finishes', () => {
@@ -83,6 +95,39 @@ describe('review pronunciation speech', () => {
     expect((speak.mock.calls[0][0] as MockUtterance).text).toBe(
       'A fortunate accident.'
     );
+  });
+
+  it('treats an autoplay block as "blocked", not as a failure, so it can retry on a tap', () => {
+    const { speak } = setupSpeechSynthesis();
+    const onFailure = vi.fn();
+    const onBlocked = vi.fn();
+
+    speakPronunciation(
+      'serendipity',
+      'en-US',
+      undefined,
+      onFailure,
+      () => true,
+      onBlocked
+    );
+    (speak.mock.calls[0][0] as MockUtterance).onerror?.({
+      error: 'not-allowed'
+    });
+
+    expect(onBlocked).toHaveBeenCalledOnce();
+    expect(onFailure).not.toHaveBeenCalled();
+  });
+
+  it('still reports a not-allowed error as a failure when nobody listens for blocks', () => {
+    const { speak } = setupSpeechSynthesis();
+    const onFailure = vi.fn();
+
+    speakPronunciation('serendipity', 'en-US', undefined, onFailure);
+    (speak.mock.calls[0][0] as MockUtterance).onerror?.({
+      error: 'not-allowed'
+    });
+
+    expect(onFailure).toHaveBeenCalledOnce();
   });
 
   it('reports an example speech error through the current attempt callback', () => {

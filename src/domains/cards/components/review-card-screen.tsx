@@ -82,7 +82,9 @@ export function speakPronunciation(
   pronunciationLocale: string | undefined,
   example: string | undefined,
   onFailure: () => void,
-  isAttemptCurrent: () => boolean = () => true
+  isAttemptCurrent: () => boolean = () => true,
+  /** The browser refused to speak without a user gesture (autoplay policy). */
+  onBlocked?: () => void
 ): void {
   if (!term.trim() || !hasSpeechSynthesis()) {
     onFailure();
@@ -108,6 +110,10 @@ export function speakPronunciation(
       }
     };
     utterance.onerror = event => {
+      if (event.error === 'not-allowed' && onBlocked) {
+        onBlocked();
+        return;
+      }
       if (event.error !== 'canceled' && event.error !== 'interrupted')
         onFailure();
     };
@@ -115,6 +121,14 @@ export function speakPronunciation(
   } catch {
     onFailure();
   }
+}
+
+/** The example is read after the word only once the meaning is revealed. */
+export function getReplayExample(
+  isRevealed: boolean,
+  example: string | undefined
+): string | undefined {
+  return isRevealed ? example : undefined;
 }
 
 function splitExample(example: string, term: string) {
@@ -153,9 +167,12 @@ export function ReviewCardScreen({
   const example = card.example ? splitExample(card.example, card.term) : null;
   const exampleEs = getExampleEs(card);
 
+  const cancelBlockedRetry = useRef<(() => void) | null>(null);
+
   useLayoutEffect(() => {
     return () => {
       activeSpeechAttemptId.current = null;
+      cancelBlockedRetry.current?.();
       if (hasSpeechSynthesis()) window.speechSynthesis.cancel();
     };
   }, [card.id]);
@@ -168,14 +185,43 @@ export function ReviewCardScreen({
     ) => {
       const attemptId = ++speechAttemptSequence.current;
       activeSpeechAttemptId.current = attemptId;
+      cancelBlockedRetry.current?.();
       dispatchSpeechAttempt({ type: 'started', attemptId });
       if (!isSpeechSupported) return;
+      const isCurrent = () => activeSpeechAttemptId.current === attemptId;
+      const onFailure = () =>
+        dispatchSpeechAttempt({ type: 'failed', attemptId });
+      // Browsers refuse speech with no user gesture on a fresh page. Instead of
+      // failing, wait for the first tap or key press and speak then.
+      const onBlocked = () => {
+        if (!isCurrent()) return;
+        const retry = () => {
+          stopWaiting();
+          if (!isCurrent()) return;
+          speakPronunciation(
+            phrase,
+            card.pronunciationLocale,
+            followWithExample,
+            onFailure,
+            isCurrent
+          );
+        };
+        const stopWaiting = () => {
+          window.removeEventListener('pointerdown', retry, true);
+          window.removeEventListener('keydown', retry, true);
+          cancelBlockedRetry.current = null;
+        };
+        window.addEventListener('pointerdown', retry, true);
+        window.addEventListener('keydown', retry, true);
+        cancelBlockedRetry.current = stopWaiting;
+      };
       speakPronunciation(
         phrase,
         card.pronunciationLocale,
         followWithExample,
-        () => dispatchSpeechAttempt({ type: 'failed', attemptId }),
-        () => activeSpeechAttemptId.current === attemptId
+        onFailure,
+        isCurrent,
+        onBlocked
       );
     },
     [card.term, card.pronunciationLocale]
@@ -247,7 +293,7 @@ export function ReviewCardScreen({
                     startSpeechAttempt(
                       isSpeechSupported,
                       card.term,
-                      card.example
+                      getReplayExample(isRevealed, card.example)
                     )
                   }
                 >
