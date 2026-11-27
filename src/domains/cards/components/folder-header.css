@@ -64,10 +64,6 @@
 }
 
 /* Gestionar keeps its size and its slot at the end of the row. */
-.folder-header__actions {
-  @apply flex min-w-0 flex-wrap items-center justify-end gap-2;
-}
-
 .folder-header__manage {
   @apply shrink-0 px-3;
 }
@@ -106,7 +102,7 @@
   .folder-header__nav,
   .folder-header__kind,
   .folder-header__summary,
-  .folder-header__actions {
+  .folder-header[data-scope='folder'] .folder-header__manage {
     @apply hidden;
   }
 

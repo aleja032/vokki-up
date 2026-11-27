@@ -116,6 +116,7 @@ export function FolderHeader({
             </p>
           ) : null}
         </div>
+        {manageButton}
         {group && stats ? (
           <FolderMenu
             cardCount={cardCount}
@@ -127,11 +128,7 @@ export function FolderHeader({
             otherGroupNames={otherGroupNames}
           />
         ) : null}
-        {group ? null : manageButton}
       </div>
-      {group ? (
-        <div className="folder-header__actions">{manageButton}</div>
-      ) : null}
     </header>
   );
 }

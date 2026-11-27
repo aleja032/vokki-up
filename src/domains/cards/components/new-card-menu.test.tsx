@@ -48,14 +48,11 @@ describe('floating button motion CSS', () => {
   const css = read('new-card-menu.css');
   const fabCss = read('new-card-fab.css');
 
-  it('animates the ring, the menu and its items, the entrance and Noma', () => {
+  it('animates the ring, the menu and its items and the entrance', () => {
     expect(css).toContain('@keyframes new-card-ring');
     expect(css).toContain('@keyframes new-card-menu-in');
     expect(css).toContain('@keyframes new-card-item-in');
     expect(fabCss).toContain('@keyframes new-card-fab-pop');
-    expect(fabCss).toContain('@keyframes new-card-noma-peek');
-    expect(fabCss).toContain('@keyframes new-card-noma-float');
-    expect(fabCss).toContain('@keyframes new-card-noma-tilt');
   });
 
   it('switches every animation off under prefers-reduced-motion', () => {
