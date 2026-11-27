@@ -58,6 +58,13 @@ describe('ArchCard', () => {
     expect(html).toContain('data-accent="mint"');
     expect(html).toContain('world-travel.svg');
     expect(html).toContain('200 palabras · 0 en tu mazo');
+    // Not started: gray veil over the art; it disappears once the world is active.
+    expect(html).toContain('arch-card__veil');
+    expect(
+      renderToStaticMarkup(
+        <ArchCard {...base} imageSrc="/images/world-travel.svg" isActive />
+      )
+    ).not.toContain('arch-card__veil');
   });
 
   it('omits the description when there is none', () => {

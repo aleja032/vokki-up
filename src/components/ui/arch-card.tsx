@@ -61,6 +61,7 @@ export function ArchCard({
               src={imageSrc}
               unoptimized
             />
+            {isActive ? null : <span className="arch-card__veil" />}
             <span className="arch-card__shade" />
           </>
         ) : (

@@ -44,6 +44,20 @@
   @apply hidden;
 }
 
+/* Not started: the scene turns gray under a soft veil, then it lights up in
+   color once the first word of that world is in the deck. */
+.arch-card[data-state='idle'] .arch-card__image {
+  filter: grayscale(1);
+}
+
+.arch-card__veil {
+  @apply absolute inset-0 bg-(--surface-muted) opacity-55;
+}
+
+.arch-card[data-state='idle'] {
+  --arch-accent: var(--ink-soft);
+}
+
 .arch-card__icon {
   @apply flex items-center justify-center;
 }
@@ -124,6 +138,10 @@
 
   .arch-card[data-state='active'] {
     @apply border-[3px] border-(--brand-line);
+  }
+
+  .arch-card[data-art='true'][data-state='idle'][data-accent] {
+    --arch-accent: var(--hero-text-soft);
   }
 
   .arch-card__art,

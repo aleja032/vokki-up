@@ -19,7 +19,7 @@ export const WORLD_ART: Record<WorldId, WorldArt> = {
     accent: 'lavender',
     hasWords: false
   },
-  work: { src: WORLD_IMAGES.work, accent: 'amber', hasWords: false },
+  work: { src: WORLD_IMAGES.work, accent: 'brand', hasWords: false },
   travel: { src: WORLD_IMAGES.travel, accent: 'mint', hasWords: false },
   phrases: {
     src: WORLD_IMAGES.phrases,
